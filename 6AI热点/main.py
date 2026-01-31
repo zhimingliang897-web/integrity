@@ -3,13 +3,14 @@ import json
 import requests
 import feedparser
 from openai import OpenAI
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 # --- 配置 ---
 QWEN_API_KEY = os.getenv("QWEN_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "-1003878273027")
 MODEL_NAME = "qwen3-vl-flash-2026-01-22"
+TARGET_COUNT = 10  # 目标推送条数
 
 client = OpenAI(
     api_key=QWEN_API_KEY,
@@ -18,35 +19,80 @@ client = OpenAI(
 
 # --- 信源列表 ---
 SOURCES = [
+    # ===== 国际硬核 =====
     {
         "name": "Hacker News",
-        "url": "https://hnrss.org/newest?q=AI+LLM+Transformer",
+        "url": "https://hnrss.org/newest?q=AI+LLM+Transformer+GPT",
         "type": "general",
+        "count": 8,
     },
     {
         "name": "HF Papers",
         "url": "https://rsshub.app/huggingface/daily-papers",
         "type": "general",
+        "count": 8,
     },
     {
         "name": "GitHub Trending",
         "url": "https://rsshub.app/github/trending/daily/python?since=daily",
         "type": "general",
+        "count": 6,
     },
     {
         "name": "ArXiv cs.AI",
         "url": "https://rss.arxiv.org/rss/cs.AI",
         "type": "general",
+        "count": 6,
     },
+    {
+        "name": "ArXiv cs.CL",
+        "url": "https://rss.arxiv.org/rss/cs.CL",
+        "type": "general",
+        "count": 6,
+    },
+    # ===== 国际社区 =====
     {
         "name": "Reddit LocalLLaMA",
         "url": "https://www.reddit.com/r/LocalLLaMA/.rss",
         "type": "general",
+        "count": 6,
     },
+    {
+        "name": "Reddit MachineLearning",
+        "url": "https://www.reddit.com/r/MachineLearning/.rss",
+        "type": "general",
+        "count": 6,
+    },
+    {
+        "name": "OpenAI Blog",
+        "url": "https://rsshub.app/openai/blog",
+        "type": "general",
+        "count": 5,
+    },
+    {
+        "name": "Google AI Blog",
+        "url": "https://rsshub.app/google/research",
+        "type": "general",
+        "count": 5,
+    },
+    {
+        "name": "MIT Tech Review AI",
+        "url": "https://www.technologyreview.com/feed/",
+        "type": "general",
+        "count": 5,
+    },
+    # ===== 国内权威 =====
     {
         "name": "机器之心",
         "url": "https://www.jiqizhixin.com/rss",
         "type": "cn_media",
+        "count": 6,
+    },
+    {
+        "name": "量子位",
+        "url": "https://rsshub.app/qbitai/category/资讯",
+        "type": "cn_media",
+        "count": 6,
     },
 ]
 
@@ -69,32 +115,31 @@ def analyze_news(title: str, summary: str, source_type: str) -> dict | None:
     anti_hype = ""
     if source_type == "cn_media":
         anti_hype = (
-            "注意：本文来自中文自媒体，请严格忽略'炸裂''颠覆''神作'等营销词汇，"
-            "只关注是否有代码/论文/实质技术架构。"
+            "注意：本文来自中文自媒体，请适当忽略'炸裂''颠覆''神作'等营销词汇，"
+            "侧重关注是否有代码/论文/实质技术内容。但如果底层内容确实有价值，不要因为标题夸张就降分。"
         )
 
-    prompt = f"""你是一个严苛的 AI 技术情报分析师。
+    prompt = f"""你是一位 AI 技术情报分析师，负责为技术从业者筛选每日值得关注的内容。
 {anti_hype}
 
 请分析以下新闻：
 标题：{title}
 摘要：{summary}
 
-评级标准：
-- S级 (9-10): 行业里程碑 (如 Sora/GPT-5)、颠覆性架构突破。
-- A级 (7-8): 高质量论文、实用工具重大更新、大厂重要开源。
-- B级 (4-6): 普通迭代、观点文章。
-- C级 (1-3): 纯公关稿、无实质内容。
+评级标准（请合理给分，不要过于苛刻）：
+- S级 (9-10): 行业里程碑事件、颠覆性架构突破、重量级产品发布。
+- A级 (7-8): 高质量论文、实用工具重大更新、大厂重要开源、值得关注的行业动态。
+- B级 (5-6): 有一定参考价值的内容、中等质量的技术分享、普通产品迭代。
+- C级 (1-4): 纯水文、无实质内容的公关稿、重复旧闻。
 
 请只输出一个合法 JSON，不要包含 Markdown 代码块标记：
-{{"rating":"S/A/B/C","score":整数1到10,"comment":"毒舌点评50字内","tags":["标签1","标签2"]}}"""
+{{"rating":"S/A/B/C","score":整数1到10,"comment":"一句话点评(中文,30字内)","tags":["标签1","标签2"]}}"""
 
     text = call_qwen(prompt)
     if not text:
         return None
 
     clean = text.replace("```json", "").replace("```", "").strip()
-    # 尝试提取 JSON 部分
     start = clean.find("{")
     end = clean.rfind("}") + 1
     if start == -1 or end == 0:
@@ -108,8 +153,9 @@ def analyze_news(title: str, summary: str, source_type: str) -> dict | None:
 
 
 def fetch_source(source: dict) -> list[dict]:
-    """抓取单个 RSS 信源并评级，返回 S/A 级条目列表"""
+    """抓取单个 RSS 信源并评级，返回带评分的条目列表"""
     name = source["name"]
+    count = source.get("count", 5)
     print(f">> 正在抓取: {name} ...")
     try:
         feed = feedparser.parse(source["url"])
@@ -117,63 +163,150 @@ def fetch_source(source: dict) -> list[dict]:
         print(f"[RSS 抓取失败] {name}: {e}")
         return []
 
+    if not feed.entries:
+        print(f"   (无内容)")
+        return []
+
     results = []
-    for entry in feed.entries[:5]:
-        title = getattr(entry, "title", "")
+    for entry in feed.entries[:count]:
+        title = getattr(entry, "title", "").strip()
         summary = getattr(entry, "summary", "")[:800]
         link = getattr(entry, "link", "")
+        if not title:
+            continue
 
         analysis = analyze_news(title, summary, source["type"])
         if not analysis:
             continue
 
         rating = analysis.get("rating", "C")
-        if rating in ("S", "A"):
-            results.append(
-                {
-                    "source": name,
-                    "title": title,
-                    "link": link,
-                    "rating": rating,
-                    "score": analysis.get("score", 0),
-                    "comment": analysis.get("comment", ""),
-                    "tags": analysis.get("tags", []),
-                }
-            )
-            print(f"   [{rating}] {title}")
-        else:
-            print(f"   [{rating}] (已过滤) {title}")
+        score = analysis.get("score", 0)
+        results.append(
+            {
+                "source": name,
+                "title": title,
+                "link": link,
+                "rating": rating,
+                "score": score,
+                "comment": analysis.get("comment", ""),
+                "tags": analysis.get("tags", []),
+            }
+        )
+        print(f"   [{rating}|{score}] {title}")
 
     return results
 
 
-def build_report(all_news: list[dict]) -> str:
-    """构建 Telegram HTML 格式的日报"""
+def select_top_news(all_news: list[dict]) -> list[dict]:
+    """按评分排序，优先 S/A，不够则补 B 级，目标 TARGET_COUNT 条"""
     all_news.sort(key=lambda x: x["score"], reverse=True)
 
-    today = datetime.utcnow().strftime("%Y-%m-%d")
-    lines = [f"<b>AI 每日情报 ({today})</b>\n"]
-
+    # 去重：同标题只保留最高分
+    seen = set()
+    unique = []
     for item in all_news:
-        icon = "S" if item["rating"] == "S" else "A"
-        tags = ", ".join(item["tags"]) if item["tags"] else ""
-        lines.append(
-            f"[{icon}|{item['score']}] <b>{item['title']}</b>\n"
-            f"<i>{item['comment']}</i>\n"
-            f"{tags}\n"
-            f"<a href='{item['link']}'>原文</a> | {item['source']}\n"
-        )
+        key = item["title"].lower().strip()
+        if key not in seen:
+            seen.add(key)
+            unique.append(item)
+
+    # 先选 S/A 级
+    selected = [n for n in unique if n["rating"] in ("S", "A")]
+
+    # 不够则补 B 级
+    if len(selected) < TARGET_COUNT:
+        b_pool = [n for n in unique if n["rating"] == "B"]
+        selected.extend(b_pool[: TARGET_COUNT - len(selected)])
+
+    # 最终按分数排序
+    selected.sort(key=lambda x: x["score"], reverse=True)
+    return selected
+
+
+def generate_summary(news_list: list[dict]) -> str:
+    """让 LLM 生成今日总结概览"""
+    headlines = "\n".join(
+        [f"- [{n['rating']}|{n['score']}] {n['title']}" for n in news_list]
+    )
+
+    prompt = f"""你是一位 AI 领域情报编辑。以下是今天筛选出的高价值 AI 新闻标题列表：
+
+{headlines}
+
+请用中文写一段 3-5 句话的「今日概览」，概括今天 AI 领域的整体动态和最值得关注的方向。
+要求：语言简洁有洞察力，像一位资深编辑写的晨报导语，不要用 Markdown 格式。"""
+
+    result = call_qwen(prompt)
+    return result.strip() if result else "今日 AI 领域动态汇总如下。"
+
+
+def build_report(news_list: list[dict], summary: str) -> str:
+    """构建 Telegram HTML 格式日报：总结在前，逐条在后"""
+    bj_time = datetime.now(timezone(timedelta(hours=8)))
+    today = bj_time.strftime("%Y-%m-%d")
+
+    lines = []
+    # ===== 标题 =====
+    lines.append(f"<b>📡 AI 每日情报 | {today}</b>")
+    lines.append("")
+
+    # ===== 今日概览 =====
+    lines.append("<b>🧭 今日概览</b>")
+    lines.append(f"<i>{summary}</i>")
+    lines.append("")
+    lines.append(f"共筛选 <b>{len(news_list)}</b> 条值得关注的内容：")
+    lines.append("━━━━━━━━━━━━━━━━━━")
+    lines.append("")
+
+    # ===== 逐条展示 =====
+    for i, item in enumerate(news_list, 1):
+        # 评级 icon
+        if item["rating"] == "S":
+            badge = "🔴 S"
+        elif item["rating"] == "A":
+            badge = "🟠 A"
+        else:
+            badge = "🟡 B"
+
+        tags = " ".join([f"#{t}" for t in item["tags"]]) if item["tags"] else ""
+
+        lines.append(f"<b>{i}. {item['title']}</b>")
+        lines.append(f"   {badge} · {item['score']}分 · {item['source']}")
+        lines.append(f"   💬 {item['comment']}")
+        if tags:
+            lines.append(f"   {tags}")
+        lines.append(f"   🔗 <a href='{item['link']}'>阅读原文</a>")
+        lines.append("")
+
+    # ===== 尾部 =====
+    lines.append("━━━━━━━━━━━━━━━━━━")
+    lines.append("<i>🤖 由 AI 情报 Agent 自动生成</i>")
 
     return "\n".join(lines)
 
 
 def send_telegram(text: str):
-    """发送消息到 Telegram，自动分段"""
+    """发送消息到 Telegram，按段落智能分割"""
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     max_len = 3800
 
-    for i in range(0, len(text), max_len):
-        chunk = text[i : i + max_len]
+    # 按空行分段，尽量不在条目中间截断
+    paragraphs = text.split("\n\n")
+    chunks = []
+    current = ""
+
+    for para in paragraphs:
+        if len(current) + len(para) + 2 > max_len:
+            if current:
+                chunks.append(current)
+            current = para
+        else:
+            current = current + "\n\n" + para if current else para
+
+    if current:
+        chunks.append(current)
+
+    for chunk in chunks:
         payload = {
             "chat_id": TELEGRAM_CHAT_ID,
             "text": chunk,
@@ -189,17 +322,28 @@ def send_telegram(text: str):
 
 
 def main():
-    print("=== AI 每日情报 Agent 启动 ===")
+    print("=== AI 每日情报 Agent 启动 ===\n")
     all_news = []
     for src in SOURCES:
         all_news.extend(fetch_source(src))
 
-    if not all_news:
-        print("今日无 S/A 级内容，不推送。")
+    print(f"\n共抓取并评级 {len(all_news)} 条内容")
+
+    # 筛选 top N
+    selected = select_top_news(all_news)
+    if not selected:
+        print("今日无值得推送的内容。")
         return
 
-    report = build_report(all_news)
-    print(f"\n共 {len(all_news)} 条高价值内容，正在推送 Telegram ...")
+    print(f"筛选出 {len(selected)} 条推送内容，正在生成总结 ...")
+
+    # LLM 生成今日总结
+    summary = generate_summary(selected)
+    print(f"今日概览: {summary}\n")
+
+    # 构建并发送报告
+    report = build_report(selected, summary)
+    print("正在推送 Telegram ...")
     send_telegram(report)
     print("推送完成。")
 
