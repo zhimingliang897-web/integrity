@@ -1,0 +1,49 @@
+{
+    "voice": "en-US-GuyNeural",
+    "gap": 0.3,
+    "output": "低血糖_完整版.mp4",
+
+    "source_image": "ChatGPT Image Jan 28, 2026, 11_06_29 PM.png",
+    "grid": [2, 2],
+
+    "scenes": [
+        {
+            "image": "scene_1.png",
+            "lines": [
+                "It was a busy morning on the MRT.",
+                "Suddenly, I felt strange.",
+                "My head grew light, and my hands turned cold.",
+                "I sat down and curled up on the seat."
+            ]
+        },
+        {
+            "image": "scene_2.png",
+            "lines": [
+                "A stranger noticed me.",
+                "\"Are you all right?\" he asked.",
+                "\"I feel dizzy. I think my blood sugar is low.\"",
+                "\"Have you eaten today?\"",
+                "\"Not much. I skipped breakfast.\""
+            ]
+        },
+        {
+            "image": "scene_3.png",
+            "lines": [
+                "He looked worried.",
+                "He took out some candy and handed it to me.",
+                "\"Here,\" he said.",
+                "My hands were shaking.",
+                "\"Sit still. Take your time.\""
+            ]
+        },
+        {
+            "image": "scene_4.png",
+            "lines": [
+                "After a few minutes, I began to feel better.",
+                "\"Thank you,\" I said quietly.",
+                "\"If you feel worse, we can get off at the next station.\"",
+                "I was still weak, but I was no longer alone."
+            ]
+        }
+    ]
+}

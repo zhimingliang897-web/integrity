@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Study</title>
+<style>
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f5f7;
+  --card: #ffffff;
+  --text: #1d1d1f;
+  --text2: #6e6e73;
+  --accent: #0071e3;
+  --accent-light: #e8f2fd;
+  --border: #e5e5ea;
+  --green: #34c759;
+  --orange: #ff9500;
+  --red: #ff3b30;
+  --shadow: 0 1px 3px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.04);
+  --shadow-hover: 0 2px 8px rgba(0,0,0,.12), 0 8px 24px rgba(0,0,0,.06);
+  --radius: 12px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ===== Layout ===== */
+.container { max-width: 800px; margin: 0 auto; padding: 24px 20px 60px; }
+
+/* ===== Header ===== */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 28px;
+}
+.header h1 {
+  font-size: 28px; font-weight: 700; letter-spacing: -0.5px;
+}
+.header .back-btn {
+  display: none;
+  background: none; border: none; font-size: 15px; color: var(--accent);
+  cursor: pointer; padding: 6px 12px; border-radius: 8px;
+}
+.header .back-btn:hover { background: var(--accent-light); }
+
+/* ===== Upload Zone ===== */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  text-align: center;
+  color: var(--text2);
+  transition: all .2s;
+  margin-bottom: 28px;
+  cursor: pointer;
+  position: relative;
+}
+.upload-zone.drag-over {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent);
+}
+.upload-zone .icon { font-size: 36px; margin-bottom: 8px; }
+.upload-zone p { font-size: 14px; }
+.upload-zone input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer;
+}
+
+/* ===== Processing Banner ===== */
+.processing-banner {
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  display: none;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+}
+.processing-banner.visible { display: flex; }
+.processing-banner .spinner {
+  width: 18px; height: 18px;
+  border: 2px solid var(--accent);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== Day Cards ===== */
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.day-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all .2s;
+  border: 1px solid transparent;
+}
+.day-card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+.day-card .day-num {
+  font-size: 24px; font-weight: 700; color: var(--accent);
+  margin-bottom: 4px;
+}
+.day-card .word-count {
+  font-size: 13px; color: var(--text2);
+}
+.day-card .status-badge {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.status-ready { background: #e8fbe8; color: #1b7a1b; }
+.status-processing { background: #fff3e0; color: #b86e00; }
+.status-error { background: #fde8e8; color: var(--red); }
+
+/* ===== Study Page ===== */
+.study-page { display: none; }
+.study-page.active { display: block; }
+
+/* ===== Upload Modal ===== */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.4);
+  z-index: 100;
+  align-items: center; justify-content: center;
+}
+.modal-overlay.visible { display: flex; }
+.modal-box {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 28px;
+  width: 360px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(0,0,0,.2);
+}
+.modal-box h3 { margin-bottom: 16px; font-size: 18px; }
+.modal-box label { font-size: 14px; color: var(--text2); display: block; margin-bottom: 6px; }
+.modal-box input[type=number] {
+  width: 100%; padding: 10px 14px; font-size: 16px;
+  border: 1px solid var(--border); border-radius: 8px;
+  outline: none; transition: border-color .2s;
+}
+.modal-box input[type=number]:focus { border-color: var(--accent); }
+.modal-box .file-name {
+  font-size: 13px; color: var(--text2); margin-bottom: 16px;
+  word-break: break-all;
+}
+.modal-actions {
+  display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px;
+}
+.modal-actions button {
+  padding: 8px 20px; border-radius: 8px; font-size: 14px;
+  cursor: pointer; border: none; font-weight: 500;
+}
+.btn-cancel { background: var(--bg); color: var(--text); }
+.btn-cancel:hover { background: var(--border); }
+.btn-confirm { background: var(--accent); color: #fff; }
+.btn-confirm:hover { background: #005bb5; }
+.modal-box .error-msg {
+  color: var(--red); font-size: 13px; margin-top: 8px; display: none;
+}
+
+/* ===== Delete Button ===== */
+.day-card { position: relative; }
+.delete-btn {
+  position: absolute; top: 10px; right: 10px;
+  background: none; border: none; cursor: pointer;
+  color: var(--text2); font-size: 16px; padding: 4px 8px;
+  border-radius: 6px; opacity: 0; transition: all .15s;
+  line-height: 1;
+}
+.day-card:hover .delete-btn { opacity: 1; }
+.delete-btn:hover { background: var(--red); color: #fff; }
+
+/* word nav */
+.word-nav {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin-bottom: 24px;
+}
+.word-nav a {
+  padding: 6px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  font-size: 13px;
+  color: var(--text);
+  text-decoration: none;
+  transition: all .15s;
+  font-weight: 500;
+}
+.word-nav a:hover, .word-nav a.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+/* word card */
+.word-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+.word-card .word-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+  letter-spacing: -0.3px;
+}
+.word-card .word-meaning {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.7;
+  margin-bottom: 20px;
+  padding: 12px 16px;
+  background: var(--accent-light);
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+}
+
+.dialogues-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text2);
+  margin-bottom: 12px;
+}
+
+.dialogue-block {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+.dialogue-source {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-light);
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+}
+.dialogue-line {
+  margin-bottom: 6px;
+}
+.dialogue-en {
+  font-size: 15px;
+  color: var(--text);
+  line-height: 1.6;
+}
+.dialogue-zh {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.5;
+  margin-top: 2px;
+  padding-left: 2px;
+}
+.dialogue-note {
+  font-size: 12px;
+  color: var(--text2);
+  font-style: italic;
+  margin-top: 6px;
+}
+
+/* ===== Loading ===== */
+.loading {
+  text-align: center;
+  padding: 60px 0;
+  color: var(--text2);
+}
+.loading .spinner {
+  width: 32px; height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  margin: 0 auto 12px;
+}
+
+/* ===== Empty State ===== */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text2);
+}
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+
+/* ===== Responsive ===== */
+@media (max-width: 500px) {
+  .container { padding: 16px 12px 40px; }
+  .header h1 { font-size: 22px; }
+  .word-card { padding: 20px; }
+  .word-card .word-title { font-size: 22px; }
+  .day-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <h1 id="page-title">Word Study</h1>
+    <button class="back-btn" id="back-btn" onclick="goHome()">&#8592; Back</button>
+  </div>
+
+  <!-- ===== Home View ===== -->
+  <div id="home-view">
+    <!-- Upload Zone -->
+    <div class="upload-zone" id="upload-zone">
+      <div class="icon">&#128196;</div>
+      <p><strong>Drop PDF here</strong> or click to upload</p>
+      <p style="font-size:12px;margin-top:4px;color:var(--text2)">
+        Choose day number, auto-create folder and start processing
+      </p>
+      <input type="file" accept=".pdf" id="file-input">
+    </div>
+
+    <!-- Processing Banner -->
+    <div class="processing-banner" id="processing-banner">
+      <div class="spinner"></div>
+      <span id="processing-text">Processing...</span>
+    </div>
+
+    <!-- Day Cards -->
+    <div class="day-grid" id="day-grid"></div>
+
+    <div class="empty-state" id="empty-state" style="display:none">
+      <div class="icon">&#128218;</div>
+      <p>No days yet. Upload a PDF to get started.</p>
+    </div>
+  </div>
+
+  <!-- ===== Study View ===== -->
+  <div class="study-page" id="study-view">
+    <div class="word-nav" id="word-nav"></div>
+    <div id="word-cards"></div>
+  </div>
+</div>
+
+<!-- Upload Modal -->
+<div class="modal-overlay" id="upload-modal">
+  <div class="modal-box">
+    <h3>Upload PDF</h3>
+    <div class="file-name" id="modal-file-name"></div>
+    <label for="day-input">Day number:</label>
+    <input type="number" id="day-input" min="1" placeholder="e.g. 3">
+    <div class="error-msg" id="modal-error"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-confirm" onclick="confirmUpload()">Upload</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===========================================================================
+//  State
+// ===========================================================================
+let currentDay = null;
+let pollingTimer = null;
+let pollingDay = null;
+
+// ===========================================================================
+//  Router
+// ===========================================================================
+function route() {
+  const path = window.location.pathname;
+  const m = path.match(/^\/day\/(\d+)$/);
+  if (m) {
+    showStudy(parseInt(m[1]));
+  } else {
+    showHome();
+  }
+}
+
+window.addEventListener('popstate', route);
+
+function navigate(url) {
+  history.pushState(null, '', url);
+  route();
+}
+
+function goHome() {
+  navigate('/');
+}
+
+// ===========================================================================
+//  Home View
+// ===========================================================================
+async function showHome() {
+  currentDay = null;
+  document.getElementById('home-view').style.display = '';
+  document.getElementById('study-view').classList.remove('active');
+  document.getElementById('back-btn').style.display = 'none';
+  document.getElementById('page-title').textContent = 'Word Study';
+  await loadDays();
+}
+
+async function loadDays() {
+  const grid = document.getElementById('day-grid');
+  const empty = document.getElementById('empty-state');
+
+  try {
+    const resp = await fetch('/api/days');
+    const days = await resp.json();
+
+    if (days.length === 0) {
+      grid.innerHTML = '';
+      empty.style.display = '';
+      return;
+    }
+
+    empty.style.display = 'none';
+    grid.innerHTML = days.map(d => {
+      let statusClass = 'status-ready';
+      let statusText = 'Ready';
+      if (d.status === 'ready') {
+        statusClass = 'status-ready';
+        statusText = 'Ready';
+      } else if (d.status === 'error') {
+        statusClass = 'status-error';
+        statusText = 'Error';
+      } else if (d.status !== 'ready') {
+        statusClass = 'status-processing';
+        statusText = d.status;
+      }
+
+      return `
+        <div class="day-card" onclick="navigate('/day/${d.num}')">
+          <button class="delete-btn" onclick="deleteDay(event, ${d.num})" title="Delete">&times;</button>
+          <div class="day-num">Day ${d.num}</div>
+          <div class="word-count">${d.word_count} words</div>
+          <span class="status-badge ${statusClass}">${statusText}</span>
+        </div>
+      `;
+    }).join('');
+  } catch (e) {
+    grid.innerHTML = '<p style="color:var(--red)">Failed to load days</p>';
+  }
+}
+
+async function deleteDay(e, dayNum) {
+  e.stopPropagation();
+  if (!confirm(`Delete Day ${dayNum} and all its files?`)) return;
+  try {
+    const resp = await fetch(`/api/day/${dayNum}`, { method: 'DELETE' });
+    const data = await resp.json();
+    if (data.error) {
+      alert('Delete failed: ' + data.error);
+    } else {
+      loadDays();
+    }
+  } catch (err) {
+    alert('Delete failed: ' + err.message);
+  }
+}
+
+// ===========================================================================
+//  Study View
+// ===========================================================================
+async function showStudy(dayNum) {
+  currentDay = dayNum;
+  document.getElementById('home-view').style.display = 'none';
+  document.getElementById('study-view').classList.add('active');
+  document.getElementById('back-btn').style.display = '';
+  document.getElementById('page-title').textContent = `Day ${dayNum}`;
+
+  const nav = document.getElementById('word-nav');
+  const cards = document.getElementById('word-cards');
+
+  nav.innerHTML = '';
+  cards.innerHTML = `
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading...</p>
+    </div>
+  `;
+
+  try {
+    const resp = await fetch(`/api/day/${dayNum}`);
+    if (!resp.ok) {
+      cards.innerHTML = `
+        <div class="empty-state">
+          <div class="icon">&#9888;</div>
+          <p>Day ${dayNum} study notes are not ready yet.</p>
+          <p style="font-size:13px;margin-top:8px">Processing may still be in progress.</p>
+        </div>
+      `;
+      return;
+    }
+
+    const data = await resp.json();
+    renderStudy(data.words);
+  } catch (e) {
+    cards.innerHTML = `<p style="color:var(--red)">Failed to load: ${e.message}</p>`;
+  }
+}
+
+function renderStudy(words) {
+  const nav = document.getElementById('word-nav');
+  const cards = document.getElementById('word-cards');
+
+  // Build nav
+  nav.innerHTML = words.map((w, i) =>
+    `<a href="#word-${i}" onclick="scrollToWord(event, ${i})">${w.word}</a>`
+  ).join('');
+
+  // Build cards
+  cards.innerHTML = words.map((w, i) => {
+    const dialoguesHtml = w.dialogues.map(d => {
+      const linesHtml = d.lines.map(l => {
+        let html = '';
+        if (l.en) {
+          html += `<div class="dialogue-line"><div class="dialogue-en">${esc(l.en)}</div></div>`;
+        }
+        if (l.zh) {
+          html += `<div class="dialogue-line"><div class="dialogue-zh">${esc(l.zh)}</div></div>`;
+        }
+        if (l.note) {
+          html += `<div class="dialogue-note">${esc(l.note)}</div>`;
+        }
+        return html;
+      }).join('');
+
+      return `
+        <div class="dialogue-block">
+          ${d.source ? `<div class="dialogue-source">${esc(d.source)}</div>` : ''}
+          ${linesHtml}
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="word-card" id="word-${i}">
+        <div class="word-title">${esc(w.word)}</div>
+        <div class="word-meaning">${esc(w.meaning)}</div>
+        <div class="dialogues-label">Example Dialogues</div>
+        ${dialoguesHtml}
+      </div>
+    `;
+  }).join('');
+}
+
+function scrollToWord(e, idx) {
+  e.preventDefault();
+  const el = document.getElementById('word-' + idx);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // highlight nav
+    document.querySelectorAll('.word-nav a').forEach(a => a.classList.remove('active'));
+    document.querySelectorAll('.word-nav a')[idx]?.classList.add('active');
+  }
+}
+
+function esc(s) {
+  if (!s) return '';
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// ===========================================================================
+//  Upload (with modal for day number)
+// ===========================================================================
+const uploadZone = document.getElementById('upload-zone');
+const fileInput = document.getElementById('file-input');
+let pendingFile = null;
+
+uploadZone.addEventListener('dragover', e => {
+  e.preventDefault();
+  uploadZone.classList.add('drag-over');
+});
+
+uploadZone.addEventListener('dragleave', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag-over');
+});
+
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadZone.classList.remove('drag-over');
+  const files = e.dataTransfer.files;
+  if (files.length > 0) openModal(files[0]);
+});
+
+fileInput.addEventListener('change', e => {
+  if (e.target.files.length > 0) {
+    openModal(e.target.files[0]);
+    e.target.value = '';
+  }
+});
+
+function openModal(file) {
+  if (!file.name.toLowerCase().endsWith('.pdf')) {
+    alert('Please select a PDF file');
+    return;
+  }
+  pendingFile = file;
+  document.getElementById('modal-file-name').textContent = file.name;
+  document.getElementById('modal-error').style.display = 'none';
+  // suggest next day number
+  const cards = document.querySelectorAll('.day-card');
+  let maxDay = 0;
+  cards.forEach(c => {
+    const m = c.querySelector('.day-num')?.textContent.match(/\d+/);
+    if (m) maxDay = Math.max(maxDay, parseInt(m[0]));
+  });
+  document.getElementById('day-input').value = maxDay + 1;
+  document.getElementById('upload-modal').classList.add('visible');
+  document.getElementById('day-input').focus();
+  document.getElementById('day-input').select();
+}
+
+function closeModal() {
+  document.getElementById('upload-modal').classList.remove('visible');
+  pendingFile = null;
+}
+
+// close modal on overlay click
+document.getElementById('upload-modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// confirm on Enter key
+document.getElementById('day-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') confirmUpload();
+});
+
+async function confirmUpload() {
+  const dayNum = parseInt(document.getElementById('day-input').value);
+  const errEl = document.getElementById('modal-error');
+
+  if (!dayNum || dayNum < 1) {
+    errEl.textContent = 'Please enter a valid day number';
+    errEl.style.display = '';
+    return;
+  }
+
+  if (!pendingFile) return;
+
+  const file = pendingFile;
+  closeModal();
+
+  const banner = document.getElementById('processing-banner');
+  const text = document.getElementById('processing-text');
+  banner.classList.add('visible');
+  text.textContent = `Day ${dayNum}: uploading...`;
+
+  const form = new FormData();
+  form.append('file', file);
+  form.append('day', dayNum);
+
+  try {
+    const resp = await fetch('/api/upload', { method: 'POST', body: form });
+    const data = await resp.json();
+
+    if (data.error) {
+      text.textContent = 'Error: ' + data.error;
+      setTimeout(() => banner.classList.remove('visible'), 5000);
+      return;
+    }
+
+    pollingDay = data.day;
+    text.textContent = `Day ${pollingDay}: extracting words from PDF...`;
+    startPolling(pollingDay);
+    loadDays();
+  } catch (e) {
+    text.textContent = 'Upload failed: ' + e.message;
+    setTimeout(() => banner.classList.remove('visible'), 5000);
+  }
+}
+
+function startPolling(dayNum) {
+  if (pollingTimer) clearInterval(pollingTimer);
+  pollingTimer = setInterval(async () => {
+    try {
+      const resp = await fetch(`/api/status/${dayNum}`);
+      const s = await resp.json();
+      const text = document.getElementById('processing-text');
+      const banner = document.getElementById('processing-banner');
+
+      const stepLabels = {
+        extracting: 'Extracting words from PDF...',
+        scraping: 'Searching movie quotes...',
+        formatting: 'Generating study notes (LLM)...',
+        done: 'Done! Ready to study.',
+        error: 'Error: ' + (s.error || 'unknown'),
+      };
+
+      text.textContent = `Day ${dayNum}: ${stepLabels[s.step] || s.step}`;
+
+      if (s.step === 'done' || s.step === 'error') {
+        clearInterval(pollingTimer);
+        pollingTimer = null;
+        loadDays();
+        setTimeout(() => banner.classList.remove('visible'), 4000);
+      }
+    } catch (e) { /* ignore */ }
+  }, 3000);
+}
+
+// ===========================================================================
+//  Init
+// ===========================================================================
+route();
+</script>
+</body>
+</html>

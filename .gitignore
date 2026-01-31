@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Secrets
+评论/config.py
+
+# Claude Code settings
+**/.claude/
+
+# OS
+Thumbs.db
+.DS_Store
+nul
+
+# IDE
+.vscode/
+.idea/
+
+# Generated data (too large for git)
+2台词/word/day*/day*.json
+2台词/word/day*/day*.csv
+2台词/word/day*/day*.pdf
+1分镜/video_maker/*/input/
+1分镜/video_maker/*/output/
+
+# Crawler data (media files too large)
+爬虫/data/
+评论/output/

@@ -1,0 +1,18 @@
+# 输出文件
+*/output/
+*.mp4
+*.mp3
+*.srt
+
+# 临时文件
+_temp*
+_silence*
+_vocab_*
+_title_*
+
+# IDE / 系统
+.claude/
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
