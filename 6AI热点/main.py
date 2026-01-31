@@ -1,16 +1,21 @@
 import os
 import json
+import html
 import requests
 import feedparser
 from openai import OpenAI
 from datetime import datetime, timezone, timedelta
+from pathlib import Path
 
 # --- 配置 ---
 QWEN_API_KEY = os.getenv("QWEN_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "-1003878273027")
 MODEL_NAME = "qwen3-vl-flash-2026-01-22"
-TARGET_COUNT = 10  # 目标推送条数
+TARGET_COUNT = 6  # 目标推送条数
+
+BJ_TZ = timezone(timedelta(hours=8))
+DOCS_DIR = Path(__file__).resolve().parent.parent / "docs"
 
 client = OpenAI(
     api_key=QWEN_API_KEY,
@@ -20,85 +25,28 @@ client = OpenAI(
 # --- 信源列表 ---
 SOURCES = [
     # ===== 国际硬核 =====
-    {
-        "name": "Hacker News",
-        "url": "https://hnrss.org/newest?q=AI+LLM+Transformer+GPT",
-        "type": "general",
-        "count": 8,
-    },
-    {
-        "name": "HF Papers",
-        "url": "https://rsshub.app/huggingface/daily-papers",
-        "type": "general",
-        "count": 8,
-    },
-    {
-        "name": "GitHub Trending",
-        "url": "https://rsshub.app/github/trending/daily/python?since=daily",
-        "type": "general",
-        "count": 6,
-    },
-    {
-        "name": "ArXiv cs.AI",
-        "url": "https://rss.arxiv.org/rss/cs.AI",
-        "type": "general",
-        "count": 6,
-    },
-    {
-        "name": "ArXiv cs.CL",
-        "url": "https://rss.arxiv.org/rss/cs.CL",
-        "type": "general",
-        "count": 6,
-    },
+    {"name": "Hacker News", "url": "https://hnrss.org/newest?q=AI+LLM+Transformer+GPT", "type": "general", "count": 8},
+    {"name": "HF Papers", "url": "https://rsshub.app/huggingface/daily-papers", "type": "general", "count": 8},
+    {"name": "GitHub Trending", "url": "https://rsshub.app/github/trending/daily/python?since=daily", "type": "general", "count": 6},
+    {"name": "ArXiv cs.AI", "url": "https://rss.arxiv.org/rss/cs.AI", "type": "general", "count": 6},
+    {"name": "ArXiv cs.CL", "url": "https://rss.arxiv.org/rss/cs.CL", "type": "general", "count": 6},
     # ===== 国际社区 =====
-    {
-        "name": "Reddit LocalLLaMA",
-        "url": "https://www.reddit.com/r/LocalLLaMA/.rss",
-        "type": "general",
-        "count": 6,
-    },
-    {
-        "name": "Reddit MachineLearning",
-        "url": "https://www.reddit.com/r/MachineLearning/.rss",
-        "type": "general",
-        "count": 6,
-    },
-    {
-        "name": "OpenAI Blog",
-        "url": "https://rsshub.app/openai/blog",
-        "type": "general",
-        "count": 5,
-    },
-    {
-        "name": "Google AI Blog",
-        "url": "https://rsshub.app/google/research",
-        "type": "general",
-        "count": 5,
-    },
-    {
-        "name": "MIT Tech Review AI",
-        "url": "https://www.technologyreview.com/feed/",
-        "type": "general",
-        "count": 5,
-    },
+    {"name": "Reddit LocalLLaMA", "url": "https://www.reddit.com/r/LocalLLaMA/.rss", "type": "general", "count": 6},
+    {"name": "Reddit ML", "url": "https://www.reddit.com/r/MachineLearning/.rss", "type": "general", "count": 6},
+    {"name": "OpenAI Blog", "url": "https://rsshub.app/openai/blog", "type": "general", "count": 5},
+    {"name": "Google AI", "url": "https://rsshub.app/google/research", "type": "general", "count": 5},
+    {"name": "MIT Tech Review", "url": "https://www.technologyreview.com/feed/", "type": "general", "count": 5},
     # ===== 国内权威 =====
-    {
-        "name": "机器之心",
-        "url": "https://www.jiqizhixin.com/rss",
-        "type": "cn_media",
-        "count": 6,
-    },
-    {
-        "name": "量子位",
-        "url": "https://rsshub.app/qbitai/category/资讯",
-        "type": "cn_media",
-        "count": 6,
-    },
+    {"name": "机器之心", "url": "https://www.jiqizhixin.com/rss", "type": "cn_media", "count": 6},
+    {"name": "量子位", "url": "https://rsshub.app/qbitai/category/资讯", "type": "cn_media", "count": 6},
 ]
 
 
+# ============================================================
+# LLM 调用
+# ============================================================
+
 def call_qwen(prompt: str) -> str | None:
-    """调用 Qwen API (OpenAI 兼容接口)"""
     try:
         resp = client.chat.completions.create(
             model=MODEL_NAME,
@@ -111,7 +59,6 @@ def call_qwen(prompt: str) -> str | None:
 
 
 def analyze_news(title: str, summary: str, source_type: str) -> dict | None:
-    """使用 LLM 对单条新闻评级，返回 dict 或 None"""
     anti_hype = ""
     if source_type == "cn_media":
         anti_hype = (
@@ -133,7 +80,7 @@ def analyze_news(title: str, summary: str, source_type: str) -> dict | None:
 - C级 (1-4): 纯水文、无实质内容的公关稿、重复旧闻。
 
 请只输出一个合法 JSON，不要包含 Markdown 代码块标记：
-{{"rating":"S/A/B/C","score":整数1到10,"comment":"一句话点评(中文,30字内)","tags":["标签1","标签2"]}}"""
+{{"rating":"S/A/B/C","score":整数1到10,"comment":"一句话点评(中文,20字内)","tags":["标签1","标签2"]}}"""
 
     text = call_qwen(prompt)
     if not text:
@@ -152,8 +99,11 @@ def analyze_news(title: str, summary: str, source_type: str) -> dict | None:
         return None
 
 
+# ============================================================
+# 数据采集
+# ============================================================
+
 def fetch_source(source: dict) -> list[dict]:
-    """抓取单个 RSS 信源并评级，返回带评分的条目列表"""
     name = source["name"]
     count = source.get("count", 5)
     print(f">> 正在抓取: {name} ...")
@@ -181,27 +131,23 @@ def fetch_source(source: dict) -> list[dict]:
 
         rating = analysis.get("rating", "C")
         score = analysis.get("score", 0)
-        results.append(
-            {
-                "source": name,
-                "title": title,
-                "link": link,
-                "rating": rating,
-                "score": score,
-                "comment": analysis.get("comment", ""),
-                "tags": analysis.get("tags", []),
-            }
-        )
+        results.append({
+            "source": name,
+            "title": title,
+            "link": link,
+            "rating": rating,
+            "score": score,
+            "comment": analysis.get("comment", ""),
+            "tags": analysis.get("tags", []),
+        })
         print(f"   [{rating}|{score}] {title}")
 
     return results
 
 
 def select_top_news(all_news: list[dict]) -> list[dict]:
-    """按评分排序，优先 S/A，不够则补 B 级，目标 TARGET_COUNT 条"""
     all_news.sort(key=lambda x: x["score"], reverse=True)
 
-    # 去重：同标题只保留最高分
     seen = set()
     unique = []
     for item in all_news:
@@ -210,91 +156,71 @@ def select_top_news(all_news: list[dict]) -> list[dict]:
             seen.add(key)
             unique.append(item)
 
-    # 先选 S/A 级
     selected = [n for n in unique if n["rating"] in ("S", "A")]
 
-    # 不够则补 B 级
     if len(selected) < TARGET_COUNT:
         b_pool = [n for n in unique if n["rating"] == "B"]
         selected.extend(b_pool[: TARGET_COUNT - len(selected)])
 
-    # 最终按分数排序
     selected.sort(key=lambda x: x["score"], reverse=True)
     return selected
 
 
+# ============================================================
+# LLM 生成总结
+# ============================================================
+
 def generate_summary(news_list: list[dict]) -> str:
-    """让 LLM 生成今日总结概览"""
     headlines = "\n".join(
         [f"- [{n['rating']}|{n['score']}] {n['title']}" for n in news_list]
     )
-
-    prompt = f"""你是一位 AI 领域情报编辑。以下是今天筛选出的高价值 AI 新闻标题列表：
+    prompt = f"""你是一位 AI 领域情报编辑。以下是今天筛选出的 AI 新闻标题列表：
 
 {headlines}
 
-请用中文写一段 3-5 句话的「今日概览」，概括今天 AI 领域的整体动态和最值得关注的方向。
-要求：语言简洁有洞察力，像一位资深编辑写的晨报导语，不要用 Markdown 格式。"""
+请用中文写 2-3 句话的「今日概览」，概括今天最值得关注的方向。
+要求：简洁、有洞察力、不超过 80 字，不要用 Markdown 格式。"""
 
     result = call_qwen(prompt)
     return result.strip() if result else "今日 AI 领域动态汇总如下。"
 
 
-def build_report(news_list: list[dict], summary: str) -> str:
-    """构建 Telegram HTML 格式日报：总结在前，逐条在后"""
-    bj_time = datetime.now(timezone(timedelta(hours=8)))
-    today = bj_time.strftime("%Y-%m-%d")
+# ============================================================
+# Telegram 推送
+# ============================================================
 
+def build_telegram_report(news_list: list[dict], summary: str) -> str:
+    today = datetime.now(BJ_TZ).strftime("%Y-%m-%d")
     lines = []
-    # ===== 标题 =====
-    lines.append(f"<b>📡 AI 每日情报 | {today}</b>")
-    lines.append("")
 
-    # ===== 今日概览 =====
-    lines.append("<b>🧭 今日概览</b>")
+    lines.append(f"<b>📡 AI 情报 | {today}</b>")
     lines.append(f"<i>{summary}</i>")
     lines.append("")
-    lines.append(f"共筛选 <b>{len(news_list)}</b> 条值得关注的内容：")
-    lines.append("━━━━━━━━━━━━━━━━━━")
-    lines.append("")
 
-    # ===== 逐条展示 =====
     for i, item in enumerate(news_list, 1):
-        # 评级 icon
-        if item["rating"] == "S":
-            badge = "🔴 S"
-        elif item["rating"] == "A":
-            badge = "🟠 A"
-        else:
-            badge = "🟡 B"
-
+        badge = {"S": "🔴S", "A": "🟠A"}.get(item["rating"], "🟡B")
         tags = " ".join([f"#{t}" for t in item["tags"]]) if item["tags"] else ""
+        title_escaped = html.escape(item["title"])
+        comment_escaped = html.escape(item["comment"])
 
-        lines.append(f"<b>{i}. {item['title']}</b>")
-        lines.append(f"   {badge} · {item['score']}分 · {item['source']}")
-        lines.append(f"   💬 {item['comment']}")
+        lines.append(f"<b>{i}. {title_escaped}</b>")
+        lines.append(f"  {badge}·{item['score']}分 | {item['source']}")
+        lines.append(f"  {comment_escaped}")
         if tags:
-            lines.append(f"   {tags}")
-        lines.append(f"   🔗 <a href='{item['link']}'>阅读原文</a>")
+            lines.append(f"  {tags}")
+        lines.append(f"  <a href='{item['link']}'>原文</a>")
         lines.append("")
-
-    # ===== 尾部 =====
-    lines.append("━━━━━━━━━━━━━━━━━━")
-    lines.append("<i>🤖 由 AI 情报 Agent 自动生成</i>")
 
     return "\n".join(lines)
 
 
 def send_telegram(text: str):
-    """发送消息到 Telegram，按段落智能分割"""
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
     max_len = 3800
 
-    # 按空行分段，尽量不在条目中间截断
     paragraphs = text.split("\n\n")
     chunks = []
     current = ""
-
     for para in paragraphs:
         if len(current) + len(para) + 2 > max_len:
             if current:
@@ -302,7 +228,6 @@ def send_telegram(text: str):
             current = para
         else:
             current = current + "\n\n" + para if current else para
-
     if current:
         chunks.append(current)
 
@@ -321,6 +246,90 @@ def send_telegram(text: str):
             print(f"[Telegram 网络错误] {e}")
 
 
+# ============================================================
+# GitHub Pages 网页生成
+# ============================================================
+
+def build_html_page(news_list: list[dict], summary: str) -> str:
+    today = datetime.now(BJ_TZ).strftime("%Y-%m-%d")
+
+    news_html = ""
+    for item in news_list:
+        badge_cls = {"S": "badge-s", "A": "badge-a"}.get(item["rating"], "badge-b")
+        badge_text = item["rating"]
+        tags = "".join([f'<span class="tag">{html.escape(t)}</span>' for t in item["tags"]])
+        title_escaped = html.escape(item["title"])
+        comment_escaped = html.escape(item["comment"])
+
+        news_html += f"""
+        <div class="card">
+            <div class="card-header">
+                <span class="badge {badge_cls}">{badge_text}</span>
+                <span class="score">{item['score']}分</span>
+                <span class="source">{html.escape(item['source'])}</span>
+            </div>
+            <h3 class="card-title"><a href="{item['link']}" target="_blank">{title_escaped}</a></h3>
+            <p class="comment">{comment_escaped}</p>
+            <div class="tags">{tags}</div>
+        </div>"""
+
+    return f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 每日情报 | {today}</title>
+    <style>
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+        body {{ font-family: -apple-system, "Noto Sans SC", sans-serif; background: #0f0f13; color: #e0e0e0; min-height: 100vh; }}
+        .container {{ max-width: 720px; margin: 0 auto; padding: 24px 16px; }}
+        header {{ text-align: center; margin-bottom: 32px; }}
+        header h1 {{ font-size: 1.6rem; color: #fff; margin-bottom: 8px; }}
+        header .date {{ color: #888; font-size: 0.9rem; }}
+        .summary {{ background: #1a1a24; border-left: 3px solid #5b8def; padding: 16px; border-radius: 8px; margin-bottom: 28px; line-height: 1.7; color: #ccc; font-size: 0.95rem; }}
+        .card {{ background: #1a1a24; border-radius: 10px; padding: 16px; margin-bottom: 14px; transition: transform 0.15s; }}
+        .card:hover {{ transform: translateY(-2px); }}
+        .card-header {{ display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.85rem; }}
+        .badge {{ padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.8rem; }}
+        .badge-s {{ background: #e74c3c; color: #fff; }}
+        .badge-a {{ background: #e67e22; color: #fff; }}
+        .badge-b {{ background: #f1c40f; color: #222; }}
+        .score {{ color: #aaa; }}
+        .source {{ color: #666; margin-left: auto; }}
+        .card-title {{ font-size: 1rem; margin-bottom: 6px; }}
+        .card-title a {{ color: #7eb8ff; text-decoration: none; }}
+        .card-title a:hover {{ text-decoration: underline; }}
+        .comment {{ color: #999; font-size: 0.88rem; margin-bottom: 8px; }}
+        .tags {{ display: flex; gap: 6px; flex-wrap: wrap; }}
+        .tag {{ background: #252535; color: #8a8aaf; padding: 2px 8px; border-radius: 4px; font-size: 0.78rem; }}
+        footer {{ text-align: center; color: #555; font-size: 0.8rem; margin-top: 32px; padding-top: 16px; border-top: 1px solid #222; }}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📡 AI 每日情报</h1>
+            <div class="date">{today} · 共 {len(news_list)} 条精选</div>
+        </header>
+        <div class="summary">{html.escape(summary)}</div>
+        {news_html}
+        <footer>由 AI 情报 Agent 自动生成 · GitHub Actions 每日更新</footer>
+    </div>
+</body>
+</html>"""
+
+
+def save_html(news_list: list[dict], summary: str):
+    DOCS_DIR.mkdir(parents=True, exist_ok=True)
+    page = build_html_page(news_list, summary)
+    (DOCS_DIR / "index.html").write_text(page, encoding="utf-8")
+    print(f"网页已生成: {DOCS_DIR / 'index.html'}")
+
+
+# ============================================================
+# 主流程
+# ============================================================
+
 def main():
     print("=== AI 每日情报 Agent 启动 ===\n")
     all_news = []
@@ -329,7 +338,6 @@ def main():
 
     print(f"\n共抓取并评级 {len(all_news)} 条内容")
 
-    # 筛选 top N
     selected = select_top_news(all_news)
     if not selected:
         print("今日无值得推送的内容。")
@@ -337,15 +345,18 @@ def main():
 
     print(f"筛选出 {len(selected)} 条推送内容，正在生成总结 ...")
 
-    # LLM 生成今日总结
     summary = generate_summary(selected)
     print(f"今日概览: {summary}\n")
 
-    # 构建并发送报告
-    report = build_report(selected, summary)
+    # Telegram 推送
+    tg_report = build_telegram_report(selected, summary)
     print("正在推送 Telegram ...")
-    send_telegram(report)
-    print("推送完成。")
+    send_telegram(tg_report)
+    print("Telegram 推送完成。")
+
+    # 生成网页
+    save_html(selected, summary)
+    print("全部完成。")
 
 
 if __name__ == "__main__":
