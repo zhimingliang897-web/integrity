@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI辩论赛</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, "Microsoft YaHei", sans-serif;
+            background: #0a0a1a;
+            color: #e0e0e0;
+            min-height: 100vh;
+        }
+
+        /* ===== 顶栏 ===== */
+        .header {
+            background: linear-gradient(135deg, #1a1a3e 0%, #0d0d2b 100%);
+            padding: 16px 24px;
+            text-align: center;
+            border-bottom: 1px solid #2a2a5a;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            background: linear-gradient(90deg, #4facfe, #f093fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ===== 设置面板 ===== */
+        .setup-panel {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 24px;
+            background: #111130;
+            border-radius: 12px;
+            border: 1px solid #2a2a5a;
+        }
+
+        .setup-panel h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+            color: #8888cc;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #aaa;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            background: #1a1a3e;
+            border: 1px solid #3a3a6a;
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-group select option {
+            background: #1a1a3e;
+        }
+
+        .topic-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .topic-chip {
+            padding: 6px 12px;
+            background: #1e1e4a;
+            border: 1px solid #3a3a6a;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .topic-chip:hover {
+            background: #2a2a6a;
+            border-color: #4facfe;
+        }
+
+        .topic-chip.active {
+            background: #2a3a7a;
+            border-color: #4facfe;
+            color: #4facfe;
+        }
+
+        /* 辩手卡片 */
+        .debaters-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .debater-card {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid;
+            font-size: 13px;
+        }
+
+        .debater-card.pro {
+            background: #0d1b3a;
+            border-color: #1a4a8a;
+        }
+
+        .debater-card.con {
+            background: #2a0d0d;
+            border-color: #8a1a1a;
+        }
+
+        .debater-card .name {
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .debater-card .meta {
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .btn-start {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: opacity 0.2s;
+        }
+
+        .btn-start:hover {
+            opacity: 0.9;
+        }
+
+        .btn-start:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ===== 辩论直播区 ===== */
+        .debate-arena {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            display: none;
+        }
+
+        .debate-arena.active {
+            display: block;
+        }
+
+        .phase-bar {
+            text-align: center;
+            padding: 12px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #1a1a3e, #2a1a3e);
+            border-radius: 8px;
+            border: 1px solid #4a3a7a;
+        }
+
+        .phase-bar .phase-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #c090ff;
+        }
+
+        .phase-bar .phase-desc {
+            font-size: 13px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .topic-banner {
+            text-align: center;
+            padding: 16px;
+            margin-bottom: 16px;
+            background: #111130;
+            border-radius: 8px;
+            border: 1px solid #2a2a5a;
+        }
+
+        .topic-banner .topic-text {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+
+        .topic-banner .positions {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .topic-banner .pos-pro {
+            color: #4facfe;
+        }
+
+        .topic-banner .pos-con {
+            color: #fe4f4f;
+        }
+
+        /* 消息流 */
+        .message-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .message-bubble {
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .message-bubble.pro {
+            background: #0d1b3a;
+            border-color: #1a4a8a;
+            margin-right: 60px;
+        }
+
+        .message-bubble.con {
+            background: #2a0d0d;
+            border-color: #8a1a1a;
+            margin-left: 60px;
+        }
+
+        .message-bubble.system {
+            background: #1a1a3e;
+            border-color: #3a3a6a;
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+        }
+
+        .message-bubble.judge {
+            background: #1a2a1a;
+            border-color: #2a6a2a;
+        }
+
+        .bubble-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .bubble-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .bubble-tag {
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+
+        .bubble-tag.pro {
+            background: #1a3a6a;
+            color: #4facfe;
+        }
+
+        .bubble-tag.con {
+            background: #5a1a1a;
+            color: #fe6f6f;
+        }
+
+        .bubble-tag.judge {
+            background: #1a3a1a;
+            color: #6ffe6f;
+        }
+
+        .bubble-content {
+            font-size: 15px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 16px;
+            background: #4facfe;
+            animation: blink 0.8s infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* 音频播放状态 */
+        .audio-playing {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #6afe6a;
+        }
+
+        .audio-bar {
+            display: inline-block;
+            width: 3px;
+            height: 12px;
+            background: #6afe6a;
+            border-radius: 2px;
+            animation: audioWave 0.6s ease-in-out infinite alternate;
+        }
+
+        .audio-bar:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .audio-bar:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes audioWave {
+            from {
+                height: 4px;
+            }
+
+            to {
+                height: 14px;
+            }
+        }
+
+        /* 控制栏 */
+        .controls {
+            position: sticky;
+            bottom: 0;
+            background: #0a0a1a;
+            padding: 12px 0;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .controls button {
+            padding: 10px 24px;
+            border-radius: 8px;
+            border: 1px solid #3a3a6a;
+            background: #1a1a3e;
+            color: #e0e0e0;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .controls button:hover {
+            background: #2a2a5a;
+        }
+
+        .controls button.primary {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: #000;
+            border: none;
+            font-weight: bold;
+        }
+
+        .controls button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 裁判结果 */
+        .judge-result {
+            padding: 20px;
+            background: #111130;
+            border: 1px solid #2a6a2a;
+            border-radius: 12px;
+            margin: 16px 0;
+        }
+
+        .judge-result h3 {
+            color: #6afe6a;
+            margin-bottom: 12px;
+        }
+
+        .judge-result .content {
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        /* 加载动画 */
+        .loading-dots span {
+            animation: dotBounce 1.4s infinite ease-in-out both;
+        }
+
+        .loading-dots span:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .loading-dots span:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes dotBounce {
+
+            0%,
+            80%,
+            100% {
+                opacity: 0.3;
+            }
+
+            40% {
+                opacity: 1;
+            }
+        }
+
+        /* 音频模式切换 */
+        .audio-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #888;
+        }
+
+        .audio-toggle input[type="checkbox"] {
+            accent-color: #4facfe;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>AI辩论赛</h1>
+    </div>
+
+    <!-- 设置面板 -->
+    <div id="setupPanel" class="setup-panel">
+        <h2>选择辩题</h2>
+
+        <div class="topic-presets" id="topicPresets"></div>
+
+        <div class="form-group">
+            <label>辩题（可自定义）</label>
+            <input type="text" id="topicInput" placeholder="输入辩论主题...">
+        </div>
+        <div class="form-group">
+            <label>正方立场</label>
+            <textarea id="proPosition" rows="2" placeholder="正方的核心观点..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>反方立场</label>
+            <textarea id="conPosition" rows="2" placeholder="反方的核心观点..."></textarea>
+        </div>
+
+        <h2>辩手阵容</h2>
+        <div class="debaters-grid" id="debatersGrid"></div>
+
+        <button class="btn-start" id="btnStart" onclick="startDebate()">开始辩论</button>
+    </div>
+
+    <!-- 辩论直播区 -->
+    <div id="debateArena" class="debate-arena">
+        <div class="topic-banner" id="topicBanner"></div>
+        <div class="phase-bar" id="phaseBar">
+            <div class="phase-name">准备中...</div>
+        </div>
+        <div class="message-flow" id="messageFlow"></div>
+        <div class="controls" id="controls">
+            <div class="audio-toggle">
+                <input type="checkbox" id="audioEnabled" checked>
+                <label for="audioEnabled">语音播放</label>
+            </div>
+            <button id="btnExport" class="primary" onclick="exportVideo()" disabled>导出视频</button>
+            <button onclick="resetDebate()">新辩论</button>
+        </div>
+    </div>
+
+    <!-- 隐藏音频播放器 -->
+    <audio id="audioPlayer"></audio>
+
+    <script>
+        let eventSource = null;
+        let currentBubbleEl = null;
+        let debateFinished = false;
+
+        // 事件队列系统
+        let eventQueue = [];
+        let isProcessingEvent = false;
+        let tokenBuffer = [];
+        let isStreamingTokens = false;
+
+        // ===== 初始化 =====
+        async function init() {
+            // 加载预设辩题
+            const res = await fetch("/api/topics");
+            const topics = await res.json();
+            const container = document.getElementById("topicPresets");
+            topics.forEach((t, i) => {
+                const chip = document.createElement("div");
+                chip.className = "topic-chip";
+                chip.textContent = t.topic;
+                chip.onclick = () => selectTopic(t, chip);
+                container.appendChild(chip);
+            });
+
+            // 加载辩手信息
+            const res2 = await fetch("/api/debaters");
+            const debaters = await res2.json();
+            const grid = document.getElementById("debatersGrid");
+            debaters.forEach(d => {
+                const card = document.createElement("div");
+                card.className = `debater-card ${d.side}`;
+                card.innerHTML = `
+                    <div class="name">${d.name}</div>
+                    <div class="meta">
+                        ${d.side === 'pro' ? '正方' : '反方'}${d.role}
+                        · ${d.model}
+                        · ${d.voice_name}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function selectTopic(topic, chipEl) {
+            document.querySelectorAll(".topic-chip").forEach(c => c.classList.remove("active"));
+            chipEl.classList.add("active");
+            document.getElementById("topicInput").value = topic.topic;
+            document.getElementById("proPosition").value = topic.pro_position;
+            document.getElementById("conPosition").value = topic.con_position;
+        }
+
+        // ===== 启动辩论 =====
+        async function startDebate() {
+            const topic = document.getElementById("topicInput").value.trim();
+            const proPos = document.getElementById("proPosition").value.trim();
+            const conPos = document.getElementById("conPosition").value.trim();
+
+            if (!topic || !proPos || !conPos) {
+                alert("请填写完整的辩题和正反方立场");
+                return;
+            }
+
+            document.getElementById("btnStart").disabled = true;
+
+            const res = await fetch("/api/start", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ topic, pro_position: proPos, con_position: conPos }),
+            });
+            const data = await res.json();
+            if (data.error) {
+                alert(data.error);
+                document.getElementById("btnStart").disabled = false;
+                return;
+            }
+
+            // 切换到辩论界面
+            document.getElementById("setupPanel").style.display = "none";
+            document.getElementById("debateArena").classList.add("active");
+
+            // 显示辩题
+            document.getElementById("topicBanner").innerHTML = `
+                <div class="topic-text">${topic}</div>
+                <div class="positions">
+                    <span class="pos-pro">正方：${proPos}</span>
+                    <span class="pos-con">反方：${conPos}</span>
+                </div>
+            `;
+
+            // 连接 SSE
+            connectSSE();
+        }
+
+        // ===== SSE 连接 =====
+        function connectSSE() {
+            eventSource = new EventSource("/api/stream");
+
+            eventSource.addEventListener("phase", e => {
+                const data = JSON.parse(e.data);
+                eventQueue.push({ type: 'phase', data });
+                processNextEvent();
+            });
+
+            eventSource.addEventListener("speaker", e => {
+                const data = JSON.parse(e.data);
+                eventQueue.push({ type: 'speaker', data });
+                processNextEvent();
+            });
+
+            // Plan B: 移除 token 流式显示，直接等 turn_end
+
+            eventSource.addEventListener("turn_end", e => {
+                const data = JSON.parse(e.data);
+                eventQueue.push({ type: 'turn_end', data });
+                processNextEvent();
+            });
+
+            eventSource.addEventListener("judge", e => {
+                const data = JSON.parse(e.data);
+                eventQueue.push({ type: 'judge', data });
+                processNextEvent();
+            });
+
+            eventSource.addEventListener("debate_end", e => {
+                const data = JSON.parse(e.data);
+                eventQueue.push({ type: 'debate_end', data });
+                processNextEvent();
+            });
+
+            eventSource.addEventListener("error", e => {
+                try {
+                    const data = JSON.parse(e.data);
+                    alert("辩论出错: " + data.message);
+                } catch {
+                    // SSE 连接错误
+                }
+            });
+        }
+
+        // ===== 事件队列处理 =====
+        async function processNextEvent() {
+            if (isProcessingEvent || eventQueue.length === 0) return;
+
+            isProcessingEvent = true;
+            const event = eventQueue.shift();
+
+            switch (event.type) {
+                case 'phase':
+                    handlePhase(event.data);
+                    isProcessingEvent = false;
+                    processNextEvent();
+                    break;
+
+                case 'speaker':
+                    handleSpeaker(event.data);
+                    isProcessingEvent = false;
+                    processNextEvent();
+                    break;
+
+                case 'turn_end':
+                    await handleTurnEnd(event.data);
+                    isProcessingEvent = false;
+                    processNextEvent();
+                    break;
+
+                case 'judge':
+                    await handleJudge(event.data);
+                    isProcessingEvent = false;
+                    processNextEvent();
+                    break;
+
+                case 'debate_end':
+                    handleDebateEnd(event.data);
+                    isProcessingEvent = false;
+                    break;
+            }
+        }
+
+        function handlePhase(data) {
+            document.getElementById("phaseBar").innerHTML = `
+                <div class="phase-name">${data.phase}</div>
+                <div class="phase-desc">${data.description || ''}</div>
+            `;
+        }
+
+        function handleSpeaker(data) {
+            const flow = document.getElementById("messageFlow");
+            const bubble = document.createElement("div");
+            const sideClass = data.side === 'pro' ? 'pro' : 'con';
+            bubble.className = `message-bubble ${sideClass}`;
+
+            const sideLabel = data.side === 'pro' ? '正方' : '反方';
+            bubble.innerHTML = `
+                <div class="bubble-header">
+                    <span class="bubble-name">${data.name}</span>
+                    <span class="bubble-tag ${sideClass}">${sideLabel}${data.role}</span>
+                </div>
+                <div class="bubble-content">
+                    <span class="loading-dots">发言生成中<span>.</span><span>.</span><span>.</span></span>
+                </div>
+            `;
+            flow.appendChild(bubble);
+            currentBubbleEl = bubble.querySelector(".bubble-content");
+            bubble.scrollIntoView({ behavior: "smooth", block: "end" });
+        }
+
+        async function handleTurnEnd(data) {
+            if (currentBubbleEl) {
+                // 直接显示完整文字 (Plan B)
+                currentBubbleEl.textContent = data.full_text;
+                currentBubbleEl.parentElement.scrollIntoView({ behavior: "smooth", block: "end" });
+            }
+
+            currentBubbleEl = null;
+
+            // 播放音频并等待完成
+            if (data.audio_url && document.getElementById("audioEnabled").checked) {
+                await playAudioSync(data.audio_url);
+            } else {
+                // 如果没有音频或未开启，直接通知后端继续
+                await notifyContinue();
+            }
+        }
+
+        async function handleJudge(data) {
+            const flow = document.getElementById("messageFlow");
+            const result = document.createElement("div");
+            result.className = "judge-result";
+            result.innerHTML = `
+                <h3>裁判评判</h3>
+                <div class="content">${formatJudgeContent(data.content)}</div>
+            `;
+            flow.appendChild(result);
+            result.scrollIntoView({ behavior: "smooth", block: "end" });
+
+            if (data.audio_url && document.getElementById("audioEnabled").checked) {
+                await playAudioSync(data.audio_url);
+            } else {
+                await notifyContinue();
+            }
+        }
+
+        function handleDebateEnd(data) {
+            debateFinished = true;
+            eventSource.close();
+            document.getElementById("btnExport").disabled = false;
+            document.getElementById("phaseBar").innerHTML = `
+                <div class="phase-name">辩论结束</div>
+                <div class="phase-desc">可导出为视频或开始新辩论</div>
+            `;
+            // 结束时不需要 notifyContinue
+        }
+
+        // ===== 同步音频播放 + 通知后端 =====
+        function playAudioSync(url) {
+            return new Promise((resolve) => {
+                const player = document.getElementById("audioPlayer");
+                player.src = url;
+
+                // 播放完成或出错时，通知后端继续
+                const onFinish = async () => {
+                    await notifyContinue();
+                    resolve();
+                };
+
+                player.onended = onFinish;
+                player.onerror = onFinish;
+
+                player.play().catch(() => onFinish());
+            });
+        }
+
+        // ===== 通知后端继续生成 =====
+        async function notifyContinue() {
+            try {
+                await fetch("/api/continue", { method: "POST" });
+            } catch (e) {
+                console.error("Failed to notify continue:", e);
+            }
+        }
+
+        // ===== 格式化裁判内容 =====
+        function formatJudgeContent(text) {
+            return text
+                .replace(/## (.+)/g, '<h4 style="color:#c090ff;margin:12px 0 6px">$1</h4>')
+                .replace(/\|(.+)\|/g, (match) => `<code style="font-size:13px">${match}</code>`)
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\n/g, '<br>');
+        }
+
+        // ===== 导出视频 =====
+        async function exportVideo() {
+            const btn = document.getElementById("btnExport");
+            btn.disabled = true;
+            btn.textContent = "导出中...";
+
+            const res = await fetch("/api/export_video", { method: "POST" });
+            const data = await res.json();
+            if (data.error) {
+                alert(data.error);
+                btn.disabled = false;
+                btn.textContent = "导出视频";
+                return;
+            }
+
+            // 轮询导出状态
+            const poll = setInterval(async () => {
+                const res2 = await fetch("/api/status");
+                const status = await res2.json();
+                if (status.export_status === "done") {
+                    clearInterval(poll);
+                    btn.textContent = "下载视频";
+                    btn.disabled = false;
+                    btn.onclick = () => window.open("/api/download_video");
+                } else if (status.export_status === "error") {
+                    clearInterval(poll);
+                    btn.textContent = "导出失败";
+                    btn.disabled = false;
+                }
+            }, 2000);
+        }
+
+        // ===== 重置 =====
+        function resetDebate() {
+            if (eventSource) eventSource.close();
+            eventQueue = [];
+            isProcessingEvent = false;
+            debateFinished = false;
+            currentBubbleEl = null;
+            document.getElementById("messageFlow").innerHTML = "";
+            document.getElementById("debateArena").classList.remove("active");
+            document.getElementById("setupPanel").style.display = "";
+            document.getElementById("btnStart").disabled = false;
+            document.getElementById("btnExport").disabled = true;
+            document.getElementById("btnExport").textContent = "导出视频";
+            document.getElementById("btnExport").onclick = exportVideo;
+        }
+
+        // ===== 页面关闭时停止后端 =====
+        window.addEventListener("beforeunload", () => {
+            if (!debateFinished) {
+                navigator.sendBeacon("/api/stop");
+            }
+        });
+
+        // 启动
+        init();
+    </script>
+</body>
+
+</html>

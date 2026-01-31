@@ -12,10 +12,11 @@ QWEN_API_KEY = os.getenv("QWEN_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "-1003878273027")
 MODEL_NAME = "qwen3-vl-flash-2026-01-22"
-TARGET_COUNT = 6  # 目标推送条数
+TARGET_COUNT = 10  # 每天固定推送 10 条
 
 BJ_TZ = timezone(timedelta(hours=8))
 DOCS_DIR = Path(__file__).resolve().parent.parent / "docs"
+DATA_DIR = DOCS_DIR / "data"
 
 client = OpenAI(
     api_key=QWEN_API_KEY,
@@ -156,13 +157,8 @@ def select_top_news(all_news: list[dict]) -> list[dict]:
             seen.add(key)
             unique.append(item)
 
-    selected = [n for n in unique if n["rating"] in ("S", "A")]
-
-    if len(selected) < TARGET_COUNT:
-        b_pool = [n for n in unique if n["rating"] == "B"]
-        selected.extend(b_pool[: TARGET_COUNT - len(selected)])
-
-    selected.sort(key=lambda x: x["score"], reverse=True)
+    # 取前 TARGET_COUNT 条（不再区分等级，直接按分数排）
+    selected = unique[:TARGET_COUNT]
     return selected
 
 
@@ -247,71 +243,31 @@ def send_telegram(text: str):
 
 
 # ============================================================
-# GitHub Pages 网页生成
+# 数据存档 + 网页
 # ============================================================
 
-def build_html_page(news_list: list[dict], summary: str) -> str:
+def save_daily_json(news_list: list[dict], summary: str):
+    """保存当天数据为 JSON 文件"""
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     today = datetime.now(BJ_TZ).strftime("%Y-%m-%d")
+    data = {
+        "date": today,
+        "summary": summary,
+        "news": news_list,
+    }
+    (DATA_DIR / f"{today}.json").write_text(
+        json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
-    news_html = ""
-    for item in news_list:
-        badge_cls = {"S": "badge-s", "A": "badge-a"}.get(item["rating"], "badge-b")
-        badge_text = item["rating"]
-        tags = "".join([f'<span class="tag">{html.escape(t)}</span>' for t in item["tags"]])
-        title_escaped = html.escape(item["title"])
-        comment_escaped = html.escape(item["comment"])
-
-        news_html += f"""
-        <div class="card">
-            <div class="card-header">
-                <span class="badge {badge_cls}">{badge_text}</span>
-                <span class="score">{item['score']}分</span>
-                <span class="source">{html.escape(item['source'])}</span>
-            </div>
-            <h3 class="card-title"><a href="{item['link']}" target="_blank">{title_escaped}</a></h3>
-            <p class="comment">{comment_escaped}</p>
-            <div class="tags">{tags}</div>
-        </div>"""
-
-    return f"""<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 每日热点 | Integrity Lab</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <nav>
-        <div class="nav-inner">
-            <span class="logo">Integrity Lab</span>
-            <div class="nav-links">
-                <a href="index.html">首页</a>
-                <a href="news.html" class="active">AI 热点</a>
-                <a href="tools.html">工具库</a>
-            </div>
-        </div>
-    </nav>
-
-    <div class="container">
-        <div class="page-header">
-            <h1>📡 AI 每日热点</h1>
-            <div class="date">{today} · 共 {len(news_list)} 条精选 · 每日 09:00 自动更新</div>
-        </div>
-        <div class="summary">{html.escape(summary)}</div>
-        {news_html}
-    </div>
-
-    <footer>Integrity Lab · 由 AI 情报 Agent 自动生成 · GitHub Actions 每日更新</footer>
-</body>
-</html>"""
-
-
-def save_html(news_list: list[dict], summary: str):
-    DOCS_DIR.mkdir(parents=True, exist_ok=True)
-    page = build_html_page(news_list, summary)
-    (DOCS_DIR / "news.html").write_text(page, encoding="utf-8")
-    print(f"网页已生成: {DOCS_DIR / 'news.html'}")
+    # 更新日期索引文件（列出所有可用日期）
+    dates = sorted(
+        [f.stem for f in DATA_DIR.glob("*.json") if f.stem != "index"],
+        reverse=True,
+    )
+    (DATA_DIR / "index.json").write_text(
+        json.dumps(dates, ensure_ascii=False), encoding="utf-8"
+    )
+    print(f"数据已存档: {DATA_DIR / f'{today}.json'}（共 {len(dates)} 天记录）")
 
 
 # ============================================================
@@ -342,8 +298,8 @@ def main():
     send_telegram(tg_report)
     print("Telegram 推送完成。")
 
-    # 生成网页
-    save_html(selected, summary)
+    # 保存 JSON 数据存档
+    save_daily_json(selected, summary)
     print("全部完成。")
 
 

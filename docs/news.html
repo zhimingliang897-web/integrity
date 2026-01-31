@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 每日热点 | Integrity Lab</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 控制栏 */
+        .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+        .controls input, .controls select {
+            background: #14141e; border: 1px solid #2a2a3a; color: #e0e0e0;
+            padding: 8px 14px; border-radius: 8px; font-size: 0.9rem; outline: none;
+        }
+        .controls input:focus, .controls select:focus { border-color: #5b8def; }
+        .controls input[type="text"] { flex: 1; min-width: 180px; }
+        .controls select { min-width: 160px; cursor: pointer; }
+        .date-nav { display: flex; gap: 8px; align-items: center; }
+        .date-nav button {
+            background: #1e1e30; border: 1px solid #2a2a3a; color: #aaa;
+            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.88rem;
+            transition: background 0.15s;
+        }
+        .date-nav button:hover { background: #2a2a40; color: #fff; }
+        .date-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
+        .current-date { color: #fff; font-weight: 600; font-size: 0.95rem; min-width: 110px; text-align: center; }
+
+        /* 历史日期列表 */
+        .history-panel { margin-bottom: 20px; }
+        .history-toggle {
+            background: none; border: 1px solid #2a2a3a; color: #7eb8ff;
+            padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.84rem;
+            transition: background 0.15s;
+        }
+        .history-toggle:hover { background: #1e1e30; }
+        .history-dates {
+            display: none; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding: 12px;
+            background: #14141e; border-radius: 8px;
+        }
+        .history-dates.show { display: flex; }
+        .history-dates a {
+            padding: 4px 10px; background: #1e1e30; border-radius: 4px;
+            color: #aaa; font-size: 0.82rem; text-decoration: none; transition: all 0.12s;
+        }
+        .history-dates a:hover, .history-dates a.active { background: #5b8def; color: #fff; text-decoration: none; }
+
+        /* 搜索结果高亮 */
+        .highlight { background: #5b8def33; padding: 0 2px; border-radius: 2px; }
+        .no-results { text-align: center; color: #666; padding: 40px 0; font-size: 0.95rem; }
+        .result-count { color: #666; font-size: 0.84rem; margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <span class="logo">Integrity Lab</span>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="news.html" class="active">AI 热点</a>
+                <a href="tools.html">工具库</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>📡 AI 每日热点</h1>
+        </div>
+
+        <!-- 日期导航 -->
+        <div class="controls">
+            <div class="date-nav">
+                <button id="btn-prev" title="前一天">◀</button>
+                <span class="current-date" id="current-date">加载中...</span>
+                <button id="btn-next" title="后一天">▶</button>
+            </div>
+            <input type="text" id="search-input" placeholder="搜索标题、标签、来源...">
+        </div>
+
+        <!-- 历史日期 -->
+        <div class="history-panel">
+            <button class="history-toggle" id="history-toggle">📅 查看历史日期</button>
+            <div class="history-dates" id="history-dates"></div>
+        </div>
+
+        <!-- 总结 -->
+        <div class="summary" id="summary"></div>
+
+        <!-- 搜索结果计数 -->
+        <div class="result-count" id="result-count" style="display:none;"></div>
+
+        <!-- 新闻列表 -->
+        <div id="news-list"></div>
+    </div>
+
+    <footer>Integrity Lab · 由 AI 情报 Agent 自动生成 · GitHub Actions 每日更新</footer>
+
+<script>
+const DATA_BASE = 'data/';
+let allDates = [];
+let currentIndex = 0;
+let currentData = null;
+
+// --- 初始化 ---
+async function init() {
+    try {
+        const resp = await fetch(DATA_BASE + 'index.json');
+        allDates = await resp.json(); // 已按日期倒序
+    } catch (e) {
+        document.getElementById('news-list').innerHTML =
+            '<div class="no-results">暂无数据，等待第一次 Actions 运行后生成。</div>';
+        return;
+    }
+    if (allDates.length === 0) {
+        document.getElementById('news-list').innerHTML =
+            '<div class="no-results">暂无数据。</div>';
+        return;
+    }
+    renderHistoryDates();
+    loadDate(0);
+}
+
+// --- 加载指定日期 ---
+async function loadDate(index) {
+    if (index < 0 || index >= allDates.length) return;
+    currentIndex = index;
+    const date = allDates[index];
+    document.getElementById('current-date').textContent = date;
+    document.getElementById('btn-prev').disabled = (index >= allDates.length - 1);
+    document.getElementById('btn-next').disabled = (index <= 0);
+
+    // 高亮历史日期
+    document.querySelectorAll('.history-dates a').forEach(a => {
+        a.classList.toggle('active', a.dataset.date === date);
+    });
+
+    try {
+        const resp = await fetch(DATA_BASE + date + '.json');
+        currentData = await resp.json();
+    } catch (e) {
+        document.getElementById('news-list').innerHTML =
+            '<div class="no-results">该日期数据加载失败。</div>';
+        return;
+    }
+
+    document.getElementById('summary').textContent = currentData.summary || '';
+    document.getElementById('search-input').value = '';
+    document.getElementById('result-count').style.display = 'none';
+    renderNews(currentData.news);
+}
+
+// --- 渲染新闻卡片 ---
+function renderNews(news, query) {
+    const container = document.getElementById('news-list');
+    if (!news || news.length === 0) {
+        container.innerHTML = '<div class="no-results">该日期无内容。</div>';
+        return;
+    }
+
+    container.innerHTML = news.map(item => {
+        const badgeMap = { S: 'badge-s', A: 'badge-a', B: 'badge-b' };
+        const cls = badgeMap[item.rating] || 'badge-b';
+        let title = escapeHtml(item.title);
+        let comment = escapeHtml(item.comment);
+        let source = escapeHtml(item.source);
+        let tagsHtml = (item.tags || []).map(t => {
+            let tag = escapeHtml(t);
+            if (query) tag = highlightText(tag, query);
+            return `<span class="tag">${tag}</span>`;
+        }).join('');
+
+        if (query) {
+            title = highlightText(title, query);
+            comment = highlightText(comment, query);
+            source = highlightText(source, query);
+        }
+
+        return `
+        <div class="card">
+            <div class="card-header">
+                <span class="badge ${cls}">${item.rating}</span>
+                <span class="score">${item.score}分</span>
+                <span class="source">${source}</span>
+            </div>
+            <h3 class="card-title"><a href="${item.link}" target="_blank">${title}</a></h3>
+            <p class="comment">${comment}</p>
+            <div class="tags">${tagsHtml}</div>
+        </div>`;
+    }).join('');
+}
+
+// --- 搜索 ---
+function doSearch(query) {
+    if (!query || !currentData) {
+        document.getElementById('result-count').style.display = 'none';
+        if (currentData) renderNews(currentData.news);
+        return;
+    }
+
+    const q = query.toLowerCase();
+    // 搜索所有日期
+    searchAllDates(q);
+}
+
+async function searchAllDates(q) {
+    let allResults = [];
+    for (const date of allDates) {
+        try {
+            const resp = await fetch(DATA_BASE + date + '.json');
+            const data = await resp.json();
+            const matched = (data.news || []).filter(item =>
+                item.title.toLowerCase().includes(q) ||
+                item.comment.toLowerCase().includes(q) ||
+                item.source.toLowerCase().includes(q) ||
+                (item.tags || []).some(t => t.toLowerCase().includes(q))
+            ).map(item => ({ ...item, _date: date }));
+            allResults = allResults.concat(matched);
+        } catch (e) { /* skip */ }
+    }
+
+    const countEl = document.getElementById('result-count');
+    if (allResults.length === 0) {
+        countEl.style.display = 'block';
+        countEl.textContent = `未找到与"${q}"相关的内容`;
+        document.getElementById('news-list').innerHTML =
+            '<div class="no-results">无匹配结果</div>';
+        return;
+    }
+
+    countEl.style.display = 'block';
+    countEl.textContent = `在 ${allDates.length} 天记录中找到 ${allResults.length} 条匹配`;
+
+    // 渲染搜索结果（带日期标记）
+    const container = document.getElementById('news-list');
+    container.innerHTML = allResults.map(item => {
+        const badgeMap = { S: 'badge-s', A: 'badge-a', B: 'badge-b' };
+        const cls = badgeMap[item.rating] || 'badge-b';
+        let title = highlightText(escapeHtml(item.title), q);
+        let comment = highlightText(escapeHtml(item.comment), q);
+        let source = highlightText(escapeHtml(item.source), q);
+        let tagsHtml = (item.tags || []).map(t =>
+            `<span class="tag">${highlightText(escapeHtml(t), q)}</span>`
+        ).join('');
+
+        return `
+        <div class="card">
+            <div class="card-header">
+                <span class="badge ${cls}">${item.rating}</span>
+                <span class="score">${item.score}分</span>
+                <span class="source">${source}</span>
+                <span class="source">${item._date}</span>
+            </div>
+            <h3 class="card-title"><a href="${item.link}" target="_blank">${title}</a></h3>
+            <p class="comment">${comment}</p>
+            <div class="tags">${tagsHtml}</div>
+        </div>`;
+    }).join('');
+}
+
+// --- 渲染历史日期列表 ---
+function renderHistoryDates() {
+    const container = document.getElementById('history-dates');
+    container.innerHTML = allDates.map(d =>
+        `<a href="#" data-date="${d}" onclick="jumpToDate('${d}');return false;">${d}</a>`
+    ).join('');
+}
+
+function jumpToDate(date) {
+    const idx = allDates.indexOf(date);
+    if (idx !== -1) loadDate(idx);
+}
+
+// --- 工具函数 ---
+function escapeHtml(s) {
+    if (!s) return '';
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function highlightText(text, query) {
+    if (!query) return text;
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(regex, '<span class="highlight">$1</span>');
+}
+
+// --- 事件绑定 ---
+document.getElementById('btn-prev').addEventListener('click', () => loadDate(currentIndex + 1));
+document.getElementById('btn-next').addEventListener('click', () => loadDate(currentIndex - 1));
+
+let searchTimer;
+document.getElementById('search-input').addEventListener('input', (e) => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => doSearch(e.target.value.trim()), 400);
+});
+
+document.getElementById('history-toggle').addEventListener('click', () => {
+    document.getElementById('history-dates').classList.toggle('show');
+});
+
+// --- 启动 ---
+init();
+</script>
+</body>
+</html>
