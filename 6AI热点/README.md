@@ -41,12 +41,16 @@ GitHub Actions (每日 09:00 北京时间)
        │
        ├── 2. Qwen LLM 逐条评级 (S/A/B/C)
        │
-       ├── 3. 筛选 Top 6 + LLM 生成今日概览
+       ├── 3. 筛选 Top + LLM 生成今日概览
        │
        ├── 4. Telegram 频道推送
        │
-       └── 5. 生成 docs/index.html 网页
-               GitHub Actions 自动 commit → GitHub Pages
+       └── 5. 数据归档
+               Python保存 -> docs/data/202x-xx-xx.json
+               GitHub Actions 自动 commit
+               ▼
+               Web 前端 (GitHub Pages)
+               动态加载 JSON 渲染页面 (无需重构 HTML)
 ```
 
 ---
@@ -68,7 +72,7 @@ GitHub Actions (每日 09:00 北京时间)
 1. 进入仓库 **Settings → Pages**
 2. Source 选择 **Deploy from a branch**
 3. Branch 选择 `main`，文件夹选择 `/docs`
-4. 保存后访问 `https://<username>.github.io/integrity/`
+4. 保存后访问 `https://<username>.github.io/integrity/news.html`
 
 ---
 
@@ -76,15 +80,17 @@ GitHub Actions (每日 09:00 北京时间)
 
 ```
 6AI热点/
-├── main.py              # 主脚本：抓取 + 评级 + 推送 + 生成网页
-├── requirements.txt     # Python 依赖
-├── README.md            # 本文件
-├── WHAT_WE_LEARN.md     # 技术心得
-└── CHANGELOG.md         # 更新日志
+├── main.py              # 核心逻辑：采集 -> 分析 -> 推送 -> 存JSON
+├── requirements.txt     # Python依赖
+├── README.md            # 项目说明
+├── WHAT_WE_LEARN.md     # 技术复盘
+└── CHANGELOG.md         # 版本记录
 
 docs/
-└── index.html           # 自动生成的每日热点网页 (GitHub Pages)
-
-.github/workflows/
-└── daily_news.yml       # 定时任务配置
+├── news.html            # 主页：单页应用，动态加载数据
+├── style.css            # 样式表
+├── data/                # [自动生成] 数据归档目录
+│   ├── index.json       # 日期索引
+│   └── 202x-xx-xx.json  # 每日数据
+└── index.html           # 首页导航
 ```
