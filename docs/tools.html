@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 工具库 - Integrity Lab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <span class="logo">Integrity Lab</span>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="news.html">AI 热点</a>
+                <a href="tools.html" class="active">工具库</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>🛠️ AI 工具库</h1>
+            <p style="color:#888; margin-top:6px;">自己动手做的 AI 工具合集，全部开源，持续更新。</p>
+        </div>
+
+        <div class="tool-grid">
+            <div class="tool-card">
+                <div class="tool-icon">🎬</div>
+                <h3>分镜视频生成器</h3>
+                <p class="tool-desc">四格分镜英语学习视频自动生成。输入对话脚本，自动合成语音、字幕、配图并导出 MP4。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">FFmpeg</span>
+                    <span class="tech-tag">Edge TTS</span>
+                    <span class="tech-tag">Pillow</span>
+                    <span class="tech-tag">DashScope</span>
+                </div>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/1分镜" class="tool-link">查看源码 →</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">📝</div>
+                <h3>台词学习工具</h3>
+                <p class="tool-desc">PDF 提取单词 → 搜索影视台词 → LLM 整理为学习材料。支持拖拽上传的 Web 界面。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">pdfplumber</span>
+                    <span class="tech-tag">BeautifulSoup</span>
+                    <span class="tech-tag">DashScope</span>
+                    <span class="tech-tag">Docker</span>
+                </div>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/2台词" class="tool-link">查看源码 →</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">🕷️</div>
+                <h3>B站爬虫</h3>
+                <p class="tool-desc">Bilibili 视频搜索与下载。提取标题、播放量、标签、热门评论、封面图和视频文件。内置反限流机制。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">requests</span>
+                    <span class="tech-tag">Bilibili API</span>
+                </div>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/爬虫" class="tool-link">查看源码 →</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">💬</div>
+                <h3>多平台评论分析</h3>
+                <p class="tool-desc">B站/抖音/小红书评论抓取 + LLM 情感分析、摘要、分类。支持导出 CSV/Excel。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Playwright</span>
+                    <span class="tech-tag">requests</span>
+                    <span class="tech-tag">OpenAI API</span>
+                    <span class="tech-tag">pandas</span>
+                </div>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/评论" class="tool-link">查看源码 →</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">🎭</div>
+                <h3>AI 辩论赛</h3>
+                <p class="tool-desc">多 AI 模型辩论模拟器。标准华语辩论赛赛制，实时 TTS 语音合成，AI 裁判评分，支持视频导出。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">Multi-LLM</span>
+                    <span class="tech-tag">TTS</span>
+                    <span class="tech-tag">SSE</span>
+                    <span class="tech-tag">Docker</span>
+                </div>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/5AI辩论赛" class="tool-link">查看源码 →</a>
+            </div>
+
+            <div class="tool-card">
+                <div class="tool-icon">📡</div>
+                <h3>AI 每日情报 Agent</h3>
+                <p class="tool-desc">12 源 RSS 聚合 + Qwen LLM 评级 + Telegram 推送 + GitHub Pages 自动部署。每日定时运行。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">GitHub Actions</span>
+                    <span class="tech-tag">RSS</span>
+                    <span class="tech-tag">Qwen API</span>
+                    <span class="tech-tag">Telegram</span>
+                </div>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/6AI热点" class="tool-link">查看源码 →</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>Integrity Lab · 全部项目开源于 <a href="https://github.com/zhimingliang897-web/integrity">GitHub</a></footer>
+</body>
+</html>

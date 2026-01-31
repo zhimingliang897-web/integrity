@@ -278,43 +278,31 @@ def build_html_page(news_list: list[dict], summary: str) -> str:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 每日情报 | {today}</title>
-    <style>
-        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-        body {{ font-family: -apple-system, "Noto Sans SC", sans-serif; background: #0f0f13; color: #e0e0e0; min-height: 100vh; }}
-        .container {{ max-width: 720px; margin: 0 auto; padding: 24px 16px; }}
-        header {{ text-align: center; margin-bottom: 32px; }}
-        header h1 {{ font-size: 1.6rem; color: #fff; margin-bottom: 8px; }}
-        header .date {{ color: #888; font-size: 0.9rem; }}
-        .summary {{ background: #1a1a24; border-left: 3px solid #5b8def; padding: 16px; border-radius: 8px; margin-bottom: 28px; line-height: 1.7; color: #ccc; font-size: 0.95rem; }}
-        .card {{ background: #1a1a24; border-radius: 10px; padding: 16px; margin-bottom: 14px; transition: transform 0.15s; }}
-        .card:hover {{ transform: translateY(-2px); }}
-        .card-header {{ display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.85rem; }}
-        .badge {{ padding: 2px 8px; border-radius: 4px; font-weight: 700; font-size: 0.8rem; }}
-        .badge-s {{ background: #e74c3c; color: #fff; }}
-        .badge-a {{ background: #e67e22; color: #fff; }}
-        .badge-b {{ background: #f1c40f; color: #222; }}
-        .score {{ color: #aaa; }}
-        .source {{ color: #666; margin-left: auto; }}
-        .card-title {{ font-size: 1rem; margin-bottom: 6px; }}
-        .card-title a {{ color: #7eb8ff; text-decoration: none; }}
-        .card-title a:hover {{ text-decoration: underline; }}
-        .comment {{ color: #999; font-size: 0.88rem; margin-bottom: 8px; }}
-        .tags {{ display: flex; gap: 6px; flex-wrap: wrap; }}
-        .tag {{ background: #252535; color: #8a8aaf; padding: 2px 8px; border-radius: 4px; font-size: 0.78rem; }}
-        footer {{ text-align: center; color: #555; font-size: 0.8rem; margin-top: 32px; padding-top: 16px; border-top: 1px solid #222; }}
-    </style>
+    <title>AI 每日热点 | Integrity Lab</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <nav>
+        <div class="nav-inner">
+            <span class="logo">Integrity Lab</span>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="news.html" class="active">AI 热点</a>
+                <a href="tools.html">工具库</a>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
-        <header>
-            <h1>📡 AI 每日情报</h1>
-            <div class="date">{today} · 共 {len(news_list)} 条精选</div>
-        </header>
+        <div class="page-header">
+            <h1>📡 AI 每日热点</h1>
+            <div class="date">{today} · 共 {len(news_list)} 条精选 · 每日 09:00 自动更新</div>
+        </div>
         <div class="summary">{html.escape(summary)}</div>
         {news_html}
-        <footer>由 AI 情报 Agent 自动生成 · GitHub Actions 每日更新</footer>
     </div>
+
+    <footer>Integrity Lab · 由 AI 情报 Agent 自动生成 · GitHub Actions 每日更新</footer>
 </body>
 </html>"""
 
@@ -322,8 +310,8 @@ def build_html_page(news_list: list[dict], summary: str) -> str:
 def save_html(news_list: list[dict], summary: str):
     DOCS_DIR.mkdir(parents=True, exist_ok=True)
     page = build_html_page(news_list, summary)
-    (DOCS_DIR / "index.html").write_text(page, encoding="utf-8")
-    print(f"网页已生成: {DOCS_DIR / 'index.html'}")
+    (DOCS_DIR / "news.html").write_text(page, encoding="utf-8")
+    print(f"网页已生成: {DOCS_DIR / 'news.html'}")
 
 
 # ============================================================
