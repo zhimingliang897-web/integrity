@@ -1,6 +1,6 @@
 {
   "date": "2026-02-01",
-  "summary": "今日焦点集中于开源模型进展与应用落地：Kimi团队开放技术细节，Open-weight模型性能逼近SOTA引发热议；MXFP4等新量化方案提升推理效率；同时，AI深伪技术滥用、政府机构部署AI视频生成工具及大规模自研AI社区涌现，凸显技术普惠与风险并存的双重挑战。",
+  "summary": "今日焦点集中于开源模型进展与应用落地：Kimi团队开放技术细节，Open-weight模型性能逼近SOTA；MXFP4等新量化方案提升推理效率；同时，AI视频生成滥用（如深度伪造、政府宣传）引发监管与伦理关注，凸显技术双刃剑特性。",
   "news": [
     {
       "source": "Reddit LocalLLaMA",
@@ -60,7 +60,7 @@
       "link": "https://www.reddit.com/r/MachineLearning/comments/1qrd4mi/p_i_solved_bipedalwalkerv3_310_score_with/",
       "rating": "A",
       "score": 8,
-      "comment": "用特征值求解BipedalWalker-v3，延续了用纯数学方法解决强化学习难题的创新路径，具实用参考价值。",
+      "comment": "用特征值方法解决BipedalWalker-v3，延续了前作硬核解法风格，具实用启发性",
       "tags": [
         "强化学习",
         "算法创新",
@@ -109,6 +109,19 @@
     },
     {
       "source": "MIT Tech Review",
+      "title": "The Download: US immigration agencies’ AI videos, and inside the Vitalism movement",
+      "link": "https://www.technologyreview.com/2026/01/30/1132022/the-download-us-immigration-agencies-ai-videos-and-inside-the-vitalism-movement/",
+      "rating": "A",
+      "score": 8,
+      "comment": "美国国土安全部采用Google和Adobe AI视频工具，体现AI在政府内容生产中的落地应用，属重要行业动态",
+      "tags": [
+        "AI视频生成",
+        "政府AI应用",
+        "技术落地"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
       "title": "DHS is using Google and Adobe AI to make videos",
       "link": "https://www.technologyreview.com/2026/01/29/1131938/dhs-is-using-google-and-adobe-ai-to-make-videos/",
       "rating": "A",
@@ -118,19 +131,6 @@
         "AI应用",
         "政策影响",
         "视频生成"
-      ]
-    },
-    {
-      "source": "机器之心",
-      "title": "没有人类了：15万Clawdbot论坛发帖自研AI，我们根本插不上话",
-      "link": "https://www.jiqizhixin.com/articles/2026-01-31-5",
-      "rating": "A",
-      "score": 8,
-      "comment": "Clawdbot论坛自研AI引发社区技术讨论，体现大型社区自治演进趋势，有实际技术探讨价值",
-      "tags": [
-        "社区自治",
-        "AI治理",
-        "技术社区"
       ]
     }
   ]
