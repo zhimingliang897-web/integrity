@@ -1,58 +1,386 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI 每日热点 | Integrity Lab</title>
+    <!-- 引入 Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-<<<<<<< HEAD
     <style>
+        :root {
+            --bg-body: #0a0a0f;
+            --bg-card: #14141e;
+            --bg-card-hover: #1e1e2a;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.4);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border: #2d3748;
+            --accent: #8b5cf6;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* 导航栏微调 (若 style.css 中已有定义，这里作为覆盖或补充) */
+        nav {
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+
         /* 控制栏 */
-        .controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
-        .controls input, .controls select {
-            background: #14141e; border: 1px solid #2a2a3a; color: #e0e0e0;
-            padding: 8px 14px; border-radius: 8px; font-size: 0.9rem; outline: none;
+        .controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            background: rgba(20, 20, 30, 0.5);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(8px);
         }
-        .controls input:focus, .controls select:focus { border-color: #5b8def; }
-        .controls input[type="text"] { flex: 1; min-width: 180px; }
-        .controls select { min-width: 160px; cursor: pointer; }
-        .date-nav { display: flex; gap: 8px; align-items: center; }
+
+        .controls input,
+        .controls select {
+            background: #0f0f16;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .controls input:focus,
+        .controls select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .controls input[type="text"] {
+            flex: 1;
+            min-width: 220px;
+        }
+
+        .date-nav {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
         .date-nav button {
-            background: #1e1e30; border: 1px solid #2a2a3a; color: #aaa;
-            padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.88rem;
-            transition: background 0.15s;
+            background: #1e1e30;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            font-family: inherit;
         }
-        .date-nav button:hover { background: #2a2a40; color: #fff; }
-        .date-nav button:disabled { opacity: 0.3; cursor: not-allowed; }
-        .current-date { color: #fff; font-weight: 600; font-size: 0.95rem; min-width: 110px; text-align: center; }
+
+        .date-nav button:hover:not(:disabled) {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .date-nav button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .current-date {
+            color: #fff;
+            font-weight: 700;
+            font-size: 1rem;
+            min-width: 120px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+        }
 
         /* 历史日期列表 */
-        .history-panel { margin-bottom: 20px; }
-        .history-toggle {
-            background: none; border: 1px solid #2a2a3a; color: #7eb8ff;
-            padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 0.84rem;
-            transition: background 0.15s;
+        .history-panel {
+            margin-bottom: 24px;
         }
-        .history-toggle:hover { background: #1e1e30; }
-        .history-dates {
-            display: none; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding: 12px;
-            background: #14141e; border-radius: 8px;
-        }
-        .history-dates.show { display: flex; }
-        .history-dates a {
-            padding: 4px 10px; background: #1e1e30; border-radius: 4px;
-            color: #aaa; font-size: 0.82rem; text-decoration: none; transition: all 0.12s;
-        }
-        .history-dates a:hover, .history-dates a.active { background: #5b8def; color: #fff; text-decoration: none; }
 
-        /* 搜索结果高亮 */
-        .highlight { background: #5b8def33; padding: 0 2px; border-radius: 2px; }
-        .no-results { text-align: center; color: #666; padding: 40px 0; font-size: 0.95rem; }
-        .result-count { color: #666; font-size: 0.84rem; margin-bottom: 12px; }
+        .history-toggle {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .history-toggle:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: var(--primary);
+        }
+
+        .history-dates {
+            display: none;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 16px;
+            background: #14141e;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            animation: slideDown 0.2s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .history-dates.show {
+            display: flex;
+        }
+
+        .history-dates a {
+            padding: 6px 14px;
+            background: #1e1e2a;
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .history-dates a:hover {
+            background: #2a2a3a;
+            color: #fff;
+        }
+
+        .history-dates a.active {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 12px var(--primary-glow);
+        }
+
+        /* 搜索结果 */
+        .highlight {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            padding: 0 2px;
+            border-radius: 2px;
+            font-weight: bold;
+        }
+
+        .no-results {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 60px 0;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+        }
+
+        .result-count {
+            color: var(--primary);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            padding: 8px 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        /* 卡片优化 */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            background: var(--bg-card-hover);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--border);
+            opacity: 0.5;
+            transition: background 0.3s;
+        }
+
+        .card:hover::before {
+            background: var(--primary);
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .score {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .source {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .card-title a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: 600;
+            line-height: 1.4;
+            transition: color 0.2s;
+            display: block;
+        }
+
+        .card-title a:hover {
+            color: var(--primary);
+        }
+
+        .comment {
+            color: #bdc3c7;
+            font-size: 1rem;
+            margin: 12px 0 16px;
+            line-height: 1.6;
+        }
+
+        .tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #94a3b8;
+            transition: all 0.2s;
+        }
+
+        .tag:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .summary {
+            background: linear-gradient(145deg, #1e1e30, #14141e);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            border: 1px solid #3b82f644;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: #e2e8f0;
+            position: relative;
+        }
+
+        .summary::before {
+            content: '📌 今日概览';
+            display: block;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 徽章样式修正 (确保与 .card-header 内的 badge 类配合) */
+        .badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .badge-s {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .badge-a {
+            background: #ffedd5;
+            color: #ea580c;
+        }
+
+        .badge-b {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        /* 暗黑模式适配 */
+        body .badge-s {
+            background: rgba(220, 38, 38, 0.2);
+            color: #fca5a5;
+        }
+
+        body .badge-a {
+            background: rgba(234, 88, 12, 0.2);
+            color: #fdba74;
+        }
+
+        body .badge-b {
+            background: rgba(37, 99, 235, 0.2);
+            color: #93c5fd;
+        }
     </style>
-=======
->>>>>>> bf7fc2f2b7198b702fe8e4d233a3a06474f6a95f
 </head>
+
 <body>
     <nav>
         <div class="nav-inner">
@@ -68,7 +396,6 @@
     <div class="container">
         <div class="page-header">
             <h1>📡 AI 每日热点</h1>
-<<<<<<< HEAD
         </div>
 
         <!-- 日期导航 -->
@@ -78,7 +405,7 @@
                 <span class="current-date" id="current-date">加载中...</span>
                 <button id="btn-next" title="后一天">▶</button>
             </div>
-            <input type="text" id="search-input" placeholder="搜索标题、标签、来源...">
+            <input type="text" id="search-input" placeholder="🔍 搜索标题、标签、来源...">
         </div>
 
         <!-- 历史日期 -->
@@ -88,7 +415,7 @@
         </div>
 
         <!-- 总结 -->
-        <div class="summary" id="summary"></div>
+        <div class="summary" id="summary" style="display:none"></div>
 
         <!-- 搜索结果计数 -->
         <div class="result-count" id="result-count" style="display:none;"></div>
@@ -99,390 +426,205 @@
 
     <footer>Integrity Lab · 由 AI 情报 Agent 自动生成 · GitHub Actions 每日更新</footer>
 
-<script>
-const DATA_BASE = 'data/';
-let allDates = [];
-let currentIndex = 0;
-let currentData = null;
+    <script>
+        const DATA_BASE = 'data/';
+        let allDates = [];
+        let currentIndex = 0;
+        let currentData = null;
 
-// --- 初始化 ---
-async function init() {
-    try {
-        const resp = await fetch(DATA_BASE + 'index.json');
-        allDates = await resp.json(); // 已按日期倒序
-    } catch (e) {
-        document.getElementById('news-list').innerHTML =
-            '<div class="no-results">暂无数据，等待第一次 Actions 运行后生成。</div>';
-        return;
-    }
-    if (allDates.length === 0) {
-        document.getElementById('news-list').innerHTML =
-            '<div class="no-results">暂无数据。</div>';
-        return;
-    }
-    renderHistoryDates();
-    loadDate(0);
-}
-
-// --- 加载指定日期 ---
-async function loadDate(index) {
-    if (index < 0 || index >= allDates.length) return;
-    currentIndex = index;
-    const date = allDates[index];
-    document.getElementById('current-date').textContent = date;
-    document.getElementById('btn-prev').disabled = (index >= allDates.length - 1);
-    document.getElementById('btn-next').disabled = (index <= 0);
-
-    // 高亮历史日期
-    document.querySelectorAll('.history-dates a').forEach(a => {
-        a.classList.toggle('active', a.dataset.date === date);
-    });
-
-    try {
-        const resp = await fetch(DATA_BASE + date + '.json');
-        currentData = await resp.json();
-    } catch (e) {
-        document.getElementById('news-list').innerHTML =
-            '<div class="no-results">该日期数据加载失败。</div>';
-        return;
-    }
-
-    document.getElementById('summary').textContent = currentData.summary || '';
-    document.getElementById('search-input').value = '';
-    document.getElementById('result-count').style.display = 'none';
-    renderNews(currentData.news);
-}
-
-// --- 渲染新闻卡片 ---
-function renderNews(news, query) {
-    const container = document.getElementById('news-list');
-    if (!news || news.length === 0) {
-        container.innerHTML = '<div class="no-results">该日期无内容。</div>';
-        return;
-    }
-
-    container.innerHTML = news.map(item => {
-        const badgeMap = { S: 'badge-s', A: 'badge-a', B: 'badge-b' };
-        const cls = badgeMap[item.rating] || 'badge-b';
-        let title = escapeHtml(item.title);
-        let comment = escapeHtml(item.comment);
-        let source = escapeHtml(item.source);
-        let tagsHtml = (item.tags || []).map(t => {
-            let tag = escapeHtml(t);
-            if (query) tag = highlightText(tag, query);
-            return `<span class="tag">${tag}</span>`;
-        }).join('');
-
-        if (query) {
-            title = highlightText(title, query);
-            comment = highlightText(comment, query);
-            source = highlightText(source, query);
+        // --- 初始化 ---
+        async function init() {
+            try {
+                const resp = await fetch(DATA_BASE + 'index.json');
+                if (!resp.ok) throw new Error('Index not found');
+                allDates = await resp.json(); // 已按日期倒序
+            } catch (e) {
+                document.getElementById('news-list').innerHTML =
+                    '<div class="no-results">暂无数据，等待第一次 Actions 运行后生成。<br><span style="font-size:0.9rem;opacity:0.7">如果您是刚刚部署，请等待定时任务运行。</span></div>';
+                return;
+            }
+            if (allDates.length === 0) {
+                document.getElementById('news-list').innerHTML =
+                    '<div class="no-results">暂无数据。</div>';
+                return;
+            }
+            renderHistoryDates();
+            loadDate(0);
         }
 
-        return `
+        // --- 加载指定日期 ---
+        async function loadDate(index) {
+            if (index < 0 || index >= allDates.length) return;
+            currentIndex = index;
+            const date = allDates[index];
+            document.getElementById('current-date').textContent = date;
+            document.getElementById('btn-prev').disabled = (index >= allDates.length - 1);
+            document.getElementById('btn-next').disabled = (index <= 0);
+
+            // 高亮历史日期
+            document.querySelectorAll('.history-dates a').forEach(a => {
+                a.classList.toggle('active', a.dataset.date === date);
+            });
+
+            try {
+                const resp = await fetch(DATA_BASE + date + '.json');
+                if (!resp.ok) throw new Error('Data not found');
+                currentData = await resp.json();
+            } catch (e) {
+                document.getElementById('news-list').innerHTML =
+                    '<div class="no-results">该日期数据加载失败。</div>';
+                return;
+            }
+
+            const summaryEl = document.getElementById('summary');
+            if (currentData.summary) {
+                summaryEl.style.display = 'block';
+                summaryEl.textContent = currentData.summary;
+            } else {
+                summaryEl.style.display = 'none';
+            }
+
+            document.getElementById('search-input').value = '';
+            document.getElementById('result-count').style.display = 'none';
+            renderNews(currentData.news);
+        }
+
+        // --- 渲染新闻卡片 ---
+        function renderNews(news, query) {
+            const container = document.getElementById('news-list');
+            if (!news || news.length === 0) {
+                container.innerHTML = '<div class="no-results">该日期无内容。</div>';
+                return;
+            }
+
+            container.innerHTML = news.map(item => {
+                const badgeMap = { S: 'badge-s', A: 'badge-a', B: 'badge-b' };
+                const cls = badgeMap[item.rating] || 'badge-b';
+                let title = escapeHtml(item.title);
+                let comment = escapeHtml(item.comment);
+                let source = escapeHtml(item.source);
+                let tagsHtml = (item.tags || []).map(t => {
+                    let tag = escapeHtml(t);
+                    if (query) tag = highlightText(tag, query);
+                    return `<span class="tag">${tag}</span>`;
+                }).join('');
+
+                if (query) {
+                    title = highlightText(title, query);
+                    comment = highlightText(comment, query);
+                    source = highlightText(source, query);
+                }
+
+                return `
         <div class="card">
             <div class="card-header">
                 <span class="badge ${cls}">${item.rating}</span>
                 <span class="score">${item.score}分</span>
                 <span class="source">${source}</span>
+                ${item._date ? `<span class="source" style="margin-left:auto">${item._date}</span>` : ''}
             </div>
             <h3 class="card-title"><a href="${item.link}" target="_blank">${title}</a></h3>
             <p class="comment">${comment}</p>
             <div class="tags">${tagsHtml}</div>
         </div>`;
-    }).join('');
-}
+            }).join('');
+        }
 
-// --- 搜索 ---
-function doSearch(query) {
-    if (!query || !currentData) {
-        document.getElementById('result-count').style.display = 'none';
-        if (currentData) renderNews(currentData.news);
-        return;
-    }
+        // --- 搜索 ---
+        function doSearch(query) {
+            if (!query || !currentData) {
+                document.getElementById('result-count').style.display = 'none';
+                if (currentData) renderNews(currentData.news);
+                return;
+            }
 
-    const q = query.toLowerCase();
-    // 搜索所有日期
-    searchAllDates(q);
-}
+            const q = query.toLowerCase();
+            // 搜索所有日期
+            searchAllDates(q);
+        }
 
-async function searchAllDates(q) {
-    let allResults = [];
-    for (const date of allDates) {
-        try {
-            const resp = await fetch(DATA_BASE + date + '.json');
-            const data = await resp.json();
-            const matched = (data.news || []).filter(item =>
-                item.title.toLowerCase().includes(q) ||
-                item.comment.toLowerCase().includes(q) ||
-                item.source.toLowerCase().includes(q) ||
-                (item.tags || []).some(t => t.toLowerCase().includes(q))
-            ).map(item => ({ ...item, _date: date }));
-            allResults = allResults.concat(matched);
-        } catch (e) { /* skip */ }
-    }
+        async function searchAllDates(q) {
+            let allResults = [];
+            // 显示加载状态
+            document.getElementById('news-list').innerHTML = '<div class="no-results">正在搜索全站历史...</div>';
 
-    const countEl = document.getElementById('result-count');
-    if (allResults.length === 0) {
-        countEl.style.display = 'block';
-        countEl.textContent = `未找到与"${q}"相关的内容`;
-        document.getElementById('news-list').innerHTML =
-            '<div class="no-results">无匹配结果</div>';
-        return;
-    }
+            for (const date of allDates) {
+                try {
+                    const resp = await fetch(DATA_BASE + date + '.json');
+                    const data = await resp.json();
+                    const matched = (data.news || []).filter(item =>
+                        item.title.toLowerCase().includes(q) ||
+                        item.comment.toLowerCase().includes(q) ||
+                        item.source.toLowerCase().includes(q) ||
+                        (item.tags || []).some(t => t.toLowerCase().includes(q))
+                    ).map(item => ({ ...item, _date: date }));
+                    allResults = allResults.concat(matched);
+                } catch (e) { /* skip */ }
+            }
 
-    countEl.style.display = 'block';
-    countEl.textContent = `在 ${allDates.length} 天记录中找到 ${allResults.length} 条匹配`;
+            const countEl = document.getElementById('result-count');
+            if (allResults.length === 0) {
+                countEl.style.display = 'block';
+                countEl.textContent = `未找到与"${q}"相关的内容`;
+                document.getElementById('news-list').innerHTML =
+                    '<div class="no-results">无匹配结果</div>';
+                return;
+            }
 
-    // 渲染搜索结果（带日期标记）
-    const container = document.getElementById('news-list');
-    container.innerHTML = allResults.map(item => {
-        const badgeMap = { S: 'badge-s', A: 'badge-a', B: 'badge-b' };
-        const cls = badgeMap[item.rating] || 'badge-b';
-        let title = highlightText(escapeHtml(item.title), q);
-        let comment = highlightText(escapeHtml(item.comment), q);
-        let source = highlightText(escapeHtml(item.source), q);
-        let tagsHtml = (item.tags || []).map(t =>
-            `<span class="tag">${highlightText(escapeHtml(t), q)}</span>`
-        ).join('');
+            countEl.style.display = 'block';
+            countEl.textContent = `在 ${allDates.length} 天记录中找到 ${allResults.length} 条匹配`;
 
-        return `
-        <div class="card">
-            <div class="card-header">
-                <span class="badge ${cls}">${item.rating}</span>
-                <span class="score">${item.score}分</span>
-                <span class="source">${source}</span>
-                <span class="source">${item._date}</span>
-            </div>
-            <h3 class="card-title"><a href="${item.link}" target="_blank">${title}</a></h3>
-            <p class="comment">${comment}</p>
-            <div class="tags">${tagsHtml}</div>
-        </div>`;
-    }).join('');
-}
+            // 渲染搜索结果（带日期标记）
+            // 按相关性排序？ 这里简单按日期（抓取顺序）
+            renderNews(allResults, q);
+        }
 
-// --- 渲染历史日期列表 ---
-function renderHistoryDates() {
-    const container = document.getElementById('history-dates');
-    container.innerHTML = allDates.map(d =>
-        `<a href="#" data-date="${d}" onclick="jumpToDate('${d}');return false;">${d}</a>`
-    ).join('');
-}
+        // --- 渲染历史日期列表 ---
+        function renderHistoryDates() {
+            const container = document.getElementById('history-dates');
+            container.innerHTML = allDates.map(d =>
+                `<a href="#" data-date="${d}" onclick="jumpToDate('${d}');return false;">${d}</a>`
+            ).join('');
+        }
 
-function jumpToDate(date) {
-    const idx = allDates.indexOf(date);
-    if (idx !== -1) loadDate(idx);
-}
+        function jumpToDate(date) {
+            const idx = allDates.indexOf(date);
+            if (idx !== -1) loadDate(idx);
+        }
 
-// --- 工具函数 ---
-function escapeHtml(s) {
-    if (!s) return '';
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+        // --- 工具函数 ---
+        function escapeHtml(s) {
+            if (!s) return '';
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        }
 
-function highlightText(text, query) {
-    if (!query) return text;
-    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-    return text.replace(regex, '<span class="highlight">$1</span>');
-}
+        function highlightText(text, query) {
+            if (!query) return text;
+            try {
+                const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                return text.replace(regex, '<span class="highlight">$1</span>');
+            } catch (e) {
+                return text;
+            }
+        }
 
-// --- 事件绑定 ---
-document.getElementById('btn-prev').addEventListener('click', () => loadDate(currentIndex + 1));
-document.getElementById('btn-next').addEventListener('click', () => loadDate(currentIndex - 1));
+        // --- 事件绑定 ---
+        document.getElementById('btn-prev').addEventListener('click', () => loadDate(currentIndex + 1));
+        document.getElementById('btn-next').addEventListener('click', () => loadDate(currentIndex - 1));
 
-let searchTimer;
-document.getElementById('search-input').addEventListener('input', (e) => {
-    clearTimeout(searchTimer);
-    searchTimer = setTimeout(() => doSearch(e.target.value.trim()), 400);
-});
+        let searchTimer;
+        document.getElementById('search-input').addEventListener('input', (e) => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => doSearch(e.target.value.trim()), 400);
+        });
 
-document.getElementById('history-toggle').addEventListener('click', () => {
-    document.getElementById('history-dates').classList.toggle('show');
-});
+        document.getElementById('history-toggle').addEventListener('click', () => {
+            document.getElementById('history-dates').classList.toggle('show');
+        });
 
-// --- 启动 ---
-init();
-</script>
+        // --- 启动 ---
+        init();
+    </script>
 </body>
-</html>
-=======
-            <div class="date">2026-02-01 · 共 17 条精选 · 每日 09:00 自动更新</div>
-        </div>
-        <div class="summary">今日焦点集中于三大方向：一是开源模型生态加速演进，Kimi、DeepSeek等本土团队在模型架构与微调上持续突破；二是具身智能进入评估标准化阶段，RoboChallenge报告推动操作能力多维衡量；三是AI应用边界快速扩展，从深度伪造到政府视频生成，技术落地与伦理挑战并存。</div>
-        
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">Reddit LocalLLaMA</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1qpewj7/ama_with_kimi_the_opensource_frontier_lab_behind/" target="_blank">AMA With Kimi, The Open-source Frontier Lab Behind Kimi K2.5 Model</a></h3>
-            <p class="comment">Kimi开源实验室亮相，K2.5模型发布体现国产大模型技术进展</p>
-            <div class="tags"><span class="tag">大模型</span><span class="tag">开源</span><span class="tag">Kimi</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">Reddit LocalLLaMA</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1qrsy4q/how_close_are_openweight_models_to_sota_my_honest/" target="_blank">How close are open-weight models to &quot;SOTA&quot;? My honest take as of today, benchmarks be damned.</a></h3>
-            <p class="comment">Reddit高赞深度分析，探讨开源模型与SOTA实际差距，兼具实证与反思价值。</p>
-            <div class="tags"><span class="tag">开源模型</span><span class="tag">SOTA评估</span><span class="tag">技术评测</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">Reddit LocalLLaMA</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1qs27hf/ghoot_in_the_machine/" target="_blank">g-HOOT in the Machine</a></h3>
-            <p class="comment">g-HOOT论文提出新型训练框架，对高效微调有实用价值</p>
-            <div class="tags"><span class="tag">LLM微调</span><span class="tag">训练优化</span><span class="tag">学术论文</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">Reddit LocalLLaMA</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1qrzyaz/i_found_that_mxfp4_has_lower_perplexity_than_q4_k/" target="_blank">I found that MXFP4 has lower perplexity than Q4_K_M and Q4_K_XL.</a></h3>
-            <p class="comment">MXFP4在4bit量化中表现优于Q4_K_M/XL，验证其高精度与高速度兼得，值得关注</p>
-            <div class="tags"><span class="tag">量化技术</span><span class="tag">LLM推理</span><span class="tag">性能优化</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">Reddit ML</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1qrd4mi/p_i_solved_bipedalwalkerv3_310_score_with/" target="_blank">[P] I solved BipedalWalker-v3 (~310 score) with eigenvalues. The entire policy fits in this post.</a></h3>
-            <p class="comment">用特征值方法解决BipedalWalker-v3，延续了前作硬核解法风格，具实用启发性</p>
-            <div class="tags"><span class="tag">强化学习</span><span class="tag">算法创新</span><span class="tag">开源分享</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">Reddit ML</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1qs7y7v/p_notebooklm_mcp_cli_v027_unified_package_file/" target="_blank">[P] 🚀 NotebookLM MCP + CLI v0.2.7 - Unified Package, File Uploads, Skill Installer, Multi-Profile Auth</a></h3>
-            <p class="comment">NotebookLM MCP+CLI整合为统一包，支持文件上传/下载、技能安装与多账号切换，提升开发者体验。</p>
-            <div class="tags"><span class="tag">AI工具</span><span class="tag">CLI</span><span class="tag">Google</span><span class="tag">开源</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">Reddit ML</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.reddit.com/r/MachineLearning/comments/1qrl61d/p_a_simple_pretraining_pipeline_for_small/" target="_blank">[P] A simple pretraining pipeline for small language models</a></h3>
-            <p class="comment">简洁实用的小模型预训练流水线，平衡易用性与可扩展性，适合研究迭代。</p>
-            <div class="tags"><span class="tag">小模型训练</span><span class="tag">开源工具</span><span class="tag">研究实用</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">MIT Tech Review</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.technologyreview.com/2026/01/30/1131945/inside-the-marketplace-powering-bespoke-ai-deepfakes-of-real-women/" target="_blank">Inside the marketplace powering bespoke AI deepfakes of real women</a></h3>
-            <p class="comment">斯坦福与印第安纳大学联合研究揭示AI深伪内容市场灰色地带，引发伦理与监管关注。</p>
-            <div class="tags"><span class="tag">AI伦理</span><span class="tag">深度伪造</span><span class="tag">内容安全</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">MIT Tech Review</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.technologyreview.com/2026/01/30/1132022/the-download-us-immigration-agencies-ai-videos-and-inside-the-vitalism-movement/" target="_blank">The Download: US immigration agencies’ AI videos, and inside the Vitalism movement</a></h3>
-            <p class="comment">美国国土安全部采用Google和Adobe AI视频工具，体现AI在政府内容生产中的落地应用，属重要行业动态</p>
-            <div class="tags"><span class="tag">AI视频生成</span><span class="tag">政府AI应用</span><span class="tag">技术落地</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">MIT Tech Review</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.technologyreview.com/2026/01/29/1131938/dhs-is-using-google-and-adobe-ai-to-make-videos/" target="_blank">DHS is using Google and Adobe AI to make videos</a></h3>
-            <p class="comment">政府机构大规模采用AI视频生成工具，反映AI应用落地加速，具行业风向标意义。</p>
-            <div class="tags"><span class="tag">AI应用</span><span class="tag">政策影响</span><span class="tag">视频生成</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">机器之心</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.jiqizhixin.com/articles/2026-01-31-5" target="_blank">没有人类了：15万Clawdbot论坛发帖自研AI，我们根本插不上话</a></h3>
-            <p class="comment">Clawdbot论坛自研AI引发技术社区关注，体现大型社区自治演进趋势，有实际技术讨论价值</p>
-            <div class="tags"><span class="tag">社区自治</span><span class="tag">AI治理</span><span class="tag">技术社区</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">机器之心</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.jiqizhixin.com/articles/2026-01-31-4" target="_blank">DeepSeek论文发表16天后，国内团队已经写出了模型的「生物字典」</a></h3>
-            <p class="comment">国内团队基于DeepSeek论文实现模型内部机制可解释性突破，提供&#x27;生物字典&#x27;工具支持模型调试与分析。</p>
-            <div class="tags"><span class="tag">模型可解释性</span><span class="tag">技术开源</span><span class="tag">中文大模型</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">机器之心</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.jiqizhixin.com/articles/2026-01-31-3" target="_blank">挑战Transformer，前OpenAI研究VP宣布创业，拟融资10亿美元</a></h3>
-            <p class="comment">前OpenAI研究VP创业，若其技术方案含实质创新（如新型架构或训练方法），属值得关注的行业动态</p>
-            <div class="tags"><span class="tag">AI创业</span><span class="tag">模型架构</span><span class="tag">融资新闻</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">机器之心</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.jiqizhixin.com/articles/2026-01-31-2" target="_blank">机器人具身操作评估新范式来了，从此告别单一成功率指标</a></h3>
-            <p class="comment">提出多维度具身操作评估范式，含具体指标设计与实验验证，具实用价值</p>
-            <div class="tags"><span class="tag">机器人</span><span class="tag">具身智能</span><span class="tag">评估基准</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">机器之心</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.jiqizhixin.com/articles/2026-01-31" target="_blank">AlphaGo之父David Silver离职创业，目标超级智能</a></h3>
-            <p class="comment">David Silver离职创业聚焦超级智能，若披露技术细节则属行业重要动态</p>
-            <div class="tags"><span class="tag">AI创业</span><span class="tag">超级智能</span><span class="tag">DeepMind</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">8分</span>
-                <span class="source">机器之心</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.jiqizhixin.com/articles/2026-01-30-12" target="_blank">RoboChallenge 年度报告发布，具身智能迈向标准化时代</a></h3>
-            <p class="comment">RoboChallenge年度报告披露具身智能标准化进展，含技术路线图与评估框架，具实用参考价值。</p>
-            <div class="tags"><span class="tag">具身智能</span><span class="tag">标准化</span><span class="tag">行业报告</span></div>
-        </div>
-        <div class="card">
-            <div class="card-header">
-                <span class="badge badge-a">A</span>
-                <span class="score">7分</span>
-                <span class="source">Reddit LocalLLaMA</span>
-            </div>
-            <h3 class="card-title"><a href="https://www.reddit.com/r/LocalLLaMA/comments/1mpk2va/announcing_localllama_discord_server_bot/" target="_blank">Announcing LocalLlama discord server &amp; bot!</a></h3>
-            <p class="comment">LocalLlama Discord社区重建，提供开源模型测试Bot，反映本地化大模型生态活跃度提升。</p>
-            <div class="tags"><span class="tag">开源社区</span><span class="tag">模型测试</span><span class="tag">LLM生态</span></div>
-        </div>
-    </div>
 
-    <footer>Integrity Lab · 由 AI 情报 Agent 自动生成 · GitHub Actions 每日更新</footer>
-</body>
 </html>
->>>>>>> bf7fc2f2b7198b702fe8e4d233a3a06474f6a95f
