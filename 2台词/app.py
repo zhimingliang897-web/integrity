@@ -338,4 +338,6 @@ def api_status(n):
 if __name__ == "__main__":
     print(f"Word dir: {WORD_DIR}")
     print(f"Open http://localhost:5000 in your browser")
-    app.run(debug=True, port=5000)
+    import os
+    debug = os.getenv("FLASK_DEBUG", "1") == "1"
+    app.run(host="0.0.0.0", debug=debug, port=5000)
