@@ -1,0 +1,137 @@
+{
+  "date": "2026-02-02",
+  "summary": "今日焦点集中于三大方向：一是大模型性能持续突破，如Step-3.5-Flash在参数量与效率间取得新平衡；二是开源生态加速演进，Kimi、Mistral等推动模型可复现性与应用落地；三是AI安全与伦理风险凸显，自主红蓝对抗、深度伪造及政府AI视频滥用等议题引发高度关注。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Step-3.5-Flash (196b/A11b) outperforms GLM-4.7 and DeepSeek v3.2",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qtjhc8/step35flash_196ba11b_outperforms_glm47_and/",
+      "rating": "S",
+      "score": 9,
+      "comment": "196B参数模型实现对671B模型的性能超越，稀疏激活架构突破显著",
+      "tags": [
+        "稀疏激活",
+        "推理效率",
+        "开源模型"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "AMA With Kimi, The Open-source Frontier Lab Behind Kimi K2.5 Model",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qpewj7/ama_with_kimi_the_opensource_frontier_lab_behind/",
+      "rating": "A",
+      "score": 8,
+      "comment": "开源实验室Kimi K2.5模型发布，推动国产大模型生态发展",
+      "tags": [
+        "开源模型",
+        "大模型进展",
+        "国产AI"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Mistral Vibe 2.0",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qt76qs/mistral_vibe_20/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Mistral发布Vibe 2.0，延续其多模态与推理增强路线，属高质量产品更新。",
+      "tags": [
+        "大模型",
+        "多模态",
+        "Mistral"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "I built a pentesting platform that lets AI control 400+ hacking tools",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qt9gyf/i_built_a_pentesting_platform_that_lets_ai/",
+      "rating": "A",
+      "score": 8,
+      "comment": "AI驱动渗透测试平台实现400+工具自动化编排，兼具实用性与创新性",
+      "tags": [
+        "AI安全",
+        "渗透测试",
+        "自动化工具"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Falcon-H1-Tiny (90M) is out - specialized micro-models that actually work",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qsx51z/falconh1tiny_90m_is_out_specialized_micromodels/",
+      "rating": "A",
+      "score": 8,
+      "comment": "TII发布90M微模型，以反课程训练实证小模型更少幻觉，挑战大模型规模迷信。",
+      "tags": [
+        "微调训练",
+        "小模型性能",
+        "AI效率"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "We ran a live red-team vs blue-team test on autonomous OpenClaw agents [R]",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1qsy793/we_ran_a_live_redteam_vs_blueteam_test_on/",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次实现自主AI红蓝对抗测试，验证安全框架在真实攻击场景下的有效性。",
+      "tags": [
+        "AI安全",
+        "红蓝对抗",
+        "自主代理"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[R] Shrinking a language detection model to under 10 KB",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1qsedto/r_shrinking_a_language_detection_model_to_under/",
+      "rating": "A",
+      "score": 8,
+      "comment": "轻量级语言检测模型压缩至10KB以内，体现模型量化与剪枝的实用突破，适合边缘部署场景。",
+      "tags": [
+        "模型压缩",
+        "轻量化AI",
+        "NLP"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "Inside the marketplace powering bespoke AI deepfakes of real women",
+      "link": "https://www.technologyreview.com/2026/01/30/1131945/inside-the-marketplace-powering-bespoke-ai-deepfakes-of-real-women/",
+      "rating": "A",
+      "score": 8,
+      "comment": "斯坦福与印第安纳大学联合研究揭示AI深伪内容市场灰色地带，暴露平台监管漏洞与伦理风险。",
+      "tags": [
+        "AI伦理",
+        "深度伪造",
+        "内容安全",
+        "Civitai"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: US immigration agencies’ AI videos, and inside the Vitalism movement",
+      "link": "https://www.technologyreview.com/2026/01/30/1132022/the-download-us-immigration-agencies-ai-videos-and-inside-the-vitalism-movement/",
+      "rating": "A",
+      "score": 8,
+      "comment": "美国国土安全部采用谷歌与Adobe AI视频工具，体现AI在政府宣传场景的落地应用。",
+      "tags": [
+        "AI应用",
+        "政府科技",
+        "视频生成"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "DHS is using Google and Adobe AI to make videos",
+      "link": "https://www.technologyreview.com/2026/01/29/1131938/dhs-is-using-google-and-adobe-ai-to-make-videos/",
+      "rating": "A",
+      "score": 8,
+      "comment": "政府机构大规模采用AI视频生成工具，反映AI应用落地加速，具行业风向标意义。",
+      "tags": [
+        "AI应用",
+        "政策影响",
+        "视频生成"
+      ]
+    }
+  ]
+}
