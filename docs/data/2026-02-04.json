@@ -1,0 +1,140 @@
+{
+  "date": "2026-02-04",
+  "summary": "今日焦点集中于三大方向：一是生成式AI范式革新，何恺明团队提出pMF实现像素级单步无潜生成；二是大模型可靠性提升，涵盖错误定位修正、微调导致的对齐风险评估及长上下文推理增强；三是AI医疗应用深化，通过混合图RAG与安全推理框架推动临床AI落地。",
+  "news": [
+    {
+      "source": "机器之心",
+      "title": "大道至简，何恺明团队新作pMF开启像素级「无潜、单步」生成范式",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-03-10",
+      "rating": "S",
+      "score": 9,
+      "comment": "何恺明团队提出pMF，实现像素级单步生成，论文与代码已开源，具里程碑意义",
+      "tags": [
+        "生成模型",
+        "扩散模型",
+        "单步生成",
+        "何恺明"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Scalable and Secure AI Inference in Healthcare: A Comparative Benchmarking of FastAPI and Triton Inference Server on Kubernetes",
+      "link": "https://arxiv.org/abs/2602.00053",
+      "rating": "A",
+      "score": 8,
+      "comment": "医疗AI推理部署的权威对比研究，FastAPI与Triton在K8s上的性能与安全权衡分析，具实用参考价值。",
+      "tags": [
+        "AI推理",
+        "医疗AI",
+        "Kubernetes",
+        "模型服务"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Learning to Price: Interpretable Attribute-Level Models for Dynamic Markets",
+      "link": "https://arxiv.org/abs/2602.00188",
+      "rating": "A",
+      "score": 8,
+      "comment": "高维动态定价领域重要理论突破，提出可解释的AFDLD模型与ADEPT算法，兼顾 interpretability 与实用性。",
+      "tags": [
+        "动态定价",
+        "可解释AI",
+        "在线学习",
+        "推荐系统"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "From Gameplay Traces to Game Mechanics: Causal Induction with Large Language Models",
+      "link": "https://arxiv.org/abs/2602.00190",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM反向工程VGDL规则，推动游戏AI从数据拟合迈向因果理解，具实用价值",
+      "tags": [
+        "AI推理",
+        "游戏AI",
+        "因果推断"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Complete Identification of Deep ReLU Neural Networks by Many-Valued Logic",
+      "link": "https://arxiv.org/abs/2602.00266",
+      "rating": "A",
+      "score": 8,
+      "comment": "ReLU网络功能等价性理论突破，提出逻辑映射与规范形式，为神经网络可解释性提供新范式。",
+      "tags": [
+        "神经网络理论",
+        "逻辑代数",
+        "可解释AI"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Localizing and Correcting Errors for LLM-based Planners",
+      "link": "https://arxiv.org/abs/2602.00276",
+      "rating": "A",
+      "score": 8,
+      "comment": "L-ICL通过局部纠错提升LLM规划器约束遵守能力，是解决LLM推理缺陷的实用新方法",
+      "tags": [
+        "LLM",
+        "规划",
+        "错误修正"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Assessing Domain-Level Susceptibility to Emergent Misalignment from Narrow Finetuning",
+      "link": "https://arxiv.org/abs/2602.00298",
+      "rating": "A",
+      "score": 8,
+      "comment": "首篇系统性评估窄微调导致领域级对齐失效的论文，揭示金融/法律等高风险领域的严重漏洞",
+      "tags": [
+        "AI安全",
+        "对齐研究",
+        "微调风险"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "PPoGA: Predictive Plan-on-Graph with Action for Knowledge Graph Question Answering",
+      "link": "https://arxiv.org/abs/2602.00007",
+      "rating": "A",
+      "score": 8,
+      "comment": "PPoGA提出规划-执行分离与预测机制，有效缓解KGQA中计划缺陷问题，具实用价值",
+      "tags": [
+        "知识图谱",
+        "大模型",
+        "推理优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Unlocking Electronic Health Records: A Hybrid Graph RAG Approach to Safe Clinical AI for Patient QA",
+      "link": "https://arxiv.org/abs/2602.00009",
+      "rating": "A",
+      "score": 8,
+      "comment": "MediGRAF提出混合图RAG框架，融合结构化与非结构化检索，解决临床AI中幻觉与上下文漂移问题。",
+      "tags": [
+        "医疗AI",
+        "图数据库",
+        "RAG",
+        "Neo4j"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "G-MemLLM: Gated Latent Memory Augmentation for Long-Context Reasoning in Large Language Models",
+      "link": "https://arxiv.org/abs/2602.00015",
+      "rating": "A",
+      "score": 8,
+      "comment": "G-MemLLM提出门控潜记忆机制，有效缓解长上下文推理中的信息衰减问题，具实用价值",
+      "tags": [
+        "长上下文",
+        "记忆增强",
+        "LLM架构"
+      ]
+    }
+  ]
+}
