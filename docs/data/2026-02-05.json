@@ -1,0 +1,137 @@
+{
+  "date": "2026-02-05",
+  "summary": "今日焦点集中于大模型评估与可信性提升：从多维评价框架（CreditAudit、PeerRank）、信念与解释一致性研究（hypocrisy gap），到训练-free的上下文感知系统（Multi-Agent Earth Observers）及可解释性增强（Self-Explanations），反映出学界正从“如何测”转向“如何信”，尤其强调无监督验证、偏见控制与行为预测能力。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "CreditAudit: 2$^\\text{nd}$ Dimension for LLM Evaluation and Selection",
+      "link": "https://arxiv.org/abs/2602.02515",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出CreditAudit框架，从部署实际场景评估LLM，解决榜单分数与真实体验脱节问题。",
+      "tags": [
+        "LLM评估",
+        "部署优化",
+        "基准测试"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Experience-Driven Multi-Agent Systems Are Training-free Context-aware Earth Observers",
+      "link": "https://arxiv.org/abs/2602.02559",
+      "rating": "A",
+      "score": 8,
+      "comment": "首篇聚焦地球观测的无训练多智能体系统论文，解决工具协同与地理约束难题，具实用价值",
+      "tags": [
+        "多智能体",
+        "地球观测",
+        "LLM应用"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Uncertainty and Fairness Awareness in LLM-Based Recommendation Systems",
+      "link": "https://arxiv.org/abs/2602.02582",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM推荐系统不确定性与公平性研究，提出新基准与数据集，揭示Gemini模型偏见问题，具实用价值",
+      "tags": [
+        "LLM",
+        "推荐系统",
+        "公平性",
+        "基准测试"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "PeerRank: Autonomous LLM Evaluation Through Web-Grounded, Bias-Controlled Peer Review",
+      "link": "https://arxiv.org/abs/2602.02589",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个全自主LLM评估框架，实现Web接地+去偏Peer Review，突破传统评测瓶颈。",
+      "tags": [
+        "LLM评估",
+        "自动化评测",
+        "Web grounding"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "A Positive Case for Faithfulness: LLM Self-Explanations Help Predict Model Behavior",
+      "link": "https://arxiv.org/abs/2602.02639",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出NSG新指标评估模型解释可信度，覆盖多主流模型，推动AI可解释性研究进展。",
+      "tags": [
+        "AI可解释性",
+        "模型评估",
+        "arXiv论文"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "MARS: Modular Agent with Reflective Search for Automated AI Research",
+      "link": "https://arxiv.org/abs/2602.02660",
+      "rating": "A",
+      "score": 8,
+      "comment": "MARS提出预算感知规划与模块化研究框架，显著提升AI自动化研究效率与可解释性。",
+      "tags": [
+        "AI研究自动化",
+        "Agent框架",
+        "MCTS"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "The Hypocrisy Gap: Quantifying Divergence Between Internal Belief and Chain-of-Thought Explanation via Sparse Autoencoders",
+      "link": "https://arxiv.org/abs/2602.02496",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次用稀疏自编码器量化模型内部信念与输出的不一致，为检测AI欺骗行为提供新方法。",
+      "tags": [
+        "LLM安全",
+        "可解释性",
+        "稀疏自编码器"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "STEMVerse: A Dual-Axis Diagnostic Framework for STEM Reasoning in Large Language Models",
+      "link": "https://arxiv.org/abs/2602.02497",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出STEM推理双轴诊断框架，解决现有评测碎片化问题，具实用价值",
+      "tags": [
+        "LLM评估",
+        "STEM推理",
+        "框架设计"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Test-Time Detoxification without Training or Learning Anything",
+      "link": "https://arxiv.org/abs/2602.02498",
+      "rating": "A",
+      "score": 8,
+      "comment": "零阶优化实现测试时去毒，无需训练/微调，兼顾安全与质量，实用价值高",
+      "tags": [
+        "LLM安全",
+        "去毒化",
+        "零阶优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "ROSA-Tuning: Enhancing Long-Context Modeling via Suffix Matching",
+      "link": "https://arxiv.org/abs/2602.02499",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出ROSATuning检索-召回机制，有效提升长上下文建模能力，兼具效率与实用性。",
+      "tags": [
+        "长上下文",
+        "检索增强",
+        "高效注意力"
+      ]
+    }
+  ]
+}
