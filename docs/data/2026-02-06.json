@@ -1,0 +1,137 @@
+{
+  "date": "2026-02-06",
+  "summary": "今日焦点集中于三大方向：一是世界模型与代码生成结合，8B模型实现超越402B的性能；二是多Agent协同与推理增强技术（如AgentArk、执行驱动推理）推动规划与数学能力突破；三是奖励设计与可监控性研究（如RLVR）揭示对齐新路径，同时临床与教育场景应用显现出AI系统在专业领域中的潜在盲区。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "We built an 8B world model that beats 402B Llama 4 by generating web code instead of pixels — open weights on HF",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qwo9j0/we_built_an_8b_world_model_that_beats_402b_llama/",
+      "rating": "S",
+      "score": 9,
+      "comment": "8B模型通过生成Web代码而非像素实现超越402B Llama 4，世界模型范式突破",
+      "tags": [
+        "世界模型",
+        "视觉推理",
+        "开源模型"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Knowledge Model Prompting Increases LLM Performance on Planning Tasks",
+      "link": "https://arxiv.org/abs/2602.03900",
+      "rating": "A",
+      "score": 8,
+      "comment": "基于TMK框架的提示工程新方法，提升LLM规划能力，具实用价值",
+      "tags": [
+        "LLM",
+        "提示工程",
+        "推理增强"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Enhancing Mathematical Problem Solving in LLMs through Execution-Driven Reasoning Augmentation",
+      "link": "https://arxiv.org/abs/2602.03950",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出执行驱动推理增强框架，解决LLM数学推理中可 revisable 表征缺失问题，具实用价值",
+      "tags": [
+        "LLM",
+        "数学推理",
+        "推理增强"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "AgentArk: Distilling Multi-Agent Intelligence into a Single LLM Agent",
+      "link": "https://arxiv.org/abs/2602.03955",
+      "rating": "A",
+      "score": 8,
+      "comment": "多智能体推理蒸馏至单模型，提升效率与性能，具实用价值",
+      "tags": [
+        "多智能体",
+        "模型蒸馏",
+        "LLM"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Active Epistemic Control for Query-Efficient Verified Planning",
+      "link": "https://arxiv.org/abs/2602.03974",
+      "rating": "A",
+      "score": 8,
+      "comment": "AEC提出新颖的信念管理与可行性验证框架，解决交互式规划中预测误差导致的不可行承诺问题，具实用价值。",
+      "tags": [
+        "强化学习",
+        "规划",
+        "世界模型",
+        "可信AI"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Adaptive Test-Time Compute Allocation via Learned Heuristics over Categorical Structure",
+      "link": "https://arxiv.org/abs/2602.03975",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM推理中验证成本优化的高质量论文，提出状态级选择性验证框架，具实用价值。",
+      "tags": [
+        "LLM推理",
+        "验证优化",
+        "学术论文"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Monitorability as a Free Gift: How RLVR Spontaneously Aligns Reasoning",
+      "link": "https://arxiv.org/abs/2602.03978",
+      "rating": "A",
+      "score": 8,
+      "comment": "RLVR训练中发现推理可监控性自发提升，强调数据多样性与指令遵循的重要性",
+      "tags": [
+        "强化学习",
+        "可解释AI",
+        "大模型安全"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Linguistic Blind Spots in Clinical Decision Extraction",
+      "link": "https://arxiv.org/abs/2602.03942",
+      "rating": "A",
+      "score": 8,
+      "comment": "医学NLP领域重要论文，揭示临床决策语言特征与抽取失败关联，对临床决策支持系统有实用价值。",
+      "tags": [
+        "医学NLP",
+        "临床决策抽取",
+        "arXiv"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Automatic Classification of Pedagogical Materials against CS Curriculum Guidelines",
+      "link": "https://arxiv.org/abs/2602.03962",
+      "rating": "A",
+      "score": 8,
+      "comment": "ACM/IEEE CS课程指南自动化分类研究，提升高校课程评估效率，具实用价值",
+      "tags": [
+        "教育技术",
+        "AI应用",
+        "课程评估"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Likelihood-Based Reward Designs for General LLM Reasoning",
+      "link": "https://arxiv.org/abs/2602.03979",
+      "rating": "A",
+      "score": 8,
+      "comment": " likelihood-based reward设计系统性对比，提升RLHF效率与泛化性，具实用价值",
+      "tags": [
+        "强化学习",
+        "LLM推理",
+        "奖励函数"
+      ]
+    }
+  ]
+}
