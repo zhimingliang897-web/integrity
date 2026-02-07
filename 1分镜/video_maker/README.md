@@ -1,68 +1,52 @@
 # 分镜视频生成器
 
-## GPT 提示词（生成对话内容 + 插图）
+一键生成英语口语学习短视频 + 学习海报，用于社交媒体发布。
 
-### 提示词 1：生成对话文本
+## 两套方案
 
+| | 多图方案 | 四宫格方案 |
+|---|---|---|
+| 脚本 | `gen_text.py` + `make_video.py` | `gen_text_pre.py` + `make_video_pre.py` |
+| 图片策略 | 每个场景单独生成一张图 | 一张四宫格合成图，代码切割 |
+| 场景数量 | 动态 4-6 个 | 固定 4 个 |
+| 视频版本 | 正常速度 | 正常 + 慢速 |
+| 风格一致性 | 靠 AI 自觉 | 同画面内天然统一 |
+
+---
+
+## 快速使用
+
+### 方案一：多图方案
+
+```bash
+# 1. 生成文本 + 多张分镜图片
+python gen_text.py 8超市 "在超市买水果"
+
+# 2. 生成视频 + 海报
+python make_video.py 8超市
 ```
-你是一个英语口语教学内容设计师。请为我创作一段英语日常对话，要求如下：
 
-【场景】<在这里描述具体场景，如：两个年轻人在公交车上，一个问另一个在哪站下车>
-【时长】对话控制在 30-60 秒内朗读完
-【难度】雅思口语 5-6 分水平（日常交流，自然但不过于俚语化）
+### 方案二：四宫格方案
 
-写作要求：
-1. 对话必须自然真实，像真人日常交流，不要书面化或教材腔
-2. 每段对话包含 3-5 个实用表达/句型，这些表达要有通用性（换个场景也能用）
-3. 角色用编号标记：M1 M2（男）/ F1 F2（女），冒号后面直接跟台词
-4. 每句台词后用 | 分隔附上中文翻译，如：M1: What stop? | 哪一站？
-5. 不要加括号动作描述，不要加 Scene/Setting 等说明文字
-6. 用 --- 分隔场景（我会用四宫格插图，所以分成 4 个场景）
-7. 对话结尾自然收束，不要强行升华
-8. 第一行写场景标题（英文），如：On a bus — asking for directions
+```bash
+# 1. 生成文本（含 Panel 分镜脚本）+ 四宫格合成图
+python gen_text_pre.py 8超市 "在超市买水果"
 
-对话结束后，用 === 分隔，列出核心表达（每行格式：短语 — 中文释义 — 例句）
-```
-
-### 提示词 2：生成四宫格插图
-
-```
-根据以下对话内容，帮我生成一张四宫格插图（2×2排列）。
-
-要求：
-- 漫画/插画风格，色彩明快，人物表情生动
-- 不要在图上标注任何文字（后期会加字幕）
-- 每格对应一个场景片段，画面要能看出在做什么
-- 人物造型在四格之间保持一致
-- 风格参考：新概念英语课本插图，或日式轻漫画
-
-对话内容：
-<粘贴对话文本>
+# 2. 生成视频（正常 + 慢速）+ 海报
+python make_video_pre.py 8超市
 ```
 
 ---
 
-## Claude 提示词（处理素材 + 生成视频）
+## 输出
 
 ```
-我在 video_maker/<文件夹名>/input/ 里放了新的图片和文本。
-请帮我：
-1. 读取文本，根据图片格数加上 --- 场景分隔
-2. 把文本改成 M1/F1 格式并保存回 文本.txt
-3. 然后帮我运行 python make_video.py <文件夹名>
-```
-
----
-
-## 你每次要做的事
-
-```
-第 1 步：用 GPT 提示词 1 生成对话文本
-第 2 步：用 GPT 提示词 2 生成四宫格插图
-第 3 步：在 video_maker/ 下新建项目文件夹（如 5咖啡店点单/）
-第 4 步：把文本和图片放进 项目文件夹/input/
-第 5 步：把 Claude 提示词发给 Claude，等视频生成完毕
-第 6 步：去 项目文件夹/output/ 拿视频
+项目文件夹/output/
+├── 项目名.mp4          ← 正常速度视频
+├── 项目名_slow.mp4     ← 慢速版（仅四宫格方案）
+├── poster.png          ← 学习海报（发评论区）
+├── subtitles.srt       ← 字幕文件
+└── audio_clips/        ← 语音片段
 ```
 
 ---
@@ -71,86 +55,49 @@
 
 ```
 video_maker/
-├── make_video.py           ← 脚本（不用改）
-├── README.md               ← 本文档
+├── gen_text.py             ← 多图方案：文本 + 图片生成
+├── gen_text_pre.py         ← 四宫格方案：文本 + 图片生成
+├── make_video.py           ← 多图方案：视频合成
+├── make_video_pre.py       ← 四宫格方案：视频合成
+├── CHANGELOG.md
+├── README.md
+├── WHAT_WE_LEARN.md
 │
 ├── 3地铁搭讪/
 │   ├── input/
-│   │   ├── 图片.png
+│   │   ├── 图片.png        ← 四宫格合成图（四宫格方案）
+│   │   ├── 1.png ~ 4.png   ← 独立分镜图（多图方案）
 │   │   └── 文本.txt
 │   └── output/
-│       ├── 3地铁搭讪.mp4    ← 成品视频
-│       ├── audio_clips/
-│       ├── subtitles.srt
+│       ├── 3地铁搭讪.mp4
+│       ├── poster.png
 │       └── ...
-│
-├── 4哪站下车/
-│   ├── input/
-│   └── output/
-│
-└── ...更多项目/
+└── ...
 ```
 
 ---
 
-## 文本格式规范
+## 文本格式
 
 ```
-On a bus — asking for directions
+Ordering Coffee — 咖啡店点单
 ---
-M1: Hey, what stop are you getting off at? | 嘿，你在哪站下车？
-M2: Maple Street. Why? | 枫叶街，怎么了？
+M1: Hey, could I get a medium latte? | 嘿，能来一杯中杯拿铁吗？
+F1: Sure! For here or to go? | 好的！堂食还是外带？
 ---
-M1: I always miss my stop when I'm on my phone. | 我看手机的时候总是坐过站。
-M2: Same here. The algorithm wins every time. | 我也是，算法每次都赢。
+M1: To go, please. | 外带，谢谢。
+F1: That'll be $4.50. | 一共4.5美元。
 ===
-get off at — 在…下车 — I get off at the next stop.
-miss my stop — 坐过站 — I almost missed my stop again.
+could I get... — 能来一个…（点单用语） — Could I get a black coffee?
+for here or to go — 堂食还是外带 — For here or to go?
 ```
 
-- 第一行 = 场景标题（视频开头显示 3 秒）
-- `M1` `M2` = 男性角色，`F1` `F2` = 女性角色
-- `|` = 英中双语分隔（英文在前，中文在后）
-- `---` = 场景分隔（对应图片网格的一格）
-- `===` = 核心表达分隔（之后的内容生成片尾卡片）
+- 第一行 = 标题（`English — 中文`，视频开头显示 1.5 秒）
+- `M1/M2` = 男声，`F1/F2` = 女声
+- `|` = 英中双语分隔
+- `---` = 场景分隔
+- `===` = 核心表达分隔（之后内容生成海报）
 - 核心表达格式：`短语 — 中文释义 — 例句`
-- 不需要括号动作描述，代码会自动去除
-- 其他非台词行会被自动忽略
-
----
-
-## 声音池（自动分配）
-
-| 编号 | 男声 | 女声 |
-|------|------|------|
-| 1 | en-US-GuyNeural | en-US-JennyNeural |
-| 2 | en-US-ChristopherNeural | en-US-AriaNeural |
-| 3 | en-US-EricNeural | en-US-MichelleNeural |
-| 4 | en-US-AndrewNeural | en-US-AnaNeural |
-
----
-
-## 运行方式
-
-### 方式 1：全自动（API 生成文本 + 图片 + 生成视频）
-
-```bash
-# 第 1 步：自动生成对话文本 + 四宫格插图
-python gen_text.py 6买咖啡 "在咖啡店点单，一个男生第一次去星巴克不知道怎么点"
-# → 6买咖啡/input/文本.txt（通义千问生成）
-# → 6买咖啡/input/图片.png（通义万相生成，不满意可手动替换）
-
-# 第 2 步：生成视频
-python make_video.py 6买咖啡
-```
-
-### 方式 2：手动（自己写文本 + 生成视频）
-
-```bash
-python make_video.py <项目文件夹名>
-# 例如：
-python make_video.py 3地铁搭讪
-```
 
 ---
 
@@ -166,8 +113,6 @@ pip install pillow edge-tts openai
 
 ## 环境变量
 
-使用 `gen_text.py` 前需设置通义千问 API 密钥：
-
 ```bash
 # Windows
 set DASHSCOPE_API_KEY=你的API密钥
@@ -177,3 +122,14 @@ export DASHSCOPE_API_KEY=你的API密钥
 ```
 
 API 密钥从 [阿里云 DashScope 控制台](https://dashscope.console.aliyun.com/) 获取。
+
+---
+
+## 声音池
+
+| 编号 | 男声 | 女声 |
+|------|------|------|
+| 1 | en-US-GuyNeural | en-US-JennyNeural |
+| 2 | en-US-ChristopherNeural | en-US-AriaNeural |
+| 3 | en-US-EricNeural | en-US-MichelleNeural |
+| 4 | en-US-AndrewNeural | en-US-AnaNeural |

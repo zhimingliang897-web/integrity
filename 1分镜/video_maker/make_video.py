@@ -47,7 +47,7 @@ PANEL_PAPER_COLOR = (248, 246, 240) # 暖白纸色背景
 PANEL_PAPER_BORDER = 0              # 图片距离画布边缘的距离 (0表示铺满高度)
 PANEL_INNER_PAD = 10                # 给图片加一个小衬底边框
 
-TITLE_DURATION = 3.0
+TITLE_DURATION = 1.5
 SLOW_RATE = "-30%"
 
 # ============================================================
@@ -185,20 +185,40 @@ def _load_font(size, prefer_cn=False):
     except: return ImageFont.load_default()
 
 def _wrap_text(draw, text, font, max_width):
-    # 简易换行
+    """按像素宽度自动换行（中英文混合）"""
     lines = []
-    if draw.textlength(text, font=font) <= max_width:
-        return [text]
-    # 暴力按字符拆分（简单处理中英文）
-    curr = ""
-    for char in text:
-        if draw.textlength(curr + char, font=font) <= max_width:
-            curr += char
+    current = ""
+    i = 0
+    while i < len(text):
+        ch = text[i]
+        if ch.isascii() and (ch.isalpha() or ch == "'"):
+            word = ""
+            while i < len(text) and text[i].isascii() and not text[i].isspace():
+                word += text[i]
+                i += 1
+            test = (current + " " + word).strip() if current else word
+        elif ch == ' ':
+            test = current + ch
+            i += 1
         else:
-            lines.append(curr)
-            curr = char
-    if curr: lines.append(curr)
-    return lines
+            test = current + ch
+            i += 1
+
+        bbox = draw.textbbox((0, 0), test, font=font)
+        if (bbox[2] - bbox[0]) <= max_width or not current:
+            current = test
+        else:
+            lines.append(current.rstrip())
+            if ch.isascii() and (ch.isalpha() or ch == "'"):
+                current = word
+            elif ch == ' ':
+                current = ""
+            else:
+                current = ch
+
+    if current.strip():
+        lines.append(current.rstrip())
+    return lines if lines else [text]
 
 # ------------------------------------------------------------
 # 步骤 0: 加载配置
@@ -496,38 +516,192 @@ def step6_make_video(config, scene_durs, audio_path, srt_path):
 # ------------------------------------------------------------
 
 def _generate_title_card(text, out_path):
-    img = Image.new("RGB", (1280, 720), (20, 20, 20))
+    """标题卡（1280x720 黑底，自适应字号 + 双行支持）"""
+    W, H = 1280, 720
+    MARGIN_X = 80
+    content_w = W - MARGIN_X * 2
+
+    img = Image.new("RGB", (W, H), (0, 0, 0))
     draw = ImageDraw.Draw(img)
-    font = _load_font(50, True)
-    
-    # 简单居中
-    bbox = draw.textbbox((0,0), text, font=font)
-    w, h = bbox[2]-bbox[0], bbox[3]-bbox[1]
-    draw.text(((1280-w)//2, (720-h)//2), text, font=font, fill="white")
+
+    parts = re.split(r'\s*[—–]\s*', text, maxsplit=1)
+    main_title = parts[0].strip()
+    sub_title = parts[1].strip() if len(parts) > 1 else ""
+
+    for size in [44, 38, 32, 28]:
+        font_main = _load_font(size, prefer_cn=True)
+        wrapped_main = _wrap_text(draw, main_title, font_main, content_w)
+        if len(wrapped_main) <= 2:
+            break
+
+    font_sub = _load_font(28, prefer_cn=True)
+    line_h_main = draw.textbbox((0, 0), "Ag中", font=font_main)[3] + 8
+    total_h = line_h_main * len(wrapped_main)
+
+    if sub_title:
+        line_h_sub = draw.textbbox((0, 0), "Ag中", font=font_sub)[3] + 8
+        total_h += 30 + line_h_sub
+
+    y = (H - total_h) // 2
+
+    for line in wrapped_main:
+        bbox = draw.textbbox((0, 0), line, font=font_main)
+        lw = bbox[2] - bbox[0]
+        draw.text(((W - lw) // 2, y), line, fill=(255, 255, 255), font=font_main)
+        y += line_h_main
+
+    if sub_title:
+        y += 10
+        draw.line([(W // 2 - 100, y), (W // 2 + 100, y)], fill=(100, 100, 100), width=1)
+        y += 20
+        bbox = draw.textbbox((0, 0), sub_title, font=font_sub)
+        lw = bbox[2] - bbox[0]
+        draw.text(((W - lw) // 2, y), sub_title, fill=(200, 200, 200), font=font_sub)
+
     img.save(out_path)
 
-def generate_poster(vocab, out_path):
-    # 简版海报
-    if not vocab: return
-    W, H = 1080, 1400
-    img = Image.new("RGB", (W, H), (240, 235, 225))
+def generate_poster(vocab_lines, out_path, title=None, episode_num=None):
+    """学习海报 — 卡片式排版"""
+    import datetime
+
+    if not vocab_lines:
+        return
+
+    WIDTH = 1080
+    PX = 50                         # 页面左右边距
+    CARD_PX = 24                    # 卡片内左右边距
+    CARD_PY = 20                    # 卡片内上下边距
+    CARD_GAP = 18                   # 卡片间距
+    BG = (216, 200, 172)            # 整体背景（暖沙色）
+    CARD_BG = (245, 240, 230)       # 卡片底色（近白暖色）
+    CARD_RADIUS = 14
+
+    # 文字颜色 — 仅三档
+    C_DARK = (38, 32, 26)           # 短语（最深）
+    C_MID = (90, 75, 58)            # 释义
+    C_LIGHT = (120, 105, 85)        # 例句
+    C_NUM = (190, 110, 45)          # 编号（暖橙强调色）
+    C_HEADER_BG = (52, 42, 32)
+    C_HEADER_TXT = (245, 238, 225)
+    C_SERIAL = (155, 140, 118)
+
+    font_header = _load_font(34, prefer_cn=True)
+    font_serial = _load_font(20, prefer_cn=True)
+    font_num = _load_font(30, prefer_cn=True)
+    font_phrase = _load_font(30, prefer_cn=True)
+    font_def = _load_font(24, prefer_cn=True)
+    font_ex = _load_font(20, prefer_cn=True)
+
+    card_inner_w = WIDTH - PX * 2 - CARD_PX * 2
+    HEADER_H = 76
+
+    raw_title = title or "Core Expressions"
+    title_parts = re.split(r'\s*[—–]\s*', raw_title, maxsplit=1)
+    header_text = "今日学习 | " + title_parts[0].strip()
+
+    # ---------- 预算每张卡片高度 ----------
+    tmp_img = Image.new("RGB", (WIDTH, 100))
+    td = ImageDraw.Draw(tmp_img)
+
+    def _text_h(draw_obj, txt, font):
+        bb = draw_obj.textbbox((0, 0), txt, font=font)
+        return bb[3] - bb[1]
+
+    card_heights = []
+    for line in vocab_lines:
+        parts = [p.strip() for p in line.split("—")]
+        h = CARD_PY * 2
+        # 短语
+        if len(parts) >= 1 and parts[0]:
+            for wl in _wrap_text(td, parts[0], font_phrase, card_inner_w - 50):
+                h += _text_h(td, wl, font_phrase) + 6
+            h += 6
+        # 释义
+        if len(parts) >= 2 and parts[1]:
+            for wl in _wrap_text(td, parts[1], font_def, card_inner_w):
+                h += _text_h(td, wl, font_def) + 4
+            h += 6
+        # 例句
+        if len(parts) >= 3 and parts[2]:
+            for wl in _wrap_text(td, f'e.g. {parts[2]}', font_ex, card_inner_w):
+                h += _text_h(td, wl, font_ex) + 4
+        card_heights.append(h)
+
+    # 总高：顶部边距 + header + 日期行 + 卡片们 + 底部边距
+    serial_row_h = 40
+    top_section = 60 + HEADER_H + 16 + serial_row_h
+    cards_total = sum(card_heights) + CARD_GAP * (len(card_heights) - 1) if card_heights else 0
+    total_height = max(top_section + cards_total + 60, 500)
+
+    # ---------- 正式绘制 ----------
+    img = Image.new("RGB", (WIDTH, total_height), BG)
     draw = ImageDraw.Draw(img)
-    
-    font_main = _load_font(40, True)
-    y = 100
-    draw.text((50, 50), "Core Expressions", font=_load_font(60), fill="#553311")
-    
-    for line in vocab:
-        parts = line.split("—")
-        txt = parts[0].strip()
-        draw.text((60, y), f"• {txt}", font=font_main, fill="#333")
-        y += 60
-        if len(parts) > 1:
-            draw.text((100, y), parts[1].strip(), font=_load_font(30, True), fill="#666")
-            y += 50
-        y += 30
-        
-    img.save(out_path)
+    y = 60
+
+    # Header bar
+    hr = [(PX, y), (WIDTH - PX, y + HEADER_H)]
+    if hasattr(draw, "rounded_rectangle"):
+        draw.rounded_rectangle(hr, radius=12, fill=C_HEADER_BG)
+    else:
+        draw.rectangle(hr, fill=C_HEADER_BG)
+    bb = draw.textbbox((0, 0), header_text, font=font_header)
+    tw, th = bb[2] - bb[0], bb[3] - bb[1]
+    draw.text(((WIDTH - tw) // 2, y + (HEADER_H - th) // 2),
+              header_text, fill=C_HEADER_TXT, font=font_header)
+    y += HEADER_H + 16
+
+    # 日期 / 集数
+    today = datetime.date.today().strftime("%Y.%m.%d")
+    ep = f"EP.{episode_num}  " if episode_num else ""
+    serial = f"{ep}{today}"
+    sb = draw.textbbox((0, 0), serial, font=font_serial)
+    draw.text((WIDTH - PX - (sb[2] - sb[0]), y + 4), serial,
+              fill=C_SERIAL, font=font_serial)
+    y += serial_row_h
+
+    # 逐条绘制卡片
+    for i, line in enumerate(vocab_lines):
+        parts = [p.strip() for p in line.split("—")]
+        ch = card_heights[i]
+
+        # 卡片背景
+        card_rect = [(PX, y), (WIDTH - PX, y + ch)]
+        if hasattr(draw, "rounded_rectangle"):
+            draw.rounded_rectangle(card_rect, radius=CARD_RADIUS, fill=CARD_BG)
+        else:
+            draw.rectangle(card_rect, fill=CARD_BG)
+
+        cy = y + CARD_PY
+        left = PX + CARD_PX
+
+        # 编号 + 短语
+        if len(parts) >= 1 and parts[0]:
+            num_str = f"{i + 1}"
+            nb = draw.textbbox((0, 0), num_str, font=font_num)
+            nw = nb[2] - nb[0]
+            draw.text((left, cy), num_str, fill=C_NUM, font=font_num)
+            phrase_left = left + nw + 10
+            for wl in _wrap_text(draw, parts[0], font_phrase, card_inner_w - nw - 10):
+                draw.text((phrase_left, cy), wl, fill=C_DARK, font=font_phrase)
+                cy += _text_h(draw, wl, font_phrase) + 6
+            cy += 6
+
+        # 释义
+        if len(parts) >= 2 and parts[1]:
+            for wl in _wrap_text(draw, parts[1], font_def, card_inner_w):
+                draw.text((left, cy), wl, fill=C_MID, font=font_def)
+                cy += _text_h(draw, wl, font_def) + 4
+            cy += 6
+
+        # 例句
+        if len(parts) >= 3 and parts[2]:
+            for wl in _wrap_text(draw, f'e.g. {parts[2]}', font_ex, card_inner_w):
+                draw.text((left, cy), wl, fill=C_LIGHT, font=font_ex)
+                cy += _text_h(draw, wl, font_ex) + 4
+
+        y += ch + CARD_GAP
+
+    img.save(out_path, quality=95)
 
 # ============================================================
 # Main
@@ -560,7 +734,10 @@ async def main():
     
     # 海报
     if config["vocab"]:
-        generate_poster(config["vocab"], os.path.join(OUTPUT_DIR, "poster.png"))
+        ep_match = re.match(r'(\d+)', os.path.basename(PROJECT_DIR))
+        ep_num = int(ep_match.group(1)) if ep_match else None
+        generate_poster(config["vocab"], os.path.join(OUTPUT_DIR, "poster.png"),
+                        title=config.get("title"), episode_num=ep_num)
         
     print("\n" + "="*50)
     print(f"全部完成！视频已生成: {final_video}")
