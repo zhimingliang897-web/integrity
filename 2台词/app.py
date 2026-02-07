@@ -1,16 +1,20 @@
+import json
+import os
 import re
 import shutil
 import sys
 import threading
 from pathlib import Path
 
-from flask import Flask, jsonify, request, render_template, abort
+import requests as http_requests
+from flask import Flask, jsonify, request, render_template, abort, send_from_directory
 
 # ---------------------------------------------------------------------------
 # 项目路径
 # ---------------------------------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent
 WORD_DIR = BASE_DIR / "word"
+CONFIG_PATH = BASE_DIR / "config.json"
 
 app = Flask(__name__)
 
@@ -18,6 +22,43 @@ app = Flask(__name__)
 # 后台处理状态  {day_num: {"step": str, "error": str|None}}
 # ---------------------------------------------------------------------------
 processing_status: dict[int, dict] = {}
+
+# ---------------------------------------------------------------------------
+# config.json 加载：仅在环境变量未设置时生效
+# ---------------------------------------------------------------------------
+_CONFIG_KEYS = ["DASHSCOPE_API_KEY", "QWEN_BASE_URL", "QWEN_MODEL"]
+
+
+def load_config():
+    """读取 config.json，对未设置的环境变量进行填充."""
+    if not CONFIG_PATH.exists():
+        return
+    try:
+        cfg = json.loads(CONFIG_PATH.read_text("utf-8"))
+    except (json.JSONDecodeError, OSError):
+        return
+    for key in _CONFIG_KEYS:
+        val = cfg.get(key, "")
+        if val and not os.environ.get(key):
+            os.environ[key] = val
+
+
+def save_config(data: dict):
+    """保存配置到 config.json 并更新 os.environ."""
+    cfg = {}
+    if CONFIG_PATH.exists():
+        try:
+            cfg = json.loads(CONFIG_PATH.read_text("utf-8"))
+        except (json.JSONDecodeError, OSError):
+            pass
+    for key in _CONFIG_KEYS:
+        if key in data:
+            cfg[key] = data[key]
+            os.environ[key] = data[key]
+    CONFIG_PATH.write_text(json.dumps(cfg, indent=2, ensure_ascii=False), "utf-8")
+
+
+load_config()
 
 
 # ===========================================================================
@@ -242,6 +283,15 @@ def run_pipeline(day_num: int):
             fmt = QuoteFormatter()
             fmt.process_file(json_path)
 
+        # Step 4: study.md -> audio/
+        audio_dir = day_dir / "audio"
+        if md_path.exists() and not audio_dir.exists():
+            processing_status[day_num] = {"step": "tts", "error": None}
+            text = md_path.read_text("utf-8")
+            parsed_words = parse_study_md(text)
+            from tts_generator import generate as tts_generate
+            tts_generate(parsed_words, audio_dir)
+
         processing_status[day_num] = {"step": "done", "error": None}
 
     except Exception as e:
@@ -275,7 +325,13 @@ def api_day(n):
         abort(404)
     text = md_path.read_text("utf-8")
     words = parse_study_md(text)
-    return jsonify({"day": n, "words": words})
+    has_audio = (WORD_DIR / day_name / "audio").is_dir()
+    return jsonify({"day": n, "words": words, "has_audio": has_audio})
+
+
+@app.route("/audio/<path:filename>")
+def serve_audio(filename):
+    return send_from_directory(WORD_DIR, filename)
 
 
 @app.route("/api/upload", methods=["POST"])
@@ -332,6 +388,67 @@ def api_status(n):
     if (day_dir / f"{day_name}_study.md").exists():
         return jsonify({"step": "done", "error": None})
     return jsonify({"step": "unknown", "error": None})
+
+
+# ---------------------------------------------------------------------------
+# 音标缓存
+# ---------------------------------------------------------------------------
+_phonetics_cache: dict[str, dict] = {}
+
+
+@app.route("/api/phonetics/<word>")
+def api_phonetics(word):
+    word = word.strip().lower()
+    if word in _phonetics_cache:
+        return jsonify(_phonetics_cache[word])
+
+    result = {"phonetic": "", "audio_url": ""}
+    try:
+        resp = http_requests.get(
+            f"https://api.dictionaryapi.dev/api/v2/entries/en/{word}",
+            timeout=8,
+        )
+        if resp.ok:
+            data = resp.json()
+            entry = data[0] if data else {}
+            result["phonetic"] = entry.get("phonetic", "")
+            # 查找音频 URL（优先 us 发音）
+            for p in entry.get("phonetics", []):
+                audio = p.get("audio", "")
+                if audio:
+                    if not result["audio_url"] or "-us" in audio:
+                        result["audio_url"] = audio
+                if not result["phonetic"] and p.get("text"):
+                    result["phonetic"] = p["text"]
+    except Exception:
+        pass
+
+    _phonetics_cache[word] = result
+    return jsonify(result)
+
+
+@app.route("/api/settings")
+def api_get_settings():
+    def mask(val):
+        if not val or len(val) <= 8:
+            return "*" * len(val) if val else ""
+        return val[:4] + "*" * (len(val) - 8) + val[-4:]
+
+    return jsonify({
+        "DASHSCOPE_API_KEY": mask(os.environ.get("DASHSCOPE_API_KEY", "")),
+        "QWEN_BASE_URL": os.environ.get("QWEN_BASE_URL", ""),
+        "QWEN_MODEL": os.environ.get("QWEN_MODEL", ""),
+        "has_key": bool(os.environ.get("DASHSCOPE_API_KEY")),
+    })
+
+
+@app.route("/api/settings", methods=["POST"])
+def api_save_settings():
+    data = request.get_json(silent=True) or {}
+    if not any(k in data for k in _CONFIG_KEYS):
+        return jsonify({"error": "No valid settings provided"}), 400
+    save_config(data)
+    return jsonify({"ok": True})
 
 
 # ===========================================================================

@@ -227,13 +227,36 @@ body {
   margin-bottom: 20px;
   border: 1px solid var(--border);
 }
+.word-card .word-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 8px; flex-wrap: wrap;
+}
 .word-card .word-title {
   font-size: 26px;
   font-weight: 700;
   color: var(--accent);
-  margin-bottom: 8px;
   letter-spacing: -0.3px;
 }
+.word-phonetic {
+  font-size: 15px; color: var(--text2);
+  font-style: italic; font-weight: 400;
+}
+.play-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 18px; padding: 2px 6px; border-radius: 6px;
+  color: var(--accent); transition: all .15s; line-height: 1;
+}
+.play-btn:hover { background: var(--accent-light); }
+.dialogue-en-row {
+  display: flex; align-items: center; gap: 6px;
+}
+.dialogue-play {
+  background: none; border: none; cursor: pointer;
+  font-size: 14px; padding: 1px 4px; border-radius: 4px;
+  color: var(--text2); transition: all .15s; line-height: 1;
+  flex-shrink: 0;
+}
+.dialogue-play:hover { color: var(--accent); background: var(--accent-light); }
 .word-card .word-meaning {
   font-size: 15px;
   color: var(--text);
@@ -316,6 +339,47 @@ body {
 }
 .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
 
+/* ===== Settings Button ===== */
+.settings-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: 20px; color: var(--text2); padding: 6px 10px;
+  border-radius: 8px; transition: all .15s;
+}
+.settings-btn:hover { background: var(--accent-light); color: var(--accent); }
+
+/* ===== Settings Modal ===== */
+.settings-modal .modal-box { width: 420px; }
+.settings-modal label {
+  font-size: 14px; color: var(--text2); display: block;
+  margin-bottom: 4px; margin-top: 14px;
+}
+.settings-modal label:first-of-type { margin-top: 0; }
+.settings-modal input[type=text],
+.settings-modal input[type=password] {
+  width: 100%; padding: 10px 14px; font-size: 14px;
+  border: 1px solid var(--border); border-radius: 8px;
+  outline: none; transition: border-color .2s;
+  font-family: monospace;
+}
+.settings-modal input:focus { border-color: var(--accent); }
+.settings-modal .hint {
+  font-size: 12px; color: var(--text2); margin-top: 2px;
+}
+.settings-modal .save-ok {
+  color: var(--green); font-size: 13px; margin-top: 10px; display: none;
+}
+
+/* ===== API Key Warning ===== */
+.api-warning {
+  background: #fff3e0; border: 1px solid var(--orange);
+  border-radius: var(--radius); padding: 14px 20px;
+  margin-bottom: 20px; display: none;
+  align-items: center; gap: 10px; font-size: 14px;
+  cursor: pointer;
+}
+.api-warning.visible { display: flex; }
+.api-warning:hover { background: #ffe8cc; }
+
 /* ===== Responsive ===== */
 @media (max-width: 500px) {
   .container { padding: 16px 12px 40px; }
@@ -332,11 +396,19 @@ body {
   <!-- Header -->
   <div class="header">
     <h1 id="page-title">Word Study</h1>
-    <button class="back-btn" id="back-btn" onclick="goHome()">&#8592; Back</button>
+    <div>
+      <button class="settings-btn" onclick="openSettings()" title="Settings">&#9881;</button>
+      <button class="back-btn" id="back-btn" onclick="goHome()">&#8592; Back</button>
+    </div>
   </div>
 
   <!-- ===== Home View ===== -->
   <div id="home-view">
+    <!-- API Key Warning -->
+    <div class="api-warning" id="api-warning" onclick="openSettings()">
+      &#9888;&#65039; API Key not set — click here to configure
+    </div>
+
     <!-- Upload Zone -->
     <div class="upload-zone" id="upload-zone">
       <div class="icon">&#128196;</div>
@@ -380,6 +452,25 @@ body {
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
       <button class="btn-confirm" onclick="confirmUpload()">Upload</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal-overlay settings-modal" id="settings-modal">
+  <div class="modal-box">
+    <h3>Settings</h3>
+    <label for="s-apikey">API Key</label>
+    <input type="password" id="s-apikey" placeholder="sk-...">
+    <label for="s-baseurl">Base URL <span class="hint">(optional)</span></label>
+    <input type="text" id="s-baseurl" placeholder="https://dashscope.aliyuncs.com/compatible-mode/v1">
+    <label for="s-model">Model <span class="hint">(optional)</span></label>
+    <input type="text" id="s-model" placeholder="deepseek-v3.2">
+    <div class="save-ok" id="settings-ok">Saved!</div>
+    <div class="error-msg" id="settings-error"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeSettings()">Cancel</button>
+      <button class="btn-confirm" onclick="saveSettings()">Save</button>
     </div>
   </div>
 </div>
@@ -522,13 +613,40 @@ async function showStudy(dayNum) {
     }
 
     const data = await resp.json();
-    renderStudy(data.words);
+    currentDayNum = dayNum;
+    renderStudy(data.words, data.has_audio || false);
   } catch (e) {
     cards.innerHTML = `<p style="color:var(--red)">Failed to load: ${e.message}</p>`;
   }
 }
 
-function renderStudy(words) {
+// ===========================================================================
+//  Phonetics & Audio
+// ===========================================================================
+const phoneticsCache = {};
+let currentDayNum = null;
+let dayHasAudio = false;
+
+async function fetchPhonetics(word) {
+  const key = word.toLowerCase();
+  if (phoneticsCache[key]) return phoneticsCache[key];
+  try {
+    const resp = await fetch(`/api/phonetics/${encodeURIComponent(key)}`);
+    const data = await resp.json();
+    phoneticsCache[key] = data;
+    return data;
+  } catch (e) {
+    return { phonetic: '', audio_url: '' };
+  }
+}
+
+function playAudio(url) {
+  if (!url) return;
+  new Audio(url).play();
+}
+
+function renderStudy(words, hasAudio) {
+  dayHasAudio = hasAudio;
   const nav = document.getElementById('word-nav');
   const cards = document.getElementById('word-cards');
 
@@ -538,12 +656,20 @@ function renderStudy(words) {
   ).join('');
 
   // Build cards
-  cards.innerHTML = words.map((w, i) => {
-    const dialoguesHtml = w.dialogues.map(d => {
+  let lineCounter = {};  // track line indices per word+dialogue
+  cards.innerHTML = words.map((w, wi) => {
+    const dialoguesHtml = w.dialogues.map((d, di) => {
+      let li = 0;
       const linesHtml = d.lines.map(l => {
         let html = '';
         if (l.en) {
-          html += `<div class="dialogue-line"><div class="dialogue-en">${esc(l.en)}</div></div>`;
+          const audioFile = `d_${wi}_${di}_${li}.mp3`;
+          li++;
+          html += `<div class="dialogue-line"><div class="dialogue-en-row"><div class="dialogue-en">${esc(l.en)}</div>`;
+          if (hasAudio) {
+            html += `<button class="dialogue-play" data-audio="${audioFile}" title="Play">&#128264;</button>`;
+          }
+          html += `</div></div>`;
         }
         if (l.zh) {
           html += `<div class="dialogue-line"><div class="dialogue-zh">${esc(l.zh)}</div></div>`;
@@ -563,14 +689,49 @@ function renderStudy(words) {
     }).join('');
 
     return `
-      <div class="word-card" id="word-${i}">
-        <div class="word-title">${esc(w.word)}</div>
+      <div class="word-card" id="word-${wi}">
+        <div class="word-header">
+          <div class="word-title">${esc(w.word)}</div>
+          <span class="word-phonetic" id="phonetic-${wi}"></span>
+          <button class="play-btn" id="play-${wi}" data-audio="w_${wi}.mp3" title="Pronounce">&#128264;</button>
+        </div>
         <div class="word-meaning">${esc(w.meaning)}</div>
         <div class="dialogues-label">Example Dialogues</div>
         ${dialoguesHtml}
       </div>
     `;
   }).join('');
+
+  // 事件委托：台词和单词播放
+  cards.addEventListener('click', e => {
+    const btn = e.target.closest('.dialogue-play');
+    if (btn && btn.dataset.audio && currentDayNum) {
+      playAudio(`/audio/day${currentDayNum}/audio/${btn.dataset.audio}`);
+    }
+  });
+
+  // 异步加载音标
+  words.forEach((w, i) => {
+    fetchPhonetics(w.word).then(data => {
+      const phEl = document.getElementById(`phonetic-${i}`);
+      if (phEl && data.phonetic) phEl.textContent = data.phonetic;
+      // 如果没有本地音频，把 dictionary API 的音频 URL 存起来做 fallback
+      const playEl = document.getElementById(`play-${i}`);
+      if (playEl && data.audio_url) {
+        playEl.dataset.fallbackUrl = data.audio_url;
+      }
+    });
+  });
+}
+
+function playWordAudio(idx) {
+  const btn = document.getElementById(`play-${idx}`);
+  if (!btn) return;
+  if (dayHasAudio && currentDayNum) {
+    playAudio(`/audio/day${currentDayNum}/audio/${btn.dataset.audio}`);
+  } else if (btn.dataset.fallbackUrl) {
+    playAudio(btn.dataset.fallbackUrl);
+  }
 }
 
 function scrollToWord(e, idx) {
@@ -715,6 +876,7 @@ function startPolling(dayNum) {
         extracting: 'Extracting words from PDF...',
         scraping: 'Searching movie quotes...',
         formatting: 'Generating study notes (LLM)...',
+        tts: 'Generating audio (TTS)...',
         done: 'Done! Ready to study.',
         error: 'Error: ' + (s.error || 'unknown'),
       };
@@ -732,9 +894,86 @@ function startPolling(dayNum) {
 }
 
 // ===========================================================================
+//  Settings
+// ===========================================================================
+async function checkApiKey() {
+  try {
+    const resp = await fetch('/api/settings');
+    const s = await resp.json();
+    const warning = document.getElementById('api-warning');
+    warning.classList.toggle('visible', !s.has_key);
+  } catch (e) { /* ignore */ }
+}
+
+async function openSettings() {
+  const modal = document.getElementById('settings-modal');
+  document.getElementById('settings-ok').style.display = 'none';
+  document.getElementById('settings-error').style.display = 'none';
+  try {
+    const resp = await fetch('/api/settings');
+    const s = await resp.json();
+    document.getElementById('s-apikey').value = s.has_key ? s.DASHSCOPE_API_KEY : '';
+    document.getElementById('s-baseurl').value = s.QWEN_BASE_URL || '';
+    document.getElementById('s-model').value = s.QWEN_MODEL || '';
+  } catch (e) { /* ignore */ }
+  modal.classList.add('visible');
+  document.getElementById('s-apikey').focus();
+}
+
+function closeSettings() {
+  document.getElementById('settings-modal').classList.remove('visible');
+}
+
+document.getElementById('settings-modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeSettings();
+});
+
+async function saveSettings() {
+  const key = document.getElementById('s-apikey').value.trim();
+  const url = document.getElementById('s-baseurl').value.trim();
+  const model = document.getElementById('s-model').value.trim();
+  const errEl = document.getElementById('settings-error');
+  const okEl = document.getElementById('settings-ok');
+  errEl.style.display = 'none';
+  okEl.style.display = 'none';
+
+  const body = {};
+  if (key && !key.includes('*')) body.DASHSCOPE_API_KEY = key;
+  if (url) body.QWEN_BASE_URL = url;
+  if (model) body.QWEN_MODEL = model;
+
+  if (Object.keys(body).length === 0) {
+    errEl.textContent = 'Nothing to save';
+    errEl.style.display = '';
+    return;
+  }
+
+  try {
+    const resp = await fetch('/api/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const data = await resp.json();
+    if (data.error) {
+      errEl.textContent = data.error;
+      errEl.style.display = '';
+    } else {
+      okEl.style.display = '';
+      checkApiKey();
+      setTimeout(() => closeSettings(), 1000);
+    }
+  } catch (e) {
+    errEl.textContent = 'Save failed: ' + e.message;
+    errEl.style.display = '';
+  }
+}
+
+// ===========================================================================
 //  Init
 // ===========================================================================
 route();
+checkApiKey();
 </script>
 </body>
 </html>

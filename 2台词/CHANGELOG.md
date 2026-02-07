@@ -1,5 +1,25 @@
 # 更新日志
 
+## v7 — TTS 语音生成
+
+- 新增 `tts_generator.py`：用 edge-tts 为单词和台词批量生成 mp3 音频
+- 处理流水线新增第 4 步：study.md → audio/（自动在上传 PDF 时执行）
+- 前端台词行旁加播放按钮，点击播放本地预生成的 mp3
+- 单词发音优先本地音频，无本地音频时 fallback 到 Free Dictionary API 音频
+- 过滤无效文本（如 `---` 分隔线），自动清理空音频文件
+- 支持命令行独立运行：`python tts_generator.py word/day1/day1_study.md`
+
+## v6 — 音标 + 发音 + 双击启动 + 网页设置
+
+- 新增 `启动.bat`：双击启动，自动打开浏览器
+- 新增网页端 API Key 设置：右上角齿轮按钮，设置保存到 `config.json`
+- config.json 已加入 `.gitignore`，API Key 不会上传 GitHub
+- 两种 API Key 方式并存：命令行 `set`（优先）或网页设置
+- 新增 `/api/phonetics/<word>`：代理 Free Dictionary API，返回 IPA 音标 + 音频 URL
+- 单词标题旁显示音标 + 发音按钮
+- 未设置 API Key 时首页显示橙色提示条
+- 处理进度新增 TTS 步骤标签
+
 ## v5 — 删除 + 上传修复
 
 - Day 卡片右上角新增删除按钮，hover 显示，点击二次确认后删除整个 day 文件夹

@@ -53,3 +53,30 @@ Prompt 的关键是给出明确的输出格式，让 LLM 返回结构化的 Mark
 - **Markdown 解析不依赖库**：`_study.md` 格式固定，用正则按 `## word` 分块提取结构化数据，返回 JSON 给前端渲染
 - **后台异步处理**：上传 PDF 后用 `threading.Thread` 在后台依次跑三个脚本，前端轮询 `/api/status` 获取进度
 - **SPA 路由**：用 `history.pushState` + `popstate` 事件实现前端路由，Flask 端对 `/day/<n>` 统一返回同一个 HTML
+
+## 运行时配置注入
+
+API Key 不能写死在代码里，也不能上传到 GitHub。两种方案并存：
+
+- **环境变量**：`set DASHSCOPE_API_KEY=xxx` 后启动，代码里用 `os.getenv()` 读取
+- **config.json**：网页端保存配置到本地文件，启动时读取并写入 `os.environ`（不覆盖已有环境变量）
+
+优先级：环境变量 > config.json。`.gitignore` 排除 config.json 防止泄露。
+
+## Free Dictionary API 获取音标
+
+`https://api.dictionaryapi.dev/api/v2/entries/en/{word}` 是免费的词典 API，返回：
+- `phonetic`：IPA 音标文本（如 `/rɪˈnjuːəl/`）
+- `phonetics[].audio`：真人发音 mp3 URL
+
+通过后端代理请求（避免前端 CORS 差异），内存缓存避免重复请求。
+
+## edge-tts 离线语音生成
+
+浏览器内置的 `speechSynthesis` API 在 Windows 上很不稳定（随缘出声）。
+解决方案是用 `edge-tts`（微软 Edge 的 TTS 引擎）**预生成** mp3 文件：
+
+- `edge-tts` 是 Python 包，调用微软 Edge 的神经网络语音，质量接近真人
+- 在处理流水线中提前生成，网页端只做播放，零延迟
+- 文件命名约定：`w_{词序号}.mp3`（单词）、`d_{词序号}_{对话序号}_{行序号}.mp3`（台词）
+- 纯符号文本（如 `---`）需要过滤，edge-tts 对这类输入会生成空文件
