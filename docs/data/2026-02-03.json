@@ -1,0 +1,137 @@
+{
+  "date": "2026-02-03",
+  "summary": "今日焦点集中于提升大模型可靠性与推理能力：从共识分解执行、自 Debate 强化到记忆增强的多代理协同，均指向构建更稳健、可验证的智能系统；同时，人机对齐、安全测试（如醉酒语言诱导）及数学发现等应用探索，凸显AI从理论向高阶实践落地的关键进展。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "JAF: Judge Agent Forest",
+      "link": "https://arxiv.org/abs/2601.22269",
+      "rating": "A",
+      "score": 8,
+      "comment": "JAF提出judge agent协同推理新范式，显著提升评估与自反思能力，是agentic AI关键进展",
+      "tags": [
+        "agentic AI",
+        "推理评估",
+        "框架创新"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "The Six Sigma Agent: Achieving Enterprise-Grade Reliability in LLM Systems Through Consensus-Driven Decomposed Execution",
+      "link": "https://arxiv.org/abs/2601.22290",
+      "rating": "A",
+      "score": 8,
+      "comment": "六西格玛Agent提出共识驱动分解执行框架，显著提升LLM企业级可靠性，具实用价值",
+      "tags": [
+        "LLM可靠性",
+        "任务分解",
+        "共识机制"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Why Reasoning Fails to Plan: A Planning-Centric Analysis of Long-Horizon Decision Making in LLM Agents",
+      "link": "https://arxiv.org/abs/2601.22311",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次从规划中心视角揭示LLM代理长程决策失败根源，为构建真正长时序智能提供理论框架",
+      "tags": [
+        "LLM",
+        "Agent",
+        "规划",
+        "理论分析"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Sparks of Rationality: Do Reasoning LLMs Align with Human Judgment and Choice?",
+      "link": "https://arxiv.org/abs/2601.22329",
+      "rating": "A",
+      "score": 8,
+      "comment": "首篇系统性评估LLM理性决策能力的高质量论文，为AI决策可信性提供关键实证支持。",
+      "tags": [
+        "LLM理性分析",
+        "行为经济学",
+        "决策模型"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Learning Provably Correct Distributed Protocols Without Human Knowledge",
+      "link": "https://arxiv.org/abs/2601.22369",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将分布式协议设计建模为不完全信息博弈搜索问题，提出GGMS框架突破传统学习方法局限，具重要理论与实践价值。",
+      "tags": [
+        "分布式系统",
+        "形式化验证",
+        "强化学习"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Semi-Autonomous Mathematics Discovery with Gemini: A Case Study on the Erd\\H{o}s Problems",
+      "link": "https://arxiv.org/abs/2601.22401",
+      "rating": "A",
+      "score": 8,
+      "comment": "AI辅助数学发现取得实质性进展，验证了大模型在高阶推理中的潜力",
+      "tags": [
+        "AI+科学",
+        "数学AI",
+        "Gemini"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "In Vino Veritas and Vulnerabilities: Examining LLM Safety via Drunk Language Inducement",
+      "link": "https://arxiv.org/abs/2601.22169",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将醉酒语言作为攻击载体研究LLM安全，方法创新且实验严谨，具实用价值。",
+      "tags": [
+        "LLM安全",
+        "攻击测试",
+        "学术研究"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Prepare Reasoning Language Models for Multi-Agent Debate with Self-Debate Reinforcement Learning",
+      "link": "https://arxiv.org/abs/2601.22297",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出Self-Debate RL框架，融合单模型推理与多智能体辩论优势，是LLM推理能力提升的重要进展。",
+      "tags": [
+        "强化学习",
+        "多智能体",
+        "推理增强"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "MERMAID: Memory-Enhanced Retrieval and Reasoning with Multi-Agent Iterative Knowledge Grounding for Veracity Assessment",
+      "link": "https://arxiv.org/abs/2601.22361",
+      "rating": "A",
+      "score": 8,
+      "comment": "MERMAID提出记忆增强多智能体框架，显著提升事实核查中检索与推理的协同效率。",
+      "tags": [
+        "大模型",
+        "事实核查",
+        "多智能体"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Context Structure Reshapes the Representational Geometry of Language Models",
+      "link": "https://arxiv.org/abs/2601.22364",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统性揭示上下文学习中表示直化现象的双轨机制，推动对LLM内部动态理解",
+      "tags": [
+        "LLM原理",
+        "表示学习",
+        "上下文学习"
+      ]
+    }
+  ]
+}
