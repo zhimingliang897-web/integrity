@@ -11,17 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <style>
-        :root {
-            --bg-body: #0a0a0f;
-            --bg-card: #14141e;
-            --bg-card-hover: #1e1e2a;
-            --primary: #3b82f6;
-            --primary-glow: rgba(59, 130, 246, 0.4);
-            --text-main: #e2e8f0;
-            --text-muted: #94a3b8;
-            --border: #2d3748;
-            --accent: #8b5cf6;
-        }
+        /* :root defines variables in style.css, so we don't need to redefine them here unless we want to override */
 
         body {
             background-color: var(--bg-body);
@@ -363,6 +353,27 @@
             color: #2563eb;
         }
 
+        /* 统计栏 */
+        .stats-bar {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .stats-bar span {
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+        }
+
+        .stats-bar .stat-s { color: #fca5a5; border-color: rgba(220,38,38,0.3); }
+        .stats-bar .stat-a { color: #fdba74; border-color: rgba(234,88,12,0.3); }
+        .stats-bar .stat-b { color: #93c5fd; border-color: rgba(37,99,235,0.3); }
+
         /* 暗黑模式适配 */
         body .badge-s {
             background: rgba(220, 38, 38, 0.2);
@@ -406,6 +417,15 @@
                 <button id="btn-next" title="后一天">▶</button>
             </div>
             <input type="text" id="search-input" placeholder="🔍 搜索标题、标签、来源...">
+            <select id="filter-rating">
+                <option value="">全部等级</option>
+                <option value="S">🔴 S 级</option>
+                <option value="A">🟠 A 级</option>
+                <option value="B">🟡 B 级</option>
+            </select>
+            <select id="filter-source">
+                <option value="">全部来源</option>
+            </select>
         </div>
 
         <!-- 历史日期 -->
@@ -416,6 +436,9 @@
 
         <!-- 总结 -->
         <div class="summary" id="summary" style="display:none"></div>
+
+        <!-- 统计栏 -->
+        <div class="stats-bar" id="stats-bar" style="display:none"></div>
 
         <!-- 搜索结果计数 -->
         <div class="result-count" id="result-count" style="display:none;"></div>
@@ -484,9 +507,44 @@
                 summaryEl.style.display = 'none';
             }
 
+            // 更新来源筛选器选项
+            populateSourceFilter(currentData.news || []);
+
             document.getElementById('search-input').value = '';
+            document.getElementById('filter-rating').value = '';
+            document.getElementById('filter-source').value = '';
             document.getElementById('result-count').style.display = 'none';
-            renderNews(currentData.news);
+            applyFilters();
+        }
+
+        // --- 填充来源筛选下拉 ---
+        function populateSourceFilter(news) {
+            const select = document.getElementById('filter-source');
+            const sources = [...new Set(news.map(n => n.source))].sort();
+            select.innerHTML = '<option value="">全部来源</option>' +
+                sources.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+        }
+
+        // --- 应用筛选（本地数据） ---
+        function applyFilters() {
+            if (!currentData) return;
+            const q = document.getElementById('search-input').value.trim();
+            const ratingFilter = document.getElementById('filter-rating').value;
+            const sourceFilter = document.getElementById('filter-source').value;
+
+            // 有搜索词时全站搜索，否则本地筛选
+            if (q) {
+                searchAllDates(q.toLowerCase(), ratingFilter, sourceFilter);
+                return;
+            }
+
+            let news = currentData.news || [];
+            if (ratingFilter) news = news.filter(n => n.rating === ratingFilter);
+            if (sourceFilter) news = news.filter(n => n.source === sourceFilter);
+
+            document.getElementById('result-count').style.display = 'none';
+            renderStats(currentData.news || [], news);
+            renderNews(news);
         }
 
         // --- 渲染新闻卡片 ---
@@ -532,32 +590,39 @@
 
         // --- 搜索 ---
         function doSearch(query) {
-            if (!query || !currentData) {
+            const ratingFilter = document.getElementById('filter-rating').value;
+            const sourceFilter = document.getElementById('filter-source').value;
+            if (!query) {
                 document.getElementById('result-count').style.display = 'none';
-                if (currentData) renderNews(currentData.news);
+                if (currentData) {
+                    let news = currentData.news || [];
+                    if (ratingFilter) news = news.filter(n => n.rating === ratingFilter);
+                    if (sourceFilter) news = news.filter(n => n.source === sourceFilter);
+                    renderStats(currentData.news || [], news);
+                    renderNews(news);
+                }
                 return;
             }
-
-            const q = query.toLowerCase();
-            // 搜索所有日期
-            searchAllDates(q);
+            searchAllDates(query.toLowerCase(), ratingFilter, sourceFilter);
         }
 
-        async function searchAllDates(q) {
+        async function searchAllDates(q, ratingFilter, sourceFilter) {
             let allResults = [];
-            // 显示加载状态
             document.getElementById('news-list').innerHTML = '<div class="no-results">正在搜索全站历史...</div>';
+            document.getElementById('stats-bar').style.display = 'none';
 
             for (const date of allDates) {
                 try {
                     const resp = await fetch(DATA_BASE + date + '.json');
                     const data = await resp.json();
-                    const matched = (data.news || []).filter(item =>
+                    let matched = (data.news || []).filter(item =>
                         item.title.toLowerCase().includes(q) ||
                         item.comment.toLowerCase().includes(q) ||
                         item.source.toLowerCase().includes(q) ||
                         (item.tags || []).some(t => t.toLowerCase().includes(q))
                     ).map(item => ({ ...item, _date: date }));
+                    if (ratingFilter) matched = matched.filter(n => n.rating === ratingFilter);
+                    if (sourceFilter) matched = matched.filter(n => n.source === sourceFilter);
                     allResults = allResults.concat(matched);
                 } catch (e) { /* skip */ }
             }
@@ -573,10 +638,26 @@
 
             countEl.style.display = 'block';
             countEl.textContent = `在 ${allDates.length} 天记录中找到 ${allResults.length} 条匹配`;
-
-            // 渲染搜索结果（带日期标记）
-            // 按相关性排序？ 这里简单按日期（抓取顺序）
             renderNews(allResults, q);
+        }
+
+        // --- 统计栏 ---
+        function renderStats(allNews, filteredNews) {
+            const bar = document.getElementById('stats-bar');
+            if (!allNews.length) { bar.style.display = 'none'; return; }
+            const countS = allNews.filter(n => n.rating === 'S').length;
+            const countA = allNews.filter(n => n.rating === 'A').length;
+            const countB = allNews.filter(n => n.rating === 'B').length;
+            const showing = filteredNews.length;
+            const total = allNews.length;
+            bar.style.display = 'flex';
+            bar.innerHTML = `
+                <span>共 ${total} 条</span>
+                ${countS ? `<span class="stat-s">🔴 S级 × ${countS}</span>` : ''}
+                ${countA ? `<span class="stat-a">🟠 A级 × ${countA}</span>` : ''}
+                ${countB ? `<span class="stat-b">🟡 B级 × ${countB}</span>` : ''}
+                ${showing < total ? `<span style="margin-left:auto">当前显示 ${showing} 条</span>` : ''}
+            `;
         }
 
         // --- 渲染历史日期列表 ---
@@ -617,6 +698,9 @@
             clearTimeout(searchTimer);
             searchTimer = setTimeout(() => doSearch(e.target.value.trim()), 400);
         });
+
+        document.getElementById('filter-rating').addEventListener('change', () => applyFilters());
+        document.getElementById('filter-source').addEventListener('change', () => applyFilters());
 
         document.getElementById('history-toggle').addEventListener('click', () => {
             document.getElementById('history-dates').classList.toggle('show');

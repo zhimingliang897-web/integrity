@@ -1,11 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Integrity Lab - AI 工具与情报</title>
+    <!-- 引入 Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <nav>
         <div class="nav-inner">
@@ -18,26 +24,85 @@
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container home-container">
+        <!-- Hero Section -->
         <div class="hero">
+            <div class="hero-badge">Build to Learn</div>
             <h1>Integrity Lab</h1>
-            <p>一个人的 AI 实验室 —— 用 AI 造工具，用工具学 AI。每日情报自动更新，项目持续迭代中。</p>
+            <p class="hero-desc">
+                一个人的 AI 实验室 —— <span class="highlight-text">用 AI 造工具，用工具学 AI</span>。<br>
+                这里没有黑盒，只有开源的代码和真实的探索过程。
+            </p>
+            <div class="hero-actions">
+                <a href="#philosophy" class="btn-secondary">了解理念 ↓</a>
+                <a href="tools.html" class="btn-primary">浏览工具库 →</a>
+            </div>
         </div>
 
-        <div class="section-grid">
-            <div class="section-card">
-                <h2>📡 AI 每日热点</h2>
-                <p>每天自动从 12 个全球技术源抓取 AI 领域最新动态，经 LLM 评级筛选后推送精华内容。每日北京时间 9:00 更新。</p>
-                <a href="news.html" class="btn">查看今日热点 →</a>
+        <!-- Philosophy / Learning Reminders Section -->
+        <div id="philosophy" class="section-block">
+            <div class="section-header">
+                <h2>🎓 学习理念</h2>
+                <p>写代码不仅是为了运行，更是为了理解。</p>
             </div>
-            <div class="section-card">
-                <h2>🛠️ AI 工具库</h2>
-                <p>自己动手做的 AI 小工具合集：视频生成、台词学习、辩论模拟、数据爬取、评论分析、情报聚合，全部开源。</p>
-                <a href="tools.html" class="btn">浏览工具库 →</a>
+            <div class="philosophy-grid">
+                <div class="philosophy-card">
+                    <div class="icon">🔍</div>
+                    <h3>拒绝黑盒</h3>
+                    <p>不要只做一个 API 调用者。我们要深入理解 Prompt 是如何构建的，数据是如何流转的，模型是如何被微调的。</p>
+                </div>
+                <div class="philosophy-card">
+                    <div class="icon">🛠️</div>
+                    <h3>造轮子</h3>
+                    <p>最好的学习方式是親手造一个轮子。通过构建真实的工具（爬虫、视频生成、辩论机）来掌握 AI 全栈开发。</p>
+                </div>
+                <div class="philosophy-card">
+                    <div class="icon">🌱</div>
+                    <h3>持续迭代</h3>
+                    <p>代码永远是不完美的。这里记录了从 V1 到 Vn 的演进过程，包括那些愚蠢的错误和灵光一现的优化。</p>
+                </div>
             </div>
+        </div>
+
+        <!-- Main Sections Grid -->
+        <div class="section-block">
+            <div class="section-header">
+                <h2>🚀 探索实验室</h2>
+            </div>
+            <div class="section-grid">
+                <div class="section-card news-card">
+                    <div class="card-content">
+                        <h2>📡 AI 每日热点</h2>
+                        <p>这不仅仅是一份新闻订阅。这是一个全自动的 AI Agent：自动抓取 12 个全球源，用 LLM 进行去重、评级、总结，每天早上 9 点推送到你面前。</p>
+                        <a href="news.html" class="link-btn">查看今日热点 →</a>
+                    </div>
+                </div>
+                <div class="section-card tools-card">
+                    <div class="card-content">
+                        <h2>🛠️ AI 工具库</h2>
+                        <p>这里存放着所有的实验产物：从自动生成分镜视频的 Python 脚本，到基于 RAG 的台词学习助手。全部开源，欢迎 Fork。</p>
+                        <a href="tools.html" class="link-btn">浏览工具库 →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="cta-section">
+            <p>Ready to build something?</p>
+            <a href="https://github.com/zhimingliang897-web/integrity" target="_blank" class="github-btn">
+                <svg height="24" width="24" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>
+                Star on GitHub
+            </a>
         </div>
     </div>
 
-    <footer>Integrity Lab · Powered by GitHub Actions + Qwen LLM · 自动更新</footer>
+    <footer>
+        <div class="footer-content">
+            <p>Integrity Lab · Powered by <a href="https://github.com/features/actions">GitHub Actions</a> + <a href="https://huggingface.co/Qwen">Qwen LLM</a></p>
+            <p class="copyright">© 2026 Open Source for Learning</p>
+        </div>
+    </footer>
 </body>
+
 </html>
