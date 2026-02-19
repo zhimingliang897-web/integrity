@@ -1,0 +1,136 @@
+{
+  "date": "2026-02-09",
+  "summary": "今日AI焦点集中于模型轻量化与实用化：Qwen3.5与Qwen3 Coder的开源进展推动小参数量高可用模型落地；MiniMax M2.2与LocalLlama社区生态构建显示大模型应用下沉趋势；同时，Speculative Decoding等推理优化技术及PyTorch可视化工具持续提升研发效率。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Announcing LocalLlama discord server & bot!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1mpk2va/announcing_localllama_discord_server_bot/",
+      "rating": "A",
+      "score": 8,
+      "comment": "LocalLlama Discord社区重建，提供开源模型测试Bot，反映本地化大模型生态活跃度提升。",
+      "tags": [
+        "开源社区",
+        "模型测试",
+        "LLM生态"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen3.5 Support Merged in llama.cpp",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qzppr7/qwen35_support_merged_in_llamacpp/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Qwen3.5支持正式合并进llama.cpp，显著提升本地推理生态兼容性与模型可用性。",
+      "tags": [
+        "llama.cpp",
+        "Qwen3.5",
+        "本地大模型"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "MiniMax M2.2 Coming Soon!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qzo77z/minimax_m22_coming_soon/",
+      "rating": "A",
+      "score": 8,
+      "comment": "MiniMax M2.2即将发布，官网代码泄露暗示新模型迭代，关注其在多模态与Agent能力上的提升。",
+      "tags": [
+        "大模型",
+        "产品发布",
+        "开源"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen3 Coder Next as first \"usable\" coding model < 60 GB for me",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qz5uww/qwen3_coder_next_as_first_usable_coding_model_60/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Qwen3 Coder Next在小模型中实现可用性突破，显著提升推理稳定性和响应速度，具实用价值",
+      "tags": [
+        "大模型",
+        "代码生成",
+        "开源"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "PR opened for Qwen3.5!!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qz23pp/pr_opened_for_qwen35/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Qwen3.5开源PR已开启，首支VLM模型即支持，体现大模型多模态演进方向。",
+      "tags": [
+        "大模型开源",
+        "多模态",
+        "Qwen3.5"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[R] Really nice interactive explanation of Speculative Decoding",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1qzr7ox/r_really_nice_interactive_explanation_of/",
+      "rating": "A",
+      "score": 8,
+      "comment": "交互式可视化解释推测解码，实用性强，适合技术传播与教学",
+      "tags": [
+        "生成式AI",
+        "推理优化",
+        "教育工具"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] [Torchvista] Interactive visualisation of PyTorch models from notebooks - updates",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1qz831h/p_torchvista_interactive_visualisation_of_pytorch/",
+      "rating": "A",
+      "score": 8,
+      "comment": "PyTorch模型交互可视化工具更新，提升模型调试与教学效率，实用性强。",
+      "tags": [
+        "PyTorch",
+        "可视化",
+        "工具更新"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] arXiv at Home - self-hosted search engine for academic papers",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1qzrty0/p_arxiv_at_home_selfhosted_search_engine_for/",
+      "rating": "A",
+      "score": 8,
+      "comment": "自托管arXiv论文搜索工具，提升科研效率与数据主权，实用性强。",
+      "tags": [
+        "学术工具",
+        "开源项目",
+        "AI科研"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: helping cancer survivors to give birth, and cleaning up Bangladesh’s garment industry",
+      "link": "https://www.technologyreview.com/2026/02/06/1132375/the-download-helping-cancer-survivors-to-give-birth-and-cleaning-up-bangladeshs-garment-industry/",
+      "rating": "A",
+      "score": 8,
+      "comment": "实验性手术助力癌症幸存者生育，体现医疗AI与再生医学交叉突破",
+      "tags": [
+        "医疗AI",
+        "再生医学",
+        "临床技术"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "An experimental surgery is helping cancer survivors give birth",
+      "link": "https://www.technologyreview.com/2026/02/06/1132319/experimental-surgery-colorectal-cancer-survivors-pregnant-birth/",
+      "rating": "A",
+      "score": 8,
+      "comment": "实验性手术助力癌症幸存者生育，体现医疗AI与再生医学交叉突破",
+      "tags": [
+        "医疗AI",
+        "再生医学",
+        "肿瘤治疗"
+      ]
+    }
+  ]
+}

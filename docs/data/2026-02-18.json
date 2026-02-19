@@ -1,0 +1,142 @@
+{
+  "date": "2026-02-18",
+  "summary": "今日焦点集中于大模型推理与安全能力的深化：Agentic AI、VeRA等研究聚焦可信推理与验证，A|8系列论文推动逻辑推理、幻觉分析与多模态一致性等基础能力升级；同时，LLM在危机响应、儿童保护等场景的实用化落地加速，体现从理论突破到社会价值应用的关键跨越。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Agentic AI for Commercial Insurance Underwriting with Adversarial Self-Critique",
+      "link": "https://arxiv.org/abs/2602.13213",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个将对抗自批判机制引入商业保险承保的agentic AI系统，兼顾自动化与监管合规性。",
+      "tags": [
+        "Agentic AI",
+        "保险科技",
+        "安全架构"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "BotzoneBench: Scalable LLM Evaluation via Graded AI Anchors",
+      "link": "https://arxiv.org/abs/2602.13214",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出基于分级AI锚点的可扩展LLM战略推理评估框架，解决动态对抗评估稳定性问题",
+      "tags": [
+        "LLM评估",
+        "基准测试",
+        "AI竞赛"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "When to Think Fast and Slow? AMOR: Entropy-Based Metacognitive Gate for Dynamic SSM-Attention Switching",
+      "link": "https://arxiv.org/abs/2602.13215",
+      "rating": "A",
+      "score": 8,
+      "comment": "基于认知双系统理论的混合架构，用熵值动态控制注意力开关，显著提升SSM效率，有实用潜力",
+      "tags": [
+        "SSM",
+        "注意力机制",
+        "元认知",
+        "熵"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "VeRA: Verified Reasoning Data Augmentation at Scale",
+      "link": "https://arxiv.org/abs/2602.13217",
+      "rating": "A",
+      "score": 8,
+      "comment": "VeRA提出可扩展的验证推理数据增强框架，解决评估静态化问题，具实用价值",
+      "tags": [
+        "AI评估",
+        "数据增强",
+        "可验证性"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Scaling the Scaling Logic: Agentic Meta-Synthesis of Logic Reasoning",
+      "link": "https://arxiv.org/abs/2602.13218",
+      "rating": "A",
+      "score": 8,
+      "comment": "RLVR领域关键突破，提出SSLogic框架实现逻辑推理的可扩展元合成，推动可验证强化学习发展",
+      "tags": [
+        "强化学习",
+        "逻辑推理",
+        "可验证奖励",
+        "元合成"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "A Geometric Taxonomy of Hallucinations in LLMs",
+      "link": "https://arxiv.org/abs/2602.13224",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出LLM幻觉的几何分类学，揭示跨域检测瓶颈，为可信AI提供新思路。",
+      "tags": [
+        "LLM",
+        "幻觉检测",
+        "嵌入空间",
+        "学术突破"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Multimodal Consistency-Guided Reference-Free Data Selection for ASR Accent Adaptation",
+      "link": "https://arxiv.org/abs/2602.13263",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出多模态一致性引导的无参考数据选择新方法，解决语音识别中口音适应的关键瓶颈问题。",
+      "tags": [
+        "ASR",
+        "口音适应",
+        "数据选择",
+        "arXiv"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "LLM-Powered Automatic Translation and Urgency in Crisis Scenarios",
+      "link": "https://arxiv.org/abs/2602.13452",
+      "rating": "A",
+      "score": 8,
+      "comment": "首份聚焦LLM在危机翻译中保 urgency 性能的实证研究，填补关键评估空白",
+      "tags": [
+        "LLM",
+        "机器翻译",
+        "危机响应",
+        "多语言"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Using Machine Learning to Enhance the Detection of Obfuscated Abusive Words in Swahili: A Focus on Child Safety",
+      "link": "https://arxiv.org/abs/2602.13455",
+      "rating": "A",
+      "score": 8,
+      "comment": "低资源语言暴力检测的ML研究，具实际应用价值，尤其儿童安全场景",
+      "tags": [
+        "机器学习",
+        "低资源语言",
+        "内容安全",
+        "非洲技术"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Language Model Memory and Memory Models for Language",
+      "link": "https://arxiv.org/abs/2602.13466",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统性对比语言模型与自编码器的记忆能力，提出可并行化记忆模型架构，具实用价值",
+      "tags": [
+        "大模型基础研究",
+        "记忆机制",
+        "架构创新"
+      ]
+    }
+  ]
+}

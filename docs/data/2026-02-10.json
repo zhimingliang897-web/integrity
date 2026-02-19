@@ -1,0 +1,137 @@
+{
+  "date": "2026-02-10",
+  "summary": "今日焦点集中于大模型推理缺陷与能力边界探索：多篇论文揭示LLM在概率决策、图算法等场景中的理性缺陷；同时，强化学习与记忆机制研究深化——如基于时序逻辑的奖励建模、角色-场景双模态记忆系统，反映学界正从“能答”转向“会思”“会记”的底层能力构建。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Jackpot: Optimal Budgeted Rejection Sampling for Extreme Actor-Policy Mismatch Reinforcement Learning",
+      "link": "https://arxiv.org/abs/2602.06107",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM强化学习中rollout与策略分布失配问题的创新解决方案，OBRS方法具实用价值",
+      "tags": [
+        "强化学习",
+        "LLM",
+        "效率优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Large Language Model Reasoning Failures",
+      "link": "https://arxiv.org/abs/2602.06176",
+      "rating": "A",
+      "score": 8,
+      "comment": "首份系统性LLM推理失败综述，提出双轴分类框架，具学术与工程价值。",
+      "tags": [
+        "LLM",
+        "推理能力",
+        "论文"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Do It for HER: First-Order Temporal Logic Reward Specification in Reinforcement Learning (Extended Version)",
+      "link": "https://arxiv.org/abs/2602.06227",
+      "rating": "A",
+      "score": 8,
+      "comment": "LTLfMT用于强化学习奖励建模，显著提升非马尔可夫任务表达能力，具实用价值",
+      "tags": [
+        "强化学习",
+        "形式化方法",
+        "逻辑规划"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Do LLMs Act Like Rational Agents? Measuring Belief Coherence in Probabilistic Decision Making",
+      "link": "https://arxiv.org/abs/2602.06286",
+      "rating": "A",
+      "score": 8,
+      "comment": "高影响力论文揭示LLM决策理性边界，为AI代理可信性提供理论框架",
+      "tags": [
+        "LLM",
+        "理性决策",
+        "概率推理",
+        "AI代理"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Exposing Weaknesses of Large Reasoning Models through Graph Algorithm Problems",
+      "link": "https://arxiv.org/abs/2602.06319",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出GrAlgoBench基准，系统揭示大推理模型长上下文能力缺陷，具实用价值",
+      "tags": [
+        "大模型评估",
+        "图算法",
+        "推理能力"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Trifuse: Enhancing Attention-Based GUI Grounding via Multimodal Fusion",
+      "link": "https://arxiv.org/abs/2602.06351",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出Trifuse框架，通过多模态融合增强注意力机制下的GUI定位可靠性，解决空间锚点缺失问题。",
+      "tags": [
+        "GUI接地",
+        "多模态融合",
+        "注意力机制"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Recontextualizing Famous Quotes for Brand Slogan Generation",
+      "link": "https://arxiv.org/abs/2602.06049",
+      "rating": "A",
+      "score": 8,
+      "comment": "利用名言再语境化生成品牌标语，解决LLM输出同质化问题，具实用价值",
+      "tags": [
+        "NLP",
+        "品牌营销",
+        "创意生成"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Relevance-aware Multi-context Contrastive Decoding for Retrieval-augmented Visual Question Answering",
+      "link": "https://arxiv.org/abs/2602.06050",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出RMCD新解码方法，提升RAG在视觉问答中的多上下文利用效率，论文质量高且具实用价值。",
+      "tags": [
+        "视觉语言模型",
+        "RAG",
+        "对比解码"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "CAST: Character-and-Scene Episodic Memory for Agents",
+      "link": "https://arxiv.org/abs/2602.06051",
+      "rating": "A",
+      "score": 8,
+      "comment": "CAST提出角色-场景架构解决代理 episodic memory 问题，融合戏剧理论与图结构语义记忆，具实用价值",
+      "tags": [
+        "记忆系统",
+        "Agent",
+        "arXiv"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Rethinking Memory Mechanisms of Foundation Agents in the Second Half",
+      "link": "https://arxiv.org/abs/2602.06052",
+      "rating": "A",
+      "score": 8,
+      "comment": "高影响力综述论文，系统梳理基础智能体记忆机制，对长时序推理与知识管理具指导价值。",
+      "tags": [
+        "AI基础研究",
+        "记忆机制",
+        "综述"
+      ]
+    }
+  ]
+}

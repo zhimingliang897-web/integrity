@@ -1,0 +1,139 @@
+{
+  "date": "2026-02-17",
+  "summary": "今日焦点集中于AI安全与系统鲁棒性：OpenClaw暴露事件揭示大规模模型部署风险，GT-HarmBench与角色赋权实验凸显对抗性攻击与偏见传播的深层挑战；同时，多领域融合应用（如制造、人道主义救援）及高效训练框架（如自动数据生成、轻量LLM）展现技术落地新路径。",
+  "news": [
+    {
+      "source": "Reddit ML",
+      "title": "[D] We found 18K+ exposed OpenClaw instances and ~15% of community skills contain malicious instructionsc",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1r6ge7h/d_we_found_18k_exposed_openclaw_instances_and_15/",
+      "rating": "S",
+      "score": 9,
+      "comment": "发现1.8万暴露实例及15%恶意技能，揭示自主代理框架重大安全风险",
+      "tags": [
+        "AI安全",
+        "开源风险",
+        "恶意代码"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "GT-HarmBench: Benchmarking AI Safety Risks Through the Lens of Game Theory",
+      "link": "https://arxiv.org/abs/2602.12316",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个面向多智能体博弈风险的系统性基准，填补AI安全评估空白",
+      "tags": [
+        "AI安全",
+        "多智能体",
+        "游戏理论",
+        "基准测试"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "A Theoretical Framework for Adaptive Utility-Weighted Benchmarking",
+      "link": "https://arxiv.org/abs/2602.12356",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出自适应效用加权基准框架，融合多利益相关者视角，对AI评估范式有理论提升意义。",
+      "tags": [
+        "AI评估",
+        "理论框架",
+        "多利益相关者"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Evolving Beyond Snapshots: Harmonizing Structure and Sequence via Entity State Tuning for Temporal Knowledge Graph Forecasting",
+      "link": "https://arxiv.org/abs/2602.12389",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出Entity State Tuning框架，解决TKG长期依赖衰减问题，具实用价值",
+      "tags": [
+        "知识图谱",
+        "时序预测",
+        "论文"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Intent-Driven Smart Manufacturing Integrating Knowledge Graphs and Large Language Models",
+      "link": "https://arxiv.org/abs/2602.12419",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM+KG融合实现制造意图驱动，领域适配性强，具实用价值",
+      "tags": [
+        "智能制造",
+        "知识图谱",
+        "大语言模型"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Scaling Web Agent Training through Automatic Data Generation and Fine-grained Evaluation",
+      "link": "https://arxiv.org/abs/2602.12544",
+      "rating": "A",
+      "score": 8,
+      "comment": "自动数据生成+细粒度评估提升Web Agent训练效率，BookingArena基准具实用价值",
+      "tags": [
+        "Web Agent",
+        "自动数据生成",
+        "强化学习"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "To Mix or To Merge: Toward Multi-Domain Reinforcement Learning for Large Language Models",
+      "link": "https://arxiv.org/abs/2602.12566",
+      "rating": "A",
+      "score": 8,
+      "comment": "多领域强化学习训练范式对比研究，填补关键空白，对构建通用AI有重要参考价值。",
+      "tags": [
+        "强化学习",
+        "大模型",
+        "多领域"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "A Lightweight LLM Framework for Disaster Humanitarian Information Classification",
+      "link": "https://arxiv.org/abs/2602.12284",
+      "rating": "A",
+      "score": 8,
+      "comment": "轻量级LLM框架解决灾难信息分类痛点，LoRA+RAG结合实用性强",
+      "tags": [
+        "LLM微调",
+        "灾后响应",
+        "参数高效"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "From Biased Chatbots to Biased Agents: Examining Role Assignment Effects on LLM Agent Robustness",
+      "link": "https://arxiv.org/abs/2602.12285",
+      "rating": "A",
+      "score": 8,
+      "comment": "首篇系统研究LLM代理角色偏见对性能影响的论文，揭示真实风险，具实用价值",
+      "tags": [
+        "LLM",
+        "Agent",
+        "偏见评估",
+        "基准测试"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Retrieval-Augmented Self-Taught Reasoning Model with Adaptive Chain-of-Thought for ASR Named Entity Correction",
+      "link": "https://arxiv.org/abs/2602.12287",
+      "rating": "A",
+      "score": 8,
+      "comment": "基于检索增强与自教推理的ASR命名实体纠错框架，有效利用LLM推理能力，具实用价值",
+      "tags": [
+        "ASR",
+        "命名实体纠正",
+        "检索增强生成",
+        "LLM推理"
+      ]
+    }
+  ]
+}
