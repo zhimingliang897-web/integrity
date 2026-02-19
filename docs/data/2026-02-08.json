@@ -1,0 +1,136 @@
+{
+  "date": "2026-02-08",
+  "summary": "今日焦点集中于三大方向：一是模型效能突破，如AIME 2026中闭源与开源模型均超90分，DeepSeek V3.2以极低成本实现高表现；二是认知范式演进，多篇论文探讨非线性智能、神经符号结合与知识缺口推理等基础理论；三是安全与工程落地挑战，包括提示注入威胁自托管部署、代理系统不确定性建模及太空任务规划中的强化学习应用。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "AIME 2026 Results are out and both closed and open models score above 90%. DeepSeek V3.2 only costs $0.09 to run the entire test.",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qyns06/aime_2026_results_are_out_and_both_closed_and/",
+      "rating": "S",
+      "score": 9,
+      "comment": "AIME 2026模型性能突破性提升，DeepSeek V3.2以极低成本达90%+准确率，标志开源模型逼近闭源顶尖水平",
+      "tags": [
+        "大模型性能突破",
+        "开源模型",
+        "数学推理能力"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Artificial Intelligence as Strange Intelligence: Against Linear Models of Intelligence",
+      "link": "https://arxiv.org/abs/2602.04986",
+      "rating": "A",
+      "score": 8,
+      "comment": "S. Schneider AI哲学批判延伸，提出'陌生智能'概念，推动非线性智能建模思潮。",
+      "tags": [
+        "AI理论",
+        "认知科学",
+        "前沿研究"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "DeepRead: Document Structure-Aware Reasoning to Enhance Agentic Search",
+      "link": "https://arxiv.org/abs/2602.05014",
+      "rating": "A",
+      "score": 8,
+      "comment": "结构化文档推理新范式，提升长文问答能力，具实用价值",
+      "tags": [
+        "RAG",
+        "Agentic AI",
+        "Document Reasoning"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "MINT: Minimal Information Neuro-Symbolic Tree for Objective-Driven Knowledge-Gap Reasoning and Active Elicitation",
+      "link": "https://arxiv.org/abs/2602.05048",
+      "rating": "A",
+      "score": 8,
+      "comment": "神经符号结合的主动提问策略新框架，提升人机协同规划效率",
+      "tags": [
+        "神经符号系统",
+        "人机协作",
+        "知识填补"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Evaluating Large Language Models on Solved and Unsolved Problems in Graph Theory: Implications for Computing Education",
+      "link": "https://arxiv.org/abs/2602.05059",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM在图论难题上的表现评估，对计算教育有重要启示",
+      "tags": [
+        "大模型评测",
+        "图论",
+        "计算教育"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Towards Reducible Uncertainty Modeling for Reliable Large Language Model Agents",
+      "link": "https://arxiv.org/abs/2602.05073",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个面向交互式LLM代理的不确定性建模框架，填补了从单轮问答到复杂代理场景的关键空白。",
+      "tags": [
+        "LLM安全",
+        "不确定性量化",
+        "Agent架构"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Optimizing Mission Planning for Multi-Debris Rendezvous Using Reinforcement Learning with Refueling and Adaptive Collision Avoidance",
+      "link": "https://arxiv.org/abs/2602.05075",
+      "rating": "A",
+      "score": 8,
+      "comment": "强化学习赋能多碎片 rendezvous 任务规划，融合补给与自适应避障，具实用价值",
+      "tags": [
+        "强化学习",
+        "航天",
+        "AI+航天"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Prompt injection is killing our self-hosted LLM deployment",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qyljr0/prompt_injection_is_killing_our_selfhosted_llm/",
+      "rating": "A",
+      "score": 8,
+      "comment": "自托管LLM面临Prompt注入威胁，暴露生产环境防护缺失问题，推动LLM安全防护方案演进。",
+      "tags": [
+        "LLM安全",
+        "Prompt Injection",
+        "自托管模型"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Full Claude Opus 4.6 System Prompt for your pleasure",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qynxuw/full_claude_opus_46_system_prompt_for_your/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Claude Opus 4.6系统提示词泄露，体现大模型能力边界与工程细节，具实用参考价值",
+      "tags": [
+        "大模型",
+        "系统提示词",
+        "开源情报"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Gemini System Prompt - Google decided to remove \"PRO\" option for paid subscribers mostly in EU due to their A/B testing, so I extracted their system prompt and cancelled the subscription.",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1qyl6rd/gemini_system_prompt_google_decided_to_remove_pro/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Google因A/B测试移除Gemini PRO选项，用户提取系统提示并退订，反映大厂产品策略动态与模型透明度争议。",
+      "tags": [
+        "AI产品迭代",
+        "模型透明度",
+        "用户反馈"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "date": "2026-02-11",
+  "summary": "今日焦点集中于三大方向：一是科学发现与代码生成的效率跃升（如Aster、LLM-FSM），二是多模态与空间认知能力的探索（Theory of Space、视觉渲染与分词对齐研究），三是AI代理在真实场景中的落地突破——包括GUI交互（ANCHOR）、生物力学分析（BiomechAgent）及版权安全机制（Anchored Decoding），体现从模型能力向工程化应用的深度演进。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Aster: Autonomous Scientific Discovery over 20x Faster Than Existing Methods",
+      "link": "https://arxiv.org/abs/2602.07040",
+      "rating": "S",
+      "score": 9,
+      "comment": "AI自主科学发现突破性进展，20倍加速+多领域验证，可能重塑科研范式",
+      "tags": [
+        "AI科研自动化",
+        "自主Agent",
+        "科学发现"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "LLM-FSM: Scaling Large Language Models for Finite-State Reasoning in RTL Code Generation",
+      "link": "https://arxiv.org/abs/2602.07032",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个面向RTL设计的FSM推理基准，自动化构建+LLM评估，推动硬件生成式AI落地",
+      "tags": [
+        "LLM",
+        "硬件设计",
+        "基准测试",
+        "FSM"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "ST-Raptor: An Agentic System for Semi-Structured Table QA",
+      "link": "https://arxiv.org/abs/2602.07034",
+      "rating": "A",
+      "score": 8,
+      "comment": "ST-Raptor提出新型代理系统解决半结构化表格问答难题，兼顾内容提取与隐式逻辑恢复，突破现有Text-to-SQL和多模态方法局限。",
+      "tags": [
+        "表格QA",
+        "Agent系统",
+        "LLM应用"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "DLLM-Searcher: Adapting Diffusion Large Language Model for Search Agents",
+      "link": "https://arxiv.org/abs/2602.07035",
+      "rating": "A",
+      "score": 8,
+      "comment": "dLLM首次用于搜索代理优化，解决ReAct串行延迟问题，具实用价值",
+      "tags": [
+        "大模型",
+        "搜索代理",
+        "推理优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Theory of Space: Can Foundation Models Construct Spatial Beliefs through Active Exploration?",
+      "link": "https://arxiv.org/abs/2602.07055",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出Theory of Space框架，首次系统性评估基础模型的主动探索与空间信念构建能力， benchmark设计有创新性。",
+      "tags": [
+        "基础模型",
+        "空间推理",
+        "主动学习",
+        "认知地图"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "ANCHOR: Branch-Point Data Generation for GUI Agents",
+      "link": "https://arxiv.org/abs/2602.07153",
+      "rating": "A",
+      "score": 8,
+      "comment": "GUI代理数据生成框架Anchor实现分支点驱动的轨迹扩展，提升合成数据质量与多样性，具实用价值。",
+      "tags": [
+        "GUI代理",
+        "数据生成",
+        "强化学习"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Does Visual Rendering Bypass Tokenization? Investigating Script-Tokenizer Misalignment in Pixel-Based Language Models",
+      "link": "https://arxiv.org/abs/2602.06973",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统验证视觉渲染仍难摆脱tokenization依赖，为低资源语言建模提供关键洞见",
+      "tags": [
+        "多模态AI",
+        "低资源语言",
+        "模型架构"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "BiomechAgent: AI-Assisted Biomechanical Analysis Through Code-Generating Agents",
+      "link": "https://arxiv.org/abs/2602.06975",
+      "rating": "A",
+      "score": 8,
+      "comment": "AI辅助生物力学分析工具，降低临床科研门槛，具实用价值",
+      "tags": [
+        "AI+医疗",
+        "运动生物力学",
+        "代码生成"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Bridging the Knowledge Void: Inference-time Acquisition of Unfamiliar Programming Languages for Coding Tasks",
+      "link": "https://arxiv.org/abs/2602.06976",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM动态学习陌生编程语言的新范式，突破预训练局限，具实用价值",
+      "tags": [
+        "LLM",
+        "编程语言",
+        "推理时学习",
+        "AI编码"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Anchored Decoding: Provably Reducing Copyright Risk for Any Language Model",
+      "link": "https://arxiv.org/abs/2602.07120",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出Anchored Decoding可有效降低LLM版权风险，为模型安全部署提供实用方案",
+      "tags": [
+        "LLM安全",
+        "版权防护",
+        "推理优化"
+      ]
+    }
+  ]
+}

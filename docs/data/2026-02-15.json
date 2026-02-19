@@ -1,0 +1,138 @@
+{
+  "date": "2026-02-15",
+  "summary": "今日AI焦点集中于模型轻量化与本地化部署：MiniMax、KaniTTS2、Heretic 1.2等新模型显著降低显存需求，AdaLLM实现RTX 4090上NVFP4首推推理；开源生态持续活跃，如LocalLlama社区建设、YOLOX自研规避AGPL；字节豆包2.0强调真实世界复杂任务能力，反映大模型从技术突破向实用落地加速演进。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "AMA with MiniMax — Ask Us Anything!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r3t775/ama_with_minimax_ask_us_anything/",
+      "rating": "A",
+      "score": 8,
+      "comment": "MiniMax举办AMA活动，推广M2.5与Hailuo模型，属大厂重要开源/产品动态",
+      "tags": [
+        "大厂动态",
+        "模型发布",
+        "社区互动"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Announcing LocalLlama discord server & bot!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1mpk2va/announcing_localllama_discord_server_bot/",
+      "rating": "A",
+      "score": 8,
+      "comment": "LocalLlama Discord社区重建，提供开源模型测试Bot，反映本地化大模型生态活跃度提升。",
+      "tags": [
+        "开源社区",
+        "模型测试",
+        "LLM生态"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "KaniTTS2 — open-source 400M TTS model with voice cloning, runs in 3GB VRAM. Pretrain code included.",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r4sivv/kanitts2_opensource_400m_tts_model_with_voice/",
+      "rating": "A",
+      "score": 8,
+      "comment": "开源400M TTS模型支持语音克隆，3GB VRAM即可运行，含预训练代码，实用价值高。",
+      "tags": [
+        "TTS",
+        "开源",
+        "语音克隆",
+        "轻量化"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Heretic 1.2 released: 70% lower VRAM usage with quantization, Magnitude-Preserving Orthogonal Ablation (\"derestriction\"), broad VL model support, session resumption, and more",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r4n3as/heretic_12_released_70_lower_vram_usage_with/",
+      "rating": "A",
+      "score": 8,
+      "comment": "LoRA-based abliteration显著降低VRAM，推动模型去偏与开源生态发展",
+      "tags": [
+        "模型去偏",
+        "LoRA",
+        "开源工具"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen3 Coder Next Speedup with Latest Llama.cpp",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r50ohq/qwen3_coder_next_speedup_with_latest_llamacpp/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Qwen3-Coder-Next在llama.cpp中实现显著推理加速，CUDA设备性能提升超30%，实用工具重大更新。",
+      "tags": [
+        "llama.cpp",
+        "推理加速",
+        "CUDA优化"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "[Release] AdaLLM: NVFP4-first inference on RTX 4090 (FP8 KV cache + custom FP8 decode)",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r4yg6p/release_adallm_nvfp4first_inference_on_rtx_4090/",
+      "rating": "A",
+      "score": 8,
+      "comment": "NVFP4在Ada架构首次实现端到端FP8推理，突破性优化RTX 4090性能瓶颈",
+      "tags": [
+        "GPU加速",
+        "FP8推理",
+        "vLLM",
+        "NVFP4"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] I trained YOLOX from scratch to avoid Ultralytics' AGPL (aircraft detection on iOS)",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1r4mcwu/p_i_trained_yolox_from_scratch_to_avoid/",
+      "rating": "A",
+      "score": 8,
+      "comment": "自研YOLOX规避AGPL许可限制，体现开源合规与移动端部署的务实创新",
+      "tags": [
+        "模型训练",
+        "开源合规",
+        "iOS部署"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "ALS stole this musician’s voice. AI let him sing again.",
+      "link": "https://www.technologyreview.com/2026/02/13/1132913/als-stole-this-musicians-voice-ai-sing/",
+      "rating": "A",
+      "score": 8,
+      "comment": "AI语音重建技术实现失声歌手重生，展现生成式AI在医疗与艺术领域的突破性应用",
+      "tags": [
+        "生成式AI",
+        "医疗康复",
+        "语音合成"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "US deputy health secretary: Vaccine guidelines are still subject to change",
+      "link": "https://www.technologyreview.com/2026/02/13/1132889/us-deputy-health-secretary-vaccine-guidelines-longevity-arpa-h-cdc-nih/",
+      "rating": "A",
+      "score": 8,
+      "comment": "美国卫生副部长变动及疫苗指南动态，体现公共卫生政策关键人物更迭与决策灵活性，具行业参考价值。",
+      "tags": [
+        "公共卫生",
+        "政策变动",
+        "美国政府"
+      ]
+    },
+    {
+      "source": "机器之心",
+      "title": "字节跳动发布豆包大模型2.0，主打真实世界复杂任务执行力",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-14-9",
+      "rating": "A",
+      "score": 8,
+      "comment": "豆包2.0强调真实世界复杂任务执行能力，若含具体技术细节（如推理框架、多模态协同机制）则属高质量产品发布",
+      "tags": [
+        "大模型",
+        "任务执行",
+        "字节跳动"
+      ]
+    }
+  ]
+}

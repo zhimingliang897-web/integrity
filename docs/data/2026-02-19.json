@@ -1,0 +1,138 @@
+{
+  "date": "2026-02-19",
+  "summary": "今日焦点集中于多领域AI应用深化：医学影像（脑肿瘤分割与生存预测）、教育研究自动化（EduResearchBench）、跨语言可解释性（Indic-TunedLens）及宗教文本理解（CGRA-DeBERTa），同时凸显模型安全防护（防蒸馏）与持续学习（Panini）等基础能力演进，体现AI从技术攻坚向场景落地与伦理治理的系统性拓展。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Attention-gated U-Net model for semantic segmentation of brain tumors and feature extraction for survival prognosis",
+      "link": "https://arxiv.org/abs/2602.15067",
+      "rating": "A",
+      "score": 8,
+      "comment": "Attention-Gated R2U-Net结合三平面架构，Dice达0.900，实用性强且具临床价值。",
+      "tags": [
+        "医学影像",
+        "分割",
+        "生存预测"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "ResearchGym: Evaluating Language Model Agents on Real-World AI Research",
+      "link": "https://arxiv.org/abs/2602.15112",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个面向真实科研流程的AI代理评测基准，推动AI研究自动化评估发展",
+      "tags": [
+        "AI代理",
+        "研究基准",
+        "学术工具"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Protecting Language Models Against Unauthorized Distillation through Trace Rewriting",
+      "link": "https://arxiv.org/abs/2602.15143",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出通过动态重写推理痕迹实现反蒸馏与API水印，兼具实用性和创新性",
+      "tags": [
+        "模型安全",
+        "知识蒸馏",
+        "AI防护"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Panini: Continual Learning in Token Space via Structured Memory",
+      "link": "https://arxiv.org/abs/2602.15156",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出结构化记忆的持续学习框架，解决RAG效率与相关性问题，具实用价值",
+      "tags": [
+        "持续学习",
+        "记忆机制",
+        "RAG优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "da Costa and Tarski meet Goguen and Carnap: a novel approach for ontological heterogeneity based on consequence systems",
+      "link": "https://arxiv.org/abs/2602.15158",
+      "rating": "A",
+      "score": 8,
+      "comment": "形式化逻辑与本体异构性研究的前沿论文，融合Carnap-Goguen主义与Tarski后果算子，具理论深度与工程潜力。",
+      "tags": [
+        "形式化方法",
+        "本体论",
+        "逻辑学"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Mind the (DH) Gap! A Contrast in Risky Choices Between Reasoning and Conversational LLMs",
+      "link": "https://arxiv.org/abs/2602.15173",
+      "rating": "A",
+      "score": 8,
+      "comment": "首篇系统性对比推理与对话模型风险决策差异的高质量论文，揭示LLM行为分层现象",
+      "tags": [
+        "LLM研究",
+        "决策分析",
+        "人机对比"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "EduResearchBench: A Hierarchical Atomic Task Decomposition Benchmark for Full-Lifecycle Educational Research",
+      "link": "https://arxiv.org/abs/2602.15034",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个面向教育科研全流程的原子任务分解评估基准，填补LLM在学术写作评估领域的空白。",
+      "tags": [
+        "LLM评测",
+        "教育AI",
+        "学术研究"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Indic-TunedLens: Interpreting Multilingual Models in Indian Languages",
+      "link": "https://arxiv.org/abs/2602.15038",
+      "rating": "A",
+      "score": 8,
+      "comment": "针对印度语种的可解释性框架，填补多语言模型本地化分析空白，具实用价值。",
+      "tags": [
+        "LLM可解释性",
+        "印度语言",
+        "多语言模型"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "CGRA-DeBERTa Concept Guided Residual Augmentation Transformer for Theologically Islamic Understanding",
+      "link": "https://arxiv.org/abs/2602.15139",
+      "rating": "A",
+      "score": 8,
+      "comment": "领域专用Transformer架构创新，结合伊斯兰神学先验知识提升QA性能",
+      "tags": [
+        "NLP",
+        "宗教AI",
+        "DeBERTa",
+        "LoRA"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "AIC CTU@AVerImaTeC: dual-retriever RAG for image-text fact checking",
+      "link": "https://arxiv.org/abs/2602.15190",
+      "rating": "A",
+      "score": 8,
+      "comment": "双检索RAG架构简洁高效，结合文本与图像检索提升事实核查精度，具实用价值与可复现性。",
+      "tags": [
+        "RAG",
+        "多模态AI",
+        "事实核查",
+        "开源工具"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,140 @@
+{
+  "date": "2026-02-14",
+  "summary": "今日焦点集中于中国AI产业爆发与前沿技术突破：智谱GLM-5登顶引发市值飙升，彰显国产大模型竞争力；同时学术界聚焦可解释AI、物理模拟、安全对齐等方向，如PBSAI治理架构与HybridRAG框架体现工程化落地趋势，而“响应式知识蒸馏”等研究揭示AI安全挑战的复杂性。",
+  "news": [
+    {
+      "source": "机器之心",
+      "title": "GLM-5封神，智谱市值五天翻倍，中国AI火力全开了",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-13-8",
+      "rating": "S",
+      "score": 9,
+      "comment": "GLM-5据称实现多模态与推理能力跃升，智谱市值激增反映行业高度关注，需验证技术细节与论文公开情况",
+      "tags": [
+        "大模型",
+        "智谱AI",
+        "多模态",
+        "中国AI"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Explaining AI Without Code: A User Study on Explainable AI",
+      "link": "https://arxiv.org/abs/2602.11159",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个面向无代码平台的可解释AI模块，填补了民主化AI与透明性之间的关键缺口。",
+      "tags": [
+        "XAI",
+        "无代码平台",
+        "可解释AI"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Latent Generative Solvers for Generalizable Long-Term Physics Simulation",
+      "link": "https://arxiv.org/abs/2602.11229",
+      "rating": "A",
+      "score": 8,
+      "comment": "LGS提出潜空间+Transformer流匹配的两阶段框架，显著提升长时物理模拟稳定性与泛化性",
+      "tags": [
+        "物理仿真",
+        "生成模型",
+        "PDE",
+        "Latent Space"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "On Decision-Valued Maps and Representational Dependence",
+      "link": "https://arxiv.org/abs/2602.11295",
+      "rating": "A",
+      "score": 8,
+      "comment": "形式化决策依赖映射与DecisionDB基础设施，为可解释AI和结果一致性提供新方法",
+      "tags": [
+        "可解释AI",
+        "形式化验证",
+        "决策审计"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Voxtral Realtime",
+      "link": "https://arxiv.org/abs/2602.11298",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个端到端流式ASR模型，延迟低至480ms仍达Whisper水平，开源Apache2许可极具价值。",
+      "tags": [
+        "ASR",
+        "流式处理",
+        "开源模型"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "The PBSAI Governance Ecosystem: A Multi-Agent AI Reference Architecture for Securing Enterprise AI Estates",
+      "link": "https://arxiv.org/abs/2602.11301",
+      "rating": "A",
+      "score": 8,
+      "comment": "PBSAI提出多智能体AI治理架构，填补企业AI治理落地空白，具实用价值",
+      "tags": [
+        "AI治理",
+        "多智能体系统",
+        "安全架构"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Dissecting Subjectivity and the \"Ground Truth\" Illusion in Data Annotation",
+      "link": "https://arxiv.org/abs/2602.11318",
+      "rating": "A",
+      "score": 8,
+      "comment": "高影响力文献揭示数据标注中的主观性陷阱，挑战传统‘真值’假设，对ML伦理与实践有深远启示。",
+      "tags": [
+        "机器学习",
+        "数据标注",
+        "AI伦理",
+        "文献综述"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "HybridRAG: A Practical LLM-based ChatBot Framework based on Pre-Generated Q&A over Raw Unstructured Documents",
+      "link": "https://arxiv.org/abs/2602.11156",
+      "rating": "A",
+      "score": 8,
+      "comment": "HybridRAG提出预生成Q&A+OCR+布局分析的实用RAG框架，解决真实文档场景下的检索生成瓶颈。",
+      "tags": [
+        "RAG",
+        "PDF处理",
+        "LLM应用"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Response-Based Knowledge Distillation for Multilingual Jailbreak Prevention Unwittingly Compromises Safety",
+      "link": "https://arxiv.org/abs/2602.11157",
+      "rating": "A",
+      "score": 8,
+      "comment": "多语言越狱防御中知识蒸馏意外削弱安全性的研究，揭示关键风险并推动跨语言对齐改进",
+      "tags": [
+        "LLM安全",
+        "知识蒸馏",
+        "多语言AI",
+        "对抗攻击"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Retrieval Heads are Dynamic",
+      "link": "https://arxiv.org/abs/2602.11162",
+      "rating": "A",
+      "score": 8,
+      "comment": "动态视角揭示检索头时序特性，深化对LLM内部机制理解",
+      "tags": [
+        "LLM",
+        "注意力机制",
+        "动态分析"
+      ]
+    }
+  ]
+}

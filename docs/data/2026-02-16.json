@@ -1,0 +1,136 @@
+{
+  "date": "2026-02-16",
+  "summary": "今日AI焦点集中于模型本地化部署与轻量化应用：MiniMax-2.5与Qwen3-Coder等大模型支持低显存运行，体现推理效率提升；华盛顿大学开源MoCo多模型协同框架，回应“单个LLM已不够”的现实挑战；同时，AI在医疗（疫苗指南）、艺术（语音修复）与工业（Gemini 3D直出STL）场景加速落地，显示技术从实验室走向实用化的关键突破。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "AMA with MiniMax — Ask Us Anything!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r3t775/ama_with_minimax_ask_us_anything/",
+      "rating": "A",
+      "score": 8,
+      "comment": "MiniMax举办AMA活动，推广M2.5与Hailuo模型，属大厂重要开源/产品动态",
+      "tags": [
+        "大厂动态",
+        "模型发布",
+        "社区互动"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "You can run MiniMax-2.5 locally",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r5h1gj/you_can_run_minimax25_locally/",
+      "rating": "A",
+      "score": 8,
+      "comment": "MiniMax-2.5本地部署方案落地，3-bit GGUF压缩至101GB显著降低硬件门槛，实用性强。",
+      "tags": [
+        "本地部署",
+        "LLM压缩",
+        "工具链"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "inclusionAI/Ling-2.5-1T · Hugging Face",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r5qfb8/inclusionailing251t_hugging_face/",
+      "rating": "A",
+      "score": 8,
+      "comment": "1T参数量开源大模型，兼顾效率与性能，属实用工具重大更新",
+      "tags": [
+        "大模型开源",
+        "1T参数",
+        "高效推理"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "How to run Qwen3-Coder-Next 80b parameters model on 8Gb VRAM",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r5m4vl/how_to_run_qwen3codernext_80b_parameters_model_on/",
+      "rating": "A",
+      "score": 8,
+      "comment": "80B大模型在8GB显存上运行突破，FP8量化+优化方案实用性强",
+      "tags": [
+        "模型压缩",
+        "量化技术",
+        "开源社区"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[D] Advice on sequential recommendations architectures",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1r5u24v/d_advice_on_sequential_recommendations/",
+      "rating": "A",
+      "score": 8,
+      "comment": "序列推荐架构创新实践，将多属性交互建模为token序列，具实用价值",
+      "tags": [
+        "序列推荐",
+        "Transformer",
+        "多属性建模"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[R] TimeBase: The Power of Minimalism in Efficient Long-term Time Series Forecasting",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1r5tzgh/r_timebase_the_power_of_minimalism_in_efficient/",
+      "rating": "A",
+      "score": 8,
+      "comment": "ICML 2025 Spotlight论文，面向长时序预测的轻量级模型，代码开源，对非大厂场景有实用价值。",
+      "tags": [
+        "时间序列",
+        "长周期预测",
+        "开源"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "ALS stole this musician’s voice. AI let him sing again.",
+      "link": "https://www.technologyreview.com/2026/02/13/1132913/als-stole-this-musicians-voice-ai-sing/",
+      "rating": "A",
+      "score": 8,
+      "comment": "AI语音重建技术助力渐冻症患者重获歌唱能力，体现技术人文价值与工程突破结合。",
+      "tags": [
+        "AI医疗",
+        "语音合成",
+        "人机交互"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "US deputy health secretary: Vaccine guidelines are still subject to change",
+      "link": "https://www.technologyreview.com/2026/02/13/1132889/us-deputy-health-secretary-vaccine-guidelines-longevity-arpa-h-cdc-nih/",
+      "rating": "A",
+      "score": 8,
+      "comment": "美国卫生副部长变动及疫苗指南动态，体现公共卫生政策关键人物更迭与决策灵活性，具行业参考价值。",
+      "tags": [
+        "公共卫生",
+        "政策变动",
+        "美国政府"
+      ]
+    },
+    {
+      "source": "机器之心",
+      "title": "单个LLM已不够？华盛顿大学开源多模型协同框架MoCo",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-16",
+      "rating": "A",
+      "score": 8,
+      "comment": "华盛顿大学开源MoCo多模型协同框架，含完整代码与实验，推动LLM协同推理研究",
+      "tags": [
+        "多模型协同",
+        "LLM框架",
+        "开源"
+      ]
+    },
+    {
+      "source": "机器之心",
+      "title": "还在玩AI 3D手办？Gemini 3 Deep Think已能直出STL，可打印实物",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-15-6",
+      "rating": "A",
+      "score": 8,
+      "comment": "Gemini 3 Deep Think支持STL直出，体现多模态生成能力进阶，具实用价值但非架构颠覆",
+      "tags": [
+        "AI生成",
+        "3D打印",
+        "多模态"
+      ]
+    }
+  ]
+}

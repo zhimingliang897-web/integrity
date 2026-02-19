@@ -1,0 +1,138 @@
+{
+  "date": "2026-02-13",
+  "summary": "今日焦点集中于三大方向：安全风险警示（OpenClaw暴露实例中15%含恶意指令）、医疗与自动驾驶等垂直场景的基准测试与强化学习突破，以及LLM在谈判、规划、推理等高阶认知任务中的机制优化——尤其“Latent Thoughts Tuning”与“Found-RL”凸显模型内部表征与外部交互的深度协同。",
+  "news": [
+    {
+      "source": "Reddit ML",
+      "title": "[D] We scanned 18,000 exposed OpenClaw instances and found 15% of community skills contain malicious instructions",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1r30nzv/d_we_scanned_18000_exposed_openclaw_instances_and/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenClaw安全危机暴露自主代理生态重大风险，15%技能含恶意代码，警示AI安全治理紧迫性。",
+      "tags": [
+        "AI安全",
+        "自主代理",
+        "开源生态",
+        "威胁情报"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Discovering Differences in Strategic Behavior Between Humans and LLMs",
+      "link": "https://arxiv.org/abs/2602.10324",
+      "rating": "A",
+      "score": 8,
+      "comment": "首篇系统比较人类与LLM战略行为的高质量论文，揭示LLM在迭代博弈中可能具备更深策略能力，具学术与应用价值。",
+      "tags": [
+        "LLM行为分析",
+        "博弈论",
+        "AlphaEvolve"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "LiveMedBench: A Contamination-Free Medical Benchmark for LLMs with Automated Rubric Evaluation",
+      "link": "https://arxiv.org/abs/2602.10367",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个抗污染、动态更新的医疗LLM基准，解决数据泄露与知识滞后两大痛点",
+      "tags": [
+        "LLM评测",
+        "医疗AI",
+        "基准测试"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Found-RL: foundation model-enhanced reinforcement learning for autonomous driving",
+      "link": "https://arxiv.org/abs/2602.10458",
+      "rating": "A",
+      "score": 8,
+      "comment": "Found-RL提出异步批推理框架，有效解决VLM推理延迟问题，推动基础模型赋能强化学习在自动驾驶落地。",
+      "tags": [
+        "自动驾驶",
+        "强化学习",
+        "大模型",
+        "异步推理"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "MERIT Feedback Elicits Better Bargaining in LLM Negotiators",
+      "link": "https://arxiv.org/abs/2602.10467",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出新基准AgoraBench与实用反馈框架，显著提升LLM谈判策略建模能力",
+      "tags": [
+        "LLM",
+        "谈判AI",
+        "基准测试"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Abstraction Generation for Generalized Planning with Pretrained Large Language Models",
+      "link": "https://arxiv.org/abs/2602.10485",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM辅助生成QNP抽象用于通用规划，结合自动化调试提升可靠性，具实用价值",
+      "tags": [
+        "通用规划",
+        "大语言模型",
+        "自动推理"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Flow of Spans: Generalizing Language Models to Dynamic Span-Vocabulary via GFlowNets",
+      "link": "https://arxiv.org/abs/2602.10583",
+      "rating": "A",
+      "score": 8,
+      "comment": "GFlowNets赋能语言模型动态跨度建模，突破传统token-by-token限制，具实用价值",
+      "tags": [
+        "GFlowNets",
+        "语言模型",
+        "动态词汇"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Reviewing the Reviewer: Elevating Peer Review Quality through LLM-Guided Feedback",
+      "link": "https://arxiv.org/abs/2602.10118",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM驱动的同行评审质量提升框架，解决多问题识别与可操作反馈缺失痛点",
+      "tags": [
+        "AI科研",
+        "peer review",
+        "LLM应用"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Latent Thoughts Tuning: Bridging Context and Reasoning with Fused Information in Latent Tokens",
+      "link": "https://arxiv.org/abs/2602.10229",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出LT-Tuning框架，解决潜空间推理中的特征坍缩与对齐问题，是连续推理方向的重要进展。",
+      "tags": [
+        "LLM推理",
+        "潜空间",
+        "CoT改进"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Learning to Evict from Key-Value Cache",
+      "link": "https://arxiv.org/abs/2602.10238",
+      "rating": "A",
+      "score": 8,
+      "comment": "将KV缓存淘汰重构为强化学习问题，提出轻量级per-head RL代理框架，兼具理论创新与工程实用性。",
+      "tags": [
+        "LLM优化",
+        "强化学习",
+        "KV Cache"
+      ]
+    }
+  ]
+}

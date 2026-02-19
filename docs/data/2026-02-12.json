@@ -1,0 +1,137 @@
+{
+  "date": "2026-02-12",
+  "summary": "今日焦点集中于大模型发布与前沿研究：GLM-5正式亮相，彰显国产大模型持续迭代；多篇顶会论文聚焦AI代理的可控性、不确定性建模与协作机制，尤其在医疗、知识库构建等场景展现新范式；同时，生成内容检测与人类监督框架成为安全治理关键议题。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "GLM-5 Officially Released",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r22hlq/glm5_officially_released/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GLM-5正式发布，参数规模与训练数据显著提升，并引入DeepSeek稀疏注意力，属AGI关键进展",
+      "tags": [
+        "大模型",
+        "AGI",
+        "架构创新"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "GLM 5 Released",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r1wl6x/glm_5_released/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GLM-5发布，中国大模型再迎重大突破，开源生态与推理能力获业界高度关注。",
+      "tags": [
+        "大模型",
+        "开源",
+        "推理能力"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "A Small-Scale System for Autoregressive Program Synthesis Enabling Controlled Experimentation",
+      "link": "https://arxiv.org/abs/2602.09112",
+      "rating": "A",
+      "score": 8,
+      "comment": "小模型实现可控程序合成实验，降低研究门槛，具实用价值",
+      "tags": [
+        "程序合成",
+        "小模型",
+        "实验可复现"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Uncertainty-Aware Multimodal Emotion Recognition through Dirichlet Parameterization",
+      "link": "https://arxiv.org/abs/2602.09121",
+      "rating": "A",
+      "score": 8,
+      "comment": "轻量级多模态情感识别框架，融合Dirichlet不确定性建模与Dempster-Shafer融合，适合边缘部署，论文质量高且具实用价值。",
+      "tags": [
+        "多模态学习",
+        "边缘AI",
+        "不确定性建模"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "PABU: Progress-Aware Belief Update for Efficient LLM Agents",
+      "link": "https://arxiv.org/abs/2602.09138",
+      "rating": "A",
+      "score": 8,
+      "comment": "PABU提出进度感知信念更新框架，显著提升LLM代理效率与决策质量，实证效果突出。",
+      "tags": [
+        "LLM代理",
+        "信念状态",
+        "效率优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "CoMMa: Contribution-Aware Medical Multi-Agents From A Game-Theoretic Perspective",
+      "link": "https://arxiv.org/abs/2602.09159",
+      "rating": "A",
+      "score": 8,
+      "comment": "Game-theoretic multi-agent医学决策框架，贡献感知与可解释性是亮点",
+      "tags": [
+        "多智能体",
+        "医疗AI",
+        "可解释性",
+        "博弈论"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "FlyAOC: Evaluating Agentic Ontology Curation of Drosophila Scientific Knowledge Bases",
+      "link": "https://arxiv.org/abs/2602.09163",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个面向AI代理的果蝇知识库本体标注评估基准，填补了端到端科学知识工程评估空白。",
+      "tags": [
+        "AI Agent",
+        "知识图谱",
+        "生物信息学"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Human Control Is the Anchor, Not the Answer: Early Divergence of Oversight in Agentic AI Communities",
+      "link": "https://arxiv.org/abs/2602.09286",
+      "rating": "A",
+      "score": 8,
+      "comment": "早期社区分化揭示AGI监管路径分歧，具理论深度与实证价值",
+      "tags": [
+        "AGI监管",
+        "社区分析",
+        "arXiv论文"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Overview of PAN 2026: Voight-Kampff Generative AI Detection, Text Watermarking, Multi-Author Writing Style Analysis, Generative Plagiarism Detection, and Reasoning Trajectory Detection",
+      "link": "https://arxiv.org/abs/2602.09147",
+      "rating": "A",
+      "score": 8,
+      "comment": "PAN 2026 新增多项AI检测与文本分析任务，推动文本 forensics 领域标准化发展",
+      "tags": [
+        "AI检测",
+        "文本取证",
+        "学术会议"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Measuring Inclusion in Interaction: Inclusion Analytics for Human-AI Collaborative Learning",
+      "link": "https://arxiv.org/abs/2602.09269",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次提出'包容性分析'框架，将包容性纳入人机协同学习的实时互动分析，具实用价值",
+      "tags": [
+        "人机协作",
+        "教育AI",
+        "对话分析"
+      ]
+    }
+  ]
+}
