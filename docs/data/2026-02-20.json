@@ -1,0 +1,138 @@
+{
+  "date": "2026-02-20",
+  "summary": "今日焦点集中于三大方向：一是大模型工程能力突破，如Qwen3 Coder高效处理长文档、Llama 3.1推理性能飙升；二是AI在医疗与专业场景的深度落地，包括临床症状检测、专科推理评估等论文；三是基础研究新发现，如“困惑度悖论”揭示代码与数学在提示中的压缩差异，为模型训练提供新视角。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen3 Coder Next 8FP in the process of converting the entire Flutter documentation for 12 hours now with just 3 sentence prompt with 64K max tokens at around 102GB memory (out of 128GB)...",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r9h3g8/qwen3_coder_next_8fp_in_the_process_of_converting/",
+      "rating": "S",
+      "score": 10,
+      "comment": "Qwen3 Coder Next 8FP实现64K上下文下12小时无损转换Flutter全量文档，突破大模型长文本处理极限，里程碑式进展",
+      "tags": [
+        "大模型推理优化",
+        "长上下文应用",
+        "开源模型突破"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Free ASIC Llama 3.1 8B inference at 16,000 tok/s - no, not a joke",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r9e27i/free_asic_llama_31_8b_inference_at_16000_toks_no/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Free ASIC推理达16k tokens/s，突破性性能验证，标志边缘AI硬件新纪元",
+      "tags": [
+        "ASIC",
+        "推理加速",
+        "硬件创新"
+      ]
+    },
+    {
+      "source": "机器之心",
+      "title": "谷歌夺回王座：Gemini 3.1 Pro来了！姚顺宇：后面还有更好的",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-20",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro发布，姚顺宇提及后续更强版本，暗示多模态与推理能力显著提升，属行业里程碑事件",
+      "tags": [
+        "大模型",
+        "谷歌",
+        "多模态",
+        "推理能力"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Towards Efficient Constraint Handling in Neural Solvers for Routing Problems",
+      "link": "https://arxiv.org/abs/2602.16012",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个通用高效神经路由约束处理框架CaR提出，解决硬约束难题，具实用价值",
+      "tags": [
+        "神经网络",
+        "组合优化",
+        "运筹学",
+        "约束处理"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Optimization Instability in Autonomous Agentic Workflows for Clinical Symptom Detection",
+      "link": "https://arxiv.org/abs/2602.16037",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统揭示自主代理工作流中的优化不稳定现象，临床诊断场景下警示性极强",
+      "tags": [
+        "AI医疗",
+        "代理系统",
+        "优化稳定性"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "How Uncertain Is the Grade? A Benchmark of Uncertainty Metrics for LLM-Based Automatic Assessment",
+      "link": "https://arxiv.org/abs/2602.16039",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM自动评估中不确定性度量的系统性基准研究，对教育AI可靠性至关重要",
+      "tags": [
+        "LLM",
+        "教育技术",
+        "不确定性量化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Evidence-Grounded Subspecialty Reasoning: Evaluating a Curated Clinical Intelligence Layer on the 2025 Endocrinology Board-Style Examination",
+      "link": "https://arxiv.org/abs/2602.16050",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个证据增强型专科推理系统在权威考试中超越前沿LLM，标志临床AI向可解释性跃升",
+      "tags": [
+        "医学AI",
+        "证据推理",
+        "临床决策支持"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Improving Interactive In-Context Learning from Natural Language Feedback",
+      "link": "https://arxiv.org/abs/2602.16066",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出将交互式上下文学习作为可训练技能，推动LLM从静态知识向动态反馈适应演进",
+      "tags": [
+        "LLM",
+        "交互学习",
+        "训练方法"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "GPSBench: Do Large Language Models Understand GPS Coordinates?",
+      "link": "https://arxiv.org/abs/2602.16105",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个系统性评估LLM地理坐标推理能力的基准数据集发布，填补关键研究空白。",
+      "tags": [
+        "LLM",
+        "地理信息",
+        "基准测试"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "The Perplexity Paradox: Why Code Compresses Better Than Math in LLM Prompts",
+      "link": "https://arxiv.org/abs/2602.15843",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统验证LLM中代码与推理的压缩差异，提出perplexity paradox机制，具实用价值",
+      "tags": [
+        "LLM优化",
+        "提示工程",
+        "代码生成"
+      ]
+    }
+  ]
+}
