@@ -1,0 +1,138 @@
+{
+  "date": "2026-02-21",
+  "summary": "今日焦点集中于大模型生态整合与前沿研究突破：Hugging Face收购GGML.AI凸显开源基础设施战略价值；谷歌Gemini 3.1 Pro发布及姚顺宇观点暗示大模型性能迭代进入新阶段；同时，多篇顶会论文聚焦LLM可解释性、基准饱和问题、跨语言能力等关键挑战，反映学界对模型真实能力与系统性瓶颈的深度反思。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "GGML.AI has got acquired by Huggingface",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r9vywq/ggmlai_has_got_acquired_by_huggingface/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GGML.AI被Hugging Face收购，标志着本地大模型推理生态与主流平台深度整合，行业里程碑事件。",
+      "tags": [
+        "大模型",
+        "开源",
+        "并购"
+      ]
+    },
+    {
+      "source": "机器之心",
+      "title": "谷歌夺回王座：Gemini 3.1 Pro来了！姚顺宇：后面还有更好的",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-20",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro发布，姚顺宇提及后续更强模型，暗示多模态与推理能力重大突破",
+      "tags": [
+        "大模型",
+        "谷歌",
+        "多模态",
+        "推理能力"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "AIdentifyAGE Ontology for Decision Support in Forensic Dental Age Assessment",
+      "link": "https://arxiv.org/abs/2602.16714",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个面向法医牙科年龄评估的领域本体，解决数据异构与AI可复现性难题",
+      "tags": [
+        "法医医学",
+        "知识图谱",
+        "AI可解释性"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Retrieval Augmented (Knowledge Graph), and Large Language Model-Driven Design Structure Matrix (DSM) Generation of Cyber-Physical Systems",
+      "link": "https://arxiv.org/abs/2602.16715",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM+RAG+知识图谱辅助生成DSM的实用研究，代码开源具复现价值",
+      "tags": [
+        "AI设计辅助",
+        "知识图谱",
+        "DSM生成"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Contextuality from Single-State Representations: An Information-Theoretic Principle for Adaptive Intelligence",
+      "link": "https://arxiv.org/abs/2602.16716",
+      "rating": "A",
+      "score": 8,
+      "comment": "信息论视角揭示单状态复用与上下文性的本质联系，为通用智能建模提供理论基石",
+      "tags": [
+        "信息论",
+        "上下文性",
+        "通用人工智能",
+        "理论突破"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Mobility-Aware Cache Framework for Scalable LLM-Based Human Mobility Simulation",
+      "link": "https://arxiv.org/abs/2602.16727",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM驱动的大型人类移动性仿真框架，通过可重构缓存提升效率，具实用价值",
+      "tags": [
+        "LLM",
+        "仿真",
+        "缓存优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "When AI Benchmarks Plateau: A Systematic Study of Benchmark Saturation",
+      "link": "https://arxiv.org/abs/2602.16763",
+      "rating": "A",
+      "score": 8,
+      "comment": "系统性研究揭示LLM基准饱和现象，为评估模型进步提供新视角",
+      "tags": [
+        "AI基准",
+        "LLM评估",
+        "研究论文"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Simple Baselines are Competitive with Code Evolution",
+      "link": "https://arxiv.org/abs/2602.16805",
+      "rating": "A",
+      "score": 8,
+      "comment": "简单基线反超复杂代码进化方法，揭示当前研究存在过度工程化问题",
+      "tags": [
+        "LLM编程",
+        "代码进化",
+        "基准测试"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "References Improve LLM Alignment in Non-Verifiable Domains",
+      "link": "https://arxiv.org/abs/2602.16802",
+      "rating": "A",
+      "score": 8,
+      "comment": "参考引导提升LLM对齐评估精度，解决非可验证领域难题",
+      "tags": [
+        "LLM对齐",
+        "评估方法",
+        "参考学习"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Evaluating Monolingual and Multilingual Large Language Models for Greek Question Answering: The DemosQA Benchmark",
+      "link": "https://arxiv.org/abs/2602.16811",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个针对希腊语的多语言QA基准评测，填补低资源语言研究空白",
+      "tags": [
+        "LLM评测",
+        "多语言NLP",
+        "希腊语AI"
+      ]
+    }
+  ]
+}
