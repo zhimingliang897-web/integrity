@@ -1,0 +1,136 @@
+{
+  "date": "2026-02-22",
+  "summary": "今日焦点集中于三大方向：一是大模型应用创新，如Pika推出“AI Selves”数字分身与北航Code2Bench推动代码模型真实能力评测；二是技术突破，包括O-TITANS内存架构适配Gemma 3及CPU训练语言模型反超GPU的实验；三是行业反思，如“AI hype修正”专刊与对虚假软件（Shade）的警示，凸显领域从炒作回归务实的转向。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "AMA with StepFun AI - Ask Us Anything",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r8snay/ama_with_stepfun_ai_ask_us_anything/",
+      "rating": "A",
+      "score": 8,
+      "comment": "StepFun AI 官方AMA活动，体现其在本地大模型社区的活跃度与技术透明度，属值得关注的行业动态。",
+      "tags": [
+        "本地大模型",
+        "社区互动",
+        "产品发布"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "they have Karpathy, we are doomed ;)",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1raq23i/they_have_karpathy_we_are_doomed/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Karpathy加入大厂引发行业关注，反映顶尖人才流向与技术竞争格局变化。",
+      "tags": [
+        "AI人才流动",
+        "大厂动态",
+        "LLM"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "PSA: The software “Shade” is a fraudulent, plagiarized copy of Heretic",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rawoe4/psa_the_software_shade_is_a_fraudulent/",
+      "rating": "A",
+      "score": 8,
+      "comment": "开源项目抄袭事件引发关注，凸显版权与诚信问题",
+      "tags": [
+        "开源伦理",
+        "代码安全",
+        "行业警示"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "O-TITANS: Orthogonal LoRAs for Gemma 3 using Google's TITANS memory architecture",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rb4luf/otitans_orthogonal_loras_for_gemma_3_using/",
+      "rating": "A",
+      "score": 8,
+      "comment": "O-TITANS融合Orthogonal LoRA与TITANS架构，为Gemma 3提供可扩展的多专家推理方案，具实用价值",
+      "tags": [
+        "LoRA优化",
+        "MoE架构",
+        "Google研究"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] I Trained a Language Model on CPU for 40 Hours - It Beat the GPU Baseline",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rbai76/p_i_trained_a_language_model_on_cpu_for_40_hours/",
+      "rating": "A",
+      "score": 8,
+      "comment": "CPU训练40小时超越GPU基线，证明低功耗高效训练可行性，具实用价值",
+      "tags": [
+        "模型训练优化",
+        "CPU推理",
+        "轻量化模型"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[D] Deterministic Replay in Live Multi-Agent Environments",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rbaaox/d_deterministic_replay_in_live_multiagent/",
+      "rating": "A",
+      "score": 8,
+      "comment": "轻量级多智能体实时控制基准，支持确定性回放，具实用价值",
+      "tags": [
+        "多智能体",
+        "确定性回放",
+        "实时控制"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "Exclusive eBook: The great Al hype correction of 2025",
+      "link": "https://www.technologyreview.com/2026/02/20/1133368/exclusive-ebook-the-great-al-hype-correction-of-2025/",
+      "rating": "A",
+      "score": 8,
+      "comment": "AI行业年度反思报告，聚焦巨头承诺与现实落差，具行业洞察价值。",
+      "tags": [
+        "AI伦理",
+        "行业分析",
+        "技术展望"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: Microsoft’s online reality check, and the worrying rise in measles cases",
+      "link": "https://www.technologyreview.com/2026/02/20/1133396/the-download-microsofts-online-reality-check-and-the-worrying-rise-in-measles-cases/",
+      "rating": "A",
+      "score": 8,
+      "comment": "微软推出AI真实性验证计划，应对日益严重的AI生成内容欺诈问题，具行业前瞻性。",
+      "tags": [
+        "AI安全",
+        "内容验证",
+        "大厂动态"
+      ]
+    },
+    {
+      "source": "机器之心",
+      "title": "不卷视频卷「造人」？Pika推出AI Selves，让你亲手「养大」数字分身",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-21-4",
+      "rating": "A",
+      "score": 8,
+      "comment": "Pika推出AI Selves实现数字分身持续进化，涉及个性化训练与交互建模，属生成式AI应用层重要进展。",
+      "tags": [
+        "AI生成",
+        "数字人",
+        "个性化模型"
+      ]
+    },
+    {
+      "source": "机器之心",
+      "title": "ICLR 2026 | 北航开源Code2Bench：双扩展动态评测，代码大模型告别躺平刷分",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-21-3",
+      "rating": "A",
+      "score": 8,
+      "comment": "北航开源Code2Bench，引入双扩展动态评测机制，提升代码大模型评估真实性与泛化性。",
+      "tags": [
+        "代码评测",
+        "大模型评估",
+        "开源工具"
+      ]
+    }
+  ]
+}
