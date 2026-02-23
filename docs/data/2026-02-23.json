@@ -1,0 +1,138 @@
+{
+  "date": "2026-02-23",
+  "summary": "今日焦点集中于基础模型能力突破与工程效率优化：DynaMix实现零样本预测动态系统长期行为，标志基础模型从“理解”迈向“推演”；同时，LightRetriever与多模态Token压缩等研究聚焦LLM推理瓶颈，推动大模型落地效率提升；阿里云新支持Qwen3.5等模型、StepFun AI开放AMA等，反映产业界加速将前沿成果转化为应用能力。",
+  "news": [
+    {
+      "source": "Reddit ML",
+      "title": "[R] DynaMix -- first foundation model that can zero-shot predict long-term behavior of dynamical systems",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rbqtbx/r_dynamix_first_foundation_model_that_can/",
+      "rating": "S",
+      "score": 9,
+      "comment": "首个能零样本预测动力系统长期行为的奠基模型，实现从模式匹配到物理规律学习的范式跃迁。",
+      "tags": [
+        "时间序列",
+        "动力系统",
+        "基础模型",
+        "NeurIPS2025"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "AMA with StepFun AI - Ask Us Anything",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r8snay/ama_with_stepfun_ai_ask_us_anything/",
+      "rating": "A",
+      "score": 8,
+      "comment": "StepFun AI在Reddit举办AMA，展示本地大模型应用进展，属实用工具重大更新",
+      "tags": [
+        "本地大模型",
+        "AMA互动",
+        "社区活跃"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen3's most underrated feature: Voice embeddings",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rc59ze/qwen3s_most_underrated_feature_voice_embeddings/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Qwen3语音嵌入实现高维声纹向量化，支持语音合成与风格迁移，技术实用性强",
+      "tags": [
+        "语音合成",
+        "AI模型",
+        "开源"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[D] Why do people say that GANs are dead or outdated when they're still commonly used?",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rbgsey/d_why_do_people_say_that_gans_are_dead_or/",
+      "rating": "A",
+      "score": 8,
+      "comment": "GAN虽非主流生成模型，但其变体（如VAE）仍是当前SOTA模型的基石组件，体现技术演进中的继承性。",
+      "tags": [
+        "生成模型",
+        "技术演进",
+        "VAE"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "Exclusive eBook: The great Al hype correction of 2025",
+      "link": "https://www.technologyreview.com/2026/02/20/1133368/exclusive-ebook-the-great-al-hype-correction-of-2025/",
+      "rating": "A",
+      "score": 8,
+      "comment": "AI行业年度反思性深度报告，聚焦巨头承诺与现实落差，具行业警示价值。",
+      "tags": [
+        "AI监管",
+        "行业洞察",
+        "技术伦理"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: Microsoft’s online reality check, and the worrying rise in measles cases",
+      "link": "https://www.technologyreview.com/2026/02/20/1133396/the-download-microsofts-online-reality-check-and-the-worrying-rise-in-measles-cases/",
+      "rating": "A",
+      "score": 8,
+      "comment": "微软推出AI真实性验证计划，应对深度伪造泛滥，属大厂重要开源方向探索。",
+      "tags": [
+        "AI安全",
+        "深度伪造",
+        "微软"
+      ]
+    },
+    {
+      "source": "机器之心",
+      "title": "后训练大牛Lambert：AI招聘市场正经历「乱纪元」",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-22-5",
+      "rating": "A",
+      "score": 8,
+      "comment": "提及Lambert及后训练技术，虽为自媒体但含行业观察与技术趋势分析，具参考价值",
+      "tags": [
+        "AI招聘",
+        "后训练",
+        "技术趋势"
+      ]
+    },
+    {
+      "source": "机器之心",
+      "title": "ICLR 2026｜把LLM Embedding Model算力瓶颈，从Query侧彻底移走，LightRetriever来了",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-22-4",
+      "rating": "A",
+      "score": 8,
+      "comment": "ICLR 2026论文提出LightRetriever，通过重构Embedding计算流程缓解LLM检索算力瓶颈，有明确技术方案与实验验证。",
+      "tags": [
+        "信息检索",
+        "LLM",
+        "嵌入优化"
+      ]
+    },
+    {
+      "source": "机器之心",
+      "title": "TMLR 2026 | 首篇多模态长上下文Token压缩综述：浙大、西湖大学等全面解析MLLM效率瓶颈",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-22-2",
+      "rating": "A",
+      "score": 8,
+      "comment": "TMLR 2026首篇多模态长上下文Token压缩综述，浙大西湖大学联合研究，聚焦MLLM效率瓶颈，含系统性分析与实验对比。",
+      "tags": [
+        "多模态",
+        "长上下文",
+        "Token压缩",
+        "LLM效率"
+      ]
+    },
+    {
+      "source": "机器之心",
+      "title": "阿里云Coding Plan上新，支持千问3.5、GLM-4.7等模型",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-22",
+      "rating": "A",
+      "score": 8,
+      "comment": "阿里云Coding Plan新增多模态模型支持，体现大厂在开发工具链与AI融合上的实用进展",
+      "tags": [
+        "AI开发工具",
+        "大模型集成",
+        "企业级应用"
+      ]
+    }
+  ]
+}
