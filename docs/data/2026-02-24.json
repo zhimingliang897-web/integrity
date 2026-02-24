@@ -1,0 +1,138 @@
+{
+  "date": "2026-02-24",
+  "summary": "今日焦点集中于模型安全与对齐的深层挑战：Anthropic披露大规模蒸馏攻击，凸显模型泄露风险；同时，多篇论文聚焦“认知陷阱”与“几何局限”，揭示理性误配与线性近似失效的理论根源；此外，神经符号推理、长程代理协调及科学工作流验证等方向加速推进，体现从理论到工程落地的系统性突破。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Epistemic Traps: Rational Misalignment Driven by Model Misspecification",
+      "link": "https://arxiv.org/abs/2602.17676",
+      "rating": "S",
+      "score": 9,
+      "comment": "首次从理论经济学角度系统解释AI代理行为病理，为安全对齐提供新范式",
+      "tags": [
+        "AI安全",
+        "模型误设",
+        "理性可解释性"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Anthropic: \"We’ve identified industrial-scale distillation attacks on our models by DeepSeek, Moonshot AI, and MiniMax.\" 🚨",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rcpmwn/anthropic_weve_identified_industrialscale/",
+      "rating": "S",
+      "score": 9,
+      "comment": "行业首度公开指控大规模模型蒸馏攻击，揭示AI安全新挑战",
+      "tags": [
+        "模型安全",
+        "产业竞争",
+        "大模型对抗"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Ontology-Guided Neuro-Symbolic Inference: Grounding Language Models with Mathematical Domain Knowledge",
+      "link": "https://arxiv.org/abs/2602.17826",
+      "rating": "A",
+      "score": 8,
+      "comment": "神经符号系统结合数学本体提升大模型推理可靠性，实证有效但需高质量检索保障",
+      "tags": [
+        "神经符号AI",
+        "大模型推理",
+        "知识增强",
+        "数学本体"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "The Token Games: Evaluating Language Model Reasoning with Puzzle Duels",
+      "link": "https://arxiv.org/abs/2602.17831",
+      "rating": "A",
+      "score": 8,
+      "comment": "以数学 duel 为灵感设计模型自创谜题的评估框架，解决训练数据泄露担忧，具实用价值",
+      "tags": [
+        "LLM评测",
+        "推理能力",
+        "arXiv论文"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "El Agente Gr\\'afico: Structured Execution Graphs for Scientific Agents",
+      "link": "https://arxiv.org/abs/2602.17902",
+      "rating": "A",
+      "score": 8,
+      "comment": "结构化执行图提升科学代理可审计性，将LLM决策与类型安全执行环境深度整合，具实用价值",
+      "tags": [
+        "科学计算",
+        "Agent框架",
+        "执行图",
+        "类型系统"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Alignment in Time: Peak-Aware Orchestration for Long-Horizon Agentic Systems",
+      "link": "https://arxiv.org/abs/2602.17910",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出APEMO调度层，解决长时序代理系统轨迹可靠性问题，具实用价值",
+      "tags": [
+        "AI对齐",
+        "多智能体系统",
+        "运行时优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "WorkflowPerturb: Calibrated Stress Tests for Evaluating Multi-Agent Workflow Metrics",
+      "link": "https://arxiv.org/abs/2602.17990",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM多智能体工作流评估基准的系统性突破，提供可控扰动与量化分析框架",
+      "tags": [
+        "多智能体",
+        "工作流评估",
+        "基准测试"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "QueryPlot: Generating Geological Evidence Layers using Natural Language Queries for Mineral Exploration",
+      "link": "https://arxiv.org/abs/2602.17784",
+      "rating": "A",
+      "score": 8,
+      "comment": "地质AI领域重要进展，将自然语言查询与地质图谱结合，提升矿产勘探效率",
+      "tags": [
+        "地质AI",
+        "NLP应用",
+        "矿产勘探"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "On the scaling relationship between cloze probabilities and language model next-token prediction",
+      "link": "https://arxiv.org/abs/2602.17848",
+      "rating": "A",
+      "score": 8,
+      "comment": "大模型语义对齐机制的实证研究，支持记忆容量与语义理解的正向关联",
+      "tags": [
+        "语言模型",
+        "认知科学",
+        "眼动实验"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Understanding Unreliability of Steering Vectors in Language Models: Geometric Predictors and the Limits of Linear Approximations",
+      "link": "https://arxiv.org/abs/2602.17881",
+      "rating": "A",
+      "score": 8,
+      "comment": "论文深入分析 Steering Vector 可靠性机制，提出几何预测指标，对可控生成有重要指导意义。",
+      "tags": [
+        "LLM控制",
+        "模型可解释性",
+        "线性近似局限"
+      ]
+    }
+  ]
+}
