@@ -1,0 +1,136 @@
+{
+  "date": "2026-02-25",
+  "summary": "今日焦点集中于大模型能力边界突破与智能体协同演进：GLiNER提出百万级标注的轻量级NER新范式，Qwen3.5-35B-A3B推动AGI编码能力跃升；同时，多篇顶会论文聚焦“智能体行为对齐”“决策可解释性”及“能量浪费机制”，揭示从单模型到多智能体系统的系统性挑战。",
+  "news": [
+    {
+      "source": "ArXiv cs.CL",
+      "title": "The Million-Label NER: Breaking Scale Barriers with GLiNER bi-encoder",
+      "link": "https://arxiv.org/abs/2602.18487",
+      "rating": "S",
+      "score": 9,
+      "comment": "百万级实体标签NER架构突破，解决传统模型扩展性瓶颈，里程碑式进展",
+      "tags": [
+        "NER",
+        "Bi-Encoder",
+        "大模型训练"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen3.5-35B-A3B is a gamechanger for agentic coding.",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rdxfdu/qwen3535ba3b_is_a_gamechanger_for_agentic_coding/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Qwen3.5-35B-A3B在代理编程领域实现显著突破，实测性能令人信服，具里程碑意义。",
+      "tags": [
+        "大模型",
+        "代理编程",
+        "开源"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "Just pull a string to turn these tile patterns into useful 3D structures",
+      "link": "https://www.technologyreview.com/2026/02/24/1132074/just-pull-a-string-to-turn-these-tile-patterns-into-useful-3d-structures/",
+      "rating": "S",
+      "score": 9,
+      "comment": "MIT突破性可拉伸3D结构设计，具颠覆性应用潜力",
+      "tags": [
+        "柔性电子",
+        "可展开结构",
+        "增材制造"
+      ]
+    },
+    {
+      "source": "机器之心",
+      "title": "228小时狂飙100篇论文、烧光114亿Token：FARS杀疯了",
+      "link": "https://www.jiqizhixin.com/articles/2026-02-24-4",
+      "rating": "S",
+      "score": 9,
+      "comment": "FARS项目在228小时内发布100篇论文，体现大规模高效科研协作能力，属行业里程碑事件",
+      "tags": [
+        "大模型训练",
+        "科研协作",
+        "开源项目"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "On the Dynamics of Observation and Semantics",
+      "link": "https://arxiv.org/abs/2602.18494",
+      "rating": "A",
+      "score": 8,
+      "comment": "arXiv新论文提出观察-语义纤维丛框架，挑战静态语义假设，具理论深度与工程潜力",
+      "tags": [
+        "视觉智能",
+        "理论突破",
+        "AI基础架构"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Hierarchical Reward Design from Language: Enhancing Alignment of Agent Behavior with Human Specifications",
+      "link": "https://arxiv.org/abs/2602.18582",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出HRDL框架解决长程任务中人类偏好的精细建模问题，具实用价值",
+      "tags": [
+        "强化学习",
+        "对齐",
+        "语言驱动"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Feedback-based Automated Verification in Vibe Coding of CAS Adaptation Built on Constraint Logic",
+      "link": "https://arxiv.org/abs/2602.18607",
+      "rating": "A",
+      "score": 8,
+      "comment": "基于vibe coding的反馈式自动化验证在CAS自适应系统中实现代码生成与验证闭环，具实用价值",
+      "tags": [
+        "CAS自适应",
+        "LLM生成代码",
+        "自动化验证"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Decoding ML Decision: An Agentic Reasoning Framework for Large-Scale Ranking System",
+      "link": "https://arxiv.org/abs/2602.18640",
+      "rating": "A",
+      "score": 8,
+      "comment": "GEARS框架重构排序优化范式，将工程约束转化为可执行的代理推理，突破传统静态模型选择瓶颈。",
+      "tags": [
+        "大模型应用",
+        "排序系统",
+        "工程架构"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Spilled Energy in Large Language Models",
+      "link": "https://arxiv.org/abs/2602.18671",
+      "rating": "A",
+      "score": 8,
+      "comment": "将LLM softmax重构成EBM，提出无训练的energy spill指标检测幻觉，方法简洁实用。",
+      "tags": [
+        "LLM",
+        "能量模型",
+        "幻觉检测"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Many AI Analysts, One Dataset: Navigating the Agentic Data Science Multiverse",
+      "link": "https://arxiv.org/abs/2602.18710",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次用LLM构建可复现的多分析师实验，揭示分析决策对结论影响，推动AI可解释性研究",
+      "tags": [
+        "LLM",
+        "可复现性",
+        "AI科研"
+      ]
+    }
+  ]
+}
