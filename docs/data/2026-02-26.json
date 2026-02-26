@@ -1,0 +1,139 @@
+{
+  "date": "2026-02-26",
+  "summary": "今日AI研究聚焦于三大方向：医疗健康领域，如罕见病自动表型分析与儿童肥胖多因素建模；大模型能力提升，涵盖工具调用、记忆持久性及推理优化；以及人机交互与评估范式革新，如隐性智能测评与面试人格模拟框架。体现从基础建模到落地应用的深度拓展。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Multilevel Determinants of Overweight and Obesity Among U.S. Children Aged 10-17: Comparative Evaluation of Statistical and Machine Learning Approaches Using the 2021 National Survey of Children's Health",
+      "link": "https://arxiv.org/abs/2602.20303",
+      "rating": "A",
+      "score": 8,
+      "comment": "高规格流行病学研究，对比多种AI建模方法预测青少年肥胖，兼具学术价值与政策参考意义。",
+      "tags": [
+        "机器学习",
+        "公共卫生",
+        "模型评估"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "An artificial intelligence framework for end-to-end rare disease phenotyping from clinical notes using large language models",
+      "link": "https://arxiv.org/abs/2602.20324",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个端到端罕见病表型注释框架，整合LLM提取、HPO标准化与诊断优先级排序，具实用价值",
+      "tags": [
+        "AI医疗",
+        "罕见病",
+        "临床NLP",
+        "HPO"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "DMCD: Semantic-Statistical Framework for Causal Discovery",
+      "link": "https://arxiv.org/abs/2602.20333",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM+统计因果发现框架，融合语义先验与验证，实证表现优异，具实用潜力。",
+      "tags": [
+        "因果推断",
+        "LLM应用",
+        "开源工具"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Diffusion Modulation via Environment Mechanism Modeling for Planning",
+      "link": "https://arxiv.org/abs/2602.20422",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出DMEMM框架，将环境机制建模引入扩散规划，解决RL轨迹一致性问题，具实用价值",
+      "tags": [
+        "扩散模型",
+        "强化学习",
+        "轨迹生成",
+        "环境建模"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Implicit Intelligence -- Evaluating Agents on What Users Don't Say",
+      "link": "https://arxiv.org/abs/2602.20424",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出Implicit Intelligence框架，聚焦隐性需求推理，填补当前Agent评估空白，具实用价值",
+      "tags": [
+        "AI Agent",
+        "评估框架",
+        "人机交互"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Learning to Rewrite Tool Descriptions for Reliable LLM-Agent Tool Use",
+      "link": "https://arxiv.org/abs/2602.20426",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出Trace-Free+框架解决工具描述优化难题，兼顾可扩展性与实用性，是LLM-Agent关键基础设施突破。",
+      "tags": [
+        "LLM-Agent",
+        "工具接口优化",
+        "课程学习"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Talking to Yourself: Defying Forgetting in Large Language Models",
+      "link": "https://arxiv.org/abs/2602.20162",
+      "rating": "A",
+      "score": 8,
+      "comment": "轻量级自增强方法有效缓解大模型灾难性遗忘，兼顾性能与实用性",
+      "tags": [
+        "大模型微调",
+        "灾难性遗忘",
+        "自监督学习"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Benchmarking Distilled Language Models: Performance and Efficiency in Resource-Constrained Settings",
+      "link": "https://arxiv.org/abs/2602.20164",
+      "rating": "A",
+      "score": 8,
+      "comment": "知识蒸馏性能-计算比显著优化，8B模型效率超训练原版2000倍，具实用价值",
+      "tags": [
+        "知识蒸馏",
+        "小语言模型",
+        "算力效率"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "ConceptRM: The Quest to Mitigate Alert Fatigue through Consensus-Based Purity-Driven Data Cleaning for Reflection Modelling",
+      "link": "https://arxiv.org/abs/2602.20166",
+      "rating": "A",
+      "score": 8,
+      "comment": "高价值论文提出Consensus-Based Purity-Driven方法解决反射模型训练中的噪声问题，实用性强且具工程推广价值。",
+      "tags": [
+        "反射模型",
+        "数据清洗",
+        "告警疲劳",
+        "arXiv"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "InterviewSim: A Scalable Framework for Interview-Grounded Personality Simulation",
+      "link": "https://arxiv.org/abs/2602.20294",
+      "rating": "A",
+      "score": 8,
+      "comment": "大规模面试数据驱动人格模拟框架，填补评估空白，具实用价值",
+      "tags": [
+        "LLM",
+        "人格建模",
+        "评估框架"
+      ]
+    }
+  ]
+}
