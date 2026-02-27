@@ -1,0 +1,137 @@
+{
+  "date": "2026-02-27",
+  "summary": "今日焦点集中于AI系统协同与可信性提升：多智能体自主发现、聚合能力边界及代理自我修正机制成为研究热点；同时，面向灾难应答、医疗分类等场景的高效微调（LoRA）、推理对齐（Sparse Junction Steering）技术凸显实用化趋势；此外，“ASIR勇气模型”等跨学科框架尝试构建人机共情的 Truth 机制，反映AI伦理与社会适应性的深化。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "A Dynamic Survey of Soft Set Theory and Its Extensions",
+      "link": "https://arxiv.org/abs/2602.21268",
+      "rating": "A",
+      "score": 8,
+      "comment": "软集理论综述论文，系统梳理多类扩展模型及应用方向，具学术价值与工程参考意义。",
+      "tags": [
+        "软集理论",
+        "数学建模",
+        "理论计算机"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "A Hierarchical Multi-Agent System for Autonomous Discovery in Geoscientific Data Archives",
+      "link": "https://arxiv.org/abs/2602.21351",
+      "rating": "A",
+      "score": 8,
+      "comment": "PANGAEA-GPT提出分层多智能体架构，解决地球科学数据发现难题，具实用价值与技术前瞻性。",
+      "tags": [
+        "多智能体系统",
+        "地球科学",
+        "LLM应用"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Beyond Refusal: Probing the Limits of Agentic Self-Correction for Semantic Sensitive Information",
+      "link": "https://arxiv.org/abs/2602.21496",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统性提出LLM推理时语义敏感信息自修正框架，34.6%泄漏降低具实证价值",
+      "tags": [
+        "LLM安全",
+        "语义隐私",
+        "自修正"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "ARLArena: A Unified Framework for Stable Agentic Reinforcement Learning",
+      "link": "https://arxiv.org/abs/2602.21534",
+      "rating": "A",
+      "score": 8,
+      "comment": "ARLArena提出统一稳定框架，系统化分析AGI训练稳定性问题，推动ARL可复现性与可扩展性发展。",
+      "tags": [
+        "强化学习",
+        "AGI",
+        "框架"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Power and Limitations of Aggregation in Compound AI Systems",
+      "link": "https://arxiv.org/abs/2602.21556",
+      "rating": "A",
+      "score": 8,
+      "comment": "系统性分析聚合在复合AI系统中的能力边界，为多模型协同设计提供理论支撑",
+      "tags": [
+        "AI系统架构",
+        "聚合机制",
+        "理论分析"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "The ASIR Courage Model: A Phase-Dynamic Framework for Truth Transitions in Human and AI Systems",
+      "link": "https://arxiv.org/abs/2602.21745",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个将人类 truth-telling 与 AI 系统对齐建模的相变框架，具理论深度和跨系统泛化潜力",
+      "tags": [
+        "AI对齐",
+        "相变模型",
+        "理论突破"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Disaster Question Answering with LoRA Efficiency and Accurate End Position",
+      "link": "https://arxiv.org/abs/2602.21212",
+      "rating": "A",
+      "score": 8,
+      "comment": "LoRA效率优化用于灾难问答，提升领域知识准确性和防幻觉能力，具实用价值",
+      "tags": [
+        "LoRA",
+        "灾难问答",
+        "RAG",
+        "防幻觉"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Inference-time Alignment via Sparse Junction Steering",
+      "link": "https://arxiv.org/abs/2602.21215",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出稀疏干预机制，解决推理时对齐的计算开销与生成质量矛盾，论文质量高且具实用价值。",
+      "tags": [
+        "大模型推理优化",
+        "稀疏干预",
+        "Inference-time Alignment"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "EQ-5D Classification Using Biomedical Entity-Enriched Pre-trained Language Models and Multiple Instance Learning",
+      "link": "https://arxiv.org/abs/2602.21216",
+      "rating": "A",
+      "score": 8,
+      "comment": "利用生物医学实体增强的预训练模型+多实例学习提升EQ-5D文献识别效率，实用性强，适合健康经济研究自动化场景。",
+      "tags": [
+        "NLP",
+        "医疗AI",
+        "文献筛选"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Applied Sociolinguistic AI for Community Development (ASA-CD): A New Scientific Paradigm for Linguistically-Grounded Social Intervention",
+      "link": "https://arxiv.org/abs/2602.21217",
+      "rating": "A",
+      "score": 8,
+      "comment": "首提ASA-CD新范式，将语言学与AI干预结合，具实用潜力",
+      "tags": [
+        "AI伦理",
+        "社会技术",
+        "NLP"
+      ]
+    }
+  ]
+}
