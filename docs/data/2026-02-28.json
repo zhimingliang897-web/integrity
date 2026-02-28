@@ -1,0 +1,139 @@
+{
+  "date": "2026-02-28",
+  "summary": "今日焦点集中于AI在科学创新、金融推理与社会研究中的应用拓展：Co-Author图谱与RAG结合推动科研灵感生成，FIRE基准提升金融AI评估标准；同时，Agent行为规范、自主记忆系统及因果嵌入等方向深化了智能体可靠性研究；此外，多模态内容安全检测与跨文化偏见数据集构建（如SAFARI）凸显AI伦理与本土化落地的紧迫性。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Graph Your Way to Inspiration: Integrating Co-Author Graphs with Retrieval-Augmented Generation for Large Language Model Based Scientific Idea Generation",
+      "link": "https://arxiv.org/abs/2602.22215",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将作者图谱与RAG结合用于科学创意生成，提升可解释性与溯源能力。",
+      "tags": [
+        "LLM",
+        "科学计算",
+        "知识图谱",
+        "RAG"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "FIRE: A Comprehensive Benchmark for Financial Intelligence and Reasoning Evaluation",
+      "link": "https://arxiv.org/abs/2602.22273",
+      "rating": "A",
+      "score": 8,
+      "comment": "金融AI评估基准FIRE发布，3000场景题+理论考试题双维度评测，推动LLM金融能力标准化评估",
+      "tags": [
+        "金融AI",
+        "基准测试",
+        "LLM评测"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Multi-Level Causal Embeddings",
+      "link": "https://arxiv.org/abs/2602.22287",
+      "rating": "A",
+      "score": 8,
+      "comment": "因果嵌入框架拓展抽象理论，支持多尺度模型融合与数据集对齐，具实用价值",
+      "tags": [
+        "因果推断",
+        "多尺度建模",
+        "模型融合"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Agent Behavioral Contracts: Formal Specification and Runtime Enforcement for Reliable Autonomous AI Agents",
+      "link": "https://arxiv.org/abs/2602.22302",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将设计契约理论系统引入AI代理行为规范，填补关键空白，具实用价值",
+      "tags": [
+        "AI代理",
+        "形式化验证",
+        "行为契约"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Vibe Researching as Wolf Coming: Can AI Agents with Skills Replace or Augment Social Scientists?",
+      "link": "https://arxiv.org/abs/2602.22401",
+      "rating": "A",
+      "score": 8,
+      "comment": "AI代理赋能社科研究范式变革，学者技能插件实证突破",
+      "tags": [
+        "AI科研自动化",
+        "大模型应用",
+        "社会科学"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Towards Autonomous Memory Agents",
+      "link": "https://arxiv.org/abs/2602.22406",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出自主记忆代理框架，通过成本感知知识提取级联与语义感知Thompson采样实现高效知识获取与更新，具实用价值",
+      "tags": [
+        "LLM",
+        "记忆系统",
+        "强化学习"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Decoder-based Sense Knowledge Distillation",
+      "link": "https://arxiv.org/abs/2602.22351",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将词义知识蒸馏有效引入解码器模型，解决大模型知识注入难题",
+      "tags": [
+        "知识蒸馏",
+        "LLM",
+        "词义表示"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Scaling In, Not Up? Testing Thick Citation Context Analysis with GPT-5 and Fragile Prompts",
+      "link": "https://arxiv.org/abs/2602.22359",
+      "rating": "A",
+      "score": 8,
+      "comment": "GPT-5实测论文，聚焦厚上下文与脆弱提示的可解释性分析，方法论价值高",
+      "tags": [
+        "LLM评测",
+        "可解释AI",
+        "文献分析"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Detecting Hate and Inflammatory Content in Bengali Memes: A New Multimodal Dataset and Co-Attention Framework",
+      "link": "https://arxiv.org/abs/2602.22391",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个面向孟加拉语仇恨内容检测的多模态数据集与框架，填补低资源语言研究空白。",
+      "tags": [
+        "NLP",
+        "多模态",
+        "低资源语言",
+        "社会危害内容检测"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "SAFARI: A Community-Engaged Approach and Dataset of Stereotype Resources in the Sub-Saharan African Context",
+      "link": "https://arxiv.org/abs/2602.22404",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个面向撒哈拉以南非洲的多语言刻板印象资源，社区参与式方法具有示范意义。",
+      "tags": [
+        "NLP",
+        "公平性",
+        "开源数据",
+        "非洲AI"
+      ]
+    }
+  ]
+}
