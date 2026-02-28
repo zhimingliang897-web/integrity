@@ -1,0 +1,26 @@
+# CourseDigest 配置文件
+# 使用阿里巴巴百炼 API (千问)
+
+# 路径配置
+input_dir: "input"
+cache_dir: "cache"
+output_dir: "output"
+
+# faster-whisper 语音转文字配置
+whisper:
+  model: "medium" # 可选: tiny / base / small / medium / large-v3
+  device: "auto" # "auto" 自动检测；可指定 "cuda" 或 "cpu"
+  compute_type: "auto" # "auto"=float16(GPU)/float32(CPU)
+  language: "en" # 课程语言
+
+# 阿里巴巴百炼 API 配置 (千问)
+api:
+  provider: "dashscope" # 使用百炼 API
+  api_key: "sk-0ef56d1b3ba54a188ce28a46c54e2a24" # 你的千问 API Key
+  model: "qwen-plus-2025-12-01" # 千问模型: qwen-turbo, qwen-plus, qwen-max
+
+# 分析分块配置
+analysis:
+  chunk_minutes: 30 # 每块时长（分钟）
+  temperature: 0.3 # 低温度确保输出稳定
+  max_tokens: 4096 # 最大token数

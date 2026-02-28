@@ -1,0 +1,27 @@
+{
+  "manifest_version": 3,
+  "name": "EasyApply - 智能简历填充助手",
+  "version": "1.1",
+  "description": "保存简历信息，一键填充到任何招聘网站表单；自动记录投递记录并导出Excel统计表。兼容Chrome和Edge浏览器。",
+  "permissions": ["storage", "activeTab", "scripting", "downloads", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["lib/xlsx.min.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

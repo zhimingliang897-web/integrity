@@ -1,0 +1,66 @@
+# 代理列表配置文件
+# 每行一个代理，支持 HTTP/HTTPS/SOCKS5 格式
+# 以 # 开头的行为注释
+
+# ========== 格式示例 ==========
+
+# 1. HTTP/HTTPS 代理（无认证）
+http://127.0.0.1:7890
+https://192.168.1.100:8080
+
+# 2. HTTP/HTTPS 代理（带用户名密码）
+http://username:password@proxy.example.com:8080
+https://user:pass@proxy.server.com:3128
+
+# 3. SOCKS5 代理（无认证）
+socks5://127.0.0.1:1080
+
+# 4. SOCKS5 代理（带用户名密码）
+socks5://username:password@proxy.example.com:1080
+
+
+# ========== 免费代理（仅供测试） ==========
+# 警告：免费代理质量差、速度慢、容易失效
+# 可从以下网站获取：
+# - https://www.sslproxies.org/
+# - https://free-proxy-list.net/
+# - https://www.proxy-list.download/
+
+# 示例（需替换为实际可用代理）
+# http://185.199.229.156:7492
+# http://185.199.228.220:7492
+
+
+# ========== 付费代理服务推荐 ==========
+
+# 1. 快代理 (kuaidaili.com)
+#    - 稳定性高，IP池大
+#    - 支持API提取代理
+#    格式: http://订单号:密钥@proxy.kuaidaili.com:端口
+
+# 2. 阿布云 (abuyun.com)
+#    格式: http://用户名:密码@proxy.abuyun.com:9020
+
+# 3. 芝麻代理 (zhimaruanjian.com)
+#    格式: http://ip:port
+
+# 4. 讯代理 (xdaili.cn)
+#    格式: http://ip:port
+
+
+# ========== 自建代理 ==========
+
+# V2Ray/Clash 本地代理
+# http://127.0.0.1:7890
+
+# SSH 隧道代理
+# socks5://127.0.0.1:1080
+
+
+# ========== 使用说明 ==========
+# 1. 复制此文件为 proxies.txt
+# 2. 填写你的代理地址（每行一个）
+# 3. 在代码中使用:
+#    from utils.proxy import ProxyPool
+#    pool = ProxyPool()
+#    pool.load_from_file("proxies.txt")

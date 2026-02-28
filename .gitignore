@@ -19,26 +19,14 @@ nul
 .vscode/
 .idea/
 
-# Generated data (too large for git)
-2台词/word/day*/day*.json
-2台词/word/day*/day*.csv
-2台词/word/day*/day*.pdf
-1分镜/video_maker/*/input/
-1分镜/video_maker/*/output/
-
-# Crawler data (media files too large)
-爬虫/data/
-评论/output/
-
-# Large video/media files
-13course_digest/cache/
-13course_digest/input/*.mp4
+# Large video/media files (keep code, exclude large media)
 *.mp4
 *.avi
 *.mov
 *.mkv
+*.wav
 
-# Large binary files
+# Large binary/archive files
 *.zip
 *.rar
 *.7z
@@ -47,35 +35,28 @@ nul
 # Minimax skills (local tools)
 .minimax/
 
-# New project folders (not ready for git yet)
-10history/
-11easyapply/
-12pdffun/
-13course_digest/
-
-# More project folders with generated content
-7爬虫/
-8评论/
-8.1新评论/
-9图生文文生图/
-
-# Generated output folders
-1分镜/video_maker/multi/
-1分镜/video_maker/grid/
-2台词/doc/
-2台词/input/
-2台词/output/
-2台词/scripts/
-2台词/tools/
+# Cache and temporary/generated folders
+13course_digest/cache/
+13course_digest/input/
+爬虫/data/
+评论/output/
+7爬虫/data/
+7爬虫/xz_图片/
+9图生文文生图/generated/
+9图生文文生图/raw/
+9图生文文生图/prompts/
 2台词/word/
+2台词/output/
+1分镜/video_maker/multi/*/output/
+1分镜/video_maker/multi/*/input/*.png
+1分镜/video_maker/grid/*/output/
 
-# Other large/generated files
-*.pdf
-*.mp3
-*.wav
+# Image files (too many generated images)
 *.png
 *.jpg
 *.jpeg
 *.JPG
 *.gif
+*.mp3
+*.pdf
 *.jsonl

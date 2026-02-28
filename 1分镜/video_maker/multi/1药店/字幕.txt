@@ -1,0 +1,22 @@
+Customer: Good afternoon.
+Clerk: Good afternoon. How can I help you?
+
+Customer: I’d like to buy some medicine.
+Clerk: Sure. What’s it for?
+
+Customer: I have a small skin problem. It’s a bit red and itchy.
+Clerk: I see. Do you know the name of the medicine?
+
+Customer: Not exactly. I only remember part of it—maybe “roxi”… or “luo-hong”.
+Clerk: Do you mean roxithromycin?
+
+Customer: Yes, that sounds right.
+Clerk: Okay. It usually comes as an ointment. One moment.
+
+Clerk: Here you are—roxithromycin ointment.
+Customer: Great. How do I use it?
+
+Clerk: Apply a thin layer two to three times a day. Keep the area clean.
+Customer: Got it. I’ll take it. Thank you.
+
+Clerk: You’re welcome. Take care.
