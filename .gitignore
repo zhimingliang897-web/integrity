@@ -35,6 +35,12 @@ nul
 # Minimax skills (local tools)
 .minimax/
 
+# Private projects (moved to integrity_pri repo)
+7爬虫/
+8评论/
+8.1新评论/
+10history/
+
 # Cache and temporary/generated folders
 13course_digest/cache/
 13course_digest/input/
