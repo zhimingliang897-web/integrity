@@ -353,6 +353,23 @@ def _confirm(prompt: str, default_yes: bool = False) -> bool:
     return (ans in ("y", "yes", "是")) if ans else default_yes
 
 
+# 绝对不允许移动的扩展名（代码 / 配置 / 项目定义文件）
+# 无论 LLM 建议什么，这些文件在执行层强制跳过
+PROTECTED_EXTS = {
+    # 代码
+    ".py", ".js", ".ts", ".jsx", ".tsx", ".java", ".cpp", ".c", ".h",
+    ".cs", ".go", ".rs", ".rb", ".php", ".swift", ".kt", ".sh", ".bat", ".ps1",
+    # 配置 / 项目文件
+    ".yaml", ".yml", ".toml", ".ini", ".cfg", ".env",
+    ".json",   # 包含 settings.json、package.json 等
+    # Web 结构
+    ".html", ".htm", ".css",
+    # 项目元数据
+    ".gitignore", ".gitattributes", ".editorconfig",
+    # 文档（README 类通常与代码同级，移走会断链）
+    ".md", ".rst",
+}
+
 def mode_classify(root: Path, report_path: Path, dry_run: bool):
     report = _load_report(report_path)
     report_root = Path(report.get("_root", root))
@@ -372,16 +389,25 @@ def mode_classify(root: Path, report_path: Path, dry_run: bool):
             if not dry_run:
                 dp.mkdir(parents=True, exist_ok=True)
 
-    moved = skipped = 0
+    moved = skipped = blocked = 0
     for a in actions:
         src = report_root / a["path"]
         dst = report_root / a["target"]
+
+        # ── 硬拦截：代码/配置文件无论 LLM 说什么都不动 ──────────────
+        if src.suffix.lower() in PROTECTED_EXTS or src.name.startswith("."):
+            print(RED(f"  [🛡️ 拦截] {a['path']}"))
+            print(DIM(f"       扩展名 {src.suffix!r} 在保护名单中，跳过（LLM 建议已被忽略）"))
+            blocked += 1; continue
+        # ────────────────────────────────────────────────────────────
+
         if not src.exists():
             print(YELLOW(f"  [跳过] 源不存在: {a['path']}"))
             skipped += 1; continue
         if dst.exists():
             print(YELLOW(f"  [跳过] 目标已存在: {a['target']}"))
             skipped += 1; continue
+
         risk = a.get("risk", "low")
         tag  = rfn.get(risk, CYAN)(f"[{risk}]")
         print(f"  {tag} {a['path']}\n       -> {a['target']}")
@@ -396,6 +422,8 @@ def mode_classify(root: Path, report_path: Path, dry_run: bool):
         moved += 1
 
     print(f"\n{'─'*40}")
+    if blocked:
+        print(RED(f"  🛡️ 拦截: {blocked} 项（代码/配置文件，已保护）"))
     print(f"  {'预演' if dry_run else '完成'}: 移动 {moved} 项，跳过 {skipped} 项")
     if dry_run:
         print("  去掉 --dry-run 即可实际执行")
@@ -453,7 +481,261 @@ def mode_clean(root: Path, report_path: Path):
 
 
 # ══════════════════════════════════════════════
-# 5. 主入口
+# 6. Agent 模式（ReAct 循环）
+# ══════════════════════════════════════════════
+
+AGENT_SYSTEM = textwrap.dedent("""
+你是一个仔细、保守的文件夹整理 Agent。你可以使用工具反复研究目录中的文件，
+充分了解后再给出整理建议。你的工作流程是：
+
+1. 先用 list_dir 全面了解目录结构
+2. 对可疑文件用 read_file 阅读内容，判断它是临时产物还是有用文件
+3. 研究充分后，用 propose_move / propose_delete 提交建议
+4. 最后调用 finish 结束，给出总结
+
+【安全规则（强制）】
+- 绝对不要对 .py .js .html .bat .sh .yaml .yaml .json .md 等代码/配置文件提出 move 或 delete
+- 只整理：视频音频(.mp4 .mov .wav .mp3)、图片(.png .jpg)、PDF讲义、UUID临时文件、明显冗余的副本
+- 不确定的文件宁可不动
+
+每次只输出一个 JSON 动作，格式如下：
+{"thought": "当前思考", "action": "工具名", "args": {参数}}
+
+可用工具：
+- list_dir: {"path": "相对路径或."}
+- read_file: {"path": "文件相对路径", "lines": 30}
+- propose_move: {"src": "原路径", "dst": "目标路径", "reason": "理由"}
+- propose_delete: {"path": "路径", "reason": "理由"}
+- finish: {"summary": "整理总结"}
+""").strip()
+
+MAX_AGENT_STEPS = 30   # 最多循环次数，防止无限运转
+MAX_READ_BYTES  = 8000 # read_file 最多读取字节数
+
+
+def _agent_list_dir(root: Path, rel: str) -> str:
+    target = (root / rel).resolve()
+    # 安全：不允许跑到 root 外面
+    try:
+        target.relative_to(root)
+    except ValueError:
+        return "[错误] 路径超出目标目录范围"
+    if not target.exists():
+        return f"[错误] 路径不存在: {rel}"
+    if not target.is_dir():
+        return f"[错误] 不是目录: {rel}"
+    lines = []
+    for entry in sorted(target.iterdir(), key=lambda p: (p.is_file(), p.name)):
+        if entry.name in SKIP_DIRS:
+            continue
+        tag = "[DIR] " if entry.is_dir() else f"[{fmt_size(entry.stat().st_size):>8}]"
+        lines.append(f"  {tag} {entry.name}")
+    return "\n".join(lines) if lines else "(空目录)"
+
+
+def _agent_read_file(root: Path, rel: str, lines: int = 30) -> str:
+    target = (root / rel).resolve()
+    try:
+        target.relative_to(root)
+    except ValueError:
+        return "[错误] 路径超出目标目录范围"
+    if not target.exists():
+        return f"[错误] 文件不存在: {rel}"
+    if target.is_dir():
+        return f"[错误] 这是目录，请用 list_dir: {rel}"
+    try:
+        text = target.read_text(encoding="utf-8", errors="replace")
+        head = "\n".join(text.splitlines()[:lines])
+        if len(text.splitlines()) > lines:
+            head += f"\n... ({len(text.splitlines()) - lines} more lines)"
+        return head[:MAX_READ_BYTES]
+    except Exception as e:
+        return f"[读取失败] {e}"
+
+
+def _agent_execute_tool(root: Path, action: str, args: dict,
+                        proposals: list) -> str:
+    """执行 Agent 工具调用，纯探索工具立即执行，变更类工具加入队列。"""
+    if action == "list_dir":
+        return _agent_list_dir(root, args.get("path", "."))
+
+    elif action == "read_file":
+        return _agent_read_file(root, args.get("path", ""),
+                                int(args.get("lines", 30)))
+
+    elif action == "propose_move":
+        src = args.get("src", "")
+        dst = args.get("dst", "")
+        reason = args.get("reason", "")
+        proposals.append({"action": "move", "src": src, "dst": dst, "reason": reason})
+        return f"[已记录] 将来移动: {src} -> {dst}"
+
+    elif action == "propose_delete":
+        path = args.get("path", "")
+        reason = args.get("reason", "")
+        proposals.append({"action": "delete", "path": path, "reason": reason})
+        return f"[已记录] 将来删除: {path}"
+
+    elif action == "finish":
+        return "__FINISH__"  # 特殊信号
+
+    else:
+        return f"[错误] 未知工具: {action}"
+
+
+def mode_agent(root: Path, api_cfg: dict, dry_run: bool):
+    """ReAct Agent 循环：LLM 反复研究文件夹后提出建议，最终人工审核。"""
+    print(BOLD(f"\n🤖 Agent 模式启动: {root}"))
+    print(DIM(f"   最多 {MAX_AGENT_STEPS} 步，大模型将自主探索后给出建议\n"))
+
+    messages = [
+        {"role": "system", "content": AGENT_SYSTEM},
+        {"role": "user",   "content":
+            f"请开始整理以下目录，先做充分调研再给出建议：\n目标目录根: {root}\n\n"
+            f"首先用 list_dir 看一下根目录内容。"},
+    ]
+
+    proposals: list[dict] = []
+    finished = False
+
+    try:
+        from openai import OpenAI
+    except ImportError:
+        print(RED("  [LLM] 未安装 openai 包：pip install openai"))
+        sys.exit(1)
+    if not api_cfg["api_key"]:
+        print(RED("  [错误] 未找到 API Key"))
+        sys.exit(1)
+    client = OpenAI(api_key=api_cfg["api_key"], base_url=api_cfg["base_url"])
+
+    for step in range(1, MAX_AGENT_STEPS + 1):
+        print(CYAN(f"── Step {step}/{MAX_AGENT_STEPS} "), end="", flush=True)
+
+        # 调用 LLM
+        response = client.chat.completions.create(
+            model=api_cfg["model"],
+            messages=messages,
+            temperature=0.1,
+            max_tokens=1024,
+        )
+        raw = response.choices[0].message.content.strip()
+        messages.append({"role": "assistant", "content": raw})
+
+        # 解析 JSON 动作
+        try:
+            obj = _extract_json(raw)
+            thought = obj.get("thought", "")
+            action  = obj.get("action", "")
+            args    = obj.get("args", {})
+        except Exception:
+            print(RED(f"[解析失败] 原始输出: {raw[:200]}"))
+            tool_result = "[错误] 请输出合法 JSON 格式的动作"
+            messages.append({"role": "user", "content": f"工具结果: {tool_result}"})
+            continue
+
+        # 打印思考过程
+        print(BOLD(action))
+        if thought:
+            print(DIM(f"   💭 {thought[:120]}"))
+        print(DIM(f"   🔧 {action}({json.dumps(args, ensure_ascii=False)})"))
+
+        # 执行工具
+        tool_result = _agent_execute_tool(root, action, args, proposals)
+
+        if tool_result == "__FINISH__":
+            summary = args.get("summary", "Agent 完成探索")
+            print(GREEN(f"\n✅ Agent 完成: {summary}"))
+            finished = True
+            break
+
+        # 打印工具结果摘要
+        result_preview = tool_result[:300].replace("\n", "\n   ")
+        print(DIM(f"   📋 结果:\n   {result_preview}"))
+
+        messages.append({"role": "user", "content": f"工具结果:\n{tool_result}"})
+
+    if not finished:
+        print(YELLOW(f"\n⚠️  已达到最大步数 {MAX_AGENT_STEPS}，强制结束"))
+
+    # ── 审核建议 ────────────────────────────────
+    if not proposals:
+        print(YELLOW("\n  Agent 没有提出任何整理建议。"))
+        return
+
+    print(f"\n{'═'*60}")
+    print(BOLD(f"📋 Agent 建议汇总（共 {len(proposals)} 项）"))
+    print(f"{'═'*60}")
+    for i, p in enumerate(proposals, 1):
+        if p["action"] == "move":
+            print(f"  [{i}] 📦 移动  {p['src']} -> {p['dst']}")
+        else:
+            print(f"  [{i}] 🗑️  删除  {p['path']}")
+        print(DIM(f"       理由: {p['reason']}"))
+    print()
+
+    if dry_run:
+        print(YELLOW("  [预演模式] 以上是 Agent 的建议，去掉 --dry-run 才会逐项确认执行"))
+        return
+
+    print(RED("  ⚠️  以下每项操作均需你手动输入 y 确认，其余跳过\n"))
+    done_count = skip_count = 0
+
+    for p in proposals:
+        if p["action"] == "move":
+            src = root / p["src"]
+            dst = root / p["dst"]
+
+            # 硬拦截保护扩展名
+            if src.suffix.lower() in PROTECTED_EXTS or src.name.startswith("."):
+                print(RED(f"  [🛡️ 拦截] {p['src']} — 受保护文件类型，跳过"))
+                skip_count += 1; continue
+
+            print(f"  📦 移动: {p['src']}")
+            print(f"       -> {p['dst']}")
+            print(DIM(f"       {p['reason']}"))
+            if not src.exists():
+                print(DIM("       (源文件不存在，跳过)")); skip_count += 1; print(); continue
+            ans = input("     确认？[y/N]: ").strip().lower()
+            if ans == "y":
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                shutil.move(str(src), str(dst))
+                print(GREEN("     ✓ 完成"))
+                done_count += 1
+            else:
+                print(DIM("     → 跳过")); skip_count += 1
+
+        elif p["action"] == "delete":
+            path = root / p["path"]
+            if path.suffix.lower() in PROTECTED_EXTS or path.name.startswith("."):
+                print(RED(f"  [🛡️ 拦截] {p['path']} — 受保护文件类型，跳过"))
+                skip_count += 1; continue
+
+            size_str = fmt_size(path.stat().st_size) if path.exists() else "不存在"
+            print(f"  🗑️  删除: {p['path']} ({size_str})")
+            print(DIM(f"       {p['reason']}"))
+            if not path.exists():
+                print(DIM("       (文件不存在，跳过)")); skip_count += 1; print(); continue
+            # 预览
+            if path.suffix.lower() in {".txt", ".log"}:
+                try:
+                    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()[:5]
+                    for ln in lines: print(DIM(f"       | {ln[:80]}"))
+                except Exception: pass
+            ans = input("     确认删除？[y/N]: ").strip().lower()
+            if ans == "y":
+                path.unlink()
+                print(GREEN("     ✓ 已删除"))
+                done_count += 1
+            else:
+                print(DIM("     → 跳过")); skip_count += 1
+        print()
+
+    print(f"{'─'*40}")
+    print(f"  完成: 执行 {done_count} 项，跳过 {skip_count} 项")
+
+
+# ══════════════════════════════════════════════
+# 7. 主入口
 # ══════════════════════════════════════════════
 
 def main():
@@ -461,30 +743,28 @@ def main():
         description="🗂️  智能目录整理助手（LLM 驱动）",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=textwrap.dedent("""
+        模式说明:
+          scan     一次性扫描 + LLM 分析，生成 organize_report.json
+          classify 按报告执行文件移动（需先 scan）
+          clean    审核建议删除的文件（需先 scan）
+          agent    LLM 自主探索循环，充分研究后再建议（推荐）
+
         示例:
-          python organize.py e:/integrity/13course_digest
-          python organize.py e:/integrity/2台词 --mode classify --dry-run
-          python organize.py e:/integrity/8评论 --mode classify
-          python organize.py e:/integrity/7爬虫 --mode clean
+          python organize.py e:/integrity/13course_digest --mode agent
+          python organize.py e:/integrity/2台词 --mode agent --dry-run
+          python organize.py e:/integrity/8评论 --mode scan
         """),
     )
-    parser.add_argument("target", help="要整理的目录路径（相对或绝对）")
+    parser.add_argument("target", help="要整理的目录路径")
     parser.add_argument(
-        "--mode", choices=["scan", "classify", "clean"],
-        default="scan", help="运行模式（默认: scan）",
+        "--mode", choices=["scan", "classify", "clean", "agent"],
+        default="agent", help="运行模式（默认: agent）",
     )
-    parser.add_argument(
-        "--dry-run", action="store_true",
-        help="classify 模式下仅预演，不实际执行",
-    )
-    parser.add_argument(
-        "--api-key", default="",
-        help="LLM API Key（最高优先级）",
-    )
-    parser.add_argument(
-        "--report", default="",
-        help=f"报告文件路径（默认: <目标目录>/{REPORT_FILE}）",
-    )
+    parser.add_argument("--dry-run", action="store_true",
+                        help="仅预演，不实际执行任何文件操作")
+    parser.add_argument("--api-key", default="", help="LLM API Key（最高优先级）")
+    parser.add_argument("--report", default="",
+                        help=f"报告路径（scan/classify/clean 模式用，默认: <dir>/{REPORT_FILE}）")
     args = parser.parse_args()
 
     root = Path(args.target).resolve()
@@ -493,14 +773,16 @@ def main():
         sys.exit(1)
 
     report_path = Path(args.report) if args.report else root / REPORT_FILE
+    api_cfg = _load_api_config(root, args.api_key)
 
     if args.mode == "scan":
-        api_cfg = _load_api_config(root, args.api_key)
         mode_scan(root, api_cfg, report_path)
     elif args.mode == "classify":
         mode_classify(root, report_path, args.dry_run)
     elif args.mode == "clean":
         mode_clean(root, report_path)
+    elif args.mode == "agent":
+        mode_agent(root, api_cfg, args.dry_run)
 
 
 if __name__ == "__main__":
