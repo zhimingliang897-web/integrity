@@ -16,7 +16,7 @@ BASE_DIR = Path(__file__).resolve().parent
 WORD_DIR = BASE_DIR / "word"
 CONFIG_PATH = BASE_DIR / "config.json"
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=str(BASE_DIR / "output" / "templates"))
 
 # ---------------------------------------------------------------------------
 # 后台处理状态  {day_num: {"step": str, "error": str|None}}
@@ -239,8 +239,8 @@ def run_pipeline(day_num: int):
     day_dir = WORD_DIR / day_name
     pdf_path = day_dir / f"{day_name}.pdf"
 
-    # 需要把项目目录加入 sys.path 以便导入脚本中的类
-    sys_path_entry = str(BASE_DIR)
+    # 需要把 tools 目录加入 sys.path 以便导入脚本中的类
+    sys_path_entry = str(BASE_DIR / "tools")
     if sys_path_entry not in sys.path:
         sys.path.insert(0, sys_path_entry)
 
@@ -455,6 +455,5 @@ def api_save_settings():
 if __name__ == "__main__":
     print(f"Word dir: {WORD_DIR}")
     print(f"Open http://localhost:5000 in your browser")
-    import os
     debug = os.getenv("FLASK_DEBUG", "1") == "1"
     app.run(host="0.0.0.0", debug=debug, port=5000)

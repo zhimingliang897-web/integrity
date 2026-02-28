@@ -1,0 +1,8 @@
+
+--- Testing Native API with qwen-image-max ---
+Submitting task...
+HTTP Error: 400 {"request_id":"5ac49623-4766-4a36-9186-bbd490c2fbc0","code":"InvalidParameter","message":"url error, please check url！ For details, see: https://help.aliyun.com/zh/model-studio/error-code#error-url"}
+Submission failed.
+
+--- Testing OpenAI Compatible API with qwen-image-max ---
+OpenAI API Error: Error code: 404

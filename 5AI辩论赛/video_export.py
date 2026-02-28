@@ -1,22 +1,26 @@
 """
-视频导出模块 — 将辩论记录转为带配音+字幕的完整视频
+视频导出模块 v4.0 — 纯文字卡片 + 精确音视频同步
 
-复用 1分镜/video_maker/make_video.py 的 FFmpeg 管线模式：
-  PIL 生成辩论卡片 → FFmpeg 图转视频 → 拼接音频 → 烧录字幕
+改动要点：
+  1. 移除字幕烧录（发言卡片已含完整文字，字幕与卡片重叠问题彻底消除）
+  2. 修复音视频同步：每张卡片独立对应精确音频段（含阶段卡静音）
+  3. 全新卡片视觉设计：渐变背景 / 左侧色条 / 徽章标签 / 裁判内容优化
 """
 
 import os
+import re
+
 from PIL import Image, ImageDraw, ImageFont
+
 from config import OUTPUT_DIR, SPEECH_GAP
-from tts_engine import get_audio_duration, ffmpeg_run, merge_all_audio
+from tts_engine import get_audio_duration, ffmpeg_run
 
 
-# ===== 常量 =====
+# ===== 全局常量 =====
 VIDEO_W, VIDEO_H = 1280, 720
-TITLE_DURATION = 4.0
-PHASE_CARD_DURATION = 2.0
+TITLE_DURATION    = 4.0   # 标题卡时长（秒）
+PHASE_CARD_DURATION = 2.0 # 阶段过渡卡时长（秒）
 
-# 中文字体查找
 _CN_FONT_CANDIDATES = [
     "C:/Windows/Fonts/msyh.ttc",
     "C:/Windows/Fonts/simhei.ttf",
@@ -24,64 +28,133 @@ _CN_FONT_CANDIDATES = [
     "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
 ]
 
+# 阶段内部 key → 显示名（question/answer 合并为同一个阶段卡）
+PHASE_DISPLAY_NAMES = {
+    "opening": "开篇立论",
+    "question": "攻辩质询",
+    "answer":   "攻辩质询",
+    "summary":  "攻辩小结",
+    "free":     "自由辩论",
+    "closing":  "总结陈词",
+    "judge":    "裁判点评",
+}
 
-def _load_font(size):
-    """加载中文字体"""
+
+# ===== 工具函数 =====
+
+def _load_font(size: int) -> ImageFont.FreeTypeFont:
     for fp in _CN_FONT_CANDIDATES:
         if os.path.exists(fp):
             try:
                 return ImageFont.truetype(fp, size)
             except OSError:
                 continue
-    try:
-        return ImageFont.truetype("arial.ttf", size)
-    except OSError:
-        return ImageFont.load_default()
+    return ImageFont.load_default()
 
 
-def _wrap_text(text, font, max_width, draw):
+def _wrap_text(text: str, font, max_width: int, draw: ImageDraw.ImageDraw) -> list[str]:
     """中文文本自动换行"""
-    lines = []
-    current_line = ""
+    lines, current = [], ""
     for char in text:
-        test_line = current_line + char
-        bbox = draw.textbbox((0, 0), test_line, font=font)
-        if bbox[2] - bbox[0] > max_width:
-            if current_line:
-                lines.append(current_line)
-            current_line = char
+        test = current + char
+        w = draw.textbbox((0, 0), test, font=font)[2]
+        if w > max_width:
+            if current:
+                lines.append(current)
+            current = char
         else:
-            current_line = test_line
-    if current_line:
-        lines.append(current_line)
+            current = test
+    if current:
+        lines.append(current)
     return lines
 
 
+def _gradient_v(img: Image.Image, top: tuple, bottom: tuple):
+    """纵向渐变背景（逐行绘制）"""
+    draw = ImageDraw.Draw(img)
+    for y in range(VIDEO_H):
+        t = y / VIDEO_H
+        r = int(top[0] + (bottom[0] - top[0]) * t)
+        g = int(top[1] + (bottom[1] - top[1]) * t)
+        b = int(top[2] + (bottom[2] - top[2]) * t)
+        draw.line([(0, y), (VIDEO_W, y)], fill=(r, g, b))
+
+
+def _make_silence(duration: float, tag: str, temp_files: list) -> str:
+    """生成指定时长的静音 mp3，返回文件路径"""
+    path = os.path.join(OUTPUT_DIR, f"_sil_{tag}.mp3")
+    ffmpeg_run([
+        "ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono",
+        "-t", f"{duration:.3f}", "-c:a", "libmp3lame", "-q:a", "9", path,
+    ], f"静音_{tag}")
+    temp_files.append(path)
+    return path
+
+
+# ===== 卡片生成器 =====
+
 def generate_title_card(topic: str, pro_position: str, con_position: str) -> str:
-    """生成标题卡：辩题 + 正反方立场"""
-    img = Image.new("RGB", (VIDEO_W, VIDEO_H), color=(10, 10, 30))
+    """标题卡：渐变背景 + 大标题 + 正反方对比 + 底部色条"""
+    img = Image.new("RGB", (VIDEO_W, VIDEO_H))
+    _gradient_v(img, (10, 10, 35), (5, 5, 18))
     draw = ImageDraw.Draw(img)
 
-    font_big = _load_font(40)
-    font_small = _load_font(24)
+    f_label  = _load_font(17)
+    f_topic  = _load_font(46)
+    f_side   = _load_font(22)
+    f_pos    = _load_font(19)
+    f_vs     = _load_font(64)
 
-    # 辩题
-    bbox = draw.textbbox((0, 0), topic, font=font_big)
-    tw = bbox[2] - bbox[0]
-    draw.text(((VIDEO_W - tw) // 2, 200), topic, fill=(255, 255, 255), font=font_big)
+    # 顶部品牌标签
+    label = "A I   辩 论 赛"
+    lw = draw.textbbox((0, 0), label, font=f_label)[2]
+    draw.text(((VIDEO_W - lw) // 2, 44), label, fill=(110, 110, 175), font=f_label)
+
+    # 辩题（居中，最多3行）
+    topic_lines = _wrap_text(topic, f_topic, VIDEO_W - 220, draw)
+    ty = 100
+    for line in topic_lines[:3]:
+        lw = draw.textbbox((0, 0), line, font=f_topic)[2]
+        draw.text(((VIDEO_W - lw) // 2, ty), line, fill=(238, 238, 255), font=f_topic)
+        ty += 58
 
     # 分割线
-    draw.line([(VIDEO_W // 2 - 200, 280), (VIDEO_W // 2 + 200, 280)], fill=(100, 100, 200), width=2)
+    div_y = ty + 14
+    draw.line([(140, div_y), (VIDEO_W - 140, div_y)], fill=(50, 50, 100), width=1)
 
-    # 正方立场
-    pro_text = f"正方：{pro_position}"
-    bbox = draw.textbbox((0, 0), pro_text, font=font_small)
-    draw.text(((VIDEO_W - (bbox[2] - bbox[0])) // 2, 320), pro_text, fill=(79, 172, 254), font=font_small)
+    # VS 布局
+    ys = div_y + 26
+    col_w = VIDEO_W // 2 - 80
+    pro_x = 72
+    con_x = VIDEO_W // 2 + 60
 
-    # 反方立场
-    con_text = f"反方：{con_position}"
-    bbox = draw.textbbox((0, 0), con_text, font=font_small)
-    draw.text(((VIDEO_W - (bbox[2] - bbox[0])) // 2, 370), con_text, fill=(254, 100, 100), font=font_small)
+    # VS 字样（居中，置于正反中间）
+    vsw = draw.textbbox((0, 0), "VS", font=f_vs)[2]
+    draw.text(((VIDEO_W - vsw) // 2, ys - 6), "VS", fill=(65, 65, 125), font=f_vs)
+
+    # 正方
+    draw.text((pro_x, ys), "正 方", fill=(79, 172, 254), font=f_side)
+    pro_lines = _wrap_text(pro_position, f_pos, col_w, draw)
+    yp = ys + 34
+    for ln in pro_lines[:4]:
+        draw.text((pro_x, yp), ln, fill=(155, 195, 240), font=f_pos)
+        yp += 27
+
+    # 反方
+    draw.text((con_x, ys), "反 方", fill=(254, 100, 100), font=f_side)
+    con_lines = _wrap_text(con_position, f_pos, col_w, draw)
+    yc = ys + 34
+    for ln in con_lines[:4]:
+        draw.text((con_x, yc), ln, fill=(240, 155, 155), font=f_pos)
+        yc += 27
+
+    # 底部蓝→红渐变色条
+    for x in range(VIDEO_W):
+        t = x / VIDEO_W
+        r = int(79  + (254 - 79)  * t)
+        g = int(172 + (100 - 172) * t)
+        b = int(254 + (100 - 254) * t)
+        draw.line([(x, VIDEO_H - 6), (x, VIDEO_H)], fill=(r, g, b))
 
     path = os.path.join(OUTPUT_DIR, "_title_card.png")
     img.save(path)
@@ -89,48 +162,110 @@ def generate_title_card(topic: str, pro_position: str, con_position: str) -> str
 
 
 def generate_phase_card(phase_name: str) -> str:
-    """生成阶段过渡卡"""
-    img = Image.new("RGB", (VIDEO_W, VIDEO_H), color=(15, 15, 40))
+    """阶段过渡卡：深色渐变 + 装饰线 + 大号文字"""
+    img = Image.new("RGB", (VIDEO_W, VIDEO_H))
+    _gradient_v(img, (12, 10, 32), (6, 5, 18))
     draw = ImageDraw.Draw(img)
-    font = _load_font(48)
 
-    bbox = draw.textbbox((0, 0), phase_name, font=font)
-    tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
-    draw.text(((VIDEO_W - tw) // 2, (VIDEO_H - th) // 2), phase_name, fill=(192, 144, 255), font=font)
+    f_phase = _load_font(62)
+    f_sub   = _load_font(17)
+
+    cx, cy = VIDEO_W // 2, VIDEO_H // 2
+
+    # 上装饰线
+    draw.line([(cx - 260, cy - 62), (cx + 260, cy - 62)], fill=(70, 52, 130), width=1)
+
+    # 阶段名
+    pw = draw.textbbox((0, 0), phase_name, font=f_phase)[2]
+    draw.text(((VIDEO_W - pw) // 2, cy - 40), phase_name, fill=(192, 144, 255), font=f_phase)
+
+    # 下装饰线
+    draw.line([(cx - 260, cy + 48), (cx + 260, cy + 48)], fill=(70, 52, 130), width=1)
+
+    # 三个装饰点
+    for dx in (-20, 0, 20):
+        draw.ellipse([(cx + dx - 3, cy + 62), (cx + dx + 3, cy + 68)], fill=(80, 58, 140))
+
+    # 底部小字
+    sub = "— AI 辩论赛 —"
+    sw = draw.textbbox((0, 0), sub, font=f_sub)[2]
+    draw.text(((VIDEO_W - sw) // 2, VIDEO_H - 46), sub, fill=(55, 55, 95), font=f_sub)
 
     path = os.path.join(OUTPUT_DIR, f"_phase_{phase_name}.png")
     img.save(path)
     return path
 
 
-def generate_speaker_card(name: str, side: str, role: str, text: str, index: int) -> str:
-    """生成辩手发言卡片"""
-    bg_color = (13, 27, 58) if side == "pro" else (42, 13, 13)
-    accent = (79, 172, 254) if side == "pro" else (254, 100, 100)
-    side_label = "正方" if side == "pro" else "反方"
+def generate_speaker_card(name: str, side: str, role: str,
+                          text: str, index: int, phase: str = "") -> str:
+    """辩手发言卡：渐变背景 + 左侧色条 + 徽章标签 + 阶段标注"""
+    if side == "pro":
+        bg_top, bg_bot = (8, 20, 54), (4, 10, 30)
+        accent          = (79, 172, 254)
+        tag_bg          = (18, 46, 96)
+        side_label      = "正方"
+    else:
+        bg_top, bg_bot = (44, 8, 8), (22, 4, 4)
+        accent          = (254, 100, 100)
+        tag_bg          = (88, 20, 20)
+        side_label      = "反方"
 
-    img = Image.new("RGB", (VIDEO_W, VIDEO_H), color=bg_color)
+    img = Image.new("RGB", (VIDEO_W, VIDEO_H))
+    _gradient_v(img, bg_top, bg_bot)
     draw = ImageDraw.Draw(img)
 
-    font_name = _load_font(32)
-    font_tag = _load_font(20)
-    font_body = _load_font(26)
+    BAR  = 7   # 左侧色条宽度
+    left = BAR + 50
+    rmar = 60  # 右边距
 
-    # 顶部：辩手名 + 标签
-    draw.text((60, 40), name, fill=accent, font=font_name)
-    draw.text((60, 80), f"{side_label}{role}", fill=(150, 150, 150), font=font_tag)
+    f_name = _load_font(36)
+    f_tag  = _load_font(17)
+    f_body = _load_font(28)
+    f_hint = _load_font(15)
+
+    # 左侧色条
+    draw.rectangle([0, 0, BAR, VIDEO_H], fill=accent)
+
+    # --- 标题行 ---
+    header_y = 36
+    draw.text((left, header_y), name, fill=accent, font=f_name)
+
+    # 徽章（辩手角色）
+    badge = f"{side_label} · {role}"
+    bbox  = draw.textbbox((0, 0), badge, font=f_tag)
+    bw    = bbox[2] - bbox[0] + 20
+    bh    = bbox[3] - bbox[1] + 12
+    nw    = draw.textbbox((0, 0), name, font=f_name)[2]
+    bx    = left + nw + 16
+    by    = header_y + 8
+    draw.rounded_rectangle([bx, by, bx + bw, by + bh], radius=5, fill=tag_bg)
+    draw.rounded_rectangle([bx, by, bx + bw, by + bh], radius=5, outline=accent, width=1)
+    draw.text((bx + 10, by + 6), badge, fill=accent, font=f_tag)
 
     # 分割线
-    draw.line([(60, 115), (VIDEO_W - 60, 115)], fill=(60, 60, 100), width=1)
+    div_y = header_y + 58
+    draw.line([(left, div_y), (VIDEO_W - rmar, div_y)], fill=(44, 44, 80), width=1)
 
-    # 正文（自动换行）
-    lines = _wrap_text(text, font_body, VIDEO_W - 120, draw)
-    y = 140
-    for line in lines[:18]:  # 最多显示18行
-        draw.text((60, y), line, fill=(224, 224, 224), font=font_body)
-        y += 36
-    if len(lines) > 18:
-        draw.text((60, y), "...", fill=(150, 150, 150), font=font_body)
+    # --- 正文 ---
+    body_y   = div_y + 20
+    line_h   = 44
+    avail_h  = VIDEO_H - body_y - 50
+    max_lines = avail_h // line_h
+
+    lines = _wrap_text(text, f_body, VIDEO_W - left - rmar, draw)
+    for i, ln in enumerate(lines[:max_lines]):
+        draw.text((left, body_y + i * line_h), ln, fill=(225, 225, 230), font=f_body)
+    if len(lines) > max_lines:
+        draw.text((left, body_y + max_lines * line_h), "…（发言已截断）",
+                  fill=(100, 100, 140), font=f_hint)
+
+    # --- 底部阶段标注 ---
+    if phase:
+        phase_label = PHASE_DISPLAY_NAMES.get(phase, phase)
+        pl_text = f"▸ {phase_label}"
+        plw = draw.textbbox((0, 0), pl_text, font=f_hint)[2]
+        draw.text((VIDEO_W - rmar - plw, VIDEO_H - 30),
+                  pl_text, fill=(70, 70, 110), font=f_hint)
 
     path = os.path.join(OUTPUT_DIR, f"_card_{index:03d}.png")
     img.save(path)
@@ -138,44 +273,63 @@ def generate_speaker_card(name: str, side: str, role: str, text: str, index: int
 
 
 def generate_judge_card(text: str) -> str:
-    """生成裁判评判卡片"""
-    img = Image.new("RGB", (VIDEO_W, VIDEO_H), color=(15, 30, 15))
+    """裁判评判卡：绿色主题 + 标题 + Markdown 简单渲染"""
+    img = Image.new("RGB", (VIDEO_W, VIDEO_H))
+    _gradient_v(img, (8, 24, 8), (4, 12, 4))
     draw = ImageDraw.Draw(img)
 
-    font_title = _load_font(36)
-    font_body = _load_font(22)
+    BAR  = 7
+    left = BAR + 50
+    rmar = 60
 
-    draw.text((60, 40), "裁判评判", fill=(106, 254, 106), font=font_title)
-    draw.line([(60, 90), (VIDEO_W - 60, 90)], fill=(40, 100, 40), width=1)
+    f_title = _load_font(40)
+    f_body  = _load_font(22)
+    f_sub   = _load_font(18)
+    f_hint  = _load_font(15)
 
-    lines = _wrap_text(text, font_body, VIDEO_W - 120, draw)
-    y = 110
-    for line in lines[:22]:
-        draw.text((60, y), line, fill=(200, 200, 200), font=font_body)
-        y += 28
-    if len(lines) > 22:
-        draw.text((60, y), "...", fill=(150, 150, 150), font=font_body)
+    # 左侧绿色条
+    draw.rectangle([0, 0, BAR, VIDEO_H], fill=(106, 254, 106))
+
+    # 标题
+    draw.text((left, 34), "裁判评判", fill=(106, 254, 106), font=f_title)
+    draw.line([(left, 86), (VIDEO_W - rmar, 86)], fill=(28, 78, 28), width=1)
+
+    # 简单清理 Markdown
+    clean = re.sub(r'\*\*(.+?)\*\*', r'\1', text)      # 去掉加粗符号
+    clean = re.sub(r'^## (.+)', r'▍ \1', clean, flags=re.MULTILINE)  # ## 转段落标题
+    clean = re.sub(r'^\| .+', '', clean, flags=re.MULTILINE)          # 跳过表格行
+    clean = re.sub(r'\n{3,}', '\n\n', clean).strip()
+
+    lines = _wrap_text(clean, f_body, VIDEO_W - left - rmar, draw)
+    y = 104
+    line_h = 31
+    max_lines = (VIDEO_H - y - 28) // line_h
+
+    for ln in lines[:max_lines]:
+        if ln.startswith("▍"):
+            # 小节标题：用浅绿色高亮
+            draw.text((left, y), ln[2:], fill=(130, 220, 130), font=f_sub)
+        else:
+            draw.text((left, y), ln, fill=(198, 218, 198), font=f_body)
+        y += line_h
+
+    if len(lines) > max_lines:
+        draw.text((left, y), "…（点评已截断）", fill=(75, 135, 75), font=f_hint)
 
     path = os.path.join(OUTPUT_DIR, "_judge_card.png")
     img.save(path)
     return path
 
 
-def format_srt_time(seconds: float) -> str:
-    """秒数 → SRT 时间格式"""
-    h = int(seconds // 3600)
-    m = int((seconds % 3600) // 60)
-    s = int(seconds % 60)
-    ms = int((seconds - int(seconds)) * 1000)
-    return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
+# ===== 主导出函数 =====
 
-
-def export_debate_video(history: list[dict], topic: str, pro_position: str = "", con_position: str = "") -> str:
+def export_debate_video(history: list[dict], topic: str,
+                        pro_position: str = "", con_position: str = "") -> str:
     """
-    将辩论记录导出为完整视频。
+    将辩论记录导出为完整视频（纯文字卡片，无字幕）。
 
     Args:
-        history: debate_engine.history 列表
+        history: DebateEngine.history 列表
         topic: 辩题
         pro_position: 正方立场
         con_position: 反方立场
@@ -188,179 +342,135 @@ def export_debate_video(history: list[dict], topic: str, pro_position: str = "",
     print("=" * 50)
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    temp_files = []
-
-    pro_pos = pro_position
-    con_pos = con_position
-
-    # 1. 收集已有的音频文件信息
+    temp_files: list[str] = []
     audio_dir = os.path.join(OUTPUT_DIR, "audio")
-    audio_infos = []
-    card_entries = []  # (image_path, duration, subtitle_text, speaker_name)
 
-    # 标题卡
-    title_img = generate_title_card(topic, pro_pos, con_pos)
+    # 预生成可复用的静音文件
+    sil_title  = _make_silence(TITLE_DURATION,      "title",  temp_files)
+    sil_phase  = _make_silence(PHASE_CARD_DURATION,  "phase",  temp_files)
+    sil_gap    = _make_silence(SPEECH_GAP,           "gap",    temp_files)
+
+    # timeline_imgs  : [(img_path, duration), ...]   →  用于构建图片序列视频
+    # audio_segments : [audio_file_path, ...]         →  逐段拼接成完整音轨
+    # 两者逐段对应，保证音视频严格同步
+    timeline_imgs:  list[tuple[str, float]] = []
+    audio_segments: list[str]               = []
+
+    # ---------- 标题卡 ----------
+    title_img = generate_title_card(topic, pro_position, con_position)
     temp_files.append(title_img)
-    card_entries.append((title_img, TITLE_DURATION, None, None))
+    timeline_imgs.append((title_img, TITLE_DURATION))
+    audio_segments.append(sil_title)
 
-    current_phase = None
+    # ---------- 辩论过程 ----------
+    current_phase_display = None
     card_index = 0
 
-    for i, entry in enumerate(history):
+    for entry in history:
         if entry["id"] == "judge":
-            continue  # 裁判单独处理
+            continue
 
-        # 阶段变化时插入阶段卡
-        if entry["phase"] != current_phase:
-            current_phase = entry["phase"]
-            phase_names = {
-                "opening": "开篇立论",
-                "question": "攻辩质询",
-                "answer": "攻辩质询",
-                "summary": "攻辩小结",
-                "free": "自由辩论",
-                "closing": "总结陈词",
-            }
-            phase_display = phase_names.get(current_phase, current_phase)
+        phase_display = PHASE_DISPLAY_NAMES.get(entry["phase"], entry["phase"])
+
+        # 阶段卡（显示名变化时插入）
+        if phase_display != current_phase_display:
+            current_phase_display = phase_display
             phase_img = generate_phase_card(phase_display)
             temp_files.append(phase_img)
-            card_entries.append((phase_img, PHASE_CARD_DURATION, None, None))
+            timeline_imgs.append((phase_img, PHASE_CARD_DURATION))
+            audio_segments.append(sil_phase)
 
         # 辩手发言卡
         speaker_img = generate_speaker_card(
-            entry["name"], entry["side"], entry["role"], entry["content"], card_index,
+            entry["name"], entry["side"], entry["role"],
+            entry["content"], card_index, entry.get("phase", ""),
         )
         temp_files.append(speaker_img)
 
-        # 查找对应的音频文件
         audio_file = os.path.join(audio_dir, f"turn_{card_index:03d}_{entry['id']}.mp3")
         if os.path.exists(audio_file):
-            duration = get_audio_duration(audio_file)
-            audio_infos.append({"audio_file": audio_file, "duration": duration})
-            card_entries.append((speaker_img, duration + SPEECH_GAP, entry["content"], entry["name"]))
+            audio_dur = get_audio_duration(audio_file)
+            card_dur  = audio_dur + SPEECH_GAP
+            timeline_imgs.append((speaker_img, card_dur))
+            audio_segments.append(audio_file)
+            audio_segments.append(sil_gap)   # 发言后的静音间隔
         else:
-            card_entries.append((speaker_img, 5.0, entry["content"], entry["name"]))
+            # 无对应音频（超时跳过等情况）：用静音填充
+            fallback_dur = 3.0
+            sil_fb = _make_silence(fallback_dur, f"fb_{card_index}", temp_files)
+            timeline_imgs.append((speaker_img, fallback_dur))
+            audio_segments.append(sil_fb)
 
         card_index += 1
 
-    # 裁判卡
+    # ---------- 裁判点评卡 ----------
     judge_entries = [e for e in history if e["id"] == "judge"]
     if judge_entries:
         judge_img = generate_judge_card(judge_entries[0]["content"])
         temp_files.append(judge_img)
 
+        # 阶段卡
+        if current_phase_display != "裁判点评":
+            phase_img = generate_phase_card("裁判点评")
+            temp_files.append(phase_img)
+            timeline_imgs.append((phase_img, PHASE_CARD_DURATION))
+            audio_segments.append(sil_phase)
+
         judge_audio = os.path.join(audio_dir, f"turn_{card_index:03d}_judge.mp3")
         if os.path.exists(judge_audio):
-            duration = get_audio_duration(judge_audio)
-            audio_infos.append({"audio_file": judge_audio, "duration": duration})
-            card_entries.append((judge_img, duration + SPEECH_GAP, None, None))
+            judge_dur = get_audio_duration(judge_audio)
+            card_dur  = judge_dur + SPEECH_GAP
+            timeline_imgs.append((judge_img, card_dur))
+            audio_segments.append(judge_audio)
+            audio_segments.append(sil_gap)
         else:
-            card_entries.append((judge_img, 10.0, None, None))
+            sil_judge = _make_silence(10.0, "judge_fb", temp_files)
+            timeline_imgs.append((judge_img, 10.0))
+            audio_segments.append(sil_judge)
 
-    # 2. 生成 SRT 字幕
-    print("  [1/4] 生成字幕...")
-    srt_content = []
-    current_time = TITLE_DURATION + PHASE_CARD_DURATION  # 跳过标题卡和第一个阶段卡
-    sub_index = 1
-    for img_path, duration, text, speaker in card_entries:
-        if text and speaker:
-            side_label = ""
-            start = current_time
-            end = current_time + duration - SPEECH_GAP
-            srt_content.append(f"{sub_index}")
-            srt_content.append(f"{format_srt_time(start)} --> {format_srt_time(end)}")
-            srt_content.append(f"【{speaker}】{text[:80]}")
-            srt_content.append("")
-            sub_index += 1
-        current_time += duration
-
-    srt_path = os.path.join(OUTPUT_DIR, "debate.srt")
-    with open(srt_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(srt_content))
-    temp_files.append(srt_path)
-
-    # 3. 图片序列 → 无声视频
-    print("  [2/4] 图片 → 视频...")
+    # ===== [1/3] 图片序列 → 无声视频 =====
+    print(f"  [1/3] 渲染卡片序列（共 {len(timeline_imgs)} 张）...")
     img_list = os.path.join(OUTPUT_DIR, "_img_list.txt")
     temp_files.append(img_list)
     with open(img_list, "w", encoding="utf-8") as f:
-        for img_path, duration, _, _ in card_entries:
+        for img_path, duration in timeline_imgs:
             f.write(f"file '{img_path.replace(chr(92), '/')}'\n")
-            f.write(f"duration {duration}\n")
-        # 最后一帧重复
-        f.write(f"file '{card_entries[-1][0].replace(chr(92), '/')}'\n")
+            f.write(f"duration {duration:.3f}\n")
+        # 最后一帧重复一次（ffmpeg concat 规范要求）
+        f.write(f"file '{timeline_imgs[-1][0].replace(chr(92), '/')}'\n")
 
     temp_video = os.path.join(OUTPUT_DIR, "_temp_video.mp4")
     temp_files.append(temp_video)
     ffmpeg_run([
         "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", img_list,
-        "-vf", f"scale={VIDEO_W}:{VIDEO_H}:force_original_aspect_ratio=decrease,"
-               f"pad={VIDEO_W}:{VIDEO_H}:(ow-iw)/2:(oh-ih)/2:color=black",
+        "-vf", (f"scale={VIDEO_W}:{VIDEO_H}:force_original_aspect_ratio=decrease,"
+                f"pad={VIDEO_W}:{VIDEO_H}:(ow-iw)/2:(oh-ih)/2:color=black"),
         "-c:v", "libx264", "-pix_fmt", "yuv420p", "-r", "30", temp_video,
     ], "图片转视频")
 
-    # 4. 合并音频
-    print("  [3/4] 合并音频...")
-    if audio_infos:
-        merged_audio = os.path.join(OUTPUT_DIR, "_merged_audio.mp3")
-        temp_files.append(merged_audio)
+    # ===== [2/3] 拼接音频（与视频严格同步）=====
+    print(f"  [2/3] 拼接音频（共 {len(audio_segments)} 段）...")
+    audio_concat = os.path.join(OUTPUT_DIR, "_audio_concat.txt")
+    temp_files.append(audio_concat)
+    with open(audio_concat, "w", encoding="utf-8") as f:
+        for ap in audio_segments:
+            f.write(f"file '{ap.replace(chr(92), '/')}'\n")
 
-        # 标题卡+阶段卡期间的静音
-        title_silence = os.path.join(OUTPUT_DIR, "_title_silence.mp3")
-        temp_files.append(title_silence)
-        silence_dur = TITLE_DURATION + PHASE_CARD_DURATION
-        ffmpeg_run([
-            "ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono",
-            "-t", str(silence_dur), "-c:a", "libmp3lame", title_silence,
-        ], "标题静音")
-
-        # 阶段间静音
-        phase_silence = os.path.join(OUTPUT_DIR, "_phase_silence.mp3")
-        temp_files.append(phase_silence)
-        ffmpeg_run([
-            "ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono",
-            "-t", str(PHASE_CARD_DURATION), "-c:a", "libmp3lame", phase_silence,
-        ], "阶段静音")
-
-        # 拼接所有音频
-        voiceover = os.path.join(OUTPUT_DIR, "_voiceover.mp3")
-        temp_files.append(voiceover)
-        merge_all_audio(audio_infos, voiceover)
-
-        # 前面加静音
-        full_audio_list = os.path.join(OUTPUT_DIR, "_full_audio.txt")
-        temp_files.append(full_audio_list)
-        with open(full_audio_list, "w", encoding="utf-8") as f:
-            f.write(f"file '{title_silence.replace(chr(92), '/')}'\n")
-            f.write(f"file '{voiceover.replace(chr(92), '/')}'\n")
-
-        ffmpeg_run([
-            "ffmpeg", "-y", "-f", "concat", "-safe", "0",
-            "-i", full_audio_list, "-c:a", "libmp3lame", merged_audio,
-        ], "拼接完整音频")
-
-        # 合并音视频
-        temp_av = os.path.join(OUTPUT_DIR, "_temp_av.mp4")
-        temp_files.append(temp_av)
-        ffmpeg_run([
-            "ffmpeg", "-y", "-i", temp_video, "-i", merged_audio,
-            "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
-            "-map", "0:v:0", "-map", "1:a:0", "-shortest", temp_av,
-        ], "合并音视频")
-    else:
-        temp_av = temp_video
-
-    # 5. 烧录字幕
-    print("  [4/4] 烧录字幕...")
-    output_path = os.path.join(OUTPUT_DIR, "debate_video.mp4")
-    srt_escaped = srt_path.replace("\\", "/").replace(":", "\\:")
+    merged_audio = os.path.join(OUTPUT_DIR, "_merged_audio.mp3")
+    temp_files.append(merged_audio)
     ffmpeg_run([
-        "ffmpeg", "-y", "-i", temp_av,
-        "-vf", f"subtitles='{srt_escaped}':force_style='FontSize=18,FontName=Microsoft YaHei,"
-               f"PrimaryColour=&Hffffff,OutlineColour=&H000000,BorderStyle=1,"
-               f"Outline=1,Shadow=0,MarginV=10,Alignment=2'",
-        "-c:v", "libx264", "-c:a", "copy", output_path,
-    ], "烧录字幕")
+        "ffmpeg", "-y", "-f", "concat", "-safe", "0",
+        "-i", audio_concat, "-c:a", "libmp3lame", "-q:a", "4", merged_audio,
+    ], "拼接音频")
+
+    # ===== [3/3] 合成最终视频 =====
+    print("  [3/3] 合成最终视频...")
+    output_path = os.path.join(OUTPUT_DIR, "debate_video.mp4")
+    ffmpeg_run([
+        "ffmpeg", "-y", "-i", temp_video, "-i", merged_audio,
+        "-c:v", "copy", "-c:a", "aac", "-b:a", "192k",
+        "-map", "0:v:0", "-map", "1:a:0", "-shortest", output_path,
+    ], "合成视频")
 
     # 清理临时文件
     for f in temp_files:
@@ -370,5 +480,5 @@ def export_debate_video(history: list[dict], topic: str, pro_position: str = "",
             except OSError:
                 pass
 
-    print(f"\n  视频已导出: {output_path}")
+    print(f"\n  ✓ 视频已导出: {output_path}")
     return output_path

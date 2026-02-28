@@ -1,1 +1,5 @@
 config.json
+__pycache__/
+*.pyc
+.venv/
+docker/.env

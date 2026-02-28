@@ -37,9 +37,15 @@ SOURCES = [
     {"name": "OpenAI Blog", "url": "https://rsshub.app/openai/blog", "type": "general", "count": 5},
     {"name": "Google AI", "url": "https://rsshub.app/google/research", "type": "general", "count": 5},
     {"name": "MIT Tech Review", "url": "https://www.technologyreview.com/feed/", "type": "general", "count": 5},
+    # ===== 大厂官方博客 =====
+    {"name": "Anthropic Blog", "url": "https://rsshub.app/anthropic/news", "type": "general", "count": 5},
+    {"name": "Microsoft AI", "url": "https://blogs.microsoft.com/ai/feed/", "type": "general", "count": 5},
+    {"name": "DeepMind Blog", "url": "https://deepmind.google/blog/rss.xml", "type": "general", "count": 5},
+    {"name": "NVIDIA AI Blog", "url": "https://blogs.nvidia.com/blog/category/deep-learning/feed/", "type": "general", "count": 4},
     # ===== 国内权威 =====
     {"name": "机器之心", "url": "https://www.jiqizhixin.com/rss", "type": "cn_media", "count": 6},
     {"name": "量子位", "url": "https://rsshub.app/qbitai/category/资讯", "type": "cn_media", "count": 6},
+    {"name": "极客公园", "url": "https://www.geekpark.net/rss", "type": "cn_media", "count": 5},
 ]
 
 
@@ -81,7 +87,7 @@ def analyze_news(title: str, summary: str, source_type: str) -> dict | None:
 - C级 (1-4): 纯水文、无实质内容的公关稿、重复旧闻。
 
 请只输出一个合法 JSON，不要包含 Markdown 代码块标记：
-{{"rating":"S/A/B/C","score":整数1到10,"comment":"一句话点评(中文,20字内)","tags":["标签1","标签2"]}}"""
+{{"rating":"S/A/B/C","score":整数1到10,"comment":"点评(中文,40字内，说清楚亮点或为什么值得关注)","tags":["标签1","标签2"]}}"""
 
     text = call_qwen(prompt)
     if not text:

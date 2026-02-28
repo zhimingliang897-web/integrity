@@ -2,16 +2,18 @@
 辩论流程引擎 — 编排4个阶段、调度各辩手发言、管理上下文、裁判评分
 
 辩论流程:
-  阶段1: 开篇陈词 — 正一 → 反一 → 正二 → 反二
-  阶段2: 攻辩质询 — 正方提问→反方答 → 反方提问→正方答（各2轮）
-  阶段3: 自由辩论 — 正反交替发言（N轮）
-  阶段4: 总结陈词 — 反方总结 → 正方总结
+  阶段1: 开篇立论 — 正一 → 反一
+  阶段2: 攻辩质询 — 正二质询反一 → 反二质询正一 → 正一质询反二 → 反一质询正二
+  阶段3: 攻辩小结 — 正一 → 反一
+  阶段4: 自由辩论 — 正反交替发言（N轮）
+  阶段5: 总结陈词 — 反二 → 正二
   裁判点评 + 评分 + 宣布胜负
 """
 
 import time
 import threading
-from config import LLM_PROVIDERS, DEBATERS, JUDGE, MAX_HISTORY, MAX_WORDS, FREE_DEBATE_ROUNDS, DEBATE_TIME_LIMIT
+import config as _cfg
+from config import JUDGE, MAX_HISTORY
 from llm_client import LLMClient
 
 
@@ -19,9 +21,10 @@ SIDE_LABELS = {"pro": "正方", "con": "反方"}
 
 
 class DebateEngine:
-    """辩论引擎：管理完整辩论流程"""
+    """辩论引擎：管理完整辩论流程，支持运行时配置覆盖"""
 
-    def __init__(self, topic: str, pro_position: str, con_position: str):
+    def __init__(self, topic: str, pro_position: str, con_position: str,
+                 debaters=None, providers=None, params=None):
         self.topic = topic
         self.pro_position = pro_position
         self.con_position = con_position
@@ -34,11 +37,20 @@ class DebateEngine:
         self.step_event = threading.Event()
         self.step_event.set()
 
+        # 运行时配置（可由前端覆盖）
+        self._debaters = debaters if debaters is not None else _cfg.DEBATERS
+        self._providers = providers if providers is not None else _cfg.LLM_PROVIDERS
+
+        params = params or {}
+        self._max_words = int(params.get("max_words", _cfg.MAX_WORDS))
+        self._free_debate_rounds = int(params.get("free_debate_rounds", _cfg.FREE_DEBATE_ROUNDS))
+        self._debate_time_limit = float(params.get("debate_time_limit", _cfg.DEBATE_TIME_LIMIT))
+
     def _is_timeout(self) -> bool:
-        """检查是否超过辩论时间上限"""
-        if self._start_time is None or DEBATE_TIME_LIMIT <= 0:
+        """检查是否超过辩论时间上限（0 表示不限制）"""
+        if self._start_time is None or self._debate_time_limit <= 0:
             return False
-        return (time.time() - self._start_time) >= DEBATE_TIME_LIMIT
+        return (time.time() - self._start_time) >= self._debate_time_limit
 
     def stop(self):
         """强制停止辩论"""
@@ -54,17 +66,27 @@ class DebateEngine:
 
     def init_clients(self):
         """根据配置初始化每个辩手和裁判的 LLM 客户端"""
-        for d in DEBATERS:
-            provider = LLM_PROVIDERS[d["provider"]]
+        for d in self._debaters:
+            provider_key = d["provider"]
+            provider = self._providers.get(provider_key)
+            if not provider:
+                raise ValueError(f"辩手 {d['name']} 引用了不存在的服务商: {provider_key}")
+
+            # 支持辩手级别的模型覆盖
+            model = d.get("model_override") or provider["model"]
             self.clients[d["id"]] = LLMClient(
                 base_url=provider["base_url"],
                 api_key=provider["api_key"],
-                model=provider["model"],
+                model=model,
             )
             self.debater_map[d["id"]] = d
 
-        # 裁判客户端
-        judge_provider = LLM_PROVIDERS[JUDGE["provider"]]
+        # 裁判客户端（使用 JUDGE 配置中指定的 provider）
+        judge_provider_key = JUDGE["provider"]
+        judge_provider = self._providers.get(judge_provider_key)
+        if not judge_provider:
+            # 降级：用第一个可用 provider
+            judge_provider = next(iter(self._providers.values()))
         self.clients["judge"] = LLMClient(
             base_url=judge_provider["base_url"],
             api_key=judge_provider["api_key"],
@@ -119,7 +141,7 @@ class DebateEngine:
 {phase_rules.get(phase, '')}
 
 【辩论赛纪律】
-- 每次发言严格控制在{MAX_WORDS}字以内
+- 每次发言严格控制在{self._max_words}字以内
 - 称呼对方为"对方辩友"，称呼队友为"我方x辩"
 - 必须针对对方已有的发言内容进行回应和反驳，严禁自说自话
 - 论证要有层次：提出观点→给出论据（事实/数据/学理）→得出结论
@@ -135,7 +157,7 @@ class DebateEngine:
         # 注入历史发言（最近 MAX_HISTORY 条）
         recent = self.history[-MAX_HISTORY:]
         for entry in recent:
-            side_label = SIDE_LABELS[entry["side"]]
+            side_label = SIDE_LABELS.get(entry["side"], entry["side"])
             if entry["id"] == debater["id"]:
                 messages.append({"role": "assistant", "content": entry["content"]})
             else:
@@ -162,7 +184,7 @@ class DebateEngine:
         # [Sync] 立即清除信号，防止跑下一轮，直到前端再次 Set
         self.step_event.clear()
 
-        # [Check] 如果已被停止或超时，直接返回
+        # [Check] 如果已被停止或超时，直接返回（不 yield 任何内容）
         if self.finished or self._is_timeout():
             return
 
@@ -175,7 +197,7 @@ class DebateEngine:
                 full_text += token
                 yield token
                 # 超字数截断
-                if len(full_text) > MAX_WORDS * 2:
+                if len(full_text) > self._max_words * 2:
                     break
         except Exception as e:
             if not full_text:
@@ -201,7 +223,7 @@ class DebateEngine:
 
         transcript = ""
         for entry in self.history:
-            side_label = SIDE_LABELS[entry["side"]]
+            side_label = SIDE_LABELS.get(entry["side"], entry["side"])
             transcript += f"\n【{entry['name']}（{side_label}{entry['role']}）- {entry['phase']}】\n{entry['content']}\n"
 
         prompt = f"""你是一位资深辩论赛裁判，请根据以下辩论记录进行评判。
@@ -239,6 +261,10 @@ class DebateEngine:
 
     def _emit_turn(self, debater, phase):
         """执行一个辩手的发言并 yield 所有 SSE 事件"""
+        # 提前检查：已停止或超时则跳过整个发言（无气泡）
+        if self.finished:
+            return
+
         yield {"event": "speaker", "data": {
             "id": debater["id"], "name": debater["name"],
             "side": debater["side"], "role": debater["role"],
@@ -247,8 +273,16 @@ class DebateEngine:
         for token in self._run_turn(debater["id"], phase):
             full_text += token
             yield {"event": "token", "data": {"speaker_id": debater["id"], "token": token}}
+
+        # 修复：超时/停止时 full_text 为空，用占位文本避免 TTS 报错和气泡卡死
+        if not full_text.strip():
+            full_text = "（此环节已超时跳过）"
+
         yield {"event": "turn_end", "data": {
-            "speaker_id": debater["id"], "full_text": full_text, "voice": debater["voice"],
+            "speaker_id": debater["id"],
+            "full_text": full_text,
+            "voice": debater["voice"],
+            "skipped": full_text == "（此环节已超时跳过）",
         }}
         time.sleep(0.3)
 
@@ -266,8 +300,8 @@ class DebateEngine:
         """
         self._start_time = time.time()
 
-        pro = [d for d in DEBATERS if d["side"] == "pro"]
-        con = [d for d in DEBATERS if d["side"] == "con"]
+        pro = [d for d in self._debaters if d["side"] == "pro"]
+        con = [d for d in self._debaters if d["side"] == "con"]
 
         # ===== 阶段1: 开篇立论（仅一辩）=====
         yield {"event": "phase", "data": {"phase": "开篇立论", "description": "双方一辩阐述己方立场，构建论证框架"}}
@@ -299,10 +333,10 @@ class DebateEngine:
             yield from self._emit_turn(debater, "summary")
 
         # ===== 阶段4: 自由辩论 =====
-        yield {"event": "phase", "data": {"phase": "自由辩论", "description": f"双方交替发言，共{FREE_DEBATE_ROUNDS}轮"}}
+        yield {"event": "phase", "data": {"phase": "自由辩论", "description": f"双方交替发言，共{self._free_debate_rounds}轮"}}
         time.sleep(0.5)
 
-        for round_num in range(FREE_DEBATE_ROUNDS):
+        for round_num in range(self._free_debate_rounds):
             yield from self._emit_turn(pro[round_num % len(pro)], "free")
             yield from self._emit_turn(con[round_num % len(con)], "free")
 

@@ -1,0 +1,4 @@
+pillow>=10.0
+edge-tts>=6.1
+openai>=1.0
+# GUI 使用 Python 内置 tkinter，无需安装

@@ -1,0 +1,8 @@
+# organize_config.yaml — organize.py 全局 API 配置
+# 存放位置：e:/integrity/tools/（与 organize.py 同目录）
+# 一次配置，对所有目录整理均生效
+
+api:
+  provider: "dashscope"
+  api_key: "sk-0ef56d1b3ba54a188ce28a46c54e2a24"
+  model: "deepseek-v3.2"

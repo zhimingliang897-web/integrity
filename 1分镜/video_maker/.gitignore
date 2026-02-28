@@ -10,6 +10,9 @@ _silence*
 _vocab_*
 _title_*
 
+# 配置（含 API Key，不提交）
+settings.json
+
 # IDE / 系统
 .claude/
 __pycache__/

@@ -1,5 +1,36 @@
 # 更新日志
 
+## v4.0.0 — 网页配置中心 + 一键启动
+
+### 新功能
+- **网页内配置面板**（`⚙️ 高级配置`，无需修改任何代码）：
+  - **API 密钥管理**：为每个 LLM 服务商（通义千问、豆包、Kimi、DeepSeek）单独配置密钥，自动保存到浏览器 localStorage，不会上传
+  - **模型选择**：每位辩手可独立切换 LLM 服务商，并可填写自定义模型名
+  - **音色选择**：每位辩手从 8 种中文 TTS 音色中自由选择
+  - **人设编辑**：每位辩手的性格描述完全可在网页内修改
+  - **辩论参数**：单次发言字数、自由辩论轮数、时间上限均可调节
+- **一键启动脚本** `启动.bat`：自动安装依赖、启动服务、3 秒后打开浏览器，零命令行操作
+- **音量滑块**：辩论界面新增音量控制
+- **错误提示 Toast**：统一的错误提示替代 alert()
+
+### API 新增
+- `GET /api/config`：返回完整配置信息（API Key 仅返回是否已配置，不含明文）
+- `POST /api/start` 现接受 `config` 字段，支持覆盖 providers（api_key/model）、debaters（provider/model_override/voice/personality）、params（max_words/free_debate_rounds/debate_time_limit）
+
+### Bug 修复
+- 🐛 **修复超时空气泡 bug**：辩论超时时，`_emit_turn()` 现在会显示"（此环节已超时跳过）"而非卡在加载中
+- 🐛 **修复 export_status 不重置**：开始新辩论时正确重置导出状态，避免导出按钮状态残留
+- 🐛 **修复 debate_clients 并发访问**：推送事件时改用 `list(debate_clients)` 快照，避免迭代时修改
+- 🐛 **修复裁判发言的 skipped TTS**：跳过的发言不再尝试生成语音，避免 edge-tts 空文本报错
+
+### 架构优化
+- `DebateEngine` 现在通过构造函数接受 `debaters`、`providers`、`params` 参数，实现运行时配置注入（不修改全局 config.py）
+- `_is_timeout()` 现在使用实例变量 `self._debate_time_limit`（支持运行时覆盖）
+- `init_clients()` 支持辩手级别的 `model_override` 字段
+- SSE heartbeat timeout 从 300s 缩短至 30s，更快检测断连
+
+---
+
 ## v3.0.0 — 标准赛制 + 提示词重构
 
 ### 赛制重构
@@ -27,6 +58,8 @@
 ### 代码优化
 - 提取 `_emit_turn()` 辅助方法，消除 `run_debate()` 中十余处重复的事件发射代码
 
+---
+
 ## v2.0.0 — 优化与节能
 
 - 💰 **按需生成 (Lazy Generation)**：后端生成完一句后自动挂起，等待前端信号，彻底杜绝 Token 浪费
@@ -34,12 +67,16 @@
 - 🛑 **关闭即停止**：网页关闭时发送信号强制停止后端进程，双重保险防跑票
 - 📝 **字数限制**：单次发言限制调整为 200 字，辩论更精简
 
+---
+
 ## v1.0.1 — Bug 修复
 
 - 修复 Windows 上 `RuntimeError: Event loop is closed` 错误（`tts_engine.py` 改用 `get_event_loop()` + `run_until_complete()`）
 - 配置所有 LLM API 密钥（Qwen、Doubao、Kimi、DeepSeek）
 - 更新模型名称：Qwen → `qwen3-vl-flash-2026-01-22`，Kimi → `kimi-k2-turbo-preview`
 - 新增 `README.md` 和 `CHANGELOG.md` 文档
+
+---
 
 ## v1.0.0 — 初始版本
 
