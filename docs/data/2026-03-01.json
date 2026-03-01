@@ -1,0 +1,136 @@
+{
+  "date": "2026-03-01",
+  "summary": "今日焦点集中于三大方向：一是大模型能力跃升，Gemini 3.1 Pro 与 Qwen 3.5 35B A3B 等新模型在复杂任务与性价比上持续突破；二是硬件与部署创新，NVIDIA Rubin 平台与裸金属推理（如 Dell E6510）推动AI落地效率；三是轻量模型研究进展，极小参数量（<100）Transformer 实现高精度算术运算，展现模型压缩与工程优化的新路径。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务深度优化，体现大模型向推理与规划能力跃迁，是当前最值得关注的AI能力突破之一。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI基础设施全面下沉至终端设备，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自构建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件基础设施，凸显AI大模型训练部署对高端GPU的深度绑定，体现算力生态关键转折点。",
+      "tags": [
+        "AI大模型",
+        "NVIDIA",
+        "算力基础设施"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "AMA with StepFun AI - Ask Us Anything",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r8snay/ama_with_stepfun_ai_ask_us_anything/",
+      "rating": "A",
+      "score": 8,
+      "comment": "StepFun AI 在 Reddit 举办 AMA，展示其本地大模型技术能力与社区互动，体现开源生态建设进展，属值得关注的行业动态。",
+      "tags": [
+        "LLM",
+        "开源",
+        "社区互动"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Best Audio Models - Feb 2026",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r7bsfd/best_audio_models_feb_2026/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Qwen3 TTS等新模型密集发布，体现语音生成技术快速演进；实测对比推动行业标准建设，具实用参考价值。",
+      "tags": [
+        "语音合成",
+        "大模型",
+        "开源"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen 3.5 35B A3B is better than free-tier Chatgpt and Gemini",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rhkgo8/qwen_35_35b_a3b_is_better_than_freetier_chatgpt/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Qwen 3.5 35B A3B在本地部署下表现优于免费版ChatGPT/Gemini，体现国产大模型在轻量化与实用性能上的进步，具实际对比价值。",
+      "tags": [
+        "大模型",
+        "本地部署",
+        "性能对比"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Bare-Metal AI: Booting Directly Into LLM Inference ‚ No OS, No Kernel (Dell E6510)",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rhg3p4/baremetal_ai_booting_directly_into_llm_inference/",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次实现UEFI直接启动LLM推理，跳过OS/Kernel，显著降低延迟与资源开销，为边缘AI和嵌入式部署提供新路径。",
+      "tags": [
+        "LLM部署",
+        "裸金属AI",
+        "低延迟推理"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "This sub is incredible",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rh9u4r/this_sub_is_incredible/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Reddit社区对本地大模型生态的自发协作与反商业化趋势引发关注，体现去中心化AI实践的活力与现实意义。",
+      "tags": [
+        "本地大模型",
+        "社区协作",
+        "反商业主义"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[R] Tiny transformers (<100 params) can add two 10-digit numbers to 100% accuracy",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rh84o0/r_tiny_transformers_100_params_can_add_two/",
+      "rating": "A",
+      "score": 8,
+      "comment": "tiny transformer在100参数内实现10位数加法100%准确，证明小模型可高效学习形式化算术，对轻量化推理与符号AI有启发价值。",
+      "tags": [
+        "小模型",
+        "算术推理",
+        "符号AI"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] Micro Diffusion — Discrete text diffusion in ~150 lines of pure Python",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rgsgt6/p_micro_diffusion_discrete_text_diffusion_in_150/",
+      "rating": "A",
+      "score": 8,
+      "comment": "微小但精巧的文本扩散模型实现，150行纯Python展现核心机制，突出模块化设计与可复现性，对理解扩散模型原理极具教学价值。",
+      "tags": [
+        "扩散模型",
+        "Python",
+        "教育工具"
+      ]
+    }
+  ]
+}
