@@ -1,0 +1,39 @@
+# 小红书英语教育内容生成器
+# Python >= 3.10
+
+# ===== 核心依赖 =====
+
+# LLM API调用 (支持千问/OpenAI)
+openai>=1.0.0
+
+# 配置文件解析
+pyyaml>=6.0
+
+# HTML模板渲染
+jinja2>=3.0.0
+
+# ===== 图片生成 =====
+
+# HTML转图片 (Playwright)
+playwright>=1.40.0
+
+# ===== 小红书发布 =====
+
+# 小红书API
+xhs>=0.2.0
+
+# ===== 图形界面 =====
+
+# Web UI
+gradio>=4.0.0
+
+# ===== 安装后操作 =====
+#
+# 1. 安装Playwright浏览器:
+#    playwright install chromium
+#
+# 2. 启动图形界面:
+#    python gui.py
+#
+# 3. 或使用命令行:
+#    python main.py -c "餐饮美食" --publish

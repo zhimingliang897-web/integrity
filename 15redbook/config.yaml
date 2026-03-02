@@ -1,0 +1,27 @@
+api:
+  api_key: sk-0ef56d1b3ba54a188ce28a46c54e2a24
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  model: qwen-plus
+  provider: dashscope
+defaults:
+  category: 随机
+  phrase_count: 5p
+  style: 轻松幽默
+image:
+  format: png
+  height: 1440
+  output_dir: output
+  width: 1080
+obsidian:
+  attachments_folder: attachments
+  queue_folder: 01_发布队列
+  vault_path: E:/Obsidian/小红书运营
+xiaohongshu:
+  cookie: abRequestId=7fd59b24-d9ca-5047-a559-2199142dd56b; webBuild=5.13.0; xsecappid=xhs-pc-web;
+    a1=19caa7ab20b70cms3oj9ye24m0fyv66kv6x01i9x550000231737; webId=4c381f2f974923947bd94aa0b373f9d9;
+    gid=yjS00WSJSKhYyjS00W0DJK3j8DW8S6MqlVjvCC2dJ468i828vhKKTy888JqyWqW8JDJWYYy2;
+    acw_tc=0a00dd8917724189970807340e4de3ebc14c331757998f4c76dd909572828f; acw_tc=0a50887c17724189997557679e56e43f9efca8d0b68126309802b90dbe483d;
+    loadts=1772419021797; unread={%22ub%22:%2264719a3d0000000027002627%22%2C%22ue%22:%22643ea0920000000013005a08%22%2C%22uc%22:20};
+    acw_tc=0ad627ca17724190229917575e3709849c096ea1cc9164eaea4294a72f0c84; websectiga=cf46039d1971c7b9a650d87269f31ac8fe3bf71d61ebf9d9a0a87efb424b816c;
+    sec_poison_id=7d0ec4b9-2a9d-4b61-8324-0cb78a4d4f04; web_session=040069b22b039837bc6bb3bf913b4b5b14c10f;
+    id_token=VjEAAJE5UlLGoeKzjLIxPvzpusDK67g+XeMpZJi+s3eLSHiWIaLuvAamNVwO6RFhUqC8yo8HaRsbc/nlB8Fa83kjtVgAelXkeCAD1a2P6wN8T+hkpIaE+qTGK3Ue55JhUzeX2oLV

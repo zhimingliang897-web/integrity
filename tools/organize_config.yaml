@@ -5,4 +5,4 @@
 api:
   provider: "dashscope"
   api_key: "sk-0ef56d1b3ba54a188ce28a46c54e2a24"
-  model: "deepseek-v3.2"
+  model: "kimi-k2.5"

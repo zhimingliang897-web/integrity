@@ -1,0 +1,96 @@
+{
+  "title": "开会插话不尴尬！10句黄金缓冲句✨",
+  "cover": {
+    "main_title": "开会怎么插话",
+    "sub_title": "10句让老板点头的神句",
+    "style_keywords": "简约商务风、浅蓝灰主色、手绘麦克风/对话气泡元素、圆角卡片排版",
+    "emoji_icon": "🎤"
+  },
+  "slides": [
+    {
+      "slide_number": 1,
+      "scene_title": "想补充关键数据",
+      "wrong_cn": "对不起，我打断一下…",
+      "wrong_en": "Sorry, I interrupt…",
+      "correct_en": "Can I jump in quickly with a number?",
+      "correct_cn": "我能快速插一句数据吗？",
+      "dialogue": {
+        "a": "A: …so the Q3 target is around $2M.",
+        "a_cn": "A：……所以Q3目标大约是200万美元。",
+        "b": "B: Can I jump in quickly with a number? It’s actually $2.3M — finance just confirmed.",
+        "b_cn": "B：我能快速插一句数据吗？其实是230万——财务刚确认的。"
+      },
+      "tip": "用‘jump in’代替‘interrupt’，自带轻快感；加‘quickly’暗示尊重对方时间⏳"
+    },
+    {
+      "slide_number": 2,
+      "scene_title": "发现事实有误",
+      "wrong_cn": "你好像说错了…",
+      "wrong_en": "You’re wrong…",
+      "correct_en": "Actually, I think there might be a small mix-up on that point.",
+      "correct_cn": "其实这点上可能有个小混淆。",
+      "dialogue": {
+        "a": "A: The client approved the design last Friday.",
+        "a_cn": "A：客户上周五就批准了设计。",
+        "b": "B: Actually, I think there might be a small mix-up on that point — they asked for revisions yesterday.",
+        "b_cn": "B：其实这点上可能有个小混淆——他们昨天刚提了修改意见。"
+      },
+      "tip": "用‘might be’+‘small mix-up’软化质疑，比‘mistake’体面100倍！💡"
+    },
+    {
+      "slide_number": 3,
+      "scene_title": "想澄清自己之前的发言",
+      "wrong_cn": "我不是那个意思…",
+      "wrong_en": "I didn’t mean that…",
+      "correct_en": "Just to clarify — what I meant was…",
+      "correct_cn": "稍作澄清——我实际想表达的是…",
+      "dialogue": {
+        "a": "A: We’ll pause the campaign next week.",
+        "a_cn": "A：我们下周暂停这个活动。",
+        "b": "B: Just to clarify — what I meant was we’ll pause *only* the social ads, not email.",
+        "b_cn": "B：稍作澄清——我实际想表达的是，只暂停社媒广告，邮件照常发。"
+      },
+      "tip": "‘Just to clarify’是会议里的万能安全带，说完立刻接重点，不道歉不辩解👍"
+    },
+    {
+      "slide_number": 4,
+      "scene_title": "急需确认一个前提",
+      "wrong_cn": "等等，这个假设对吗？",
+      "wrong_en": "Wait, is this assumption correct?",
+      "correct_en": "Before we go further — could we double-check this assumption?",
+      "correct_cn": "在继续之前，我们可以再确认下这个前提吗？",
+      "dialogue": {
+        "a": "A: So if the timeline holds, we’ll launch by June.",
+        "a_cn": "A：所以如果时间线不变，我们6月上线。",
+        "b": "B: Before we go further — could we double-check this assumption? Legal hasn’t signed off yet.",
+        "b_cn": "B：在继续之前，我们可以再确认下这个前提吗？法务还没签字呢。"
+      },
+      "tip": "用‘Before we go further’自然卡位，比‘Wait’礼貌3个level，还显得你有全局观🚀"
+    },
+    {
+      "slide_number": 5,
+      "scene_title": "想温和提出不同方案",
+      "wrong_cn": "我觉得另一个办法更好",
+      "wrong_en": "I think another way is better.",
+      "correct_en": "Would it be helpful if I shared an alternative approach?",
+      "correct_cn": "我分享一个替代方案，会有帮助吗？",
+      "dialogue": {
+        "a": "A: Let’s stick with the original vendor.",
+        "a_cn": "A：我们还是用原供应商吧。",
+        "b": "B: Would it be helpful if I shared an alternative approach? I’ve got benchmark data from 3 others.",
+        "b_cn": "B：我分享一个替代方案，会有帮助吗？我手上有另外3家的对比数据。"
+      },
+      "tip": "用‘Would it be helpful…’把主动权给团队，不是挑战，是贡献！👏"
+    }
+  ],
+  "caption": "开会时想插话却卡在喉咙里？不是不能打断，而是你缺这10句让老板都点头说‘Great point’的黄金缓冲句！✅中式道歉式打断（Sorry I interrupt…）真的会拉低专业感…老外靠的是「软着陆」话术：用jump in / before we go further / would it be helpful…轻轻一推，就把话语权稳稳接住～收藏这篇，下次开会前默念3遍！👇你最常用哪句？评论区交出你的‘救命句’！💬\n#职场英语 #开会英语 #商务英语 #英语口语 #外企必备 #实用英语 #高情商表达",
+  "tags": [
+    "#职场英语",
+    "#开会英语",
+    "#商务英语",
+    "#英语口语",
+    "#外企必备",
+    "#实用英语",
+    "#高情商表达"
+  ]
+}

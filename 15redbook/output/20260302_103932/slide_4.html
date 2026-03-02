@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            width: 1080px;
+            height: 1440px;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            background: linear-gradient(180deg, #f8f9ff 0%, #e8ecff 100%);
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .slide-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+        }
+        .scene-title {
+            font-size: 42px;
+            font-weight: 700;
+            color: #333;
+            flex: 1;
+            margin-left: 30px;
+        }
+        .comparison-box {
+            background: white;
+            border-radius: 30px;
+            padding: 50px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+        .wrong-section {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 2px dashed #eee;
+        }
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .wrong-label {
+            color: #e74c3c;
+        }
+        .correct-label {
+            color: #27ae60;
+        }
+        .chinese-text {
+            font-size: 32px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .english-text {
+            font-size: 40px;
+            font-weight: 600;
+        }
+        .wrong-english {
+            color: #e74c3c;
+            text-decoration: line-through;
+            text-decoration-thickness: 3px;
+        }
+        .correct-english {
+            color: #27ae60;
+        }
+        .correct-meaning {
+            font-size: 28px;
+            color: #888;
+            margin-top: 10px;
+        }
+        .dialogue-box {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-radius: 25px;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-left: 6px solid #667eea;
+        }
+        .dialogue-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .dialogue-line {
+            margin-bottom: 20px;
+        }
+        .dialogue-en {
+            font-size: 34px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .dialogue-cn {
+            font-size: 26px;
+            color: #888;
+        }
+        .tip-box {
+            background: linear-gradient(135deg, #fff9e6 0%, #fff3cc 100%);
+            border-radius: 20px;
+            padding: 30px 40px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+        .tip-icon {
+            font-size: 36px;
+        }
+        .tip-text {
+            font-size: 28px;
+            color: #666;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="slide-number">4</div>
+        <div class="scene-title">温度不对（太凉/太烫）</div>
+    </div>
+
+    <div class="comparison-box">
+        <div class="wrong-section">
+            <div class="section-label wrong-label">
+                <span>&#10060;</span> 中式英语
+            </div>
+            <div class="chinese-text">这个太冷了！</div>
+            <div class="english-text wrong-english">This is too cold!</div>
+        </div>
+
+        <div class="correct-section">
+            <div class="section-label correct-label">
+                <span>&#9989;</span> 地道表达
+            </div>
+            <div class="english-text correct-english">Would it be alright if this was warmed up just a touch? It’s a little cooler than I expected.</div>
+            <div class="correct-meaning">方便稍微加热一下吗？它比我预期的要凉一点。</div>
+        </div>
+    </div>
+
+    <div class="dialogue-box">
+        <div class="dialogue-title">
+            <span>&#128172;</span> 实战对话
+        </div>
+        <div class="dialogue-line">
+            <div class="dialogue-en">A: Would it be alright if this was warmed up just a touch? It’s a little cooler than I expected.</div>
+            <div class="dialogue-cn">A：方便稍微加热一下吗？它比我预期的要凉一点。</div>
+        </div>
+        <div class="dialogue-line">
+            <div class="dialogue-en">B: Of course — I’ll pop it in the oven for 90 seconds and bring it back warm and perfect.</div>
+            <div class="dialogue-cn">B：当然可以——我放进烤箱热90秒，马上给您端回温热完美的版本！</div>
+        </div>
+    </div>
+
+    <div class="tip-box">
+        <div class="tip-icon">&#128161;</div>
+        <div class="tip-text">‘just a touch’是英美餐厅高频词，比‘a little’更自然，还带点可爱感～</div>
+    </div>
+</body>
+</html>

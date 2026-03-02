@@ -1,0 +1,96 @@
+{
+  "title": "酒店退房投诉英语5句🔥别再说I don’t like it！",
+  "cover": {
+    "main_title": "退房投诉英语",
+    "sub_title": "5句让前台秒行动！",
+    "style_keywords": "简约高级、蓝白旅感、手写体英文、酒店前台插画风",
+    "emoji_icon": "🏨"
+  },
+  "slides": [
+    {
+      "slide_number": 1,
+      "scene_title": "空调罢工？冷气=0℃",
+      "wrong_cn": "This air conditioner is very bad!",
+      "wrong_en": "This air conditioner is very bad!",
+      "correct_en": "The AC wasn’t cooling at all — could we get this checked before I check out?",
+      "correct_cn": "空调完全不制冷——退房前能麻烦检查一下吗？",
+      "dialogue": {
+        "a": "A: Hi, the AC in Room 308 wasn’t cooling at all — could we get this checked before I check out?",
+        "a_cn": "你好，308房间空调完全不制冷，退房前能麻烦检查一下吗？",
+        "b": "B: Oh, I’m so sorry! Let me call maintenance right away and offer you a discount.",
+        "b_cn": "啊太抱歉了！我马上叫维修，再给您减免部分房费。"
+      },
+      "tip": "用‘wasn’t + 动词-ing’代替‘is bad’，把问题归因于状态而非人，既客观又留台阶"
+    },
+    {
+      "slide_number": 2,
+      "scene_title": "床单有可疑污渍…",
+      "wrong_cn": "Your sheet is dirty! Change it now!",
+      "wrong_en": "Your sheet is dirty! Change it now!",
+      "correct_en": "I noticed some stains on the sheets — would it be possible to have them replaced or a room change?",
+      "correct_cn": "我发现床单上有污渍——方便更换床单，或换一间房吗？",
+      "dialogue": {
+        "a": "A: I noticed some stains on the sheets — would it be possible to have them replaced or a room change?",
+        "a_cn": "我发现床单上有污渍——方便更换床单，或换一间房吗？",
+        "b": "B: Absolutely — let me arrange a fresh set and upgrade you to a suite as an apology.",
+        "b_cn": "当然可以——我马上安排新床单，并免费为您升级套房致歉。"
+      },
+      "tip": "‘I noticed…’ 是万能软化开头，比‘You have…’少指责感，+ ‘would it be possible…’ 把要求变成共同解题"
+    },
+    {
+      "slide_number": 3,
+      "scene_title": "浴室哗哗漏水…",
+      "wrong_cn": "The bathroom is leaking! You must fix it!",
+      "wrong_en": "The bathroom is leaking! You must fix it!",
+      "correct_en": "There’s water leaking from the shower drain — could someone take a quick look? It’s been dripping nonstop.",
+      "correct_cn": "淋浴地漏一直在漏水——方便请人快速看一下吗？已经滴个不停了。",
+      "dialogue": {
+        "a": "A: There’s water leaking from the shower drain — could someone take a quick look? It’s been dripping nonstop.",
+        "a_cn": "淋浴地漏一直在漏水——方便请人快速看一下吗？已经滴个不停了。",
+        "b": "B: Yes, our engineer is on standby — I’ll escort you to the front desk for a complimentary breakfast voucher while they fix it.",
+        "b_cn": "好的，我们的工程师随时待命——我带您去前台领一份免费早餐券，维修马上开始。"
+      },
+      "tip": "描述具体位置（shower drain）+ 持续状态（has been dripping）= 让问题真实可感，避免模糊指控"
+    },
+    {
+      "slide_number": 4,
+      "scene_title": "Wi-Fi密码是‘12345678’还连不上",
+      "wrong_cn": "Your Wi-Fi is terrible! I can’t use internet!",
+      "wrong_en": "Your Wi-Fi is terrible! I can’t use internet!",
+      "correct_en": "I’ve tried connecting several times but keep getting disconnected — is there a stronger signal option or a wired port available?",
+      "correct_cn": "我试了好几次，但一直断连——有更强信号的网络，或网线接口可用吗？",
+      "dialogue": {
+        "a": "A: I’ve tried connecting several times but keep getting disconnected — is there a stronger signal option or a wired port available?",
+        "a_cn": "我试了好几次，但一直断连——有更强信号的网络，或网线接口可用吗？",
+        "b": "B: Apologies — let me reset the router and give you a priority access code. Also, here’s a USB-C Ethernet adapter on the house.",
+        "b_cn": "非常抱歉——我马上重置路由器，并给您一个优先接入码。另附赠一个USB-C网线转换器。"
+      },
+      "tip": "用‘I’ve tried… but…’展示你已努力，把‘你们不行’悄悄转成‘我们一起优化’"
+    },
+    {
+      "slide_number": 5,
+      "scene_title": "最后通牒式诉求（礼貌版）",
+      "wrong_cn": "If you don’t fix it, I will complain to manager!",
+      "wrong_en": "If you don’t fix it, I will complain to manager!",
+      "correct_en": "To wrap things up smoothly, could we agree on a solution by [time] — say, a partial refund or a confirmed upgrade for my next stay?",
+      "correct_cn": "为了顺利结账，我们能否在[时间]前确认一个方案？比如部分退款，或下次入住时确认升级？",
+      "dialogue": {
+        "a": "A: To wrap things up smoothly, could we agree on a solution by 11am — say, a partial refund or a confirmed upgrade for my next stay?",
+        "a_cn": "为了顺利结账，我们能否在上午11点前确认一个方案？比如部分退款，或下次入住时确认升级？",
+        "b": "B: Done — refund processed, and your suite booking for next month is locked in. Thank you for your patience!",
+        "b_cn": "已处理——退款到账，下月套房预订也已锁定！感谢您的理解！"
+      },
+      "tip": "‘To wrap things up smoothly’ 是高级缓冲句，把施压包装成合作，还暗含时间锚点+二选一选项，推动立刻决策"
+    }
+  ],
+  "caption": "酒店前台微笑点头说‘No problem’，却转身就走？你缺的不是勇气，是这5句让对方立刻行动的英语！✅不吼不怼，不卑不亢，母语者听了都觉得‘这客人好懂规矩’～出国住酒店再也不当沉默小鹌鹑！👇评论区告诉我：你最想吐槽哪家酒店的哪件事？我来帮你翻译成‘优雅暴击版’英语！✨收藏这篇，下次退房前扫一眼，气场两米八！\n\n#旅行英语 #酒店英语 #实用口语 #出国必备 #英语表达 #小红书英语课 #地道英语",
+  "tags": [
+    "#旅行英语",
+    "#酒店英语",
+    "#实用口语",
+    "#出国必备",
+    "#英语表达",
+    "#小红书英语课",
+    "#地道英语"
+  ]
+}

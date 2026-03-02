@@ -1,0 +1,96 @@
+{
+  "title": "在国外餐厅退菜不尴尬！3句地道英语✨",
+  "cover": {
+    "main_title": "退菜不踩雷",
+    "sub_title": "3句让服务员主动换菜",
+    "style_keywords": "清新手绘风、暖黄餐盘背景、简约英文手写字体、小叉勺插画元素",
+    "emoji_icon": "🍽️"
+  },
+  "slides": [
+    {
+      "slide_number": 1,
+      "scene_title": "菜太咸/太辣，一口就皱眉",
+      "wrong_cn": "我不喜欢这个味道",
+      "wrong_en": "I don’t like it.",
+      "correct_en": "Could I possibly get this re-made? It’s a bit too salty for me.",
+      "correct_cn": "这道菜能麻烦重做一下吗？对我来说有点太咸了。",
+      "dialogue": {
+        "a": "A: Hi, sorry to bother you — could I possibly get this re-made? It’s a bit too salty for me.",
+        "a_cn": "A：你好，不好意思打扰下——这道菜能麻烦重做一下吗？对我来说有点太咸了。",
+        "b": "B: Of course! I’ll take it right back and have the chef adjust it. Would you like something lighter?",
+        "b_cn": "B：当然可以！我马上拿回去，让厨师调整。您想要口味更清淡一点的版本吗？"
+      },
+      "tip": "用‘a bit too…’软化批评，加‘for me’强调主观感受，不指责厨师；‘could I possibly…’比‘can I…’更显尊重。"
+    },
+    {
+      "slide_number": 2,
+      "scene_title": "菜里有头发/异物，吓一跳",
+      "wrong_cn": "这菜错了！里面有头发！",
+      "wrong_en": "This is wrong! There’s hair in it!",
+      "correct_en": "I’m so sorry to mention this, but I noticed something in my dish — would it be okay to swap it out?",
+      "correct_cn": "不好意思提一下，我注意到菜里有个小东西——方便帮我换一份吗？",
+      "dialogue": {
+        "a": "A: I’m so sorry to mention this, but I noticed something in my dish — would it be okay to swap it out?",
+        "a_cn": "A：不好意思提一下，我注意到菜里有个小东西——方便帮我换一份吗？",
+        "b": "B: Oh my goodness — absolutely! I’ll replace it immediately and speak with the kitchen. Thank you for letting me know so kindly.",
+        "b_cn": "B：天啊，非常抱歉！我立刻给您换一份，并通知厨房检查。谢谢您这么友善地告知！"
+      },
+      "tip": "先道歉（I’m so sorry to mention this）是老外黄金缓冲句；‘notice something’比‘there’s hair’委婉百倍，保全双方体面。"
+    },
+    {
+      "slide_number": 3,
+      "scene_title": "上错菜了，根本不是我点的",
+      "wrong_cn": "这不是我点的！",
+      "wrong_en": "This is not what I ordered!",
+      "correct_en": "I think there might’ve been a mix-up — I actually ordered the grilled salmon. Would it be alright to switch?",
+      "correct_cn": "可能这边有点小误会——我点的是烤三文鱼，可以帮我换成那道吗？",
+      "dialogue": {
+        "a": "A: I think there might’ve been a mix-up — I actually ordered the grilled salmon. Would it be alright to switch?",
+        "a_cn": "A：可能这边有点小误会——我点的是烤三文鱼，可以帮我换成那道吗？",
+        "b": "B: Oh, totally! Let me fix that right away — and I’ll bring over your salmon with extra lemon wedges on the house.",
+        "b_cn": "B：完全没问题！我马上为您更换——另外免费送您几片柠檬～"
+      },
+      "tip": "用‘might’ve been a mix-up’把错误归给系统/流程，而非人；‘actually ordered’轻描淡写带出事实，不带火药味。"
+    },
+    {
+      "slide_number": 4,
+      "scene_title": "菜凉了/没熟/明显没做好",
+      "wrong_cn": "这菜不行，重做！",
+      "wrong_en": "This is not good. Make it again!",
+      "correct_en": "Would it be possible to have this warmed up / cooked a little longer? I’d really appreciate it.",
+      "correct_cn": "方便帮忙加热一下／多煮一会儿吗？特别感谢！",
+      "dialogue": {
+        "a": "A: Would it be possible to have this warmed up? It’s come out a bit cooler than expected.",
+        "a_cn": "A：方便帮忙加热一下吗？这道菜端上来时比预期凉了不少。",
+        "b": "B: Absolutely — I’ll pop it in the oven for 90 seconds and bring it back with fresh herbs.",
+        "b_cn": "B：没问题！我马上进烤箱热90秒，再配点新鲜香草给您送过来～"
+      },
+      "tip": "‘a bit cooler than expected’暗示客观偏差，而非主观嫌弃；‘would it be possible…’+‘I’d really appreciate it’构成温柔闭环，服务生听了都想给你升杯咖啡。"
+    },
+    {
+      "slide_number": 5,
+      "scene_title": "想悄悄退菜，但不想被当难搞客人",
+      "wrong_cn": "我要退款",
+      "wrong_en": "I want a refund.",
+      "correct_en": "No worries at all — happy to just have this taken off the bill. Thanks so much!",
+      "correct_cn": "完全没关系！这道菜直接从账单去掉就好，太感谢啦～",
+      "dialogue": {
+        "a": "A: No worries at all — happy to just have this taken off the bill. Thanks so much!",
+        "a_cn": "A：完全没关系！这道菜直接从账单去掉就好，太感谢啦～",
+        "b": "B: You’re so understanding — I’ll adjust it now and include a complimentary sparkling water on us.",
+        "b_cn": "B：您真的太体谅了！我马上处理，再送您一杯气泡水～"
+      },
+      "tip": "主动说‘no worries’传递松弛感，‘happy to…’展现配合意愿，比‘I want…’少80%压迫感——对方反而更愿意多给你福利！"
+    }
+  ],
+  "caption": "服务员端来一道你根本没法下口的菜？别憋着咽下去，也别一开口就踩雷——这3句话，让对方主动帮你换，还夸你‘so polite’！⚠️重点不是‘说什么’，而是‘怎么说’：把‘问题’变成‘小意外’，把‘要求’变成‘请求’，把‘我不要’变成‘我们可以一起解决～’✨你试过哪一句？评论区蹲一个真实战报！👇收藏这篇，下次点单前默念三遍～ #出国吃饭必备 #英语救急 #餐厅英语 #礼貌表达 #实用口语 #小红书学英语 #海外生存指南",
+  "tags": [
+    "#出国吃饭必备",
+    "#英语救急",
+    "#餐厅英语",
+    "#礼貌表达",
+    "#实用口语",
+    "#小红书学英语",
+    "#海外生存指南"
+  ]
+}

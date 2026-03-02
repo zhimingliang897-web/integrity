@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文件助手 Agent - 偏好设置</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --surface: #161922;
+      --surface2: #1e2230;
+      --border: #2a2f42;
+      --accent: #6c63ff;
+      --accent2: #4ecdc4;
+      --text: #e8eaf0;
+      --text-dim: #8892a4;
+      --radius: 14px;
+      --success: #4ecdc4;
+      --error: #ff6b6b;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    .container {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 600px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    h2 { margin-bottom: 24px; font-weight: 500; }
+    .form-group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    label { font-size: 14px; color: var(--text-dim); }
+    input[type="text"], input[type="password"] {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus { border-color: var(--accent); }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      width: 100%;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: #5a52d5; }
+    .btn-back {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      width: 100%;
+      margin-top: 10px;
+      transition: background 0.2s;
+    }
+    .btn-back:hover { background: var(--surface2); }
+    .desc { font-size: 12px; color: var(--text-dim); }
+    .toast {
+      position: fixed; top: 20px; right: 20px;
+      background: var(--success); color: #000;
+      padding: 12px 20px; border-radius: 8px;
+      opacity: 0; pointer-events: none; transition: 0.3s;
+      font-weight: 500;
+    }
+    .toast.show { opacity: 1; transform: translateY(10px); }
+  </style>
+</head>
+<body>
+  <div class="toast" id="toast">保存成功！</div>
+  <div class="container">
+    <h2>偏好设置</h2>
+    
+    <div class="form-group">
+      <label>Dashscope API Key</label>
+      <input type="password" id="api_key" placeholder="sk-xxxxxxx">
+      <span class="desc">阿里云大模型调用密钥，必填项</span>
+    </div>
+
+    <div class="form-group">
+      <label>Natapp Authtoken</label>
+      <input type="text" id="natapp" placeholder="输入 VIP 或免费通道 token">
+      <span class="desc">修改后需重新运行 start.bat 生效</span>
+    </div>
+
+    <div class="form-group">
+      <label>QQ 发件邮箱</label>
+      <input type="text" id="email" placeholder="xxx@qq.com">
+      <span class="desc">用于发送文件附件</span>
+    </div>
+
+    <div class="form-group">
+      <label>邮箱授权码</label>
+      <input type="password" id="email_pwd" placeholder="16位授权码">
+      <span class="desc">在 QQ邮箱设置 中获取（非登录密码）</span>
+    </div>
+
+    <button class="btn-primary" onclick="saveConfig()">保存配置</button>
+    <button class="btn-back" onclick="location.href='/'">返回主页</button>
+  </div>
+
+  <script>
+    async function loadConfig() {
+      try {
+        const res = await fetch('/api/config');
+        const data = await res.json();
+        document.getElementById('api_key').value = data.dashscope_api_key || '';
+        document.getElementById('natapp').value = data.natapp_token || '';
+        document.getElementById('email').value = data.email_sender || '';
+        document.getElementById('email_pwd').value = data.email_password || '';
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    async function saveConfig() {
+      const payload = {
+        dashscope_api_key: document.getElementById('api_key').value,
+        natapp_token: document.getElementById('natapp').value,
+        email_sender: document.getElementById('email').value,
+        email_password: document.getElementById('email_pwd').value
+      };
+      const btn = document.querySelector('.btn-primary');
+      btn.innerText = '正在保存...';
+      try {
+        const res = await fetch('/api/config', {
+          method: 'POST',
+          headers:{'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
+        });
+        const ret = await res.json();
+        if (ret.status === 'ok') {
+          showToast('设置保存成功！(Natapp 需重启 start.bat)');
+        }
+      } catch (e) {
+        alert(e);
+      }
+      btn.innerText = '保存配置';
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.innerText = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    loadConfig();
+  </script>
+</body>
+</html>
