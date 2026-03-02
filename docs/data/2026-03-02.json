@@ -1,0 +1,138 @@
+{
+  "date": "2026-03-02",
+  "summary": "今日焦点集中于大模型性能跃升与生态演进：Gemini 3.1 Pro与NVIDIA Rubin平台推动复杂任务处理能力突破；Qwen 3.5与开源模型在长上下文、高吞吐场景实现显著优化；同时，本地部署、微调工具链（如easy-torch-tpu）及开源模型质量逼近商用水平，体现AI基础设施持续下沉与普惠化趋势。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，是大模型在专业场景落地的关键突破，标志AI向高阶认知能力迈进。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google",
+        "AI应用"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI基础设施向全栈化、自主化演进，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "大模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，凸显AI大模型训练部署对GPU算力的深度绑定，行业生态关键转折点。",
+      "tags": [
+        "AI模型",
+        "NVIDIA",
+        "算力依赖"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "AMA with StepFun AI - Ask Us Anything",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1r8snay/ama_with_stepfun_ai_ask_us_anything/",
+      "rating": "A",
+      "score": 8,
+      "comment": "StepFun AI 在 Reddit 举办 AMA，展示其本地大模型技术能力与社区互动，体现开源生态建设进展，属值得关注的行业动态。",
+      "tags": [
+        "LLM",
+        "开源",
+        "社区互动"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Breaking : Today Qwen 3.5 small",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1ri2irg/breaking_today_qwen_35_small/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Qwen 3.5 Small 为轻量级模型带来显著性能提升，体现大模型在端侧/边缘场景的实用化进展，值得关注其推理效率与微调适配能力。",
+      "tags": [
+        "大模型",
+        "轻量化",
+        "Qwen"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Running Qwen3.5 27b dense with 170k context at 100+t/s decode and ~1500t/s prefill on 2x3090 (with 585t/s throughput for 8 simultaneous requests)",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rianwb/running_qwen35_27b_dense_with_170k_context_at/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Qwen3.5-27B在2×3090上实现170K上下文、100+t/s解码与1500+t/s预填充，8并发达585t/s吞吐，显著提升推理效率，体现大模型工程优化实力。",
+      "tags": [
+        "大模型推理优化",
+        "Qwen3.5",
+        "3090部署"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "13 months since the DeepSeek moment, how far have we gone running models locally?",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1ri635s/13_months_since_the_deepseek_moment_how_far_have/",
+      "rating": "A",
+      "score": 8,
+      "comment": "DeepSeek R1本地部署从$6000降至近似性能成本显著下降，反映推理优化与硬件适配进步，体现大模型普惠化关键进展。",
+      "tags": [
+        "本地部署",
+        "推理优化",
+        "成本下降"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Reverse engineered Apple Neural Engine(ANE) to train Microgpt",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rhx5pc/reverse_engineered_apple_neural_engineane_to/",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次公开反向工程Apple ANE私有API，突破黑盒限制，为Mac端模型训练开辟新路径，具实用价值与技术前瞻性。",
+      "tags": [
+        "Apple",
+        "ANE",
+        "反向工程",
+        "LLM训练"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[R] Benchmarked 94 LLM endpoints for jan 2026. open source is now within 5 quality points of proprietary",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rhuwyt/r_benchmarked_94_llm_endpoints_for_jan_2026_open/",
+      "rating": "A",
+      "score": 8,
+      "comment": "94个LLM端点基准测试，开源模型与闭源差距缩至5分内，反映开源生态快速追赶，对生产选型具实用价值。",
+      "tags": [
+        "LLM基准测试",
+        "开源模型进展",
+        "生产推理选型"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] easy-torch-tpu: Making it easy to train PyTorch-based models on Google TPUs",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rigxhy/p_easytorchtpu_making_it_easy_to_train/",
+      "rating": "A",
+      "score": 8,
+      "comment": "简化PyTorch在TPU上的训练流程，显著降低使用门槛，对研究者和工程师实用价值高，呼应大模型部署落地痛点。",
+      "tags": [
+        "PyTorch",
+        "TPU",
+        "工具库"
+      ]
+    }
+  ]
+}
