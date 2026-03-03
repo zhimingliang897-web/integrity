@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-03",
+  "summary": "今日焦点集中于大模型架构演进与产业落地：Qwen 3.5 27B 与 Gemini 3.1 Pro 展示 Transformer 架构持续优化，NVIDIA Rubin 平台则推动开源模型与自动驾驶融合；学术端聚焦因果推理、多智能体规划及人机协同（如 SleepLM），体现从“能答”向“能思、能适配、能共情”跃迁。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen 3.5 27b: a testament to the transformer architecture",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rj6m71/qwen_35_27b_a_testament_to_the_transformer/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Qwen 3.5 27B在推理与知识测试中接近R1 0528水平，显著突破小型模型性能瓶颈，印证Transformer架构仍有潜力，属行业里程碑事件。",
+      "tags": [
+        "大模型突破",
+        "推理能力",
+        "Qwen"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，是大模型在专业场景落地的关键突破，标志AI向高阶认知能力迈进。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google",
+        "AI应用"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台与开放模型战略，宣告AI算力全面渗透各领域，标志加速计算范式正式落地产业核心，具里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "平台架构"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，凸显AI大模型训练部署对GPU算力的深度绑定，行业生态关键转折点。",
+      "tags": [
+        "AI模型",
+        "NVIDIA",
+        "算力需求",
+        "大模型"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "HumanMCP: A Human-Like Query Dataset for Evaluating MCP Tool Retrieval Performance",
+      "link": "https://arxiv.org/abs/2602.23367",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个大规模人类自然语言查询数据集，填补MCP工具检索评估空白，推动LLM与外部系统集成的真实能力验证。",
+      "tags": [
+        "MCP",
+        "工具检索",
+        "评估基准"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "An Agentic LLM Framework for Adverse Media Screening in AML Compliance",
+      "link": "https://arxiv.org/abs/2602.23373",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将LLM Agent与RAG结合用于AML合规的实证研究，提出AMI指标可量化风险，显著降低误报率，具产业落地潜力。",
+      "tags": [
+        "LLM应用",
+        "反洗钱",
+        "Agent"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Causal Identification from Counterfactual Data: Completeness and Bounding Results",
+      "link": "https://arxiv.org/abs/2602.23541",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将反事实识别的完备性结果拓展至可实验估计的反事实分布，突破了传统因果推断理论边界，为高阶因果推理提供新范式。",
+      "tags": [
+        "因果推断",
+        "反事实学习",
+        "理论突破"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Planning under Distribution Shifts with Causal POMDPs",
+      "link": "https://arxiv.org/abs/2602.23545",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出基于因果知识的POMDP框架，可主动识别环境变化并评估计划鲁棒性，为分布偏移下的可靠规划提供理论基础，具重要学术价值与工程潜力。",
+      "tags": [
+        "强化学习",
+        "因果推理",
+        "POMDP",
+        "分布偏移"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Construct, Merge, Solve & Adapt with Reinforcement Learning for the min-max Multiple Traveling Salesman Problem",
+      "link": "https://arxiv.org/abs/2602.23579",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出RL-CMSA混合方法解决min-max mTSP，结合强化学习与启发式优化，显著提升解质量与收敛性，具实用价值与算法创新性。",
+      "tags": [
+        "强化学习",
+        "组合优化",
+        "mTSP"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "SleepLM: Natural-Language Intelligence for Human Sleep",
+      "link": "https://arxiv.org/abs/2602.23605",
+      "rating": "A",
+      "score": 8,
+      "comment": "SleepLM首次将自然语言与多模态睡眠数据深度对齐，构建首个超10万小时大规模睡眠文本数据集，突破传统封闭标签分析局限，为睡眠AI研究开辟新范式。",
+      "tags": [
+        "睡眠AI",
+        "多模态学习",
+        "大模型应用"
+      ]
+    }
+  ]
+}
