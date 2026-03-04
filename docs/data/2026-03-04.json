@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-04",
+  "summary": "今日焦点集中于三大方向：苹果发布M5系列芯片，显著提升大模型推理效率；NVIDIA在CES全面展示其AI生态蓝图，强化软硬件协同；学术界则聚焦多智能体协作、事实核查与具身认知等前沿议题，凸显AI从单点突破迈向系统化协同的演进趋势。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Apple unveils M5 Pro and M5 Max, citing up to 4× faster LLM prompt processing than M4 Pro and M4 Max",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rjqsv6/apple_unveils_m5_pro_and_m5_max_citing_up_to_4/",
+      "rating": "S",
+      "score": 9,
+      "comment": "M5系列首次明确强调LLM推理性能提升（4×），标志着苹果从硬件规格竞争转向AI原生能力落地，是端侧大模型演进的关键里程碑。",
+      "tags": [
+        "Apple",
+        "M5",
+        "LLM推理",
+        "端侧AI"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，是大模型在专业场景落地的关键突破，标志AI向高阶认知能力迈进。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI算力基础设施与生态协同进入新阶段，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，体现大模型训练部署对高端GPU的深度绑定，标志AI基础设施新范式确立。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Multi-Sourced, Multi-Agent Evidence Retrieval for Fact-Checking",
+      "link": "https://arxiv.org/abs/2603.00267",
+      "rating": "A",
+      "score": 8,
+      "comment": "多源多智能体证据检索提升事实核查鲁棒性，突破传统RAG依赖文本相似度的瓶颈，支持多跳语义推理，对对抗性 misinformation 有实用价值。",
+      "tags": [
+        "事实核查",
+        "RAG",
+        "多智能体"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "TraderBench: How Robust Are AI Agents in Adversarial Capital Markets?",
+      "link": "https://arxiv.org/abs/2603.00285",
+      "rating": "A",
+      "score": 8,
+      "comment": "TraderBench首次将静态知识评估与动态对抗性交易仿真结合，用纯绩效指标消除主观评判偏差，为AI金融代理提供可比、可复现的基准，推动该领域评估范式演进。",
+      "tags": [
+        "AI金融",
+        "基准测试",
+        "对抗训练"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "DIG to Heal: Scaling General-purpose Agent Collaboration via Explainable Dynamic Decision Paths",
+      "link": "https://arxiv.org/abs/2603.00309",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出可解释动态决策路径，解决多智能体协作中的冗余与故障问题，为通用Agent协同提供新范式，兼具理论深度与工程价值。",
+      "tags": [
+        "多智能体系统",
+        "可解释AI",
+        "LLM应用"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "How Well Do Multimodal Models Reason on ECG Signals?",
+      "link": "https://arxiv.org/abs/2603.00312",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统性提出ECG信号推理评估框架，将推理分解为感知与演绎两部分，解决黑箱AI可解释性验证难题，具实用价值。",
+      "tags": [
+        "多模态AI",
+        "医疗AI",
+        "可解释性",
+        "ECG"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "EmCoop: A Framework and Benchmark for Embodied Cooperation Among LLM Agents",
+      "link": "https://arxiv.org/abs/2603.00349",
+      "rating": "A",
+      "score": 8,
+      "comment": "EmCoop提出首个面向LLM驱动具身协作的基准框架，填补了多智能体协同评估空白，推动具身AI从单点能力向群体智能演进，对下一代人机协作系统有重要指导意义。",
+      "tags": [
+        "具身AI",
+        "多智能体",
+        "LLM应用",
+        "基准评测"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Monotropic Artificial Intelligence: Toward a Cognitive Taxonomy of Domain-Specialized Language Models",
+      "link": "https://arxiv.org/abs/2603.00350",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出'单向专注AI'概念，将认知科学与模型架构结合，为领域专用大模型提供新理论框架，有潜力推动垂直场景AI范式演进。",
+      "tags": [
+        "AI理论",
+        "认知科学",
+        "领域专用模型"
+      ]
+    }
+  ]
+}
