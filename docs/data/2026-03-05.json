@@ -1,0 +1,140 @@
+{
+  "date": "2026-03-05",
+  "summary": "今日焦点集中于三大方向：一是大模型能力跃升，如Gemini 3.1 Pro与NVIDIA Rubin平台推动复杂任务与自主驾驶落地；二是隐私与安全强化，联邦推理、抗中毒记忆等研究聚焦可信协作；三是基础理论突破，包括不确定性建模、语言序列生成与RL验证等，凸显AI从“能用”向“可靠、可解释、可信赖”演进。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，标志着大模型从回答转向解决问题的跃迁，具里程碑意义。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google",
+        "AI突破"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI算力基础设施与生态协同进入新阶段，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，体现大模型训练部署对高端GPU的深度绑定，标志AI基础设施新范式确立。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Federated Inference: Toward Privacy-Preserving Collaborative and Incentivized Model Serving",
+      "link": "https://arxiv.org/abs/2603.02214",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统性提出Federated Inference框架，明确隐私与性能权衡的双核心要求，为模型协同推理提供理论基础，是联邦学习向实际服务延伸的关键进展。",
+      "tags": [
+        "联邦推理",
+        "隐私计算",
+        "模型协作"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Engineering Reasoning and Instruction (ERI) Benchmark: A Large Taxonomy-driven Dataset for Foundation Models and Agents",
+      "link": "https://arxiv.org/abs/2603.02239",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个跨9大工程领域、55子领域、7意图+3难度的结构化指令数据集，为工程AI能力评估提供标准化基准，推动LLM在专业场景落地。",
+      "tags": [
+        "工程AI",
+        "基准测试",
+        "大模型训练"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "SuperLocalMemory: Privacy-Preserving Multi-Agent Memory with Bayesian Trust Defense Against Memory Poisoning",
+      "link": "https://arxiv.org/abs/2603.02240",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出面向多智能体的本地化记忆系统，通过贝叶斯信任与架构隔离防御内存投毒，兼顾隐私、安全与个性化检索，解决当前AI Agent核心风险点。",
+      "tags": [
+        "多智能体",
+        "内存安全",
+        "隐私保护"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Estimating Visual Attribute Effects in Advertising from Observational Data: A Deepfake-Informed Double Machine Learning Approach",
+      "link": "https://arxiv.org/abs/2603.02359",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出DICE-DML框架，用生成式AI解耦图像中嵌入的处理变量与混淆因子，解决视觉广告因果推断难题，具实用价值与方法论创新。",
+      "tags": [
+        "因果推断",
+        "生成式AI",
+        "广告技术",
+        "双机器学习"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Can machines be uncertain?",
+      "link": "https://arxiv.org/abs/2603.02365",
+      "rating": "A",
+      "score": 8,
+      "comment": "arXiv新论文系统探讨AI不确定性建模，区分认知与主观不确定性，提出 interrogative attitude 新视角，对可信AI与人机交互有重要理论价值。",
+      "tags": [
+        "AI理论",
+        "不确定性建模",
+        "可解释性"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "COOL-MC: Verifying and Explaining RL Policies for Platelet Inventory Management",
+      "link": "https://arxiv.org/abs/2603.02396",
+      "rating": "A",
+      "score": 8,
+      "comment": "将RL与形式化验证结合用于血小板库存管理，解决黑箱政策可信性问题，兼具学术严谨性与医疗场景实用性，是可解释AI在高风险领域的重要落地案例。",
+      "tags": [
+        "可解释AI",
+        "强化学习",
+        "医疗决策",
+        "形式化验证"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "A Zipf-preserving, long-range correlated surrogate for written language and other symbolic sequences",
+      "link": "https://arxiv.org/abs/2603.02213",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出首个能同时保留词频分布与长程相关性的符号序列代理模型，解决长期存在的建模矛盾，对语言建模、生物信息学等有基础性意义。",
+      "tags": [
+        "Zipf定律",
+        "长程相关性",
+        "符号序列建模",
+        "arXiv新论文"
+      ]
+    }
+  ]
+}
