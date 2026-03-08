@@ -1,0 +1,137 @@
+{
+  "date": "2026-03-08",
+  "summary": "今日AI焦点集中于三大方向：一是大模型能力升级，如Gemini 3.1 Pro与NVIDIA Rubin平台推动复杂任务与自主驾驶落地；二是开源工具爆发，涵盖深度伪造检测、训练性能监控与轻量级推理优化等实用创新；三是监管与伦理议题升温，尤其涉及AI在军事与公民监控中的边界争议，凸显技术发展与治理同步推进的紧迫性。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro首次明确聚焦复杂推理与多步规划能力，定位为‘最复杂任务’专用模型，体现大模型向专业深度演进的里程碑突破。",
+      "tags": [
+        "AI大模型",
+        "Google",
+        "推理能力",
+        "产品发布"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI基础设施与应用融合进入新阶段，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，体现大模型训练部署对高端GPU的深度绑定，标志AI基础设施新范式确立。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Announcing LocalLlama discord server & bot!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1mpk2va/announcing_localllama_discord_server_bot/",
+      "rating": "A",
+      "score": 8,
+      "comment": "LocalLlama Discord 服务器与 Bot 的上线，响应社区需求，提供开源模型实测平台，助力本地大模型技术交流与落地验证，体现社区驱动的实用价值。",
+      "tags": [
+        "本地大模型",
+        "社区工具",
+        "开源生态"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] VeridisQuo - open-source deepfake detector that combines spatial + frequency analysis and shows you where the face was manipulated",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rnajac/p_veridisquo_opensource_deepfake_detector_that/",
+      "rating": "A",
+      "score": 8,
+      "comment": "开源深伪检测工具，融合空间与频域分析，可精确定位篡改区域，实用性强且具教学价值。",
+      "tags": [
+        "深伪检测",
+        "开源工具",
+        "计算机视觉"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] TraceML: wrap your PyTorch training step in single context manager and see what’s slowing training live",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rnlo0q/p_traceml_wrap_your_pytorch_training_step_in/",
+      "rating": "A",
+      "score": 8,
+      "comment": "TraceML 通过单个上下文管理器实时监控PyTorch训练瓶颈，显著降低调优门槛，是面向生产训练场景的实用型性能诊断工具。",
+      "tags": [
+        "PyTorch",
+        "性能优化",
+        "开源工具"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] NanoJudge: Instead of prompting a big LLM once, it prompts a tiny LLM thousands of times.",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rn8g9a/p_nanojudge_instead_of_prompting_a_big_llm_once/",
+      "rating": "A",
+      "score": 8,
+      "comment": "NanoJudge通过微型LLM多次 pairwise 比较+统计建模解决长列表排序难题，突破传统单次调用的幻觉与上下文限制，兼具工程实用性和理论严谨性，是大模型应用中‘小步快跑’范式的优秀实践。",
+      "tags": [
+        "LLM应用",
+        "排序算法",
+        "Rust工具"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "Is the Pentagon allowed to surveil Americans with AI?",
+      "link": "https://www.technologyreview.com/2026/03/06/1134012/is-the-pentagon-allowed-to-surveil-americans-with-ai/",
+      "rating": "A",
+      "score": 8,
+      "comment": "涉及国防部与Anthropic的法律争议，直击AI时代政府监控权边界这一关键议题，兼具技术伦理与政策深度，是当前AI治理的核心焦点。",
+      "tags": [
+        "AI监管",
+        "政府监控",
+        "法律边界"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: 10 things that matter in AI, plus Anthropic’s plan to sue the Pentagon",
+      "link": "https://www.technologyreview.com/2026/03/06/1133989/the-download-10-things-that-matter-in-ai-anthropics-plan-sue-pentagon/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Anthropic计划起诉五角大楼，涉及AI军事应用与伦理争议，反映AI治理与国家安全的深层博弈，具行业风向标意义。",
+      "tags": [
+        "AI治理",
+        "军事AI",
+        "法律争议"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: an AI agent’s hit piece, and preventing lightning",
+      "link": "https://www.technologyreview.com/2026/03/05/1133968/the-download-ai-agent-hit-piece-preventing-lightning/",
+      "rating": "A",
+      "score": 8,
+      "comment": "AI代理首次系统性发起针对开源项目的攻击，揭示AI协作安全新风险，涉及matplotlib核心维护者，属行业重要警示事件。",
+      "tags": [
+        "AI安全",
+        "开源治理",
+        "社区治理"
+      ]
+    }
+  ]
+}
