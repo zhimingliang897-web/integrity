@@ -1,0 +1,137 @@
+{
+  "date": "2026-03-09",
+  "summary": "今日焦点集中于大模型能力跃升与硬件协同演进：Gemini 3.1 Pro与NVIDIA Rubin平台凸显“复杂任务+专用算力”双轮驱动；Qwen 3.5系列多尺寸迭代及本地部署实践（如3.5M专利分类）反映模型轻量化与实用化加速；而VRAM扩容、Sim-to-real瓶颈与GGUF运行时篡改等技术细节，揭示工程落地中的关键挑战。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务深度优化，体现大模型向专业推理与多步规划能力跃迁，是当前最前沿的通用AI能力突破之一。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA发布Rubin平台与开放模型，聚焦AI原生架构和自动驾驶，标志其从算力供应商向全栈AI生态领导者转型，具行业里程碑意义。",
+      "tags": [
+        "AI平台",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，体现大模型训练部署对高端GPU的深度绑定，标志AI基础设施新范式确立。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Announcing LocalLlama discord server & bot!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1mpk2va/announcing_localllama_discord_server_bot/",
+      "rating": "A",
+      "score": 8,
+      "comment": "LocalLlama Discord 服务器重启并引入模型测试 Bot，响应50万用户社区需求，推动本地大模型实操与技术讨论，体现开源生态活力。",
+      "tags": [
+        "本地大模型",
+        "社区建设",
+        "开源工具"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen3.5 family comparison on shared benchmarks",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1ro7xve/qwen35_family_comparison_on_shared_benchmarks/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Qwen3.5系列在共享基准上展现优异的模型规模缩放效率，尤其27B/35B/122B保持旗舰性能，验证了高效参数压缩与训练策略的有效性，对大模型落地具有参考价值。",
+      "tags": [
+        "大模型",
+        "性能对比",
+        "开源模型"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "I classified 3.5M US patents with Nemotron 9B on a single RTX 5090 — then built a free search engine on top",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1ro52cu/i_classified_35m_us_patents_with_nemotron_9b_on_a/",
+      "rating": "A",
+      "score": 8,
+      "comment": "本地化大模型+传统检索结合的专利分类实践，验证了小参数模型在垂直领域高精度任务中的可行性，兼具技术深度与工程落地价值。",
+      "tags": [
+        "AI应用",
+        "专利检索",
+        "本地LLM"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Does going from 96GB -> 128GB VRAM open up any interesting model options?",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rojt4c/does_going_from_96gb_128gb_vram_open_up_any/",
+      "rating": "A",
+      "score": 8,
+      "comment": "RTX 5090+Pro 6000组合实现128GB VRAM扩展，显著拓展大模型本地部署边界，尤其对120B级编码模型友好；用户实测验证了跨卡/跨设备混合推理可行性，具实用参考价值。",
+      "tags": [
+        "硬件扩展",
+        "大模型本地部署",
+        "编码AI"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen 3.5 2B upgrade!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rof18x/qwen_35_2b_upgrade/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Qwen 3.5 2B轻量模型升级，修复重复生成问题，提升推理能力，适合本地部署与快速验证，体现大模型小型化优化的实用进展。",
+      "tags": [
+        "Qwen",
+        "2B模型",
+        "本地部署",
+        "推理优化"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[D] Sim-to-real in robotics — what are the actual unsolved problems?",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1ro7zez/d_simtoreal_in_robotics_what_are_the_actual/",
+      "rating": "A",
+      "score": 8,
+      "comment": "聚焦sim-to-real核心痛点，直击工业落地瓶颈，引发行业深度思考，具实践指导价值。",
+      "tags": [
+        "机器人",
+        "仿真",
+        "AI工程化"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] Runtime GGUF tampering in llama.cpp: persistent output steering without server restart",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1romjfw/p_runtime_gguf_tampering_in_llamacpp_persistent/",
+      "rating": "A",
+      "score": 8,
+      "comment": "llama.cpp Runtime GGUF tampering 实现无需重启的持久化输出控制，提升模型部署灵活性与安全可控性，属实用工具重大更新。",
+      "tags": [
+        "llama.cpp",
+        "模型部署",
+        "输出控制"
+      ]
+    }
+  ]
+}
