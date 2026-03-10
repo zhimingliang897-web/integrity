@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-10",
+  "summary": "今日焦点集中于三大方向：一是大模型能力跃升，如Gemini 3.1 Pro与推理模型对“思维链控制”的挑战；二是AI基础设施演进，NVIDIA以 Rubin 平台与开放模型构建未来生态；三是具身智能与可信AI落地，RoboLayout、医疗影像代理及浏览器事实核查等应用凸显“生成-验证-进化”闭环的实践突破。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，是大模型迈向专业级应用的关键一步，具行业里程碑意义。",
+      "tags": [
+        "AI大模型",
+        "Google",
+        "复杂任务"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI基础设施与应用层深度整合，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，体现大模型训练部署对高端GPU的深度绑定，标志AI基础设施新范式确立。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "RoboLayout: Differentiable 3D Scene Generation for Embodied Agents",
+      "link": "https://arxiv.org/abs/2603.05522",
+      "rating": "A",
+      "score": 8,
+      "comment": "RoboLayout将agent可达性约束融入可微分布局优化，解决3D场景生成中‘语义合理但物理不可行’的核心痛点，是VLM向具身智能落地的关键一步。",
+      "tags": [
+        "具身智能",
+        "3D生成",
+        "可微分优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Real-Time AI Service Economy: A Framework for Agentic Computing Across the Continuum",
+      "link": "https://arxiv.org/abs/2603.05614",
+      "rating": "A",
+      "score": 8,
+      "comment": "arXiv新论文提出实时AI服务经济框架，首次系统分析服务依赖图（DAG）结构对分布式资源定价与最优分配的影响，为异构计算环境下的代理式计算提供理论基础，具实用指导价值。",
+      "tags": [
+        "AI服务经济",
+        "代理计算",
+        "DAG建模",
+        "资源调度"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Reasoning Models Struggle to Control their Chains of Thought",
+      "link": "https://arxiv.org/abs/2603.05706",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统量化推理模型CoT可控性，揭示其与输出可控性的显著差距，为可解释性与安全监管提供新评估维度。",
+      "tags": [
+        "大模型安全",
+        "可解释AI",
+        "CoT评测"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Evolving Medical Imaging Agents via Experience-driven Self-skill Discovery",
+      "link": "https://arxiv.org/abs/2603.05860",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出MACRO框架，实现医疗AI代理的自进化与经验驱动工具发现，突破静态工具链瓶颈，对临床决策支持系统有重要推动意义。",
+      "tags": [
+        "医学AI",
+        "LLMAgent",
+        "自进化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "The World Won't Stay Still: Programmable Evolution for Agent Benchmarks",
+      "link": "https://arxiv.org/abs/2603.05910",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出ProEvolve图结构框架，实现环境演化的可编程控制，解决Agent基准测试中静态环境与现实动态性脱节的核心问题，具实用价值。",
+      "tags": [
+        "LLM Agent",
+        "基准测试",
+        "环境演化",
+        "arXiv"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "DeepFact: Co-Evolving Benchmarks and Agents for Deep Research Factuality",
+      "link": "https://arxiv.org/abs/2603.05912",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出AtS（Audit-then-Score）动态基准演化方法，解决深度研究报告事实性验证的基准缺失与专家标注脆弱问题，推动LLM事实核查向复杂学术场景迁移。",
+      "tags": [
+        "LLM评测",
+        "事实核查",
+        "基准构建"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Verify as You Go: An LLM-Powered Browser Extension for Fake News Detection",
+      "link": "https://arxiv.org/abs/2603.05519",
+      "rating": "A",
+      "score": 8,
+      "comment": "基于RAG+LLM的浏览器插件Aletheia，创新融合证据解释、用户对话与事实核查，解决现有工具透明度与交互性不足问题，具实用价值。",
+      "tags": [
+        "Fake News Detection",
+        "Browser Extension",
+        "RAG",
+        "LLM"
+      ]
+    }
+  ]
+}
