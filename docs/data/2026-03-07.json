@@ -1,0 +1,138 @@
+{
+  "date": "2026-03-07",
+  "summary": "今日焦点集中于三大方向：一是开源工具链与模型协同演进，如Open WebUI整合Qwen3.5与原生工具调用，推动本地化AI体验升级；二是产业级落地加速，NVIDIA以 Rubin 平台和开放模型构建自动驾驶等复杂场景生态；三是基础研究突破，涵盖多智能体数学发现、扩散模型解码优化及AI自我评估偏差机制，体现从工程到认知的深度拓展。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Open WebUI’s New Open Terminal + “Native” Tool Calling + Qwen3.5 35b = Holy Sh!t!!!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rmplvs/open_webuis_new_open_terminal_native_tool_calling/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Open WebUI 首次集成原生工具调用与Qwen3.5 35B，实现本地大模型终端交互能力跃升，是开源生态中罕见的工程突破级进展。",
+      "tags": [
+        "Open WebUI",
+        "工具调用",
+        "Qwen3.5",
+        "本地大模型"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务深度优化，体现大模型在推理、规划等高阶能力上的关键突破，是当前最前沿的通用AI能力代表。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA发布Rubin平台与开放模型，聚焦AI原生架构与自动驾驶，标志其从GPU向全栈AI基础设施转型的里程碑事件。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "大模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA高端硬件（Hopper/GB200），标志AI模型复杂度跃升与算力生态深度绑定，具行业里程碑意义。",
+      "tags": [
+        "AI大模型",
+        "NVIDIA",
+        "算力依赖"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "SkillNet: Create, Evaluate, and Connect AI Skills",
+      "link": "https://arxiv.org/abs/2603.04448",
+      "rating": "A",
+      "score": 8,
+      "comment": "SkillNet提出统一技能本体与多维评估体系，解决AI代理技能重复造轮子问题，是构建可积累、可复用智能体的关键基础设施，具备实用工具潜力。",
+      "tags": [
+        "AI Agent",
+        "技能管理",
+        "开源基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Capability Thresholds and Manufacturing Topology: How Embodied Intelligence Triggers Phase Transitions in Economic Geography",
+      "link": "https://arxiv.org/abs/2603.04457",
+      "rating": "A",
+      "score": 8,
+      "comment": "arXiv新论文提出'具身智能触发制造业地理相变'的前沿理论，突破百年福特主义范式桎梏，为AI驱动制造变革提供系统性框架，值得技术战略与产业研究者重点关注。",
+      "tags": [
+        "具身智能",
+        "制造业转型",
+        "经济地理",
+        "AI+工业"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Progressive Refinement Regulation for Accelerating Diffusion Language Model Decoding",
+      "link": "https://arxiv.org/abs/2603.04514",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出动态精炼调控机制，突破传统固定规则限制，显著提升扩散语言模型解码效率，为大模型推理优化提供新思路。",
+      "tags": [
+        "扩散语言模型",
+        "解码优化",
+        "动态控制"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Discovering mathematical concepts through a multi-agent system",
+      "link": "https://arxiv.org/abs/2603.04528",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将多智能体系统用于数学概念自主发现，能从多面体数据中重构同调概念，兼具理论深度与实证能力，为AI+数学研究提供新范式。",
+      "tags": [
+        "多智能体系统",
+        "AI数学发现",
+        "同调代数"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Adaptive Memory Admission Control for LLM Agents",
+      "link": "https://arxiv.org/abs/2603.04549",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出A-MAC框架，将记忆准入问题结构化为可解释的五因素决策，解决LLM代理长期记忆失控痛点，具实用价值与可审计性。",
+      "tags": [
+        "LLM代理",
+        "记忆管理",
+        "AI架构"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Self-Attribution Bias: When AI Monitors Go Easy on Themselves",
+      "link": "https://arxiv.org/abs/2603.04582",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统揭示AI自监控中的自我归因偏差，揭示了代理系统在自我评估时的潜在安全风险，对AI安全与可靠性设计有重要指导意义。",
+      "tags": [
+        "AI安全",
+        "自监控",
+        "偏见研究"
+      ]
+    }
+  ]
+}

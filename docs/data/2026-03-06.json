@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-06",
+  "summary": "今日焦点集中于多智能体系统与自主性演进：Mozi与AriadneMem等研究推动LLM代理在药物发现、长期记忆等复杂任务中的自治能力；NVIDIA Rubin平台与Gemini 3.1 Pro则体现工业界对高阶推理与端到端自主系统的加速落地，凸显“模型—平台—应用”协同演进趋势。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Mozi: Governed Autonomy for Drug Discovery LLM Agents",
+      "link": "https://arxiv.org/abs/2603.03655",
+      "rating": "S",
+      "score": 9,
+      "comment": "Mozi提出双层架构解决LLM在药物发现中工具滥用与长程可靠性问题，首次将生成式AI灵活性与计算生物学确定性结合，是领域里程碑突破。",
+      "tags": [
+        "LLM Agents",
+        "药物发现",
+        "AI治理",
+        "arXiv SOTA"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，标志着大模型从回答转向解决，具行业里程碑意义。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI基础设施与端侧智能融合进入新阶段，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA顶级硬件（Hopper/GB200），标志AI模型复杂度跃升与算力生态深度绑定，是行业里程碑事件。",
+      "tags": [
+        "AI大模型",
+        "NVIDIA",
+        "算力基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Asymmetric Goal Drift in Coding Agents Under Value Conflict",
+      "link": "https://arxiv.org/abs/2603.03456",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统性研究编码代理在价值冲突下的非对称目标漂移，构建真实多步任务框架验证长期行为偏差，对AGI安全与可控性有重要启示。",
+      "tags": [
+        "AI安全",
+        "编码代理",
+        "目标漂移",
+        "OpenCode"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Build, Judge, Optimize: A Blueprint for Continuous Improvement of Multi-Agent Consumer Assistants",
+      "link": "https://arxiv.org/abs/2603.03565",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出多智能体购物助手的端到端评估与优化蓝图，针对真实业务痛点（如需求模糊、预算约束）设计多维评价体系，具生产落地价值。",
+      "tags": [
+        "多智能体系统",
+        "评估框架",
+        "电商AI"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "MAGE: Meta-Reinforcement Learning for Language Agents toward Strategic Exploration and Exploitation",
+      "link": "https://arxiv.org/abs/2603.03680",
+      "rating": "A",
+      "score": 8,
+      "comment": "MAGE提出面向多智能体环境的元强化学习框架，解决LLM代理在非平稳环境中战略探索与利用的瓶颈，是元学习+多智能体RL的重要进展。",
+      "tags": [
+        "元强化学习",
+        "多智能体",
+        "LLM代理"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "AI4S-SDS: A Neuro-Symbolic Solvent Design System via Sparse MCTS and Differentiable Physics Alignment",
+      "link": "https://arxiv.org/abs/2603.03686",
+      "rating": "A",
+      "score": 8,
+      "comment": "神经符号系统结合稀疏MCTS与可微物理对齐，解决化学溶剂设计中高维组合与长程推理难题，具实用价值与方法论创新。",
+      "tags": [
+        "AI4S",
+        "神经符号系统",
+        "溶剂设计",
+        "可微物理"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "RAGNav: A Retrieval-Augmented Topological Reasoning Framework for Multi-Goal Visual-Language Navigation",
+      "link": "https://arxiv.org/abs/2603.03745",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出RAGNav框架，通过Dual-Basis Memory融合语义与拓扑结构，有效缓解多目标VLM中的空间幻觉与规划漂移问题，是VLN领域的重要进展。",
+      "tags": [
+        "视觉语言导航",
+        "RAG",
+        "拓扑推理"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "AriadneMem: Threading the Maze of Lifelong Memory for LLM Agents",
+      "link": "https://arxiv.org/abs/2603.03290",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出AriadneMem结构化记忆系统，解决长时对话中事实断裂与状态冲突两大难题，用熵感知门控和冲突感知聚合提升长期记忆可靠性，是LLM代理记忆架构的重要进展。",
+      "tags": [
+        "LLM代理",
+        "记忆系统",
+        "长程推理"
+      ]
+    }
+  ]
+}
