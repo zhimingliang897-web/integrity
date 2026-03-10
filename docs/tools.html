@@ -27,6 +27,7 @@
         <!-- Live Demo Section for tools.html -->
         <div class="demo-section" style="margin-bottom: 40px;">
             <div class="demo-container">
+                <!-- Demo 1: 图文互转 -->
                 <div class="demo-card">
                     <div class="demo-header">
                         <div class="demo-title">
@@ -44,6 +45,98 @@
                             <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:1px;"><span style="color:#10b981;">●</span> Qwen-VL Prompt Output</div>
                             <div id="vision-output" style="font-family: monospace; color:#e2e8f0; line-height:1.6; font-size:0.9rem; flex:1;">
                                 <span style="opacity:0.5; font-style:italic;">等待传入图片进行反推...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo 2: 多模型对比 -->
+                <div class="demo-card" style="margin-top: 20px;">
+                    <div class="demo-header">
+                        <div class="demo-title">
+                            <span class="icon">⚖️</span>
+                            <h3>多模型对比平台</h3>
+                        </div>
+                        <button id="start-compare-btn" class="demo-btn">开始对比 🎯</button>
+                    </div>
+                    <div class="demo-body" style="background:#0d0d14; padding:20px;">
+                        <div style="margin-bottom: 16px;">
+                            <input type="text" id="compare-input" placeholder="输入你的问题..." value="解释一下什么是大语言模型" style="width:100%; padding:12px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff; font-size:14px;">
+                        </div>
+                        <div class="compare-models" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;">
+                            <div class="model-result" id="model-qwen" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                                    <span style="color:#f59e0b; font-weight:600;">🟡</span> <strong>Qwen-Plus</strong>
+                                </div>
+                                <div class="model-text" style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+                                    <span style="opacity:0.5;">点击开始对比查看回复...</span>
+                                </div>
+                            </div>
+                            <div class="model-result" id="model-deepseek" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                                    <span style="color:#3b82f6; font-weight:600;">🔵</span> <strong>DeepSeek-V3</strong>
+                                </div>
+                                <div class="model-text" style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+                                    <span style="opacity:0.5;">点击开始对比查看回复...</span>
+                                </div>
+                            </div>
+                            <div class="model-result" id="model-gpt" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                                    <span style="color:#10b981; font-weight:600;">🟢</span> <strong>GPT-4o-mini</strong>
+                                </div>
+                                <div class="model-text" style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+                                    <span style="opacity:0.5;">点击开始对比查看回复...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo 3: Token 计算器 -->
+                <div class="demo-card" style="margin-top: 20px;">
+                    <div class="demo-header">
+                        <div class="demo-title">
+                            <span class="icon">🪙</span>
+                            <h3>Token 消耗计算器</h3>
+                        </div>
+                        <button id="calc-token-btn" class="demo-btn">计算消耗 💰</button>
+                    </div>
+                    <div class="demo-body" style="background:#0d0d14; padding:20px;">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:16px;">
+                            <div>
+                                <label style="display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px;">模型</label>
+                                <select id="token-model" style="width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
+                                    <option value="qwen-plus">Qwen-Plus</option>
+                                    <option value="qwen-turbo">Qwen-Turbo</option>
+                                    <option value="gpt-4o">GPT-4o</option>
+                                    <option value="gpt-4o-mini">GPT-4o Mini</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px;">输入语言</label>
+                                <select id="token-lang" style="width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
+                                    <option value="zh">中文</option>
+                                    <option value="en">英文</option>
+                                    <option value="img">图片+中文</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px;">字符数</label>
+                                <input type="number" id="token-chars" value="100" style="width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
+                            </div>
+                        </div>
+                        <div class="token-result" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:16px; display:flex; justify-content:space-around; text-align:center;">
+                            <div>
+                                <div style="font-size:24px; color:var(--primary); font-weight:700;" id="result-prompt">-</div>
+                                <div style="font-size:12px; color:var(--text-muted);">输入 Token</div>
+                            </div>
+                            <div>
+                                <div style="font-size:24px; color:var(--secondary); font-weight:700;" id="result-completion">-</div>
+                                <div style="font-size:12px; color:var(--text-muted);">输出 Token</div>
+                            </div>
+                            <div>
+                                <div style="font-size:24px; color:#10b981; font-weight:700;" id="result-cost">-</div>
+                                <div style="font-size:12px; color:var(--text-muted);">预估费用</div>
                             </div>
                         </div>
                     </div>
@@ -324,6 +417,91 @@
                 isScanning = false;
                 visionBtn.disabled = false;
                 visionBtn.textContent = '重新提取 ⚡';
+            });
+        }
+
+        // Multi-Model Comparison Demo
+        const compareBtn = document.getElementById('start-compare-btn');
+        const compareInput = document.getElementById('compare-input');
+        
+        const modelResponses = {
+            'qwen-plus': '大语言模型（Large Language Model，简称LLM）是一种基于深度学习技术的人工智能模型。它通过海量文本数据进行训练，能够理解和生成人类语言。核心特点包括：1）规模巨大，通常有数十亿到数千亿参数；2）涌现能力，随着规模增大出现小模型不具备的能力；3）通用性，一个模型可以完成多种任务。',
+            'deepseek-v3': 'LLM（Large Language Model）是近年来AI领域的重大突破。它本质是一个超级强大的文本预测机器——给定前面的文字，预测下一个最可能出现的文字。训练方式是无监督学习，让模型从海量互联网文本中自学语言规律。典型架构是Transformerattention机制让它能处理长文本依赖。',
+            'gpt-4o-mini': 'A Large Language Model (LLM) is an AI trained on massive text data to understand and generate human language. Key points: 1) Trained using transformer architecture, 2) Learns patterns from billions of parameters, 3) Can perform various NLP tasks like translation, summarization, coding, etc., 4) Shows emergent abilities at scale.'
+        };
+        
+        if (compareBtn) {
+            compareBtn.addEventListener('click', async () => {
+                if (compareBtn.disabled) return;
+                compareBtn.disabled = true;
+                compareBtn.textContent = '模型回答中...';
+                
+                const qwenText = document.querySelector('#model-qwen .model-text');
+                const deepseekText = document.querySelector('#model-deepseek .model-text');
+                const gptText = document.querySelector('#model-gpt .model-text');
+                
+                // Clear previous
+                qwenText.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
+                deepseekText.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
+                gptText.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
+                
+                // Simulate parallel responses
+                await new Promise(r => setTimeout(r, 800));
+                qwenText.innerHTML = '';
+                for (let i = 0; i < modelResponses['qwen-plus'].length; i++) {
+                    qwenText.innerHTML += modelResponses['qwen-plus'].charAt(i);
+                    await new Promise(r => setTimeout(r, 15));
+                }
+                
+                await new Promise(r => setTimeout(r, 400));
+                deepseekText.innerHTML = '';
+                for (let i = 0; i < modelResponses['deepseek-v3'].length; i++) {
+                    deepseekText.innerHTML += modelResponses['deepseek-v3'].charAt(i);
+                    await new Promise(r => setTimeout(r, 12));
+                }
+                
+                await new Promise(r => setTimeout(r, 400));
+                gptText.innerHTML = '';
+                for (let i = 0; i < modelResponses['gpt-4o-mini'].length; i++) {
+                    gptText.innerHTML += modelResponses['gpt-4o-mini'].charAt(i);
+                    await new Promise(r => setTimeout(r, 10));
+                }
+                
+                compareBtn.disabled = false;
+                compareBtn.textContent = '重新对比 🎯';
+            });
+        }
+
+        // Token Calculator Demo
+        const calcTokenBtn = document.getElementById('calc-token-btn');
+        
+        const tokenPrices = {
+            'qwen-plus': { input: 0.004, output: 0.012 },
+            'qwen-turbo': { input: 0.001, output: 0.002 },
+            'gpt-4o': { input: 0.0025, output: 0.01 },
+            'gpt-4o-mini': { input: 0.00015, output: 0.0006 }
+        };
+        
+        const tokenRatios = { 'zh': 0.5, 'en': 0.25, 'img': 1.5 }; // chars to tokens ratio
+        
+        if (calcTokenBtn) {
+            calcTokenBtn.addEventListener('click', () => {
+                const model = document.getElementById('token-model').value;
+                const lang = document.getElementById('token-lang').value;
+                const chars = parseInt(document.getElementById('token-chars').value) || 100;
+                
+                const ratio = tokenRatios[lang];
+                const promptTokens = Math.ceil(chars * ratio);
+                const completionTokens = Math.ceil(promptTokens * 0.3);
+                const prices = tokenPrices[model];
+                
+                const inputCost = (promptTokens / 1000) * prices.input;
+                const outputCost = (completionTokens / 1000) * prices.output;
+                const totalCost = inputCost + outputCost;
+                
+                document.getElementById('result-prompt').textContent = promptTokens;
+                document.getElementById('result-completion').textContent = completionTokens;
+                document.getElementById('result-cost').textContent = '$' + totalCost.toFixed(6);
             });
         }
     </script>
