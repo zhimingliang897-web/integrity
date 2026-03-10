@@ -24,6 +24,33 @@
             <p style="color:#888; margin-top:6px;">自己动手做的 AI 工具合集，全部开源，持续更新。</p>
         </div>
 
+        <!-- Live Demo Section for tools.html -->
+        <div class="demo-section" style="margin-bottom: 40px;">
+            <div class="demo-container">
+                <div class="demo-card">
+                    <div class="demo-header">
+                        <div class="demo-title">
+                            <span class="icon">🎨</span>
+                            <h3>图文互转体验 (Image ↔ Prompt)</h3>
+                        </div>
+                        <button id="start-vision-btn" class="demo-btn">提取提示词 ⚡</button>
+                    </div>
+                    <div class="demo-body vision-window" style="padding:24px; display:flex; gap:24px; background:#0d0d14; align-items:flex-start;">
+                        <div class="vision-image-box" style="flex:1; border: 1px dashed var(--border); border-radius: 12px; padding: 8px; text-align:center; position:relative;">
+                            <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=400" alt="demo sample" style="width:100%; border-radius:8px; display:block; filter: grayscale(20%); transition: filter 0.5s;">
+                            <div id="scan-line" style="position:absolute; top:8px; left:8px; right:8px; height:2px; background:var(--primary); box-shadow: 0 0 8px var(--primary); display:none; border-radius: 2px;"></div>
+                        </div>
+                        <div class="vision-prompt-box" style="flex:1.5; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:16px; min-height: 200px; display:flex; flex-direction:column;">
+                            <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:1px;"><span style="color:#10b981;">●</span> Qwen-VL Prompt Output</div>
+                            <div id="vision-output" style="font-family: monospace; color:#e2e8f0; line-height:1.6; font-size:0.9rem; flex:1;">
+                                <span style="opacity:0.5; font-style:italic;">等待传入图片进行反推...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="tool-grid">
             <!-- 1. 分镜视频生成器 -->
             <div class="tool-card">
@@ -139,6 +166,60 @@
                 </div>
                 <a href="https://github.com/zhimingliang897-web/integrity/tree/main/13course_digest" class="tool-link">查看源码 →</a>
             </div>
+
+            <!-- 14. 个人文件助手 -->
+            <div class="tool-card">
+                <div class="tool-icon">🤖</div>
+                <h3>个人文件助手 Agent</h3>
+                <p class="tool-desc">用大白话控制电脑极速秒搜全盘文件的大模型管家。支持手机端远程内网访问，并能自动打包所选文件发送到指定邮箱。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">DashScope</span>
+                    <span class="tech-tag">Natapp</span>
+                    <span class="tech-tag">Windows API</span>
+                </div>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/14file-agent" class="tool-link">查看源码 →</a>
+            </div>
+
+            <!-- 15. 小红书生成器 -->
+            <div class="tool-card">
+                <div class="tool-icon">📕</div>
+                <h3>小红书内容生成器</h3>
+                <p class="tool-desc">AI 全自动生成英语教育图文笔记。自动构思知识点、生成精美封面排版，并支持控制浏览器一键自动发布。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Playwright</span>
+                    <span class="tech-tag">LLM</span>
+                    <span class="tech-tag">Pillow</span>
+                </div>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/15redbook" class="tool-link">查看源码 →</a>
+            </div>
+
+            <!-- 17. 多模型对比平台 -->
+            <div class="tool-card">
+                <div class="tool-icon">⚖️</div>
+                <h3>多模型对比平台</h3>
+                <p class="tool-desc">同一个界面横向对比 Qwen、Doubao、DeepSeek 等大模型。支持并发提交问题，流式输出展示，直观评测回复质量差异。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Node.js</span>
+                    <span class="tech-tag"> Vanilla JS</span>
+                    <span class="tech-tag">OpenAI Format API</span>
+                </div>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/17ai-compare" class="tool-link">查看源码 →</a>
+            </div>
+
+            <!-- 18. Token 消耗对比 -->
+            <div class="tool-card">
+                <div class="tool-icon">🪙</div>
+                <h3>Token 消耗对比工具</h3>
+                <p class="tool-desc">量化测试相同语义在「中文/英文/带图」三种输入下的 Token 开销差异。帮助开发者优化 Prompt 成本，包含图形化界面。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Tkinter</span>
+                    <span class="tech-tag">DashScope</span>
+                </div>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/18tokens" class="tool-link">查看源码 →</a>
+            </div>
         </div>
 
         <!-- Private Projects Section -->
@@ -148,6 +229,18 @@
         </div>
 
         <div class="tool-grid">
+            <div class="tool-card" style="opacity: 0.7;">
+                <div class="tool-icon">🎫</div>
+                <h3>大麦抢票助手</h3>
+                <p class="tool-desc">通过电脑端 ADB 控制 Android 手机，到达指定时间全自动进入大麦 APP 执行物理点击抢票流程与选座购买。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">uiautomator2</span>
+                    <span class="tech-tag">ADB</span>
+                </div>
+                <span class="tool-link" style="color:#666;">私有仓库</span>
+            </div>
+
             <div class="tool-card" style="opacity: 0.7;">
                 <div class="tool-icon">🕷️</div>
                 <h3>多平台爬虫</h3>
@@ -187,5 +280,63 @@
     </div>
 
     <footer>Integrity Lab · 全部项目开源于 <a href="https://github.com/zhimingliang897-web/integrity">GitHub</a></footer>
+
+    <script>
+        // Vision AI Simulation
+        const visionBtn = document.getElementById('start-vision-btn');
+        const visionOutput = document.getElementById('vision-output');
+        const scanLine = document.getElementById('scan-line');
+        const demoImg = document.querySelector('.vision-image-box img');
+        let isScanning = false;
+
+        if (visionBtn) {
+            visionBtn.addEventListener('click', async () => {
+                if (isScanning) return;
+                isScanning = true;
+                visionBtn.disabled = true;
+                visionBtn.textContent = '视觉模型分析中...';
+                
+                // Start scan animation
+                scanLine.style.display = 'block';
+                scanLine.style.animation = 'scan 2.5s ease-in-out infinite';
+                demoImg.style.filter = 'brightness(1.1) contrast(1.1)';
+                
+                visionOutput.innerHTML = '<span style="color:var(--primary);">[Model Initialized] Analyzing visual features...</span><br><br>';
+                
+                // Simulate network/inference latency
+                await new Promise(r => setTimeout(r, 1800)); 
+                
+                scanLine.style.display = 'none';
+                demoImg.style.filter = 'grayscale(0%) brightness(1.1)';
+                
+                const promptText = "A stunning high-quality 3D render of a futuristic cyberpunk cityscape at night. Neon signs glowing in magenta and cyan, reflecting off wet asphalt. Sleek flying vehicles navigate between towering skyscrapers shrouded in volumetric fog. Cinematic lighting, octane render, unreal engine 5, 8k resolution, photorealistic details, deeply atmospheric.";
+                
+                const targetSpan = document.createElement('span');
+                targetSpan.style.color = '#fff';
+                visionOutput.appendChild(targetSpan);
+                
+                // Typewriter effect
+                for (let i = 0; i < promptText.length; i++) {
+                    targetSpan.innerHTML += promptText.charAt(i);
+                    await new Promise(r => setTimeout(r, 15)); // Typing speed
+                }
+                
+                isScanning = false;
+                visionBtn.disabled = false;
+                visionBtn.textContent = '重新提取 ⚡';
+            });
+        }
+    </script>
+    <style>
+        @keyframes scan {
+            0% { top: 8px; opacity: 1; }
+            50% { top: calc(100% - 14px); opacity: 0.8; }
+            100% { top: 8px; opacity: 1; }
+        }
+        @media (max-width: 640px) {
+            .vision-window { flex-direction: column !important; }
+            .vision-image-box, .vision-prompt-box { width: 100%; }
+        }
+    </style>
 </body>
 </html>

@@ -1,0 +1,11 @@
+name: damai
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - uiautomator2
+    - adbutils
+    - ntplib

@@ -1,0 +1,96 @@
+{
+  "title": "打推销电话不尬聊！5句让老外秒接话💡",
+  "cover": {
+    "main_title": "推销电话救命句",
+    "sub_title": "5句让客户不挂你📞",
+    "style_keywords": "干净商务风、浅蓝渐变背景、手绘电话图标、圆角卡片排版、活泼字体",
+    "emoji_icon": "📞"
+  },
+  "slides": [
+    {
+      "slide_number": 1,
+      "scene_title": "开场3秒破冰",
+      "wrong_cn": "我打电话是来卖东西的",
+      "wrong_en": "I call you to sell something.",
+      "correct_en": "Hi, this is [Name] from [Company] — hope I’m not catching you mid-sprint! 😅",
+      "correct_cn": "嗨，我是[公司]的[名字]，没打扰你赶工吧？😅",
+      "dialogue": {
+        "a": "A: Hi, this is Maya from BloomLabs — hope I’m not catching you mid-sprint! 😅",
+        "a_cn": "A：嗨，我是BloomLabs的Maya，没打扰你赶工吧？😅",
+        "b": "B: Haha no worries — what’s up?",
+        "b_cn": "B：哈哈没事～什么事？"
+      },
+      "tip": "用‘mid-sprint’（敏捷开发术语）或‘mid-coffee’等轻幽默词，瞬间拉近距离，比‘sorry to bother you’更自然！"
+    },
+    {
+      "slide_number": 2,
+      "scene_title": "一句话说清来意",
+      "wrong_cn": "我们有个新产品想推荐给你",
+      "wrong_en": "We have a new product to recommend to you.",
+      "correct_en": "We’re helping teams like yours cut onboarding time by 40% — thought you’d want the first look.",
+      "correct_cn": "我们帮同类团队把入职时间缩短了40%，觉得你们该优先看看。",
+      "dialogue": {
+        "a": "A: We’re helping teams like yours cut onboarding time by 40% — thought you’d want the first look.",
+        "a_cn": "A：我们帮同类团队把入职时间缩短了40%，觉得你们该优先看看。",
+        "b": "B: Oh cool — is it SaaS-based?",
+        "b_cn": "B：哦不错——是SaaS产品吗？"
+      },
+      "tip": "别讲‘what we sell’，讲‘what they gain’！用数据+‘teams like yours’精准锚定身份，拒绝感直降70%"
+    },
+    {
+      "slide_number": 3,
+      "scene_title": "被拒时别秒退场",
+      "wrong_cn": "好的，谢谢，再见",
+      "wrong_en": "OK, thank you. Goodbye.",
+      "correct_en": "Totally get it — if things shift next quarter, would it be okay if I circle back with a 2-min update?",
+      "correct_cn": "完全理解！如果下季度有变化，我发个2分钟更新，方便你快速扫一眼，可以吗？",
+      "dialogue": {
+        "a": "A: Totally get it — if things shift next quarter, would it be okay if I circle back with a 2-min update?",
+        "a_cn": "A：完全理解！如果下季度有变化，我发个2分钟更新，方便你快速扫一眼，可以吗？",
+        "b": "B: Yeah, just shoot me a quick email!",
+        "b_cn": "B：行，邮件甩我一下就行！"
+      },
+      "tip": "用‘circle back’代替‘call again’，用‘2-min update’降低心理门槛——老外一听就懂：这人专业且不烦人。"
+    },
+    {
+      "slide_number": 4,
+      "scene_title": "应对‘我现在很忙’",
+      "wrong_cn": "那我晚点再打给你",
+      "wrong_en": "Then I’ll call you later.",
+      "correct_en": "How about I send a 90-second Loom video + bullet points? You can watch/scan anytime — zero call-back pressure.",
+      "correct_cn": "我发你一个90秒Loom视频+要点清单？随时看/扫一眼都行，绝不催你回电。",
+      "dialogue": {
+        "a": "A: How about I send a 90-second Loom video + bullet points? You can watch/scan anytime — zero call-back pressure.",
+        "a_cn": "A：我发你一个90秒Loom视频+要点清单？随时看/扫一眼都行，绝不催你回电。",
+        "b": "B: Perfect — send it now!",
+        "b_cn": "B：太好了——现在就发！"
+      },
+      "tip": "Offer value *on their terms*：视频+bullet points=尊重对方时间，还悄悄植入你的专业形象（Loom是欧美职场默认工具）"
+    },
+    {
+      "slide_number": 5,
+      "scene_title": "结束前埋钩子",
+      "wrong_cn": "谢谢您的时间",
+      "wrong_en": "Thank you for your time.",
+      "correct_en": "One last thing — our pilot group got early access to [Feature]. Want me to reserve your spot while it’s open?",
+      "correct_cn": "最后一个小消息：内测组能提前用[功能]，要帮你留个名额吗？",
+      "dialogue": {
+        "a": "A: One last thing — our pilot group got early access to AI calendar sync. Want me to reserve your spot while it’s open?",
+        "a_cn": "A：最后一个小消息：内测组能提前用AI日历同步功能，要帮你留个名额吗？",
+        "b": "B: Wait — send details ASAP!",
+        "b_cn": "B：等等——快把详情发我！"
+      },
+      "tip": "用‘One last thing’制造轻微悬念，‘reserve your spot’激发稀缺感，比‘let me know if interested’转化率高3倍！"
+    }
+  ],
+  "caption": "90%的销售电话3秒就被挂断——不是产品不好，是第一句话就暴露了‘非母语者’身份。🤦‍♀️今天这5句，全是我在硅谷SaaS公司当AE时每天真·在用的！不背单词、不练发音，专治‘不敢开口’和‘一拒就怂’。亲测客户回复率↑60%！👉你最常卡在哪一句？评论区蹲翻牌！👇收藏这篇，下次拨号前瞄一眼，稳赢！✨\n\n#职场英语 #销售话术 #英语口语 #外贸人必备 #电话英语 #SaaS销售 #实用英语",
+  "tags": [
+    "#职场英语",
+    "#销售话术",
+    "#英语口语",
+    "#外贸人必备",
+    "#电话英语",
+    "#SaaS销售",
+    "#实用英语"
+  ]
+}

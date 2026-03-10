@@ -1,0 +1,97 @@
+{
+  "title": "打推销电话不尬聊！5句让老外秒接话的职场英语💡",
+  "cover": {
+    "main_title": "冷Call不翻车",
+    "sub_title": "5句让客户主动聊下去",
+    "style_keywords": "简约商务风、蓝白渐变、手绘电话图标、清爽字体、带微光效果",
+    "emoji_icon": "📞"
+  },
+  "slides": [
+    {
+      "slide_number": 1,
+      "scene_title": "开场破冰：别一上来就报身份",
+      "wrong_cn": "我是XX公司，我打电话是想卖您产品…",
+      "wrong_en": "Hi, I’m from ABC Co., and I’m calling to sell you something.",
+      "correct_en": "Hi there — this is [Name] calling from [Team/Dept], hope I caught you at a good time?",
+      "correct_cn": "你好呀～我是[名字]，来自[团队/部门]，没打扰到你吧？",
+      "dialogue": {
+        "a": "Hi there — this is Maya calling from Customer Success, hope I caught you at a good time?",
+        "a_cn": "你好呀～我是客户成功部的Maya，没打扰到你吧？",
+        "b": "Oh hey Maya! Yeah, just grabbing coffee — what’s up?",
+        "b_cn": "哦嘿Maya！刚好在喝咖啡——有啥事？"
+      },
+      "tip": "用‘hope I caught you at a good time’代替‘sorry to bother you’，更自信不卑微；‘Hi there’比‘Hello’更自然亲切～"
+    },
+    {
+      "slide_number": 2,
+      "scene_title": "说明来意：不说“卖”，说“帮”",
+      "wrong_cn": "我们有个很棒的产品想推荐给您",
+      "wrong_en": "We have a great product we’d like to recommend to you.",
+      "correct_en": "We’ve been helping teams like yours with [specific pain point] — thought I’d share how it’s working for others.",
+      "correct_cn": "我们一直在帮像你们这样的团队解决[具体痛点]，想和你分享下别人是怎么搞定的。",
+      "dialogue": {
+        "a": "We’ve been helping SaaS teams like yours streamline onboarding — thought I’d share how it’s working for others.",
+        "a_cn": "我们一直在帮SaaS团队简化入职流程，想和你分享下别人是怎么搞定的。",
+        "b": "Hmm, onboarding *is* messy for us right now… tell me more?",
+        "b_cn": "嗯…我们这会儿入职流程确实一团乱…说说看？"
+      },
+      "tip": "把‘sell’藏进‘helping’里，用‘teams like yours’制造认同感，客户瞬间觉得‘这人懂我’！"
+    },
+    {
+      "slide_number": 3,
+      "scene_title": "应对拒绝①：当对方说‘现在没兴趣’",
+      "wrong_cn": "那我加您微信，以后再联系？",
+      "wrong_en": "Can I add you on WeChat and follow up later?",
+      "correct_en": "Totally get it — no pitch today. Mind if I circle back in [X weeks/months] when things settle?",
+      "correct_cn": "完全理解——今天绝不推销！方便我[X周/月]后等你们节奏稳了再简单同步下？",
+      "dialogue": {
+        "a": "Totally get it — no pitch today. Mind if I circle back in 6 weeks when your Q3 planning wraps up?",
+        "a_cn": "完全理解——今天绝不推销！方便我6周后等你们Q3规划收尾了再简单同步下？",
+        "b": "Yeah, that actually works — ping me then!",
+        "b_cn": "行啊，到时候戳我！"
+      },
+      "tip": "用‘circle back’代替‘contact again’，地道又专业；加上具体时间锚点（如‘Q3 planning’），显得你真的研究过对方！"
+    },
+    {
+      "slide_number": 4,
+      "scene_title": "应对拒绝②：当对方说‘我们有供应商了’",
+      "wrong_cn": "那您能介绍我们认识一下吗？",
+      "wrong_en": "Can you introduce us to your current supplier?",
+      "correct_en": "Got it — out of curiosity, what’s working really well with them? (pause) …That’s helpful — we actually specialize in exactly that gap.",
+      "correct_cn": "明白啦～好奇问下，他们哪块做得特别好？（停顿）…原来如此！这恰恰是我们最擅长补上的缺口。",
+      "dialogue": {
+        "a": "Got it — out of curiosity, what’s working really well with them? …That’s helpful — we actually specialize in exactly that gap.",
+        "a_cn": "明白啦～好奇问下，他们哪块做得特别好？…原来如此！这恰恰是我们最擅长补上的缺口。",
+        "b": "Haha, fair question — their reporting is solid, but our team spends hours cleaning data first…",
+        "b_cn": "哈哈，好问题——他们报表是挺稳，但我们团队得先花几小时清洗数据…"
+      },
+      "tip": "先真诚提问+停顿，展现倾听；再用‘specialize in that gap’悄悄植入价值，不硬推，但精准扎心！"
+    },
+    {
+      "slide_number": 5,
+      "scene_title": "礼貌收尾：挂电话前留个‘钩子’",
+      "wrong_cn": "谢谢您的时间，再见！",
+      "wrong_en": "Thank you for your time — goodbye!",
+      "correct_en": "Thanks so much — I’ll send over that [resource/case study] I mentioned. And if anything jumps out, just hit reply!",
+      "correct_cn": "超感谢！我马上把提到的[资料/案例]发你邮箱～有任何想法，随时回邮件哈！",
+      "dialogue": {
+        "a": "Thanks so much — I’ll send over that Shopify onboarding checklist I mentioned. And if anything jumps out, just hit reply!",
+        "a_cn": "超感谢！我马上把提到的Shopify入职清单发你邮箱～有任何想法，随时回邮件哈！",
+        "b": "Perfect — looking forward to it!",
+        "b_cn": "太好了——期待收到！"
+      },
+      "tip": "结尾给‘可执行的小行动’（发资料/清单）+ ‘低门槛回应方式’（hit reply），转化率直接拉高3倍！"
+    }
+  ],
+  "caption": "90%的人第一句话就把客户吓跑了——真正专业的推销，从来不说‘I want to sell you something’！✅这5句不是背稿，是‘思维切换’：从‘我要卖’变成‘我来帮’。语调放松点，像跟朋友聊工作，反而更可信～你最常卡在哪一步？开场？被拒？还是收尾不敢留钩子？👇评论区蹲你的实战故事！✨收藏这篇，下次cold call前扫一眼，气场直接拿捏～\n\n#职场英语 #销售英语 #coldcall技巧 #英语口语 #外贸人必备 #商务英语 #英语干货 #小红书英语课",
+  "tags": [
+    "#职场英语",
+    "#销售英语",
+    "#coldcall技巧",
+    "#英语口语",
+    "#外贸人必备",
+    "#商务英语",
+    "#英语干货",
+    "#小红书英语课"
+  ]
+}

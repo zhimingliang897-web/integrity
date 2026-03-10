@@ -39,8 +39,34 @@
             </div>
         </div>
 
+        <!-- Live Demo Section (New) -->
+        <div id="live-demos" class="section-block demo-section">
+            <div class="section-header">
+                <h2>✨ 交互体验区</h2>
+                <p>点击下方按钮，直接在网页上体验工具的运行效果</p>
+            </div>
+            
+            <div class="demo-container">
+                <div class="demo-card">
+                    <div class="demo-header">
+                        <div class="demo-title">
+                            <span class="icon">🎭</span>
+                            <h3>AI 辩论赛模拟</h3>
+                        </div>
+                        <button id="start-debate-btn" class="demo-btn">开始辩论比赛 ⚡</button>
+                    </div>
+                    <div class="demo-body debate-window" id="debate-window">
+                        <div class="debate-message system" style="opacity: 1; transform: translateY(0);">
+                            欢迎来到 AI 辩论场！本场辩题：<strong>AI 是否会让人类变得更懒惰？</strong>
+                        </div>
+                        <!-- Messages will be injected here via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Philosophy / Learning Reminders Section -->
-        <div id="philosophy" class="section-block">
+        <div id="philosophy" class="section-block" style="margin-top: 40px;">
             <div class="section-header">
                 <h2>🎓 学习理念</h2>
                 <p>写代码不仅是为了运行，更是为了理解。</p>
@@ -103,6 +129,69 @@
             <p class="copyright">© 2026 Open Source for Learning</p>
         </div>
     </footer>
-</body>
 
+    <script>
+        // AI Debate Simulation
+        const debateBtn = document.getElementById('start-debate-btn');
+        const debateWindow = document.getElementById('debate-window');
+        
+        const debateScript = [
+            { role: 'qwen', name: '正方 (Qwen-Max)', text: '毫无疑问，AI 的普及让人们过度依赖自动化工具，剥夺了深度思考的过程。比如现在的学生写论文直接用 AI 生成，不仅丧失了写作能力，也失去了查阅资料的乐趣。' },
+            { role: 'deepseek', name: '反方 (DeepSeek)', text: '非也！AI 恰恰是将人类从重复性劳动中解放出来。当机器搞定了繁杂的数据收集和初稿攥写，人类才有更多时间和精力去进行高维度的创新和策略性思考。这不是懒惰，是效率的进化。' },
+            { role: 'judge', name: '裁判 (GPT-4o)', text: '点评：正方立足于能力的退化，反方拔高于效率的提升。结合时代背景，反方的论点更具前瞻性，正方也指出了我们必须警惕的陷阱。' }
+        ];
+
+        let isDebating = false;
+
+        async function typeText(element, text, speed = 30) {
+            element.innerHTML = '';
+            for (let i = 0; i < text.length; i++) {
+                element.innerHTML += text.charAt(i);
+                debateWindow.scrollTop = debateWindow.scrollHeight;
+                await new Promise(r => setTimeout(r, speed));
+            }
+        }
+
+        if(debateBtn) {
+            debateBtn.addEventListener('click', async () => {
+                if (isDebating) return;
+                isDebating = true;
+                debateBtn.disabled = true;
+                debateBtn.textContent = '比赛进行中...';
+                
+                // Clear previous except system message
+                const sysMsg = debateWindow.querySelector('.system');
+                debateWindow.innerHTML = '';
+                if (sysMsg) debateWindow.appendChild(sysMsg);
+                else debateWindow.innerHTML = '<div class="debate-message system" style="opacity: 1; transform: translateY(0);">本场辩题：<strong>AI 是否会让人类变得更懒惰？</strong></div>';
+
+                for (const msg of debateScript) {
+                    await new Promise(r => setTimeout(r, 600)); // Pause between speakers
+                    
+                    const msgDiv = document.createElement('div');
+                    msgDiv.className = `debate-message ${msg.role}`;
+                    
+                    const nameDiv = document.createElement('div');
+                    nameDiv.className = 'speaker-name';
+                    nameDiv.textContent = msg.name;
+                    
+                    const contentDiv = document.createElement('div');
+                    contentDiv.className = 'speaker-content';
+                    contentDiv.textContent = '...'; // typing indicator
+                    
+                    msgDiv.appendChild(nameDiv);
+                    msgDiv.appendChild(contentDiv);
+                    debateWindow.appendChild(msgDiv);
+                    debateWindow.scrollTop = debateWindow.scrollHeight;
+                    
+                    await typeText(contentDiv, msg.text);
+                }
+                
+                isDebating = false;
+                debateBtn.disabled = false;
+                debateBtn.textContent = '重新开始 ⚡';
+            });
+        }
+    </script>
+</body>
 </html>

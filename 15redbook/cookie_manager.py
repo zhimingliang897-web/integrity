@@ -89,7 +89,7 @@ class CookieManager:
 
             # 等待用户登录 - 自动检测登录状态
             max_wait = 300  # 最多等待5分钟
-            check_interval = 12  # 每3秒检查一次
+            check_interval = 3  # 每3秒检查一次
             dots = 0
             login_detected = False
 
@@ -130,15 +130,15 @@ class CookieManager:
                     # 需要有登录cookie才算登录成功
                     if has_login_cookie:
                         print(f"\n\n✅ 检测到已登录！（发现登录Cookie）")
-                        print("正在获取完整Cookie...")
-                        await asyncio.sleep(2)  # 等待2秒确保cookie完全写入
+                        print("等待10秒后获取Cookie（可继续操作浏览器）...")
+                        await asyncio.sleep(100)  # 等待10秒让用户有时间操作
                         login_detected = True
                         break
                     elif len(new_cookies) > 3 and has_user_element:
                         # 有多个新cookie且有用户元素
                         print(f"\n\n✅ 检测到已登录！（发现用户信息）")
-                        print("正在获取完整Cookie...")
-                        await asyncio.sleep(2)
+                        print("等待10秒后获取Cookie（可继续操作浏览器）...")
+                        await asyncio.sleep(100)
                         login_detected = True
                         break
                 except Exception as e:
@@ -154,8 +154,26 @@ class CookieManager:
             with open(self.COOKIE_FILE, 'w') as f:
                 json.dump(cookies, f, indent=2)
 
-            # 转换为cookie字符串
-            cookie_str = '; '.join([f"{c['name']}={c['value']}" for c in cookies])
+            # 分离两个域名的cookie
+            xhs_cookies = [c for c in cookies if 'xiaohongshu.com' in c.get('domain', '')]
+            rednote_cookies = [c for c in cookies if 'rednote.com' in c.get('domain', '')]
+
+            # 判断用户登录的是哪个版本（检查web_session）
+            xhs_has_session = any(c['name'] == 'web_session' for c in xhs_cookies)
+            rednote_has_session = any(c['name'] == 'web_session' for c in rednote_cookies)
+
+            if rednote_has_session and not xhs_has_session:
+                # 用户登录的是国际版
+                target_cookies = rednote_cookies
+                print("检测到登录的是国际版(rednote.com)")
+            else:
+                # 默认使用国内版
+                target_cookies = xhs_cookies
+                if xhs_has_session:
+                    print("检测到登录的是国内版(xiaohongshu.com)")
+
+            # 转换为cookie字符串（只使用目标域名的cookie）
+            cookie_str = '; '.join([f"{c['name']}={c['value']}" for c in target_cookies])
 
             await browser.close()
 

@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>多模型对比平台</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <div>
+          <h1>多模型对比平台</h1>
+          <p>同一问题，多供应商并行对比</p>
+        </div>
+        <button id="refreshProviders" class="ghost">刷新供应商</button>
+      </header>
+
+      <section class="panel">
+        <div class="field">
+          <label>问题</label>
+          <textarea id="question" rows="3" placeholder="输入你的问题"></textarea>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label>系统提示词</label>
+            <input id="systemPrompt" type="text" placeholder="可选" />
+          </div>
+          <div class="field small">
+            <label>温度</label>
+            <input id="temperature" type="number" min="0" max="2" step="0.1" value="0.7" />
+          </div>
+          <div class="field small">
+            <label>&nbsp;</label>
+            <button id="runCompare" class="primary">对比提问</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <div class="title-group">
+            <h2>供应商与模型</h2>
+            <div class="actions">
+              <button id="selectAll" class="ghost small">全选</button>
+              <button id="deselectAll" class="ghost small">全不选</button>
+            </div>
+          </div>
+          <span id="providerHint"></span>
+        </div>
+        <div id="providerList" class="provider-list"></div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <div class="title-group">
+            <h2>对比结果</h2>
+            <div class="actions">
+              <button id="saveResults" class="ghost small">导出为 Markdown</button>
+            </div>
+          </div>
+          <span id="resultHint"></span>
+        </div>
+        <div id="resultGrid" class="result-grid"></div>
+      </section>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
