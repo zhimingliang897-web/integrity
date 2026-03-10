@@ -6,6 +6,7 @@ __pycache__/
 
 # Secrets
 评论/config.py
+18tokens/config.py
 
 # Claude Code settings
 **/.claude/

@@ -12,18 +12,8 @@ try:
 except ImportError:
     HAS_TRANSLATE = False
 
-# API配置
-DASHSCOPE_API_KEY = ""your-key-replaced"
-OPENAI_API_KEY = ""your-key-replaced"
-
-DASHSCOPE_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-OPENAI_BASE_URL = "https://api.openai.com/v1"
-
-# 模型分组
-MODELS = {
-    "阿里云百炼": ["qwen-plus", "qwen-turbo", "qwen-max", "qwen-vl-plus"],
-    "OpenAI": ["gpt-4o", "gpt-4o-mini", "gpt-4-turbo"]
-}
+# API配置 - 从 config 模块导入
+from config import DASHSCOPE_API_KEY, OPENAI_API_KEY, DASHSCOPE_BASE_URL, OPENAI_BASE_URL, MODELS
 
 
 class TokenAnalyzerApp:
