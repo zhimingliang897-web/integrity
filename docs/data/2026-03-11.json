@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-11",
+  "summary": "今日焦点集中于三大方向：一是AI技术十年演进的深度复盘，从AlphaGo到多模态大模型；二是产业落地加速，NVIDIA布局端到端自动驾驶与开放模型生态；三是学术前沿突破，涵盖强化学习、多智能体博弈及推理对齐等高阶研究，凸显AI从“能用”向“可信可用”跃迁。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "From games to biology and beyond: 10 years of AlphaGo’s impact",
+      "link": "https://deepmind.google/blog/10-years-of-alphago/",
+      "rating": "S",
+      "score": 9,
+      "comment": "AlphaGo十周年回顾具有里程碑意义，首次系统梳理其对科学发现与AGI路径的深远推动，体现AI从游戏到现实世界的范式跃迁。",
+      "tags": [
+        "AI发展史",
+        "AGI",
+        "科学计算"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，标志着大模型从回答转向解决，具行业里程碑意义。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI基础设施与应用层深度整合，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI发布GPT-5.2/5.3 Codex，首次实现自建代码能力，且全系依赖NVIDIA高端硬件（Hopper/GB200），标志AI模型复杂度跃升与算力生态深度绑定，具里程碑意义。",
+      "tags": [
+        "AI大模型",
+        "NVIDIA",
+        "AGI"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Autonomous AI Agents for Option Hedging: Enhancing Financial Stability through Shortfall Aware Reinforcement Learning",
+      "link": "https://arxiv.org/abs/2603.06587",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将 shortfall-aware RL引入期权对冲，提出RLOP与QLBS框架，实证显示显著降低尾部风险，为金融AI应用提供新范式。",
+      "tags": [
+        "强化学习",
+        "金融AI",
+        "期权对冲",
+        "风险控制"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Scaling Strategy, Not Compute: A Stand-Alone, Open-Source StarCraft II Benchmark for Accessible Reinforcement Learning Research",
+      "link": "https://arxiv.org/abs/2603.06608",
+      "rating": "A",
+      "score": 8,
+      "comment": "填补StarCraft II RL研究中间空白，开源Two-Bridge基准可降低实验门槛，推动RTS领域RL算法可复现性与公平比较。",
+      "tags": [
+        "强化学习",
+        "游戏AI",
+        "开源基准",
+        "RTS"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "MultiGen: Level-Design for Editable Multiplayer Worlds in Diffusion Game Engines",
+      "link": "https://arxiv.org/abs/2603.06679",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出显式外部记忆机制，解决扩散游戏引擎中环境可编辑性与多人共享推理两大痛点，模块化设计具实用价值",
+      "tags": [
+        "扩散模型",
+        "游戏引擎",
+        "多玩家交互",
+        "外部记忆"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Best-of-Tails: Bridging Optimism and Pessimism in Inference-Time Alignment",
+      "link": "https://arxiv.org/abs/2603.06797",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次从 regret minimization 视角形式化推理时间对齐的乐观-悲观权衡，理论深度高，为 reward hacking 和探索不足问题提供新解法，具有重要学术与工程指导价值。",
+      "tags": [
+        "LLM对齐",
+        "推理时间优化",
+        "理论分析"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Breaking the Martingale Curse: Multi-Agent Debate via Asymmetric Cognitive Potential Energy",
+      "link": "https://arxiv.org/abs/2603.06801",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出AceMAD框架突破多智能体辩论的马尔可夫诅咒，通过非对称认知势能实现有向收敛，是LLM推理机制的重要理论突破，具实用潜力。",
+      "tags": [
+        "多智能体辩论",
+        "LLM推理",
+        "理论突破"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Making AI Evaluation Deployment Relevant Through Context Specification",
+      "link": "https://arxiv.org/abs/2603.06811",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出'上下文规范'新方法，将模糊的部署关切转化为可测量的评估指标，直击AI落地痛点，对决策层极具实用价值。",
+      "tags": [
+        "AI评估",
+        "部署决策",
+        "学术论文"
+      ]
+    }
+  ]
+}
