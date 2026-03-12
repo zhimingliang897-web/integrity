@@ -19,7 +19,7 @@
             <div class="nav-links">
                 <a href="index.html" class="active">首页</a>
                 <a href="news.html">AI 热点</a>
-                <a href="tools.html">工具库</a>
+                <a href="http://8.138.164.133:5000/app/tools.html">工具库</a>
                 <button id="auth-btn" class="auth-btn">登录</button>
             </div>
         </div>
@@ -50,7 +50,7 @@
             </p>
             <div class="hero-actions">
                 <a href="#philosophy" class="btn-secondary">了解理念 ↓</a>
-                <a href="tools.html" class="btn-primary">浏览工具库 →</a>
+                <a href="http://8.138.164.133:5000/app/tools.html" class="btn-primary">浏览工具库 →</a>
             </div>
         </div>
 
@@ -147,7 +147,7 @@
                     <div class="card-content">
                         <h2>🛠️ AI 工具库</h2>
                         <p>这里存放着所有的实验产物：从自动生成分镜视频的 Python 脚本，到基于 RAG 的台词学习助手。全部开源，欢迎 Fork。</p>
-                        <a href="tools.html" class="link-btn">浏览工具库 →</a>
+                        <a href="http://8.138.164.133:5000/app/tools.html" class="link-btn">浏览工具库 →</a>
                     </div>
                 </div>
             </div>
@@ -247,7 +247,7 @@
         .auth-switch a { color: var(--primary); }
     </style>
     <script>
-        const API_BASE = 'http://8.138.164.133:5000';
+        const API_BASE = window.location.origin;
         let isRegisterMode = false;
         function checkAuth() {
             const token = localStorage.getItem('token');

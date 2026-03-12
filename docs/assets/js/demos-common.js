@@ -1,6 +1,6 @@
 // 演示页面通用脚本
-// API 基础地址（使用 IP:端口，避免域名备案问题）
-const API_BASE = 'http://8.138.164.133:5000';
+// API 基础地址（使用相对路径，前后端同源）
+const API_BASE = window.location.origin;
 
 // 通用工具函数
 const DemoUtils = {

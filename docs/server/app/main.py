@@ -5,7 +5,7 @@ Integrity Lab API 主入口
 本地备份 | 云端部署：服务器运行在 8.138.164.133:5000
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory, render_template
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import jwt
@@ -13,7 +13,9 @@ import datetime
 import os
 import hashlib
 
-app = Flask(__name__)
+app = Flask(__name__, 
+            static_folder='static',
+            template_folder='templates')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'integrity-lab-secret-key-2026')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../data/users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -22,7 +24,8 @@ app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB 文件上传限制
 CORS(app, origins=[
     'https://zhimingliang897-web.github.io',
     'http://localhost:*',
-    'http://127.0.0.1:*'
+    'http://127.0.0.1:*',
+    'http://8.138.164.133:*'
 ])
 
 db = SQLAlchemy(app)
@@ -76,6 +79,36 @@ def health():
         'version': '2.0.0',
         'tools': ['pdf', 'token-calc']
     })
+
+
+# ============ 前端页面路由 ============
+
+@app.route('/app/')
+@app.route('/app/<path:path>')
+def serve_app(path=''):
+    """前端应用入口"""
+    if path == '' or path == 'index.html':
+        return render_template('index.html')
+    elif path == 'tools.html':
+        return render_template('tools.html')
+    elif path == 'news.html':
+        return render_template('news.html')
+    elif path.endswith('.html'):
+        return render_template(path)
+    else:
+        return send_from_directory(app.static_folder, path)
+
+
+@app.route('/demos/<path:path>')
+def serve_demos(path):
+    """Demo 页面"""
+    return send_from_directory(os.path.join(app.static_folder, 'demos'), path)
+
+
+@app.route('/assets/<path:path>')
+def serve_assets(path):
+    """静态资源"""
+    return send_from_directory(os.path.join(app.static_folder, 'assets'), path)
 
 
 @app.route('/api/auth/register', methods=['POST'])
