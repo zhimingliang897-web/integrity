@@ -277,7 +277,7 @@
                 const data = await res.json();
                 if (data.error) { document.getElementById('auth-error').textContent = data.error; document.getElementById('auth-error').style.display = 'block'; }
                 else { localStorage.setItem('token', data.token); localStorage.setItem('username', data.username); hideAuthModal(); checkAuth(); }
-            } catch (e) { document.getElementById('auth-error').textContent = '网络错误'; document.getElementById('auth-error').style.display = 'block'; }
+            } catch (e) { document.getElementById('auth-error').textContent = '网络错误: ' + e.message; document.getElementById('auth-error').style.display = 'block'; console.error(e); }
         }
         function logout() { localStorage.removeItem('token'); localStorage.removeItem('username'); checkAuth(); }
         checkAuth();

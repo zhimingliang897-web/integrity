@@ -703,8 +703,9 @@
                     checkAuth();
                 }
             } catch (e) {
-                errorEl.textContent = '网络错误，请稍后重试';
+                errorEl.textContent = '网络错误: ' + e.message;
                 errorEl.style.display = 'block';
+                console.error('Auth error:', e);
             }
         }
         
