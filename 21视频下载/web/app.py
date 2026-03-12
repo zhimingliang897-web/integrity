@@ -12,7 +12,8 @@ from typing import Optional, List, Dict
 
 # 确保项目根目录在 Python 路径中
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from fastapi import FastAPI, HTTPException, Request
+import json
+from fastapi import FastAPI, HTTPException, Request, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -21,7 +22,14 @@ from pydantic import BaseModel
 import uvicorn
 
 # 导入核心模块
-from core.downloader import VideoDownloaderCore, downloader
+from core.downloader import VideoDownloaderCore
+
+# 路径固定到项目根目录（不受启动目录影响）
+_project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+downloader = VideoDownloaderCore(
+    download_dir=os.path.join(_project_root, "downloads"),
+    cookies_file=os.path.join(_project_root, "cookies.txt")
+)
 
 
 # 创建FastAPI应用
@@ -129,6 +137,40 @@ async def capture_cookies(request: CookieCaptureRequest):
     if success:
         return {"status": "ok", "message": f"已保存 {len(request.cookies)} 个Cookie", "count": len(request.cookies)}
     raise HTTPException(status_code=500, detail="保存Cookie失败")
+
+
+@app.post("/api/cookies/upload")
+async def upload_cookies_file(file: UploadFile = File(...)):
+    """上传 J2Team / EditThisCookie 导出的 JSON 文件，自动转为 Netscape 格式保存"""
+    content = await file.read()
+    try:
+        data = json.loads(content)
+    except Exception:
+        raise HTTPException(status_code=400, detail="文件不是有效的 JSON 格式")
+
+    # J2Team 格式：{"url": "...", "cookies": [...]}  或直接 [...]
+    if isinstance(data, dict) and "cookies" in data:
+        cookies = data["cookies"]
+    elif isinstance(data, list):
+        cookies = data
+    else:
+        raise HTTPException(status_code=400, detail="无法识别的 Cookie JSON 格式")
+
+    lines = ["# Netscape HTTP Cookie File\n# Converted from J2Team export\n\n"]
+    for c in cookies:
+        domain = c.get("domain", "")
+        include_sub = "TRUE" if domain.startswith(".") else "FALSE"
+        path = c.get("path", "/")
+        secure = "TRUE" if c.get("secure", False) else "FALSE"
+        expiry = str(int(c.get("expirationDate", 0)))
+        name = c.get("name", "")
+        value = c.get("value", "")
+        lines.append(f"{domain}\t{include_sub}\t{path}\t{secure}\t{expiry}\t{name}\t{value}\n")
+
+    success = downloader.save_cookies("".join(lines))
+    if success:
+        return {"status": "ok", "message": f"已保存 {len(cookies)} 个 Cookie", "count": len(cookies)}
+    raise HTTPException(status_code=500, detail="保存失败")
 
 
 @app.post("/api/add_task")

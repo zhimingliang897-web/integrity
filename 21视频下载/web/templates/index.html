@@ -93,10 +93,17 @@
                         </div>
                         <div class="p-3 bg-blue-900/30 border border-blue-700/50 rounded-lg mb-2">
                             <p class="text-xs text-blue-300 mb-2">
-                                <i class="fas fa-puzzle-piece mr-1"></i>
-                                推荐：安装浏览器扩展，在B站/NTU页面一键同步Cookie
+                                <i class="fas fa-upload mr-1"></i>
+                                上传 J2Team Cookies 导出的 JSON 文件：
                             </p>
-                            <p class="text-xs text-gray-400">或手动粘贴 cookies.txt 内容：</p>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="file" id="cookieFileInput" accept=".json" class="hidden" onchange="uploadCookieFile(this)">
+                                <span class="px-3 py-1.5 bg-blue-600/50 hover:bg-blue-600/80 border border-blue-500 rounded text-xs text-white transition-colors">
+                                    <i class="fas fa-file-import mr-1"></i>选择 JSON 文件
+                                </span>
+                                <span id="cookieFileName" class="text-xs text-gray-400">未选择文件</span>
+                            </label>
+                            <p class="text-xs text-gray-500 mt-2">或手动粘贴 cookies.txt 内容：</p>
                         </div>
                         <textarea
                             id="cookiesInput"
@@ -259,6 +266,36 @@
             }
         }
         
+        // 上传 J2Team Cookie 文件
+        async function uploadCookieFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+            document.getElementById('cookieFileName').textContent = file.name;
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const res = await fetch('/api/cookies/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    const statusEl = document.getElementById('cookieStatus');
+                    const statusText = document.getElementById('cookieStatusText');
+                    statusEl.classList.remove('hidden');
+                    statusText.textContent = `Cookie 已导入（${data.count} 个）`;
+                    document.getElementById('cookieFileName').textContent = `✅ ${file.name}`;
+                } else {
+                    alert('导入失败: ' + data.detail);
+                }
+            } catch (e) {
+                alert('上传出错: ' + e.message);
+            }
+            input.value = '';
+        }
+
         // 添加下载任务
         async function addTask() {
             const urlInput = document.getElementById('urlInput');
