@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-12",
+  "summary": "今日焦点集中于三大方向：一是Agent系统生态演进，如AgentOS与多智能体评估框架（MASEval、LDP）推动协作智能化；二是大模型开源与落地加速，NVIDIA计划260亿美元构建开放权重模型，Gemini 3.1 Pro与Nemotron 3 Super凸显性能突破；三是AI工程化深化，Rubin平台与预算约束下的搜索优化等研究强化实际部署能力。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "AgentOS: From Application Silos to a Natural Language-Driven Data Ecosystem",
+      "link": "https://arxiv.org/abs/2603.08938",
+      "rating": "S",
+      "score": 9,
+      "comment": "提出AgentOS新范式，直击当前LLM代理架构痛点：GUI/CLI底层不匹配导致的碎片化与权限混乱，有望推动从应用孤岛到自然语言驱动数据生态的跃迁。",
+      "tags": [
+        "AgentOS",
+        "LLM代理",
+        "系统架构",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Nvidia Will Spend $26 Billion to Build Open-Weight AI Models, Filings Show",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rr4by8/nvidia_will_spend_26_billion_to_build_openweight/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA首次明确投入260亿美元构建开源模型，标志着其从硬件巨头向AI基础设施生态主导者转型，对开源大模型生态有颠覆性影响。",
+      "tags": [
+        "NVIDIA",
+        "开源模型",
+        "AI战略"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Nemotron 3 Super Released",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rqy3cx/nemotron_3_super_released/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA发布120B MoE模型，仅12B参数激活，融合Mamba+Transformer+MoE架构，显著提升推理效率与成本效益，是大模型轻量化与高效推理的里程碑突破。",
+      "tags": [
+        "Mamba",
+        "MoE",
+        "大模型",
+        "推理优化"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，标志着大模型从回答转向解决，具行业里程碑意义。",
+      "tags": [
+        "AI模型",
+        "大语言模型",
+        "Google",
+        "复杂任务"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI基础设施与应用层深度整合，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，体现大模型训练部署对高端GPU的深度绑定，标志AI基础设施新范式确立。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "MASEval: Extending Multi-Agent Evaluation from Models to Systems",
+      "link": "https://arxiv.org/abs/2603.08835",
+      "rating": "A",
+      "score": 8,
+      "comment": "MASEval填补了多智能体系统评估的空白，首次将系统级（框架+模型+架构）作为评估单元，证明框架选择对性能影响堪比模型本身，推动评估范式升级。",
+      "tags": [
+        "多智能体",
+        "评估基准",
+        "系统级评测"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "LDP: An Identity-Aware Protocol for Multi-Agent LLM Systems",
+      "link": "https://arxiv.org/abs/2603.08852",
+      "rating": "A",
+      "score": 8,
+      "comment": "LDP提出AI原生通信协议，首次将模型身份、推理特征等核心属性作为一等公民暴露，解决多智能体系统中委托与信任的关键瓶颈，具有实用价值和架构前瞻性。",
+      "tags": [
+        "多智能体",
+        "LLM协议",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Quantifying the Accuracy and Cost Impact of Design Decisions in Budget-Constrained Agentic LLM Search",
+      "link": "https://arxiv.org/abs/2603.08877",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统量化预算约束下代理RAG的搜索深度、检索策略与成本-精度权衡，为实际部署提供关键决策依据，BCAS评估框架具普适性。",
+      "tags": [
+        "RAG",
+        "LLM效率",
+        "成本优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Interpretable Markov-Based Spatiotemporal Risk Surfaces for Missing-Child Search Planning with Reinforcement Learning and LLM-Based Quality Assurance",
+      "link": "https://arxiv.org/abs/2603.08933",
+      "rating": "A",
+      "score": 8,
+      "comment": "Guardian系统首次将Markov时空建模与LLM质量保障结合用于失踪儿童搜救，解决关键期预测痛点，具实用价值和跨学科创新性。",
+      "tags": [
+        "AI+公共安全",
+        "强化学习",
+        "时空预测"
+      ]
+    }
+  ]
+}
