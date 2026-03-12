@@ -27,127 +27,188 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById(tabId).classList.add('active');
         });
     });
+
+    // 初始化演示按钮
+    initVisionDemo();
+    initCompareDemo();
+    initDebateDemo();
+    initTokenCalc();
 });
 
 // ========== 图文互转演示 ==========
-const visionBtn = document.getElementById('start-vision-btn');
-const visionOutput = document.getElementById('vision-output');
-const scanLine = document.getElementById('scan-line');
-const demoImg = document.getElementById('vision-demo-img');
-let isScanning = false;
+function initVisionDemo() {
+    const visionBtn = document.getElementById('start-vision-btn');
+    const visionOutput = document.getElementById('vision-output');
+    const demoImg = document.getElementById('vision-demo-img');
+    let isScanning = false;
 
-if (visionBtn) {
-    visionBtn.addEventListener('click', async () => {
-        if (isScanning) return;
-        isScanning = true;
-        visionBtn.disabled = true;
-        visionBtn.textContent = '视觉模型分析中...';
-        
-        scanLine.style.display = 'block';
-        scanLine.style.animation = 'scan 2.5s ease-in-out infinite';
-        demoImg.style.filter = 'brightness(1.1) contrast(1.1)';
-        
-        visionOutput.innerHTML = '<span style="color:var(--primary);">[Model Initialized] Analyzing visual features...</span><br><br>';
-        
-        await new Promise(r => setTimeout(r, 1800));
-        
-        scanLine.style.display = 'none';
-        demoImg.style.filter = 'grayscale(0%) brightness(1.1)';
-        
-        const promptText = "A stunning high-quality 3D render of a futuristic cyberpunk cityscape at night. Neon signs glowing in magenta and cyan, reflecting off wet asphalt. Sleek flying vehicles navigate between towering skyscrapers shrouded in volumetric fog. Cinematic lighting, octane render, unreal engine 5, 8k resolution, photorealistic details, deeply atmospheric.";
-        
-        const targetSpan = document.createElement('span');
-        targetSpan.style.color = '#fff';
-        visionOutput.appendChild(targetSpan);
-        
-        for (let i = 0; i < promptText.length; i++) {
-            targetSpan.innerHTML += promptText.charAt(i);
-            await new Promise(r => setTimeout(r, 15));
-        }
-        
-        isScanning = false;
-        visionBtn.disabled = false;
-        visionBtn.textContent = '重新提取 ⚡';
-    });
+    if (visionBtn && visionOutput) {
+        visionBtn.addEventListener('click', async () => {
+            if (isScanning) return;
+            isScanning = true;
+            visionBtn.disabled = true;
+            visionBtn.textContent = '分析中...';
+            
+            if (demoImg) demoImg.style.filter = 'brightness(1.1) contrast(1.1)';
+            
+            visionOutput.innerHTML = '<span style="color:var(--primary);">分析中...</span>';
+            
+            await new Promise(r => setTimeout(r, 1500));
+            
+            if (demoImg) demoImg.style.filter = 'grayscale(0%)';
+            
+            const promptText = "A stunning cyberpunk cityscape at night. Neon signs in magenta and cyan, reflecting off wet asphalt. Flying vehicles between towering skyscrapers. Cinematic lighting, photorealistic.";
+            
+            visionOutput.innerHTML = '';
+            const targetSpan = document.createElement('span');
+            targetSpan.style.color = '#e2e8f0';
+            visionOutput.appendChild(targetSpan);
+            
+            for (let i = 0; i < promptText.length; i++) {
+                targetSpan.innerHTML += promptText.charAt(i);
+                await new Promise(r => setTimeout(r, 20));
+            }
+            
+            isScanning = false;
+            visionBtn.disabled = false;
+            visionBtn.textContent = '重新提取';
+        });
+    }
 }
 
 // ========== 多模型对比演示 ==========
-const compareBtn = document.getElementById('start-compare-btn');
+function initCompareDemo() {
+    const compareBtn = document.getElementById('start-compare-btn');
 
-const modelResponses = {
-    'qwen-plus': '大语言模型（Large Language Model，简称LLM）是一种基于深度学习技术的人工智能模型。它通过海量文本数据进行训练，能够理解和生成人类语言。核心特点包括：1）规模巨大，通常有数十亿到数千亿参数；2）涌现能力，随着规模增大出现小模型不具备的能力；3）通用性，一个模型可以完成多种任务。',
-    'deepseek-v3': 'LLM（Large Language Model）是近年来AI领域的重大突破。它本质是一个超级强大的文本预测机器——给定前面的文字，预测下一个最可能出现的文字。训练方式是无监督学习，让模型从海量互联网文本中自学语言规律。典型架构是Transformer，attention机制让它能处理长文本依赖。',
-    'gpt-4o-mini': 'A Large Language Model (LLM) is an AI trained on massive text data to understand and generate human language. Key points: 1) Trained using transformer architecture, 2) Learns patterns from billions of parameters, 3) Can perform various NLP tasks like translation, summarization, coding, etc., 4) Shows emergent abilities at scale.'
-};
+    const modelResponses = {
+        'qwen': '大语言模型（LLM）是基于深度学习的AI模型，通过海量文本训练，能理解和生成人类语言。核心特点：规模大、涌现能力、通用性强。',
+        'turbo': 'LLM本质是文本预测机器，给定上文预测下文。使用Transformer架构，通过注意力机制处理长文本依赖，从互联网文本中自学语言规律。',
+        'max': 'Large Language Model (LLM) is an AI trained on massive text data. Key features: 1) Transformer architecture, 2) Billions of parameters, 3) Multi-task capabilities, 4) Emergent abilities at scale.'
+    };
 
-if (compareBtn) {
-    compareBtn.addEventListener('click', async () => {
-        if (compareBtn.disabled) return;
-        compareBtn.disabled = true;
-        compareBtn.textContent = '模型回答中...';
-        
-        const qwenText = document.querySelector('#model-qwen .model-text');
-        const deepseekText = document.querySelector('#model-deepseek .model-text');
-        const gptText = document.querySelector('#model-gpt .model-text');
-        
-        qwenText.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
-        deepseekText.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
-        gptText.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
-        
-        await new Promise(r => setTimeout(r, 800));
-        qwenText.innerHTML = '';
-        for (let i = 0; i < modelResponses['qwen-plus'].length; i++) {
-            qwenText.innerHTML += modelResponses['qwen-plus'].charAt(i);
-            await new Promise(r => setTimeout(r, 15));
-        }
-        
-        await new Promise(r => setTimeout(r, 400));
-        deepseekText.innerHTML = '';
-        for (let i = 0; i < modelResponses['deepseek-v3'].length; i++) {
-            deepseekText.innerHTML += modelResponses['deepseek-v3'].charAt(i);
-            await new Promise(r => setTimeout(r, 12));
-        }
-        
-        await new Promise(r => setTimeout(r, 400));
-        gptText.innerHTML = '';
-        for (let i = 0; i < modelResponses['gpt-4o-mini'].length; i++) {
-            gptText.innerHTML += modelResponses['gpt-4o-mini'].charAt(i);
-            await new Promise(r => setTimeout(r, 10));
-        }
-        
-        compareBtn.disabled = false;
-        compareBtn.textContent = '重新对比 🎯';
-    });
+    if (compareBtn) {
+        compareBtn.addEventListener('click', async () => {
+            if (compareBtn.disabled) return;
+            compareBtn.disabled = true;
+            compareBtn.textContent = '对比中...';
+            
+            const qwenEl = document.querySelector('#model-qwen > div:last-child');
+            const turboEl = document.querySelector('#model-turbo > div:last-child');
+            const maxEl = document.querySelector('#model-max > div:last-child');
+            
+            if (qwenEl) qwenEl.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
+            if (turboEl) turboEl.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
+            if (maxEl) maxEl.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
+            
+            await new Promise(r => setTimeout(r, 600));
+            
+            if (qwenEl) {
+                qwenEl.innerHTML = '';
+                for (let c of modelResponses.qwen) {
+                    qwenEl.innerHTML += c;
+                    await new Promise(r => setTimeout(r, 15));
+                }
+            }
+            
+            await new Promise(r => setTimeout(r, 300));
+            
+            if (turboEl) {
+                turboEl.innerHTML = '';
+                for (let c of modelResponses.turbo) {
+                    turboEl.innerHTML += c;
+                    await new Promise(r => setTimeout(r, 12));
+                }
+            }
+            
+            await new Promise(r => setTimeout(r, 300));
+            
+            if (maxEl) {
+                maxEl.innerHTML = '';
+                for (let c of modelResponses.max) {
+                    maxEl.innerHTML += c;
+                    await new Promise(r => setTimeout(r, 10));
+                }
+            }
+            
+            compareBtn.disabled = false;
+            compareBtn.textContent = '重新对比';
+        });
+    }
+}
+
+// ========== AI 辩论赛演示 ==========
+function initDebateDemo() {
+    const debateBtn = document.getElementById('start-debate-btn');
+    const debateOutput = document.getElementById('debate-output');
+    
+    if (debateBtn && debateOutput) {
+        debateBtn.addEventListener('click', async () => {
+            if (debateBtn.disabled) return;
+            debateBtn.disabled = true;
+            debateBtn.textContent = '辩论中...';
+            
+            debateOutput.innerHTML = '';
+            
+            const messages = [
+                { role: '正方', speaker: '千问·论道', text: '我认为AI不会让人类变懒，而是解放了人类的创造力...' },
+                { role: '反方', speaker: '千问·辨析', text: '恰恰相反，过度依赖AI会导致人类思维能力退化...' },
+                { role: '正方', speaker: '千问·论道', text: '这种担忧在每次技术革命时都会出现，但历史证明技术总是推动进步...' }
+            ];
+            
+            for (const msg of messages) {
+                const msgDiv = document.createElement('div');
+                msgDiv.style.cssText = 'margin-bottom:12px;padding:12px;background:var(--bg-card);border-radius:8px;border-left:3px solid ' + (msg.role === '正方' ? '#10b981' : '#ef4444');
+                msgDiv.innerHTML = `<div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">${msg.role} - ${msg.speaker}</div><div id="msg-text"></div>`;
+                debateOutput.appendChild(msgDiv);
+                
+                const textEl = msgDiv.querySelector('#msg-text');
+                for (let c of msg.text) {
+                    textEl.innerHTML += c;
+                    await new Promise(r => setTimeout(r, 30));
+                }
+            }
+            
+            debateBtn.disabled = false;
+            debateBtn.textContent = '重新开始';
+        });
+    }
 }
 
 // ========== Token 计算器演示 ==========
-const calcTokenBtn = document.getElementById('calc-token-btn');
+function initTokenCalc() {
+    const calcTokenBtn = document.getElementById('calc-token-btn');
 
-if (calcTokenBtn) {
-    calcTokenBtn.addEventListener('click', async () => {
-        const model = document.getElementById('token-model').value;
-        const lang = document.getElementById('token-lang').value;
-        const chars = parseInt(document.getElementById('token-chars').value) || 100;
-        
-        calcTokenBtn.disabled = true;
-        calcTokenBtn.textContent = '计算中...';
-        
-        try {
-            const res = await fetch(API_BASE + '/api/tools/token-calc', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ model, lang, chars })
-            });
-            const data = await res.json();
+    if (calcTokenBtn) {
+        calcTokenBtn.addEventListener('click', async () => {
+            const model = document.getElementById('token-model')?.value || 'qwen-plus';
+            const lang = document.getElementById('token-lang')?.value || 'zh';
+            const chars = parseInt(document.getElementById('token-chars')?.value) || 100;
             
-            document.getElementById('result-prompt').textContent = data.prompt_tokens;
-            document.getElementById('result-completion').textContent = data.completion_tokens;
-            document.getElementById('result-cost').textContent = '$' + data.total_cost.toFixed(6);
-        } catch (e) {
-            document.getElementById('result-cost').textContent = 'API 错误';
-        }
-        
-        calcTokenBtn.disabled = false;
-        calcTokenBtn.textContent = '计算消耗 💰';
-    });
+            calcTokenBtn.disabled = true;
+            calcTokenBtn.textContent = '计算中...';
+            
+            try {
+                const res = await fetch(API_BASE + '/api/tools/token-calc', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ model, lang, chars })
+                });
+                const data = await res.json();
+                
+                const promptEl = document.getElementById('result-prompt');
+                const completionEl = document.getElementById('result-completion');
+                const costEl = document.getElementById('result-cost');
+                
+                if (promptEl) promptEl.textContent = data.prompt_tokens || '-';
+                if (completionEl) completionEl.textContent = data.completion_tokens || '-';
+                if (costEl) costEl.textContent = '$' + (data.total_cost || 0).toFixed(6);
+            } catch (e) {
+                const costEl = document.getElementById('result-cost');
+                if (costEl) costEl.textContent = 'API 错误';
+            }
+            
+            calcTokenBtn.disabled = false;
+            calcTokenBtn.textContent = '计算消耗';
+        });
+    }
 }

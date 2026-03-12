@@ -65,14 +65,14 @@
                         </div>
                         <button id="start-vision-btn" class="demo-btn">提取提示词</button>
                     </div>
-                    <div class="demo-body" style="padding:24px; display:flex; gap:24px; background:#0d0d14; align-items:flex-start;">
-                        <div style="flex:1; border: 1px dashed var(--border); border-radius: 12px; padding: 8px; text-align:center; position:relative;">
-                            <img id="vision-demo-img" src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=400" alt="demo sample" style="width:100%; border-radius:8px; display:block;">
-                        </div>
-                        <div style="flex:1.5; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:16px; min-height: 200px;">
-                            <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;"><span style="color:#10b981;">●</span> Qwen-VL Output</div>
-                            <div id="vision-output" style="font-family: monospace; color:#e2e8f0; line-height:1.6; font-size:0.9rem;">
-                                <span style="opacity:0.5; font-style:italic;">等待传入图片进行反推...</span>
+                    <div class="demo-body" style="padding:20px; background:#0d0d14;">
+                        <div style="display:flex; gap:20px; align-items:flex-start;">
+                            <div style="flex:1; border:1px dashed var(--border); border-radius:12px; padding:8px; text-align:center;">
+                                <img id="vision-demo-img" src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=400" alt="demo" style="width:100%; border-radius:8px;">
+                            </div>
+                            <div style="flex:1.5; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:16px; min-height:160px;">
+                                <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">Qwen-VL Output</div>
+                                <div id="vision-output" style="font-family:monospace; color:#e2e8f0; line-height:1.6; font-size:13px;">等待分析...</div>
                             </div>
                         </div>
                     </div>
@@ -89,32 +89,20 @@
                     </div>
                     <div class="demo-body" style="background:#0d0d14; padding:20px;">
                         <div style="margin-bottom: 16px;">
-                            <input type="text" id="compare-input" placeholder="输入你的问题..." value="解释一下什么是大语言模型" style="width:100%; padding:12px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff; font-size:14px;">
+                            <input type="text" id="compare-input" placeholder="输入问题..." value="什么是大语言模型？" style="width:100%; padding:12px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
                         </div>
                         <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;">
-                            <div id="model-qwen" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
-                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-                                    <span style="color:#f59e0b; font-weight:600;">🟡</span> <strong>Qwen-Plus</strong>
-                                </div>
-                                <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
-                                    <span style="opacity:0.5;">点击开始对比查看回复...</span>
-                                </div>
+                            <div id="model-qwen" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px;">
+                                <div style="color:#f59e0b; font-weight:600; margin-bottom:8px;">Qwen-Plus</div>
+                                <div id="model-qwen-text" style="font-size:13px; color:var(--text-muted); line-height:1.5;">点击开始...</div>
                             </div>
-                            <div id="model-deepseek" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
-                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-                                    <span style="color:#3b82f6; font-weight:600;">🔵</span> <strong>Qwen-Turbo</strong>
-                                </div>
-                                <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
-                                    <span style="opacity:0.5;">点击开始对比查看回复...</span>
-                                </div>
+                            <div id="model-turbo" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px;">
+                                <div style="color:#3b82f6; font-weight:600; margin-bottom:8px;">Qwen-Turbo</div>
+                                <div id="model-turbo-text" style="font-size:13px; color:var(--text-muted); line-height:1.5;">点击开始...</div>
                             </div>
-                            <div id="model-gpt" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
-                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-                                    <span style="color:#10b981; font-weight:600;">🟢</span> <strong>Qwen-Max</strong>
-                                </div>
-                                <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
-                                    <span style="opacity:0.5;">点击开始对比查看回复...</span>
-                                </div>
+                            <div id="model-max" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px;">
+                                <div style="color:#10b981; font-weight:600; margin-bottom:8px;">Qwen-Max</div>
+                                <div id="model-max-text" style="font-size:13px; color:var(--text-muted); line-height:1.5;">点击开始...</div>
                             </div>
                         </div>
                     </div>
@@ -131,12 +119,10 @@
                     </div>
                     <div class="demo-body" style="background:#0d0d14; padding:20px;">
                         <div style="margin-bottom: 16px;">
-                            <input type="text" id="debate-topic-input" placeholder="输入辩题..." value="AI 是否会让人类变得更懒惰？" style="width:100%; padding:12px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff; font-size:14px;">
+                            <input type="text" id="debate-topic-input" placeholder="输入辩题..." value="AI 是否会让人类更懒惰？" style="width:100%; padding:12px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
                         </div>
-                        <div id="debate-output" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:150px; max-height:200px; overflow-y:auto;">
-                            <div style="color:var(--text-muted); font-size:13px;">
-                                <span style="opacity:0.5;">点击开始辩论，观看 AI 选手激烈交锋...</span>
-                            </div>
+                        <div id="debate-output" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px; max-height:180px; overflow-y:auto;">
+                            <div style="color:var(--text-muted); font-size:13px;">点击开始辩论...</div>
                         </div>
                     </div>
                 </div>
@@ -161,7 +147,7 @@
                                 </select>
                             </div>
                             <div>
-                                <label style="display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px;">输入语言</label>
+                                <label style="display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px;">语言</label>
                                 <select id="token-lang" style="width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
                                     <option value="zh">中文</option>
                                     <option value="en">英文</option>
@@ -178,7 +164,7 @@
                                 <div style="font-size:12px; color:var(--text-muted);">输入 Token</div>
                             </div>
                             <div>
-                                <div style="font-size:24px; color:var(--secondary); font-weight:700;" id="result-completion">-</div>
+                                <div style="font-size:24px; color:#8b5cf6; font-weight:700;" id="result-completion">-</div>
                                 <div style="font-size:12px; color:var(--text-muted);">输出 Token</div>
                             </div>
                             <div>
@@ -189,14 +175,14 @@
                     </div>
                 </div>
 
-                <!-- Demo 5: 台词学习预览 -->
+                <!-- Demo 5: 台词学习 -->
                 <div class="demo-card">
                     <div class="demo-header">
                         <div class="demo-title">
                             <span class="icon">📝</span>
-                            <h3>台词学习预览</h3>
+                            <h3>台词学习工具</h3>
                         </div>
-                        <a href="demos/dialogue-learning.html" class="demo-btn" style="text-decoration:none;">查看完整版 →</a>
+                        <a href="http://8.138.164.133:5000/demos/dialogue-learning.html" class="demo-btn" style="text-decoration:none;">进入工具 →</a>
                     </div>
                     <div class="demo-body" style="background:#0d0d14; padding:20px;">
                         <div style="color:var(--text-muted); font-size:14px; line-height:1.8;">
@@ -207,19 +193,18 @@
                                 <li>AI 整理释义和记忆技巧</li>
                                 <li>生成 TTS 发音音频</li>
                             </ul>
-                            <p style="color:#10b981;">💡 在语境中高效记忆单词</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Demo 6: 视频生成预览 -->
+                <!-- Demo 6: 视频生成 -->
                 <div class="demo-card">
                     <div class="demo-header">
                         <div class="demo-title">
                             <span class="icon">🎬</span>
                             <h3>分镜视频生成</h3>
                         </div>
-                        <a href="demos/video-maker.html" class="demo-btn" style="text-decoration:none;">查看完整版 →</a>
+                        <a href="http://8.138.164.133:5000/demos/video-maker.html" class="demo-btn" style="text-decoration:none;">进入工具 →</a>
                     </div>
                     <div class="demo-body" style="background:#0d0d14; padding:20px;">
                         <div style="color:var(--text-muted); font-size:14px; line-height:1.8;">
@@ -228,9 +213,8 @@
                                 <li>AI 生成英文对话剧本</li>
                                 <li>自动创建分镜插图</li>
                                 <li>Edge TTS 生成配音</li>
-                                <li>合成短视频（需 FFmpeg）</li>
+                                <li>合成短视频</li>
                             </ul>
-                            <p style="color:#f59e0b;">⚡ 一键生成 AI 短视频</p>
                         </div>
                     </div>
                 </div>
@@ -245,7 +229,7 @@
                 <div class="icon">🔒</div>
                 <h3>登录后使用在线工具</h3>
                 <p>登录后可在浏览器直接使用所有在线工具</p>
-                <button onclick="showAuthModal()" style="margin-top:16px; padding:10px 24px; background:var(--primary); color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:14px;">立即登录</button>
+                <button onclick="showAuthModal()" style="margin-top:16px; padding:10px 24px; background:var(--primary); color:#fff; border:none; border-radius:8px; cursor:pointer;">立即登录</button>
             </div>
 
             <div id="online-tools-content" style="display:none;">
@@ -263,24 +247,14 @@
                         <p style="color:#888;margin-bottom:16px;">同时向多个 AI 模型提问，对比回答质量</p>
                         <div class="pdf-form-row">
                             <label>输入问题</label>
-                            <textarea id="ai-compare-question" rows="3" placeholder="输入你的问题..." style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;resize:vertical;"></textarea>
-                        </div>
-                        <div class="pdf-form-row">
-                            <label>系统提示词（可选）</label>
-                            <input type="text" id="ai-compare-system" placeholder="你是一个专业的技术顾问" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;">
+                            <textarea id="ai-compare-question" rows="2" placeholder="输入问题..." style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;"></textarea>
                         </div>
                         <div class="pdf-form-row">
                             <label>选择模型</label>
-                            <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-                                    <input type="checkbox" value="qwen-turbo" checked> Qwen-Turbo
-                                </label>
-                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-                                    <input type="checkbox" value="qwen-plus"> Qwen-Plus
-                                </label>
-                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
-                                    <input type="checkbox" value="qwen-max"> Qwen-Max
-                                </label>
+                            <div style="display:flex; gap:16px;">
+                                <label><input type="checkbox" id="cb-qwen-turbo" checked> Qwen-Turbo</label>
+                                <label><input type="checkbox" id="cb-qwen-plus"> Qwen-Plus</label>
+                                <label><input type="checkbox" id="cb-qwen-max"> Qwen-Max</label>
                             </div>
                         </div>
                         <button class="pdf-btn" onclick="startAICompare()">开始对比</button>
@@ -302,13 +276,6 @@
                         <div class="pdf-form-row">
                             <label>上传图片</label>
                             <input type="file" id="image-prompt-file" accept="image/*">
-                        </div>
-                        <div class="pdf-form-row">
-                            <label>提示词风格</label>
-                            <select id="image-prompt-style" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;">
-                                <option value="dalle">DALL-E 风格</option>
-                                <option value="sd">Stable Diffusion 风格</option>
-                            </select>
                         </div>
                         <button class="pdf-btn" onclick="analyzeImage()">生成提示词</button>
                         <div id="image-prompt-result" style="margin-top:16px;"></div>
@@ -333,59 +300,12 @@
                         <div class="pdf-form-row">
                             <label>辩论轮数</label>
                             <select id="debate-rounds" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;">
-                                <option value="2">2 轮（快速）</option>
-                                <option value="4" selected>4 轮（标准）</option>
+                                <option value="2">2 轮</option>
+                                <option value="4" selected>4 轮</option>
                             </select>
                         </div>
                         <button class="pdf-btn" onclick="startDebate()">开始辩论</button>
                         <div id="debate-result" style="margin-top:16px;max-height:400px;overflow-y:auto;"></div>
-                    </div>
-                </div>
-
-                <!-- 台词学习 -->
-                <div class="online-card">
-                    <div class="online-header" onclick="toggleSection('dialogue-tools')">
-                        <div class="demo-title">
-                            <span class="icon">📝</span>
-                            <h3>台词学习工具</h3>
-                        </div>
-                        <span id="dialogue-tools-arrow">▼</span>
-                    </div>
-                    <div id="dialogue-tools" class="online-body" style="display:none;">
-                        <p style="color:#888;margin-bottom:16px;">上传扇贝单词 PDF，自动检索影视台词</p>
-                        <div class="pdf-form-row">
-                            <label>上传单词 PDF</label>
-                            <input type="file" id="dialogue-pdf" accept=".pdf">
-                        </div>
-                        <button class="pdf-btn" onclick="startDialogueLearning()">开始处理</button>
-                        <div id="dialogue-result" style="margin-top:16px;"></div>
-                    </div>
-                </div>
-
-                <!-- 视频生成 -->
-                <div class="online-card">
-                    <div class="online-header" onclick="toggleSection('video-tools')">
-                        <div class="demo-title">
-                            <span class="icon">🎬</span>
-                            <h3>分镜视频生成</h3>
-                        </div>
-                        <span id="video-tools-arrow">▼</span>
-                    </div>
-                    <div id="video-tools" class="online-body" style="display:none;">
-                        <p style="color:#888;margin-bottom:16px;">描述场景，AI 自动生成剧本和视频</p>
-                        <div class="pdf-form-row">
-                            <label>场景描述</label>
-                            <textarea id="video-scene" rows="3" placeholder="例如：在咖啡店点一杯拿铁，与服务员的对话" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;resize:vertical;"></textarea>
-                        </div>
-                        <div class="pdf-form-row">
-                            <label>视频类型</label>
-                            <select id="video-type" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;">
-                                <option value="multi">分镜视频（多场景）</option>
-                                <option value="grid">宫格视频</option>
-                            </select>
-                        </div>
-                        <button class="pdf-btn" onclick="startVideoGeneration()">生成视频</button>
-                        <div id="video-result" style="margin-top:16px;"></div>
                     </div>
                 </div>
 
@@ -417,16 +337,16 @@
                             </div>
                             <div class="pdf-form-row" style="display:flex;align-items:center;gap:8px;">
                                 <input type="checkbox" id="p-img2pdf-landscape">
-                                <label for="p-img2pdf-landscape">强制横向（竖图自动旋转）</label>
+                                <label for="p-img2pdf-landscape">强制横向</label>
                             </div>
                             <button class="pdf-btn" onclick="pdfOp('img2pdf')">生成 PDF</button>
                             <div class="pdf-result" id="r-img2pdf"></div>
                         </div>
 
                         <div class="pdf-panel" id="p-merge">
-                            <p style="color:#888;margin-bottom:12px;">将多个 PDF 按顺序合并</p>
+                            <p style="color:#888;margin-bottom:12px;">将多个 PDF 合并</p>
                             <div class="pdf-form-row">
-                                <label>上传 PDF 文件（至少2个）</label>
+                                <label>上传 PDF（至少2个）</label>
                                 <input type="file" id="p-merge-files" multiple accept=".pdf">
                             </div>
                             <button class="pdf-btn" onclick="pdfOp('merge')">合并 PDF</button>
@@ -437,106 +357,73 @@
                             <p style="color:#888;margin-bottom:12px;">删除指定页面</p>
                             <div class="pdf-form-row">
                                 <label>上传 PDF</label>
-                                <input type="file" id="p-remove-file" accept=".pdf" onchange="getPdfInfo(this,'p-remove-info')">
-                                <div class="pdf-info" id="p-remove-info"></div>
+                                <input type="file" id="p-remove-file" accept=".pdf">
                             </div>
                             <div class="pdf-form-row">
                                 <label>要删除的页码（如 1,3,5-8）</label>
-                                <input type="text" id="p-remove-pages" placeholder="1,3-5,8">
+                                <input type="text" id="p-remove-pages" placeholder="1,3-5">
                             </div>
                             <button class="pdf-btn" onclick="pdfOp('remove')">删除页面</button>
                             <div class="pdf-result" id="r-remove"></div>
                         </div>
 
                         <div class="pdf-panel" id="p-insert">
-                            <p style="color:#888;margin-bottom:12px;">在指定位置插入另一个 PDF</p>
+                            <p style="color:#888;margin-bottom:12px;">在指定位置插入 PDF</p>
                             <div class="pdf-form-row">
                                 <label>主文档</label>
-                                <input type="file" id="p-insert-main" accept=".pdf" onchange="getPdfInfo(this,'p-insert-info')">
-                                <div class="pdf-info" id="p-insert-info"></div>
+                                <input type="file" id="p-insert-main" accept=".pdf">
                             </div>
                             <div class="pdf-form-row">
                                 <label>要插入的文档</label>
                                 <input type="file" id="p-insert-ins" accept=".pdf">
                             </div>
-                            <div class="pdf-form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                                <div>
-                                    <label>插入位置</label>
-                                    <select id="p-insert-pos" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                                        <option value="start">最前面</option>
-                                        <option value="after" selected>指定页之后</option>
-                                        <option value="before">指定页之前</option>
-                                        <option value="end">最后面</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label>目标页码</label>
-                                    <input type="number" id="p-insert-page" value="1" min="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                                </div>
+                            <div class="pdf-form-row">
+                                <label>插入位置</label>
+                                <select id="p-insert-pos" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;">
+                                    <option value="start">最前面</option>
+                                    <option value="after" selected>指定页之后</option>
+                                    <option value="end">最后面</option>
+                                </select>
                             </div>
                             <button class="pdf-btn" onclick="pdfOp('insert')">插入</button>
                             <div class="pdf-result" id="r-insert"></div>
                         </div>
 
                         <div class="pdf-panel" id="p-reorder">
-                            <p style="color:#888;margin-bottom:12px;">将竖版页面移到横版页面前面</p>
+                            <p style="color:#888;margin-bottom:12px;">竖版页面移到前面</p>
                             <div class="pdf-form-row">
                                 <label>上传 PDF</label>
-                                <input type="file" id="p-reorder-file" accept=".pdf" onchange="getPdfInfo(this,'p-reorder-info')">
-                                <div class="pdf-info" id="p-reorder-info"></div>
+                                <input type="file" id="p-reorder-file" accept=".pdf">
                             </div>
                             <button class="pdf-btn" onclick="pdfOp('reorder')">重排页面</button>
                             <div class="pdf-result" id="r-reorder"></div>
                         </div>
 
                         <div class="pdf-panel" id="p-normalize">
-                            <p style="color:#888;margin-bottom:12px;">将所有横向页面统一为相同尺寸</p>
+                            <p style="color:#888;margin-bottom:12px;">统一横向页面尺寸</p>
                             <div class="pdf-form-row">
                                 <label>上传 PDF</label>
-                                <input type="file" id="p-normalize-file" accept=".pdf" onchange="getPdfInfo(this,'p-normalize-info')">
-                                <div class="pdf-info" id="p-normalize-info"></div>
+                                <input type="file" id="p-normalize-file" accept=".pdf">
                             </div>
                             <button class="pdf-btn" onclick="pdfOp('normalize')">统一尺寸</button>
                             <div class="pdf-result" id="r-normalize"></div>
                         </div>
 
                         <div class="pdf-panel" id="p-to-img">
-                            <p style="color:#888;margin-bottom:12px;">将 PDF 页面导出为图片</p>
+                            <p style="color:#888;margin-bottom:12px;">PDF 转图片</p>
                             <div class="pdf-form-row">
                                 <label>上传 PDF</label>
-                                <input type="file" id="p-toimg-file" accept=".pdf" onchange="getPdfInfo(this,'p-toimg-info');autoFillEndPage(this)">
-                                <div class="pdf-info" id="p-toimg-info"></div>
-                            </div>
-                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
-                                <div class="pdf-form-row" style="margin:0;">
-                                    <label>起始页</label>
-                                    <input type="number" id="p-toimg-start" value="1" min="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                                </div>
-                                <div class="pdf-form-row" style="margin:0;">
-                                    <label>结束页</label>
-                                    <input type="number" id="p-toimg-end" value="1" min="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                                </div>
-                                <div class="pdf-form-row" style="margin:0;">
-                                    <label>DPI</label>
-                                    <input type="number" id="p-toimg-dpi" value="150" min="72" max="600" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                                </div>
+                                <input type="file" id="p-toimg-file" accept=".pdf">
                             </div>
                             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-                                <div class="pdf-form-row" style="margin:0;">
-                                    <label>格式</label>
-                                    <select id="p-toimg-fmt" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                                        <option value="jpg">JPG（体积小）</option>
-                                        <option value="png">PNG（无损）</option>
-                                    </select>
+                                <div class="pdf-form-row">
+                                    <label>起始页</label>
+                                    <input type="number" id="p-toimg-start" value="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
                                 </div>
-                                <div class="pdf-form-row" style="margin:0;">
-                                    <label>限制大小(KB, 0=不限)</label>
-                                    <input type="number" id="p-toimg-maxsize" value="0" min="0" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
+                                <div class="pdf-form-row">
+                                    <label>结束页</label>
+                                    <input type="number" id="p-toimg-end" value="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
                                 </div>
-                            </div>
-                            <div class="pdf-form-row" style="display:flex;align-items:center;gap:8px;">
-                                <input type="checkbox" id="p-toimg-long">
-                                <label for="p-toimg-long">合并为长图</label>
                             </div>
                             <button class="pdf-btn" onclick="pdfOp('to_images')">导出图片</button>
                             <div class="pdf-result" id="r-to_images"></div>
@@ -554,41 +441,35 @@
                 <div class="source-card">
                     <div class="icon">📄</div>
                     <h3>PDF 工具集</h3>
-                    <p class="desc">在线 PDF 处理工具：图片转PDF、PDF合并、删页、插入PDF、页面重排、统一尺寸、PDF转图片</p>
+                    <p class="desc">在线 PDF 处理工具：图片转PDF、合并、删页、插入、重排、统一尺寸、PDF转图片</p>
                     <div class="tech-tags">
                         <span class="tech-tag">Flask</span>
                         <span class="tech-tag">pypdf</span>
                         <span class="tech-tag">Pillow</span>
                     </div>
-                    <a href="https://github.com/zhimingliang897-web/integrity" class="source-link" target="_blank">查看源码 →</a>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/docs/server/app/tools/pdf.py" class="source-link" target="_blank">查看源码 →</a>
                 </div>
 
                 <div class="source-card">
-                    <div class="icon">⚖️</span></div>
+                    <div class="icon">⚖️</div>
                     <h3>多模型对比平台</h3>
-                    <p class="desc">同一个界面横向对比 Qwen 等大模型，支持并发提交问题，流式输出展示</p>
+                    <p class="desc">同一个界面横向对比 Qwen 等大模型，支持并发提交问题</p>
                     <div class="tech-tags">
                         <span class="tech-tag">Flask</span>
                         <span class="tech-tag">OpenAI API</span>
                     </div>
-                    <div class="card-links">
-                        <a href="demos/ai-compare.html" class="demo-link">查看演示 →</a>
-                        <a href="https://github.com/zhimingliang897-web/integrity" class="source-link" target="_blank">查看源码 →</a>
-                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/docs/server/app/tools/ai_compare.py" class="source-link" target="_blank">查看源码 →</a>
                 </div>
 
                 <div class="source-card">
                     <div class="icon">🎨</div>
                     <h3>图文互转工具</h3>
-                    <p class="desc">AI 图片 ↔ 提示词双向转换工具箱，使用 Qwen VL 视觉模型</p>
+                    <p class="desc">AI 图片 ↔ 提示词双向转换，使用 Qwen VL 视觉模型</p>
                     <div class="tech-tags">
                         <span class="tech-tag">Python</span>
                         <span class="tech-tag">Qwen VL</span>
                     </div>
-                    <div class="card-links">
-                        <a href="demos/image-prompt.html" class="demo-link">查看演示 →</a>
-                        <a href="https://github.com/zhimingliang897-web/integrity" class="source-link" target="_blank">查看源码 →</a>
-                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/docs/server/app/tools/image_prompt.py" class="source-link" target="_blank">查看源码 →</a>
                 </div>
 
                 <div class="source-card">
@@ -599,10 +480,7 @@
                         <span class="tech-tag">Flask</span>
                         <span class="tech-tag">SSE</span>
                     </div>
-                    <div class="card-links">
-                        <a href="demos/ai-debate.html" class="demo-link">查看演示 →</a>
-                        <a href="https://github.com/zhimingliang897-web/integrity" class="source-link" target="_blank">查看源码 →</a>
-                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/docs/server/app/tools/ai_debate.py" class="source-link" target="_blank">查看源码 →</a>
                 </div>
 
                 <div class="source-card">
@@ -614,10 +492,7 @@
                         <span class="tech-tag">pdfplumber</span>
                         <span class="tech-tag">Edge TTS</span>
                     </div>
-                    <div class="card-links">
-                        <a href="demos/dialogue-learning.html" class="demo-link">查看演示 →</a>
-                        <a href="https://github.com/zhimingliang897-web/integrity" class="source-link" target="_blank">查看源码 →</a>
-                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/docs/server/app/tools/dialogue_learning.py" class="source-link" target="_blank">查看源码 →</a>
                 </div>
 
                 <div class="source-card">
@@ -629,10 +504,7 @@
                         <span class="tech-tag">FFmpeg</span>
                         <span class="tech-tag">Edge TTS</span>
                     </div>
-                    <div class="card-links">
-                        <a href="demos/video-maker.html" class="demo-link">查看演示 →</a>
-                        <a href="https://github.com/zhimingliang897-web/integrity" class="source-link" target="_blank">查看源码 →</a>
-                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/docs/server/app/tools/video_maker.py" class="source-link" target="_blank">查看源码 →</a>
                 </div>
             </div>
         </div>
