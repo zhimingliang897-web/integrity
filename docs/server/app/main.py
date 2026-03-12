@@ -166,6 +166,9 @@ def chat():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+from app.tools.pdf import pdf_bp
+app.register_blueprint(pdf_bp)
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
