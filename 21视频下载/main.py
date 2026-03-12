@@ -46,6 +46,23 @@ def check_ytdlp():
             return False
 
 
+def check_ffmpeg():
+    """检查 ffmpeg 是否已安装（合并视频流必需）"""
+    try:
+        result = subprocess.run(["ffmpeg", "-version"], capture_output=True, text=True)
+        # 提取版本号
+        version_line = result.stdout.split('\n')[0]
+        print(f"  ✓ {version_line}")
+        return True
+    except FileNotFoundError:
+        print("  ⚠️  ffmpeg 未找到（合并视频流时需要）")
+        print("  安装方法:")
+        print("    macOS:   brew install ffmpeg")
+        print("    Windows: 从 https://ffmpeg.org/download.html 下载")
+        print("    Linux:   sudo apt install ffmpeg")
+        return False
+
+
 def build_cmd(url: str) -> list:
     """构建 yt-dlp 命令"""
     cmd = [
@@ -125,8 +142,14 @@ def main():
 
     # 检查依赖
     print("\n检查依赖...")
-    if not check_ytdlp():
+    ytdlp_ok = check_ytdlp()
+    ffmpeg_ok = check_ffmpeg()
+    
+    if not ytdlp_ok:
         sys.exit(1)
+    
+    if not ffmpeg_ok:
+        print("\n  提示: 没有 ffmpeg 可能无法合并某些视频流，但可以继续尝试\n")
 
     # 命令行模式：直接下载参数中的 URL
     if len(sys.argv) > 1:

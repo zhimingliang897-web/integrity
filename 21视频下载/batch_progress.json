@@ -1,0 +1,45 @@
+{
+  "page_url": "https://example.com/course/videos",
+  "timestamp": "2026-03-13T00:11:13.171339",
+  "videos": [
+    {
+      "index": 1,
+      "title": "Week 1 - Lecture",
+      "element_selector": "iframe:nth-of-type(1)",
+      "video_urls": [
+        "https://example.com/video1.m3u8"
+      ],
+      "best_url": "https://example.com/video1.m3u8",
+      "status": "completed",
+      "download_path": "downloads/01_Week 1 - Lecture.mp4",
+      "error": "",
+      "retry_count": 0
+    },
+    {
+      "index": 2,
+      "title": "Week 2 - Lecture",
+      "element_selector": "iframe:nth-of-type(2)",
+      "video_urls": [
+        "https://example.com/video2.m3u8"
+      ],
+      "best_url": "https://example.com/video2.m3u8",
+      "status": "completed",
+      "download_path": "downloads/02_Week 2 - Lecture.mp4",
+      "error": "",
+      "retry_count": 0
+    },
+    {
+      "index": 3,
+      "title": "Week 3 - Lecture",
+      "element_selector": "iframe:nth-of-type(3)",
+      "video_urls": [
+        "https://example.com/video3.m3u8"
+      ],
+      "best_url": "https://example.com/video3.m3u8",
+      "status": "completed",
+      "download_path": "downloads/03_Week 3 - Lecture.mp4",
+      "error": "",
+      "retry_count": 0
+    }
+  ]
+}

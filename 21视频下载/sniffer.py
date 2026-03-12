@@ -10,6 +10,7 @@ import re
 import sys
 import subprocess
 from pathlib import Path
+from typing import List
 
 def install_dependencies():
     """检查并安装 Playwright"""
@@ -27,18 +28,21 @@ def install_dependencies():
             print("请手动执行: pip install playwright && playwright install chromium")
             sys.exit(1)
 
-# ── 视频特征匹配 ────────────────────────────────────────────────────────
+# ── 视频特征匹配（增强 NTU 支持）────────────────────────────────────────
 VIDEO_PATTERNS = [
     r'\.(m3u8|mp4|webm|ts|m4v|flv)(\?|#|$)',
     r'/manifest(\.f4m|/video)',
     r'/playlist\b',
     r'master\.m3u8',
     r'chunklist.*?\.m3u8',
-    r'/kaltura.*/p/',
-    r'/delivery.*video',
+    r'/kaltura.*/p/',           # Kaltura 特征（NTU 常用）
+    r'/delivery.*video',         # Kaltura delivery
     r'videoplayback',
     r'media\..*?\.mp4',
     r'chunk.*\.m4v',
+    r'panopto\.com.*delivery',   # Panopto 特征（NTU 常用）
+    r'ntu\.edu\.sg.*\.m3u8',     # NTU 域名的 m3u8
+    r'ntu\.edu\.sg.*\.mp4',      # NTU 域名的 mp4
 ]
 
 IGNORE_PATTERNS = [
@@ -57,7 +61,7 @@ def is_video_url(url: str) -> bool:
             return True
     return False
 
-def extract_video_from_page(url: str) -> list[str]:
+def extract_video_from_page(url: str) -> List[str]:
     """使用浏览器模拟打开大链接，窃听网络请求，找出所有真实视频地址"""
     install_dependencies()
     from playwright.sync_api import sync_playwright

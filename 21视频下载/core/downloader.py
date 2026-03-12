@@ -16,23 +16,18 @@ from datetime import datetime
 from urllib.parse import urlparse, unquote
 
 
-# 不支持的 URL 模式及其提示
+# 不支持的 URL 模式及其提示（仅作警告，不阻止下载）
 UNSUPPORTED_URL_PATTERNS = [
     {
         "pattern": r"ntulearn\.ntu\.edu\.sg.*lti.*launchFrame",
-        "name": "NTU Learn LTI",
-        "hint": "这是跳转链接。请先在浏览器中播放视频，使用插件自动检测，或按F12打开Network面板筛选.m3u8"
+        "name": "NTU Learn LTI 跳转链接",
+        "hint": "这是跳转链接，无法直接下载。请使用 ntu_sniffer.py 或 sniffer.py 嗅探真实视频地址"
     },
     {
-        "pattern": r"ntulearn\.ntu\.edu\.sg.*blackboard",
-        "name": "NTU Blackboard",
-        "hint": "请使用浏览器插件自动检测视频，或手动从Network面板提取"
+        "pattern": r"ntulearn\.ntu\.edu\.sg.*blackboard.*(?<!\.m3u8)(?<!\.mp4)$",
+        "name": "NTU Blackboard 页面",
+        "hint": "这是网页链接，无法直接下载。请使用 ntu_sniffer.py 或 sniffer.py 嗅探真实视频地址"
     },
-    {
-        "pattern": r"ntulive\.ntu\.edu\.sg/Panopto",
-        "name": "NTU Panopto",
-        "hint": "请确保已上传NTU的Cookie，然后使用插件下载"
-    }
 ]
 
 
@@ -139,11 +134,11 @@ class VideoDownloaderCore:
         """
         warning = None
 
-        # 检查 URL 是否支持
+        # 检查 URL 是否可能有问题（仅警告，不阻止）
         if not skip_url_check:
             is_supported, error_name, error_hint = check_url_support(url)
             if not is_supported:
-                warning = f"[{error_name}] {error_hint}"
+                warning = f"⚠️  [{error_name}] {error_hint}"
 
         task_id = str(uuid.uuid4())[:8]
         task = DownloadTask(task_id, url, self.download_dir)
