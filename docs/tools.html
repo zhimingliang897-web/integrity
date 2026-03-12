@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI 工具库 - Integrity Lab</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="tools-styles.css">
 </head>
 <body>
     <nav>
@@ -37,33 +38,219 @@
                     <a href="#" id="switch-link" onclick="toggleAuthMode()">注册</a>
                 </p>
             </div>
+            </div>
         </div>
-    </div>
+
+        <!-- 在线工具区 -->
+        <div id="tab-online" class="tab-content">
+            <div class="section-title">登录后可在浏览器直接使用</div>
+            
+            <!-- 登录提示 -->
+            <div id="login-prompt" class="login-prompt">
+                <div class="icon">🔒</div>
+                <h3>登录后使用在线工具</h3>
+                <p>登录后可在浏览器直接使用 PDF 工具等功能</p>
+                <button onclick="showAuthModal()" style="margin-top:16px; padding:10px 24px; background:var(--primary); color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:14px;">立即登录</button>
+            </div>
+
+            <!-- 在线工具内容（登录后显示） -->
+            <div id="online-tools-content" style="display:none;">
+                <div class="online-card">
+                    <div class="online-header" onclick="toggleSection('pdf-tools')">
+                        <div class="demo-title">
+                            <span class="icon">📄</span>
+                            <h3>PDF 工具集</h3>
+                        </div>
+                        <span id="pdf-tools-arrow">▼</span>
+                    </div>
+                    <div id="pdf-tools" class="online-body">
+                        <!-- PDF Tab 导航 -->
+                        <div class="pdf-tabs" id="pdf-tabs">
+                            <button class="pdf-tab active" data-tab="p-img2pdf">图片→PDF</button>
+                            <button class="pdf-tab" data-tab="p-merge">合并PDF</button>
+                            <button class="pdf-tab" data-tab="p-remove">删除页面</button>
+                            <button class="pdf-tab" data-tab="p-insert">插入PDF</button>
+                            <button class="pdf-tab" data-tab="p-reorder">页面重排</button>
+                            <button class="pdf-tab" data-tab="p-normalize">统一尺寸</button>
+                            <button class="pdf-tab" data-tab="p-to-img">PDF→图片</button>
+                        </div>
+
+                        <!-- 图片→PDF -->
+                        <div class="pdf-panel active" id="p-img2pdf">
+                            <p style="color:#888;margin-bottom:12px;">将多张图片合成一个 PDF</p>
+                            <div class="pdf-form-row">
+                                <label>上传图片（可多选）</label>
+                                <input type="file" id="p-img2pdf-files" multiple accept="image/*">
+                            </div>
+                            <div class="pdf-form-row" style="display:flex;align-items:center;gap:8px;">
+                                <input type="checkbox" id="p-img2pdf-landscape">
+                                <label for="p-img2pdf-landscape">强制横向（竖图自动旋转）</label>
+                            </div>
+                            <button class="pdf-btn" onclick="pdfOp('img2pdf')">生成 PDF</button>
+                            <div class="pdf-result" id="r-img2pdf"></div>
+                        </div>
+
+                        <!-- 合并PDF -->
+                        <div class="pdf-panel" id="p-merge">
+                            <p style="color:#888;margin-bottom:12px;">将多个 PDF 按顺序合并</p>
+                            <div class="pdf-form-row">
+                                <label>上传 PDF 文件（至少2个）</label>
+                                <input type="file" id="p-merge-files" multiple accept=".pdf">
+                            </div>
+                            <button class="pdf-btn" onclick="pdfOp('merge')">合并 PDF</button>
+                            <div class="pdf-result" id="r-merge"></div>
+                        </div>
+
+                        <!-- 删除页面 -->
+                        <div class="pdf-panel" id="p-remove">
+                            <p style="color:#888;margin-bottom:12px;">删除指定页面</p>
+                            <div class="pdf-form-row">
+                                <label>上传 PDF</label>
+                                <input type="file" id="p-remove-file" accept=".pdf" onchange="getPdfInfo(this,'p-remove-info')">
+                                <div class="pdf-info" id="p-remove-info"></div>
+                            </div>
+                            <div class="pdf-form-row">
+                                <label>要删除的页码（如 1,3,5-8）</label>
+                                <input type="text" id="p-remove-pages" placeholder="1,3-5,8">
+                            </div>
+                            <button class="pdf-btn" onclick="pdfOp('remove')">删除页面</button>
+                            <div class="pdf-result" id="r-remove"></div>
+                        </div>
+
+                        <!-- 插入PDF -->
+                        <div class="pdf-panel" id="p-insert">
+                            <p style="color:#888;margin-bottom:12px;">在指定位置插入另一个 PDF</p>
+                            <div class="pdf-form-row">
+                                <label>主文档</label>
+                                <input type="file" id="p-insert-main" accept=".pdf" onchange="getPdfInfo(this,'p-insert-info')">
+                                <div class="pdf-info" id="p-insert-info"></div>
+                            </div>
+                            <div class="pdf-form-row">
+                                <label>要插入的文档</label>
+                                <input type="file" id="p-insert-ins" accept=".pdf">
+                            </div>
+                            <div class="pdf-form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                                <div>
+                                    <label>插入位置</label>
+                                    <select id="p-insert-pos" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
+                                        <option value="start">最前面</option>
+                                        <option value="after" selected>指定页之后</option>
+                                        <option value="before">指定页之前</option>
+                                        <option value="end">最后面</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label>目标页码</label>
+                                    <input type="number" id="p-insert-page" value="1" min="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
+                                </div>
+                            </div>
+                            <button class="pdf-btn" onclick="pdfOp('insert')">插入</button>
+                            <div class="pdf-result" id="r-insert"></div>
+                        </div>
+
+                        <!-- 页面重排 -->
+                        <div class="pdf-panel" id="p-reorder">
+                            <p style="color:#888;margin-bottom:12px;">将竖版页面移到横版页面前面</p>
+                            <div class="pdf-form-row">
+                                <label>上传 PDF</label>
+                                <input type="file" id="p-reorder-file" accept=".pdf" onchange="getPdfInfo(this,'p-reorder-info')">
+                                <div class="pdf-info" id="p-reorder-info"></div>
+                            </div>
+                            <button class="pdf-btn" onclick="pdfOp('reorder')">重排页面</button>
+                            <div class="pdf-result" id="r-reorder"></div>
+                        </div>
+
+                        <!-- 统一尺寸 -->
+                        <div class="pdf-panel" id="p-normalize">
+                            <p style="color:#888;margin-bottom:12px;">将所有横向页面统一为相同尺寸</p>
+                            <div class="pdf-form-row">
+                                <label>上传 PDF</label>
+                                <input type="file" id="p-normalize-file" accept=".pdf" onchange="getPdfInfo(this,'p-normalize-info')">
+                                <div class="pdf-info" id="p-normalize-info"></div>
+                            </div>
+                            <button class="pdf-btn" onclick="pdfOp('normalize')">统一尺寸</button>
+                            <div class="pdf-result" id="r-normalize"></div>
+                        </div>
+
+                        <!-- PDF→图片 -->
+                        <div class="pdf-panel" id="p-to-img">
+                            <p style="color:#888;margin-bottom:12px;">将 PDF 页面导出为图片</p>
+                            <div class="pdf-form-row">
+                                <label>上传 PDF</label>
+                                <input type="file" id="p-toimg-file" accept=".pdf" onchange="getPdfInfo(this,'p-toimg-info');autoFillEndPage(this)">
+                                <div class="pdf-info" id="p-toimg-info"></div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+                                <div class="pdf-form-row" style="margin:0;">
+                                    <label>起始页</label>
+                                    <input type="number" id="p-toimg-start" value="1" min="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
+                                </div>
+                                <div class="pdf-form-row" style="margin:0;">
+                                    <label>结束页</label>
+                                    <input type="number" id="p-toimg-end" value="1" min="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
+                                </div>
+                                <div class="pdf-form-row" style="margin:0;">
+                                    <label>DPI</label>
+                                    <input type="number" id="p-toimg-dpi" value="150" min="72" max="600" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
+                                </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+                                <div class="pdf-form-row" style="margin:0;">
+                                    <label>格式</label>
+                                    <select id="p-toimg-fmt" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
+                                        <option value="jpg">JPG（体积小）</option>
+                                        <option value="png">PNG（无损）</option>
+                                    </select>
+                                </div>
+                                <div class="pdf-form-row" style="margin:0;">
+                                    <label>限制大小(KB, 0=不限)</label>
+                                    <input type="number" id="p-toimg-maxsize" value="0" min="0" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
+                                </div>
+                            </div>
+                            <div class="pdf-form-row" style="display:flex;align-items:center;gap:8px;">
+                                <input type="checkbox" id="p-toimg-long">
+                                <label for="p-toimg-long">合并为长图</label>
+                            </div>
+                            <button class="pdf-btn" onclick="pdfOp('to_images')">导出图片</button>
+                            <div class="pdf-result" id="r-to_images"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     <div class="container">
         <div class="page-header">
             <h1>🛠️ AI 工具库</h1>
-            <p style="color:#888; margin-top:6px;">自己动手做的 AI 工具合集，全部开源，持续更新。</p>
+            <p style="color:#888; margin-top:6px;">自己动手做的 AI 工具合集，全部开源，持续更新</p>
         </div>
 
-        <!-- Live Demo Section for tools.html -->
-        <div class="demo-section" style="margin-bottom: 40px;">
-            <div class="demo-container">
+        <!-- Tab 导航 -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('demo')">✨ 演示体验</button>
+            <button class="tab-btn" onclick="switchTab('online')">⚡ 在线工具</button>
+            <button class="tab-btn" onclick="switchTab('source')">📦 源码浏览</button>
+        </div>
+
+        <!-- 演示体验区 -->
+        <div id="tab-demo" class="tab-content active">
+            <div class="section-title">体验 AI 工具的核心功能</div>
+            <div class="demo-grid">
                 <!-- Demo 1: 图文互转 -->
                 <div class="demo-card">
                     <div class="demo-header">
                         <div class="demo-title">
                             <span class="icon">🎨</span>
-                            <h3>图文互转体验 (Image ↔ Prompt)</h3>
+                            <h3>图文互转体验</h3>
                         </div>
                         <button id="start-vision-btn" class="demo-btn">提取提示词 ⚡</button>
                     </div>
-                    <div class="demo-body vision-window" style="padding:24px; display:flex; gap:24px; background:#0d0d14; align-items:flex-start;">
-                        <div class="vision-image-box" style="flex:1; border: 1px dashed var(--border); border-radius: 12px; padding: 8px; text-align:center; position:relative;">
-                            <img src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=400" alt="demo sample" style="width:100%; border-radius:8px; display:block; filter: grayscale(20%); transition: filter 0.5s;">
+                    <div class="demo-body" style="padding:24px; display:flex; gap:24px; background:#0d0d14; align-items:flex-start;">
+                        <div style="flex:1; border: 1px dashed var(--border); border-radius: 12px; padding: 8px; text-align:center; position:relative;">
+                            <img id="vision-demo-img" src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=400" alt="demo sample" style="width:100%; border-radius:8px; display:block; filter: grayscale(20%); transition: filter 0.5s;">
                             <div id="scan-line" style="position:absolute; top:8px; left:8px; right:8px; height:2px; background:var(--primary); box-shadow: 0 0 8px var(--primary); display:none; border-radius: 2px;"></div>
                         </div>
-                        <div class="vision-prompt-box" style="flex:1.5; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:16px; min-height: 200px; display:flex; flex-direction:column;">
+                        <div style="flex:1.5; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:16px; min-height: 200px; display:flex; flex-direction:column;">
                             <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:1px;"><span style="color:#10b981;">●</span> Qwen-VL Prompt Output</div>
                             <div id="vision-output" style="font-family: monospace; color:#e2e8f0; line-height:1.6; font-size:0.9rem; flex:1;">
                                 <span style="opacity:0.5; font-style:italic;">等待传入图片进行反推...</span>
@@ -73,7 +260,7 @@
                 </div>
 
                 <!-- Demo 2: 多模型对比 -->
-                <div class="demo-card" style="margin-top: 20px;">
+                <div class="demo-card">
                     <div class="demo-header">
                         <div class="demo-title">
                             <span class="icon">⚖️</span>
@@ -85,37 +272,220 @@
                         <div style="margin-bottom: 16px;">
                             <input type="text" id="compare-input" placeholder="输入你的问题..." value="解释一下什么是大语言模型" style="width:100%; padding:12px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff; font-size:14px;">
                         </div>
-                        <div class="compare-models" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;">
-                            <div class="model-result" id="model-qwen" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;">
+                            <div id="model-qwen" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
                                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
                                     <span style="color:#f59e0b; font-weight:600;">🟡</span> <strong>Qwen-Plus</strong>
                                 </div>
-                                <div class="model-text" style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+                                <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
                                     <span style="opacity:0.5;">点击开始对比查看回复...</span>
                                 </div>
                             </div>
-                            <div class="model-result" id="model-deepseek" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
+                            <div id="model-deepseek" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
                                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
                                     <span style="color:#3b82f6; font-weight:600;">🔵</span> <strong>DeepSeek-V3</strong>
                                 </div>
-                                <div class="model-text" style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+                                <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
                                     <span style="opacity:0.5;">点击开始对比查看回复...</span>
                                 </div>
                             </div>
-                            <div class="model-result" id="model-gpt" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
+                            <div id="model-gpt" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
                                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
                                     <span style="color:#10b981; font-weight:600;">🟢</span> <strong>GPT-4o-mini</strong>
                                 </div>
-                                <div class="model-text" style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+                                <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
                                     <span style="opacity:0.5;">点击开始对比查看回复...</span>
-                                </div>
-                            </div>
-                        </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 源码浏览区 -->
+        <div id="tab-source" class="tab-content">
+            <div class="section-title">所有项目开源，欢迎学习和使用</div>
+            <div class="source-grid">
+                <!-- 1. PDF 工具集 -->
+                <div class="source-card">
+                    <div class="icon">📄</div>
+                    <h3>PDF 工具集</h3>
+                    <p class="desc">在线 PDF 处理工具：图片转PDF、PDF合并、删页、插入PDF、页面重排、统一尺寸、PDF转图片</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Flask</span>
+                        <span class="tech-tag">pypdf</span>
+                        <span class="tech-tag">Pillow</span>
+                        <span class="tech-tag">PyMuPDF</span>
                     </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/12pdffun" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <!-- 2. 分镜视频生成器 -->
+                <div class="source-card">
+                    <div class="icon">🎬</div>
+                    <h3>分镜视频生成器</h3>
+                    <p class="desc">调用大模型生成英文对话场景，使用 AI 生图或自定义图片，自动合成带字幕和配音的短视频</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">FFmpeg</span>
+                        <span class="tech-tag">Edge TTS</span>
+                        <span class="tech-tag">DashScope</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/1%E5%88%86%E9%95%9C" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <!-- 3. 台词学习工具 -->
+                <div class="source-card">
+                    <div class="icon">📝</div>
+                    <h3>台词学习工具</h3>
+                    <p class="desc">从扇贝单词导出生词卡片，程序自动检索对应美剧/电影台词，结合语境高效记忆单词</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Flask</span>
+                        <span class="tech-tag">pdfplumber</span>
+                        <span class="tech-tag">BeautifulSoup</span>
+                        <span class="tech-tag">DashScope</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/2%E5%8F%B0%E8%AF%8D" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <!-- 4. AI 辩论赛 -->
+                <div class="source-card">
+                    <div class="icon">🎭</div>
+                    <h3>AI 辩论赛</h3>
+                    <p class="desc">多模型驱动的 AI 辩论竞技场。集成 Qwen/DeepSeek 等模型，还原标准华语辩论赛制，实时语音合成辩论过程并由 AI 裁判评分</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Flask</span>
+                        <span class="tech-tag">Multi-LLM</span>
+                        <span class="tech-tag">TTS</span>
+                        <span class="tech-tag">SSE</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/5AI%E8%BE%A9%E8%AE%BA%E8%B5%9B" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <!-- 5. AI 每日情报 Agent -->
+                <div class="source-card">
+                    <div class="icon">📡</div>
+                    <h3>AI 每日情报 Agent</h3>
+                    <p class="desc">全自动化的 AI 资讯情报官。聚合全球 12+ 技术信源 → LLM 智能评级与摘要 → 自动推送到 Telegram 并归档网页</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">GitHub Actions</span>
+                        <span class="tech-tag">RSS</span>
+                        <span class="tech-tag">Qwen API</span>
+                        <span class="tech-tag">Telegram</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/6AI%E7%83%AD%E7%82%B9" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <!-- 6. 图文互转工具 -->
+                <div class="source-card">
+                    <div class="icon">🎨</div>
+                    <h3>图文互转工具</h3>
+                    <p class="desc">AI 图片 ↔ 提示词双向转换工具箱。图片逆向生成 DALL·E/SD 风格提示词，或从提示词批量生成图片</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Qwen VL</span>
+                        <span class="tech-tag">DashScope</span>
+                        <span class="tech-tag">Volcengine</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/9%E5%9B%BE%E7%94%9F%E6%96%87%E6%96%87%E7%94%9F%E5%9B%BE" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <!-- 7. EasyApply 浏览器插件 -->
+                <div class="source-card">
+                    <div class="icon">📋</div>
+                    <h3>EasyApply 浏览器插件</h3>
+                    <p class="desc">求职助手浏览器扩展。自动抓取招聘页面信息，一键导出为 Excel 表格，支持 Chrome/Edge 双平台</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Manifest V3</span>
+                        <span class="tech-tag">Chrome API</span>
+                        <span class="tech-tag">xlsx.js</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/11easyapply" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <!-- 8. CourseDigest 智能助考 -->
+                <div class="source-card">
+                    <div class="icon">🎓</div>
+                    <h3>CourseDigest 智能助考</h3>
+                    <p class="desc">将录播课视频与 PPT 讲义转化为考试导向复习大纲。本地 Whisper 转录 + AI 提取考点 + 自动生成模拟试题</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">faster-whisper</span>
+                        <span class="tech-tag">pdfplumber</span>
+                        <span class="tech-tag">Qwen API</span>
+                        <span class="tech-tag">Groq</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/13course_digest" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <!-- 9. 个人文件助手 Agent -->
+                <div class="source-card">
+                    <div class="icon">🤖</div>
+                    <h3>个人文件助手 Agent</h3>
+                    <p class="desc">用大白话控制电脑极速秒搜全盘文件的大模型管家。支持手机端远程内网访问，并能自动打包所选文件发送到指定邮箱</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">DashScope</span>
+                        <span class="tech-tag">Natapp</span>
+                        <span class="tech-tag">Windows API</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/14file-agent" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <!-- 10. 小红书内容生成器 -->
+                <div class="source-card">
+                    <div class="icon">📕</div>
+                    <h3>小红书内容生成器</h3>
+                    <p class="desc">AI 全自动生成英语教育图文笔记。自动构思知识点、生成精美封面排版，并支持控制浏览器一键自动发布</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Playwright</span>
+                        <span class="tech-tag">LLM</span>
+                        <span class="tech-tag">Pillow</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/15redbook" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <!-- 11. 多模型对比平台 -->
+                <div class="source-card">
+                    <div class="icon">⚖️</div>
+                    <h3>多模型对比平台</h3>
+                    <p class="desc">同一个界面横向对比 Qwen、Doubao、DeepSeek 等大模型。支持并发提交问题，流式输出展示，直观评测回复质量差异</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Vanilla JS</span>
+                        <span class="tech-tag">OpenAI Format API</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/17ai-compare" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <!-- 12. Token 消耗对比工具 -->
+                <div class="source-card">
+                    <div class="icon">🪙</div>
+                    <h3>Token 消耗对比工具</h3>
+                    <p class="desc">量化测试相同语义在「中文/英文/带图」三种输入下的 Token 开销差异。帮助开发者优化 Prompt 成本</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Tkinter</span>
+                        <span class="tech-tag">DashScope</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/18tokens" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="text-align:center; padding:40px 20px; color:var(--text-muted); border-top:1px solid var(--border); margin-top:60px;">
+        Integrity Lab · 全部项目开源于 <a href="https://github.com/zhimingliang897-web/integrity" target="_blank" style="color:var(--primary);">GitHub</a>
+    </footer>
+
+    <!-- 引入 JS 模块 -->
+    <script src="tools-auth.js"></script>
+    <script src="tools-demo.js"></script>
+    <script src="tools-pdf.js"></script>
+</body>
+</html>
                 </div>
 
                 <!-- Demo 3: Token 计算器 -->
-                <div class="demo-card" style="margin-top: 20px;">
+                <div class="demo-card">
                     <div class="demo-header">
                         <div class="demo-title">
                             <span class="icon">🪙</span>
@@ -147,7 +517,7 @@
                                 <input type="number" id="token-chars" value="100" style="width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
                             </div>
                         </div>
-                        <div class="token-result" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:16px; display:flex; justify-content:space-around; text-align:center;">
+                        <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:16px; display:flex; justify-content:space-around; text-align:center;">
                             <div>
                                 <div style="font-size:24px; color:var(--primary); font-weight:700;" id="result-prompt">-</div>
                                 <div style="font-size:12px; color:var(--text-muted);">输入 Token</div>
@@ -165,961 +535,3 @@
                 </div>
             </div>
         </div>
-
-        <!-- ===== 在线工具区（登录后显示）===== -->
-        <div id="online-tools-section" style="display:none; margin-bottom:48px;">
-            <div class="page-header">
-                <h2>⚡ 在线工具</h2>
-                <p style="color:#888; margin-top:6px;">登录后可在浏览器内直接使用，无需本地 Python 环境。</p>
-            </div>
-
-            <!-- PDF 工具 -->
-            <div class="demo-card" style="margin-bottom:24px;">
-                <div class="demo-header" style="padding:16px 20px; cursor:pointer;" onclick="toggleTool('pdf-tool')">
-                    <div class="demo-title">
-                        <span class="icon">📄</span>
-                        <h3>PDF 工具集</h3>
-                    </div>
-                    <span id="pdf-tool-arrow" style="color:var(--text-muted); font-size:18px;">▼</span>
-                </div>
-                <div id="pdf-tool" style="display:none; padding:20px; background:var(--bg-body); border-top:1px solid var(--border);">
-                    <!-- Tab 导航 -->
-                    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:20px;" id="pdf-tabs">
-                        <button class="pdf-tab active" data-tab="p-img2pdf">图片→PDF</button>
-                        <button class="pdf-tab" data-tab="p-merge">合并PDF</button>
-                        <button class="pdf-tab" data-tab="p-remove">删除页面</button>
-                        <button class="pdf-tab" data-tab="p-insert">插入PDF</button>
-                        <button class="pdf-tab" data-tab="p-reorder">页面重排</button>
-                        <button class="pdf-tab" data-tab="p-normalize">统一尺寸</button>
-                        <button class="pdf-tab" data-tab="p-to-img">PDF→图片</button>
-                    </div>
-
-                    <!-- 图片→PDF -->
-                    <div class="pdf-panel active" id="p-img2pdf">
-                        <p style="color:#888;margin-bottom:12px;">将多张图片合成一个 PDF</p>
-                        <div class="pdf-form-row">
-                            <label>上传图片（可多选）</label>
-                            <input type="file" id="p-img2pdf-files" multiple accept="image/*">
-                        </div>
-                        <div class="pdf-form-row" style="display:flex;align-items:center;gap:8px;">
-                            <input type="checkbox" id="p-img2pdf-landscape">
-                            <label for="p-img2pdf-landscape">强制横向（竖图自动旋转）</label>
-                        </div>
-                        <button class="pdf-btn" onclick="pdfOp('img2pdf')">生成 PDF</button>
-                        <div class="pdf-result" id="r-img2pdf"></div>
-                    </div>
-
-                    <!-- 合并PDF -->
-                    <div class="pdf-panel" id="p-merge">
-                        <p style="color:#888;margin-bottom:12px;">将多个 PDF 按顺序合并</p>
-                        <div class="pdf-form-row">
-                            <label>上传 PDF 文件（至少2个）</label>
-                            <input type="file" id="p-merge-files" multiple accept=".pdf">
-                        </div>
-                        <button class="pdf-btn" onclick="pdfOp('merge')">合并 PDF</button>
-                        <div class="pdf-result" id="r-merge"></div>
-                    </div>
-
-                    <!-- 删除页面 -->
-                    <div class="pdf-panel" id="p-remove">
-                        <p style="color:#888;margin-bottom:12px;">删除指定页面</p>
-                        <div class="pdf-form-row">
-                            <label>上传 PDF</label>
-                            <input type="file" id="p-remove-file" accept=".pdf" onchange="getPdfInfo(this,'p-remove-info')">
-                            <div class="pdf-info" id="p-remove-info"></div>
-                        </div>
-                        <div class="pdf-form-row">
-                            <label>要删除的页码（如 1,3,5-8）</label>
-                            <input type="text" id="p-remove-pages" placeholder="1,3-5,8">
-                        </div>
-                        <button class="pdf-btn" onclick="pdfOp('remove')">删除页面</button>
-                        <div class="pdf-result" id="r-remove"></div>
-                    </div>
-
-                    <!-- 插入PDF -->
-                    <div class="pdf-panel" id="p-insert">
-                        <p style="color:#888;margin-bottom:12px;">在指定位置插入另一个 PDF</p>
-                        <div class="pdf-form-row">
-                            <label>主文档</label>
-                            <input type="file" id="p-insert-main" accept=".pdf" onchange="getPdfInfo(this,'p-insert-info')">
-                            <div class="pdf-info" id="p-insert-info"></div>
-                        </div>
-                        <div class="pdf-form-row">
-                            <label>要插入的文档</label>
-                            <input type="file" id="p-insert-ins" accept=".pdf">
-                        </div>
-                        <div class="pdf-form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                            <div>
-                                <label>插入位置</label>
-                                <select id="p-insert-pos" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                                    <option value="start">最前面</option>
-                                    <option value="after" selected>指定页之后</option>
-                                    <option value="before">指定页之前</option>
-                                    <option value="end">最后面</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label>目标页码</label>
-                                <input type="number" id="p-insert-page" value="1" min="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                            </div>
-                        </div>
-                        <button class="pdf-btn" onclick="pdfOp('insert')">插入</button>
-                        <div class="pdf-result" id="r-insert"></div>
-                    </div>
-
-                    <!-- 页面重排 -->
-                    <div class="pdf-panel" id="p-reorder">
-                        <p style="color:#888;margin-bottom:12px;">将竖版页面移到横版页面前面</p>
-                        <div class="pdf-form-row">
-                            <label>上传 PDF</label>
-                            <input type="file" id="p-reorder-file" accept=".pdf" onchange="getPdfInfo(this,'p-reorder-info')">
-                            <div class="pdf-info" id="p-reorder-info"></div>
-                        </div>
-                        <button class="pdf-btn" onclick="pdfOp('reorder')">重排页面</button>
-                        <div class="pdf-result" id="r-reorder"></div>
-                    </div>
-
-                    <!-- 统一尺寸 -->
-                    <div class="pdf-panel" id="p-normalize">
-                        <p style="color:#888;margin-bottom:12px;">将所有横向页面统一为相同尺寸</p>
-                        <div class="pdf-form-row">
-                            <label>上传 PDF</label>
-                            <input type="file" id="p-normalize-file" accept=".pdf" onchange="getPdfInfo(this,'p-normalize-info')">
-                            <div class="pdf-info" id="p-normalize-info"></div>
-                        </div>
-                        <button class="pdf-btn" onclick="pdfOp('normalize')">统一尺寸</button>
-                        <div class="pdf-result" id="r-normalize"></div>
-                    </div>
-
-                    <!-- PDF→图片 -->
-                    <div class="pdf-panel" id="p-to-img">
-                        <p style="color:#888;margin-bottom:12px;">将 PDF 页面导出为图片</p>
-                        <div class="pdf-form-row">
-                            <label>上传 PDF</label>
-                            <input type="file" id="p-toimg-file" accept=".pdf" onchange="getPdfInfo(this,'p-toimg-info');autoFillEndPage(this)">
-                            <div class="pdf-info" id="p-toimg-info"></div>
-                        </div>
-                        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
-                            <div class="pdf-form-row" style="margin:0;">
-                                <label>起始页</label>
-                                <input type="number" id="p-toimg-start" value="1" min="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                            </div>
-                            <div class="pdf-form-row" style="margin:0;">
-                                <label>结束页</label>
-                                <input type="number" id="p-toimg-end" value="1" min="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                            </div>
-                            <div class="pdf-form-row" style="margin:0;">
-                                <label>DPI</label>
-                                <input type="number" id="p-toimg-dpi" value="150" min="72" max="600" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                            </div>
-                        </div>
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-                            <div class="pdf-form-row" style="margin:0;">
-                                <label>格式</label>
-                                <select id="p-toimg-fmt" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                                    <option value="jpg">JPG（体积小）</option>
-                                    <option value="png">PNG（无损）</option>
-                                </select>
-                            </div>
-                            <div class="pdf-form-row" style="margin:0;">
-                                <label>限制大小(KB, 0=不限)</label>
-                                <input type="number" id="p-toimg-maxsize" value="0" min="0" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
-                            </div>
-                        </div>
-                        <div class="pdf-form-row" style="display:flex;align-items:center;gap:8px;">
-                            <input type="checkbox" id="p-toimg-long">
-                            <label for="p-toimg-long">合并为长图</label>
-                        </div>
-                        <button class="pdf-btn" onclick="pdfOp('to_images')">导出图片</button>
-                        <div class="pdf-result" id="r-to_images"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 更多工具占位 -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;opacity:0.5;">
-                <div style="background:var(--bg-card);border:1px dashed var(--border);border-radius:12px;padding:20px;text-align:center;color:var(--text-muted);">
-                    <div style="font-size:28px;margin-bottom:8px;">🎭</div>
-                    <div style="font-size:13px;">AI 辩论赛</div>
-                    <div style="font-size:11px;margin-top:4px;">即将上线</div>
-                </div>
-                <div style="background:var(--bg-card);border:1px dashed var(--border);border-radius:12px;padding:20px;text-align:center;color:var(--text-muted);">
-                    <div style="font-size:28px;margin-bottom:8px;">⚖️</div>
-                    <div style="font-size:13px;">多模型对比</div>
-                    <div style="font-size:11px;margin-top:4px;">即将上线</div>
-                </div>
-                <div style="background:var(--bg-card);border:1px dashed var(--border);border-radius:12px;padding:20px;text-align:center;color:var(--text-muted);">
-                    <div style="font-size:28px;margin-bottom:8px;">🎨</div>
-                    <div style="font-size:13px;">图文互转</div>
-                    <div style="font-size:11px;margin-top:4px;">即将上线</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="tool-grid">
-            <!-- 0. PDF 工具集（源码卡片） -->
-            <div class="tool-card">
-                <div class="tool-icon">📄</div>
-                <h3>PDF 工具集</h3>
-                <p class="tool-desc">在线 PDF 处理工具：图片转PDF、PDF合并、删页、插入PDF、页面重排、统一尺寸、PDF转图片。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">pypdf</span>
-                    <span class="tech-tag">Pillow</span>
-                    <span class="tech-tag">PyMuPDF</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/12pdffun" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 1. 分镜视频生成器 -->
-            <div class="tool-card">
-                <div class="tool-icon">🎬</div>
-                <h3>分镜视频生成器</h3>
-                <p class="tool-desc">调用大模型生成英文对话场景，使用 AI 生图或自定义图片，自动合成带字幕和配音的短视频。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">FFmpeg</span>
-                    <span class="tech-tag">Edge TTS</span>
-                    <span class="tech-tag">Pillow</span>
-                    <span class="tech-tag">DashScope</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/1%E5%88%86%E9%95%9C" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 2. 台词学习工具 -->
-            <div class="tool-card">
-                <div class="tool-icon">📝</div>
-                <h3>台词学习工具</h3>
-                <p class="tool-desc">从扇贝单词导出生词卡片，程序自动检索对应美剧/电影台词，结合语境高效记忆单词。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">pdfplumber</span>
-                    <span class="tech-tag">BeautifulSoup</span>
-                    <span class="tech-tag">DashScope</span>
-                    <span class="tech-tag">Docker</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/2%E5%8F%B0%E8%AF%8D" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 5. AI 辩论赛 -->
-            <div class="tool-card">
-                <div class="tool-icon">🎭</div>
-                <h3>AI 辩论赛</h3>
-                <p class="tool-desc">多模型驱动的 AI 辩论竞技场。集成 Qwen/DeepSeek 等模型，还原标准华语辩论赛制，实时语音合成辩论过程并由 AI 裁判评分。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">Multi-LLM</span>
-                    <span class="tech-tag">TTS</span>
-                    <span class="tech-tag">SSE</span>
-                    <span class="tech-tag">Docker</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/5AI%E8%BE%A9%E8%AE%BA%E8%B5%9B" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 6. AI 每日情报 -->
-            <div class="tool-card">
-                <div class="tool-icon">📡</div>
-                <h3>AI 每日情报 Agent</h3>
-                <p class="tool-desc">全自动化的 AI 资讯情报官。聚合全球 12+ 技术信源 → LLM 智能评级与摘要 → 自动推送到 Telegram 并归档网页。每日定时运行。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">GitHub Actions</span>
-                    <span class="tech-tag">RSS</span>
-                    <span class="tech-tag">Qwen API</span>
-                    <span class="tech-tag">Telegram</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/6AI%E7%83%AD%E7%82%B9" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 9. 图生文文生图 -->
-            <div class="tool-card">
-                <div class="tool-icon">🎨</div>
-                <h3>图文互转工具</h3>
-                <p class="tool-desc">AI 图片 ↔ 提示词双向转换工具箱。图片逆向生成 DALL·E/SD 风格提示词，或从提示词批量生成图片。支持多模型并发。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Qwen VL</span>
-                    <span class="tech-tag">DashScope</span>
-                    <span class="tech-tag">Volcengine</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/9%E5%9B%BE%E7%94%9F%E6%96%87%E6%96%87%E7%94%9F%E5%9B%BE" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 11. EasyApply -->
-            <div class="tool-card">
-                <div class="tool-icon">📋</div>
-                <h3>EasyApply 浏览器插件</h3>
-                <p class="tool-desc">求职助手浏览器扩展。自动抓取招聘页面信息，一键导出为 Excel 表格，支持 Chrome/Edge 双平台。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">JavaScript</span>
-                    <span class="tech-tag">Manifest V3</span>
-                    <span class="tech-tag">Chrome API</span>
-                    <span class="tech-tag">xlsx.js</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/11easyapply" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 12. PDF 工具集 -->
-            <div class="tool-card">
-                <div class="tool-icon">📄</div>
-                <h3>PDF 工具集</h3>
-                <p class="tool-desc">实用 PDF 处理工具箱。支持图片转 PDF、多文件合并、删除/插入页面、页面重排、统一尺寸、PDF 转图片等功能。附带 Web UI。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Flask</span>
-                    <span class="tech-tag">PyPDF</span>
-                    <span class="tech-tag">PyMuPDF</span>
-                    <span class="tech-tag">Pillow</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/12pdffun" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 13. CourseDigest -->
-            <div class="tool-card">
-                <div class="tool-icon">🎓</div>
-                <h3>CourseDigest 智能助考</h3>
-                <p class="tool-desc">将录播课视频与 PPT 讲义转化为考试导向复习大纲。本地 Whisper 转录 + AI 提取考点 + 自动生成模拟试题。留学生备考神器。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">faster-whisper</span>
-                    <span class="tech-tag">pdfplumber</span>
-                    <span class="tech-tag">Qwen API</span>
-                    <span class="tech-tag">Groq</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/13course_digest" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 14. 个人文件助手 -->
-            <div class="tool-card">
-                <div class="tool-icon">🤖</div>
-                <h3>个人文件助手 Agent</h3>
-                <p class="tool-desc">用大白话控制电脑极速秒搜全盘文件的大模型管家。支持手机端远程内网访问，并能自动打包所选文件发送到指定邮箱。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">DashScope</span>
-                    <span class="tech-tag">Natapp</span>
-                    <span class="tech-tag">Windows API</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/14file-agent" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 15. 小红书生成器 -->
-            <div class="tool-card">
-                <div class="tool-icon">📕</div>
-                <h3>小红书内容生成器</h3>
-                <p class="tool-desc">AI 全自动生成英语教育图文笔记。自动构思知识点、生成精美封面排版，并支持控制浏览器一键自动发布。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Playwright</span>
-                    <span class="tech-tag">LLM</span>
-                    <span class="tech-tag">Pillow</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/15redbook" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 20. 小红书图片自动化 -->
-            <div class="tool-card">
-                <div class="tool-icon">🎨</div>
-                <h3>小红书图片自动化生成器</h3>
-                <p class="tool-desc">将文章一键转换为精美小红书多图。LLM 自动拆分文章为多页内容，PIL 渲染生成配图，支持自定义主题样式。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Qwen API</span>
-                    <span class="tech-tag">Pillow</span>
-                    <span class="tech-tag">YAML</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/20AIer-xhs/xhs_auto" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 智能文件夹整理 -->
-            <div class="tool-card">
-                <div class="tool-icon">🗂️</div>
-                <h3>智能文件夹整理助手</h3>
-                <p class="tool-desc">基于 LLM 的目录整理 Agent。采用 ReAct 循环自主探索文件内容后给出整理建议，代码和配置文件受双重保护绝不会被误移动。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">ReAct Agent</span>
-                    <span class="tech-tag">LLM</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/tools(不好用)" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 17. 多模型对比平台 -->
-            <div class="tool-card">
-                <div class="tool-icon">⚖️</div>
-                <h3>多模型对比平台</h3>
-                <p class="tool-desc">同一个界面横向对比 Qwen、Doubao、DeepSeek 等大模型。支持并发提交问题，流式输出展示，直观评测回复质量差异。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Node.js</span>
-                    <span class="tech-tag"> Vanilla JS</span>
-                    <span class="tech-tag">OpenAI Format API</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/17ai-compare" class="tool-link">查看源码 →</a>
-            </div>
-
-            <!-- 18. Token 消耗对比 -->
-            <div class="tool-card">
-                <div class="tool-icon">🪙</div>
-                <h3>Token 消耗对比工具</h3>
-                <p class="tool-desc">量化测试相同语义在「中文/英文/带图」三种输入下的 Token 开销差异。帮助开发者优化 Prompt 成本，包含图形化界面。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">Tkinter</span>
-                    <span class="tech-tag">DashScope</span>
-                </div>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/18tokens" class="tool-link">查看源码 →</a>
-            </div>
-        </div>
-
-        <!-- Private Projects Section -->
-        <div class="page-header" style="margin-top: 60px;">
-            <h2>🔒 私有项目</h2>
-            <p style="color:#888; margin-top:6px;">以下项目因涉及爬虫/敏感数据，仅供个人使用，代码不公开。</p>
-        </div>
-
-        <div class="tool-grid">
-            <div class="tool-card" style="opacity: 0.7;">
-                <div class="tool-icon">🎫</div>
-                <h3>大麦抢票助手</h3>
-                <p class="tool-desc">通过电脑端 ADB 控制 Android 手机，到达指定时间全自动进入大麦 APP 执行物理点击抢票流程与选座购买。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">uiautomator2</span>
-                    <span class="tech-tag">ADB</span>
-                </div>
-                <span class="tool-link" style="color:#666;">私有仓库</span>
-            </div>
-
-            <div class="tool-card" style="opacity: 0.7;">
-                <div class="tool-icon">🕷️</div>
-                <h3>多平台爬虫</h3>
-                <p class="tool-desc">B站/XZ 图片站视频与图片采集工具。支持关键词搜索、批量下载、自动反爬策略。带 GUI 界面。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">requests</span>
-                    <span class="tech-tag">Tkinter</span>
-                </div>
-                <span class="tool-link" style="color:#666;">私有项目 (7爬虫)</span>
-            </div>
-
-            <div class="tool-card" style="opacity: 0.7;">
-                <div class="tool-icon">💬</div>
-                <h3>多平台评论分析</h3>
-                <p class="tool-desc">B站/抖音/小红书评论抓取与舆情分析。支持 LLM 情感分析、关键词提取、话题聚类。集成无头浏览器与代理池。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Playwright</span>
-                    <span class="tech-tag">OpenAI API</span>
-                    <span class="tech-tag">SQLite</span>
-                </div>
-                <span class="tool-link" style="color:#666;">私有项目 (8评论)</span>
-            </div>
-
-            <div class="tool-card" style="opacity: 0.7;">
-                <div class="tool-icon">📸</div>
-                <h3>历史照片整理</h3>
-                <p class="tool-desc">个人历史照片与视频智能整理工具。基于 RAG 的媒体索引器，支持去重、时间线重建、智能分类。</p>
-                <div class="tech-tags">
-                    <span class="tech-tag">Python</span>
-                    <span class="tech-tag">RAG</span>
-                    <span class="tech-tag">JSONL</span>
-                </div>
-                <span class="tool-link" style="color:#666;">私有仓库</span>
-            </div>
-        </div>
-    </div>
-
-    <footer>Integrity Lab · 全部项目开源于 <a href="https://github.com/zhimingliang897-web/integrity">GitHub</a></footer>
-
-    <script>
-        // Vision AI Simulation
-        const visionBtn = document.getElementById('start-vision-btn');
-        const visionOutput = document.getElementById('vision-output');
-        const scanLine = document.getElementById('scan-line');
-        const demoImg = document.querySelector('.vision-image-box img');
-        let isScanning = false;
-
-        if (visionBtn) {
-            visionBtn.addEventListener('click', async () => {
-                if (isScanning) return;
-                isScanning = true;
-                visionBtn.disabled = true;
-                visionBtn.textContent = '视觉模型分析中...';
-                
-                // Start scan animation
-                scanLine.style.display = 'block';
-                scanLine.style.animation = 'scan 2.5s ease-in-out infinite';
-                demoImg.style.filter = 'brightness(1.1) contrast(1.1)';
-                
-                visionOutput.innerHTML = '<span style="color:var(--primary);">[Model Initialized] Analyzing visual features...</span><br><br>';
-                
-                // Simulate network/inference latency
-                await new Promise(r => setTimeout(r, 1800)); 
-                
-                scanLine.style.display = 'none';
-                demoImg.style.filter = 'grayscale(0%) brightness(1.1)';
-                
-                const promptText = "A stunning high-quality 3D render of a futuristic cyberpunk cityscape at night. Neon signs glowing in magenta and cyan, reflecting off wet asphalt. Sleek flying vehicles navigate between towering skyscrapers shrouded in volumetric fog. Cinematic lighting, octane render, unreal engine 5, 8k resolution, photorealistic details, deeply atmospheric.";
-                
-                const targetSpan = document.createElement('span');
-                targetSpan.style.color = '#fff';
-                visionOutput.appendChild(targetSpan);
-                
-                // Typewriter effect
-                for (let i = 0; i < promptText.length; i++) {
-                    targetSpan.innerHTML += promptText.charAt(i);
-                    await new Promise(r => setTimeout(r, 15)); // Typing speed
-                }
-                
-                isScanning = false;
-                visionBtn.disabled = false;
-                visionBtn.textContent = '重新提取 ⚡';
-            });
-        }
-
-        // Multi-Model Comparison Demo
-        const compareBtn = document.getElementById('start-compare-btn');
-        const compareInput = document.getElementById('compare-input');
-        
-        const modelResponses = {
-            'qwen-plus': '大语言模型（Large Language Model，简称LLM）是一种基于深度学习技术的人工智能模型。它通过海量文本数据进行训练，能够理解和生成人类语言。核心特点包括：1）规模巨大，通常有数十亿到数千亿参数；2）涌现能力，随着规模增大出现小模型不具备的能力；3）通用性，一个模型可以完成多种任务。',
-            'deepseek-v3': 'LLM（Large Language Model）是近年来AI领域的重大突破。它本质是一个超级强大的文本预测机器——给定前面的文字，预测下一个最可能出现的文字。训练方式是无监督学习，让模型从海量互联网文本中自学语言规律。典型架构是Transformerattention机制让它能处理长文本依赖。',
-            'gpt-4o-mini': 'A Large Language Model (LLM) is an AI trained on massive text data to understand and generate human language. Key points: 1) Trained using transformer architecture, 2) Learns patterns from billions of parameters, 3) Can perform various NLP tasks like translation, summarization, coding, etc., 4) Shows emergent abilities at scale.'
-        };
-        
-        if (compareBtn) {
-            compareBtn.addEventListener('click', async () => {
-                if (compareBtn.disabled) return;
-                compareBtn.disabled = true;
-                compareBtn.textContent = '模型回答中...';
-                
-                const qwenText = document.querySelector('#model-qwen .model-text');
-                const deepseekText = document.querySelector('#model-deepseek .model-text');
-                const gptText = document.querySelector('#model-gpt .model-text');
-                
-                // Clear previous
-                qwenText.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
-                deepseekText.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
-                gptText.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
-                
-                // Simulate parallel responses
-                await new Promise(r => setTimeout(r, 800));
-                qwenText.innerHTML = '';
-                for (let i = 0; i < modelResponses['qwen-plus'].length; i++) {
-                    qwenText.innerHTML += modelResponses['qwen-plus'].charAt(i);
-                    await new Promise(r => setTimeout(r, 15));
-                }
-                
-                await new Promise(r => setTimeout(r, 400));
-                deepseekText.innerHTML = '';
-                for (let i = 0; i < modelResponses['deepseek-v3'].length; i++) {
-                    deepseekText.innerHTML += modelResponses['deepseek-v3'].charAt(i);
-                    await new Promise(r => setTimeout(r, 12));
-                }
-                
-                await new Promise(r => setTimeout(r, 400));
-                gptText.innerHTML = '';
-                for (let i = 0; i < modelResponses['gpt-4o-mini'].length; i++) {
-                    gptText.innerHTML += modelResponses['gpt-4o-mini'].charAt(i);
-                    await new Promise(r => setTimeout(r, 10));
-                }
-                
-                compareBtn.disabled = false;
-                compareBtn.textContent = '重新对比 🎯';
-            });
-        }
-
-        // Token Calculator Demo
-        const calcTokenBtn = document.getElementById('calc-token-btn');
-        
-        const tokenPrices = {
-            'qwen-plus': { input: 0.004, output: 0.012 },
-            'qwen-turbo': { input: 0.001, output: 0.002 },
-            'gpt-4o': { input: 0.0025, output: 0.01 },
-            'gpt-4o-mini': { input: 0.00015, output: 0.0006 }
-        };
-        
-        const tokenRatios = { 'zh': 0.5, 'en': 0.25, 'img': 1.5 }; // chars to tokens ratio
-        
-        if (calcTokenBtn) {
-            calcTokenBtn.addEventListener('click', async () => {
-                const model = document.getElementById('token-model').value;
-                const lang = document.getElementById('token-lang').value;
-                const chars = parseInt(document.getElementById('token-chars').value) || 100;
-                
-                calcTokenBtn.disabled = true;
-                calcTokenBtn.textContent = '计算中...';
-                
-                try {
-                    const res = await fetch(API_BASE + '/api/tools/token-calc', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ model, lang, chars })
-                    });
-                    const data = await res.json();
-                    
-                    document.getElementById('result-prompt').textContent = data.prompt_tokens;
-                    document.getElementById('result-completion').textContent = data.completion_tokens;
-                    document.getElementById('result-cost').textContent = '$' + data.total_cost.toFixed(6);
-                } catch (e) {
-                    document.getElementById('result-cost').textContent = 'API 错误';
-                }
-                
-                calcTokenBtn.disabled = false;
-                calcTokenBtn.textContent = '计算消耗 💰';
-            });
-        }
-    </script>
-    <style>
-        /* 登录按钮样式 */
-        .auth-btn {
-            background: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 6px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .auth-btn:hover { background: var(--primary); color: #fff; }
-        .auth-btn.logged-in { background: #10b981; border-color: #10b981; color: #fff; }
-        
-        /* 弹窗样式 */
-        .modal {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 1000;
-        }
-        .modal-content {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 32px;
-            width: 360px;
-            position: relative;
-        }
-        .modal-close {
-            position: absolute; top: 16px; right: 20px;
-            font-size: 24px; cursor: pointer; color: var(--text-muted);
-        }
-        .modal-close:hover { color: #fff; }
-        .modal h3 { margin-bottom: 24px; color: #fff; }
-        .modal input {
-            width: 100%; padding: 12px 16px;
-            background: var(--bg-body); border: 1px solid var(--border);
-            border-radius: 8px; color: #fff; font-size: 1rem;
-            margin-bottom: 16px;
-        }
-        .modal input:focus { outline: none; border-color: var(--primary); }
-        .modal button {
-            width: 100%; padding: 12px;
-            background: var(--primary); border: none;
-            border-radius: 8px; color: #fff; font-weight: 600;
-            cursor: pointer; font-size: 1rem;
-        }
-        .modal button:hover { background: #2563eb; }
-        .auth-switch { text-align: center; margin-top: 16px; color: var(--text-muted); font-size: 0.9rem; }
-        .auth-switch a { color: var(--primary); }
-        
-        @keyframes scan {
-            0% { top: 8px; opacity: 1; }
-            50% { top: calc(100% - 14px); opacity: 0.8; }
-            100% { top: 8px; opacity: 1; }
-        }
-        @media (max-width: 640px) {
-            .vision-window { flex-direction: column !important; }
-            .vision-image-box, .vision-prompt-box { width: 100%; }
-        }
-
-        /* ── 在线工具区 ── */
-        .pdf-tab {
-            padding: 7px 14px; background: var(--bg-card);
-            border: 1px solid var(--border); border-radius: 6px;
-            cursor: pointer; color: var(--text-muted); font-size: 13px;
-            transition: all 0.15s;
-        }
-        .pdf-tab:hover { border-color: var(--primary); color: var(--primary); }
-        .pdf-tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-        .pdf-panel { display: none; }
-        .pdf-panel.active { display: block; }
-        .pdf-form-row { margin-bottom: 12px; }
-        .pdf-form-row label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 5px; }
-        .pdf-form-row input[type="file"] {
-            width: 100%; padding: 10px; border: 2px dashed var(--border);
-            border-radius: 8px; background: var(--bg-card); color: #aaa;
-            cursor: pointer; font-size: 13px;
-        }
-        .pdf-form-row input[type="text"], .pdf-form-row input[type="number"] {
-            width: 100%; padding: 8px 12px; background: var(--bg-card);
-            border: 1px solid var(--border); border-radius: 6px; color: #fff; font-size: 13px;
-        }
-        .pdf-info {
-            margin-top: 6px; padding: 8px 12px; background: rgba(59,130,246,0.1);
-            border: 1px solid rgba(59,130,246,0.3); border-radius: 6px;
-            color: #93c5fd; font-size: 12px; display: none;
-        }
-        .pdf-btn {
-            padding: 10px 24px; background: var(--primary); color: #fff;
-            border: none; border-radius: 8px; cursor: pointer; font-size: 14px;
-            font-weight: 600; transition: background 0.2s; margin-top: 4px;
-        }
-        .pdf-btn:hover { background: #2563eb; }
-        .pdf-btn:disabled { background: #374151; color: #6b7280; cursor: not-allowed; }
-        .pdf-result { margin-top: 12px; padding: 12px; border-radius: 8px; display: none; font-size: 13px; }
-        .pdf-result.ok { display: block; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: #6ee7b7; }
-        .pdf-result.err { display: block; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: #fca5a5; }
-        .pdf-dl { display:inline-block; margin-top:8px; padding:8px 16px; background:#10b981; color:#fff; border-radius:6px; text-decoration:none; font-weight:600; }
-        .pdf-dl:hover { background:#059669; }
-    </style>
-    <script>
-        // API 配置
-        const API_BASE = 'https://api.liangyiren.top';
-        let isRegisterMode = false;
-        
-        // 检查登录状态
-        function checkAuth() {
-            const token = localStorage.getItem('token');
-            const username = localStorage.getItem('username');
-            const btn = document.getElementById('auth-btn');
-            const onlineSection = document.getElementById('online-tools-section');
-            if (token && username) {
-                btn.textContent = username;
-                btn.classList.add('logged-in');
-                btn.onclick = () => { if(confirm('确定退出登录？')) { logout(); } };
-                if (onlineSection) onlineSection.style.display = 'block';
-            } else {
-                btn.textContent = '登录';
-                btn.classList.remove('logged-in');
-                btn.onclick = showAuthModal;
-                if (onlineSection) onlineSection.style.display = 'none';
-            }
-        }
-        
-        function showAuthModal() {
-            document.getElementById('auth-modal').style.display = 'flex';
-            document.getElementById('auth-error').style.display = 'none';
-        }
-        
-        function hideAuthModal() {
-            document.getElementById('auth-modal').style.display = 'none';
-            document.getElementById('auth-username').value = '';
-            document.getElementById('auth-password').value = '';
-            document.getElementById('auth-invite').value = '';
-        }
-        
-        function toggleAuthMode() {
-            isRegisterMode = !isRegisterMode;
-            document.getElementById('auth-title').textContent = isRegisterMode ? '注册' : '登录';
-            document.getElementById('auth-submit').textContent = isRegisterMode ? '注册' : '登录';
-            document.getElementById('invite-code-wrap').style.display = isRegisterMode ? 'block' : 'none';
-            document.getElementById('switch-text').textContent = isRegisterMode ? '已有账号？' : '没有账号？';
-            document.getElementById('switch-link').textContent = isRegisterMode ? '登录' : '注册';
-            document.getElementById('auth-error').style.display = 'none';
-        }
-        
-        async function handleAuth() {
-            const username = document.getElementById('auth-username').value.trim();
-            const password = document.getElementById('auth-password').value;
-            const invite = document.getElementById('auth-invite').value.trim();
-            const errorEl = document.getElementById('auth-error');
-            
-            if (!username || !password) {
-                errorEl.textContent = '请填写用户名和密码';
-                errorEl.style.display = 'block';
-                return;
-            }
-            
-            const endpoint = isRegisterMode ? '/api/auth/register' : '/api/auth/login';
-            const body = isRegisterMode 
-                ? { username, password, invite_code: invite }
-                : { username, password };
-            
-            try {
-                const res = await fetch(API_BASE + endpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(body)
-                });
-                const data = await res.json();
-                
-                if (data.error) {
-                    errorEl.textContent = data.error;
-                    errorEl.style.display = 'block';
-                } else {
-                    localStorage.setItem('token', data.token);
-                    localStorage.setItem('username', data.username);
-                    hideAuthModal();
-                    checkAuth();
-                }
-            } catch (e) {
-                errorEl.textContent = '网络错误: ' + e.message;
-                errorEl.style.display = 'block';
-                console.error('Auth error:', e);
-            }
-        }
-        
-        function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('username');
-            checkAuth();
-        }
-        
-        // 页面加载时检查登录状态
-        checkAuth();
-
-        // ── PDF 在线工具 ──────────────────────────────
-
-        // Tab 切换
-        document.getElementById('pdf-tabs').addEventListener('click', e => {
-            const tab = e.target.closest('.pdf-tab');
-            if (!tab) return;
-            document.querySelectorAll('.pdf-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.pdf-panel').forEach(p => p.classList.remove('active'));
-            tab.classList.add('active');
-            document.getElementById(tab.dataset.tab).classList.add('active');
-        });
-
-        // 展开/收起 PDF 工具
-        function toggleTool(id) {
-            const el = document.getElementById(id);
-            const arrow = document.getElementById(id + '-arrow');
-            const open = el.style.display === 'none';
-            el.style.display = open ? 'block' : 'none';
-            if (arrow) arrow.textContent = open ? '▲' : '▼';
-        }
-
-        // 获取 PDF 信息（上传后显示页数）
-        async function getPdfInfo(input, infoId) {
-            const file = input.files[0];
-            if (!file) return;
-            const token = localStorage.getItem('token');
-            const fd = new FormData();
-            fd.append('pdf', file);
-            try {
-                const res = await fetch(API_BASE + '/pdf/info', {
-                    method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + token },
-                    body: fd
-                });
-                const data = await res.json();
-                const el = document.getElementById(infoId);
-                el.textContent = data.info || data.error;
-                el.style.display = 'block';
-            } catch (e) { console.error(e); }
-        }
-
-        async function autoFillEndPage(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const token = localStorage.getItem('token');
-            const fd = new FormData();
-            fd.append('pdf', file);
-            try {
-                const res = await fetch(API_BASE + '/pdf/info', {
-                    method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + token },
-                    body: fd
-                });
-                const data = await res.json();
-                const m = data.info && data.info.match(/总页数：(\d+)/);
-                if (m) document.getElementById('p-toimg-end').value = m[1];
-            } catch (e) { console.error(e); }
-        }
-
-        async function pdfOp(op) {
-            const token = localStorage.getItem('token');
-            if (!token) { alert('请先登录'); return; }
-
-            const resultId = 'r-' + op;
-            const resultEl = document.getElementById(resultId);
-            const btn = resultEl.previousElementSibling;
-
-            resultEl.className = 'pdf-result';
-            resultEl.innerHTML = '处理中...';
-            resultEl.style.display = 'block';
-            btn.disabled = true;
-
-            const fd = new FormData();
-            let endpoint = '';
-
-            try {
-                if (op === 'img2pdf') {
-                    const files = document.getElementById('p-img2pdf-files').files;
-                    if (!files.length) throw new Error('请选择图片');
-                    for (const f of files) fd.append('images', f);
-                    if (document.getElementById('p-img2pdf-landscape').checked) fd.append('force_landscape', '1');
-                    endpoint = '/pdf/images_to_pdf';
-
-                } else if (op === 'merge') {
-                    const files = document.getElementById('p-merge-files').files;
-                    if (files.length < 2) throw new Error('请选择至少 2 个 PDF');
-                    for (const f of files) fd.append('pdfs', f);
-                    endpoint = '/pdf/merge';
-
-                } else if (op === 'remove') {
-                    const file = document.getElementById('p-remove-file').files[0];
-                    if (!file) throw new Error('请选择 PDF 文件');
-                    const pages = document.getElementById('p-remove-pages').value.trim();
-                    if (!pages) throw new Error('请输入要删除的页码');
-                    fd.append('pdf', file);
-                    fd.append('pages', pages);
-                    endpoint = '/pdf/remove_pages';
-
-                } else if (op === 'insert') {
-                    const main = document.getElementById('p-insert-main').files[0];
-                    const ins = document.getElementById('p-insert-ins').files[0];
-                    if (!main || !ins) throw new Error('请选择两个 PDF 文件');
-                    fd.append('main_pdf', main);
-                    fd.append('insert_pdf', ins);
-                    fd.append('position', document.getElementById('p-insert-pos').value);
-                    fd.append('page_index', document.getElementById('p-insert-page').value);
-                    endpoint = '/pdf/insert';
-
-                } else if (op === 'reorder') {
-                    const file = document.getElementById('p-reorder-file').files[0];
-                    if (!file) throw new Error('请选择 PDF 文件');
-                    fd.append('pdf', file);
-                    endpoint = '/pdf/reorder';
-
-                } else if (op === 'normalize') {
-                    const file = document.getElementById('p-normalize-file').files[0];
-                    if (!file) throw new Error('请选择 PDF 文件');
-                    fd.append('pdf', file);
-                    endpoint = '/pdf/normalize';
-
-                } else if (op === 'to_images') {
-                    const file = document.getElementById('p-toimg-file').files[0];
-                    if (!file) throw new Error('请选择 PDF 文件');
-                    fd.append('pdf', file);
-                    fd.append('start_page', document.getElementById('p-toimg-start').value);
-                    fd.append('end_page', document.getElementById('p-toimg-end').value);
-                    fd.append('dpi', document.getElementById('p-toimg-dpi').value);
-                    fd.append('format', document.getElementById('p-toimg-fmt').value);
-                    fd.append('max_size', document.getElementById('p-toimg-maxsize').value);
-                    if (document.getElementById('p-toimg-long').checked) fd.append('long_image', '1');
-                    endpoint = '/pdf/to_images';
-                }
-
-                const res = await fetch(API_BASE + endpoint, {
-                    method: 'POST',
-                    headers: { 'Authorization': 'Bearer ' + token },
-                    body: fd
-                });
-                const data = await res.json();
-
-                if (data.success) {
-                    resultEl.className = 'pdf-result ok';
-                    resultEl.innerHTML = data.message +
-                        `<br><a class="pdf-dl" href="${API_BASE + data.download_url}" target="_blank">下载文件</a>`;
-                } else {
-                    resultEl.className = 'pdf-result err';
-                    resultEl.textContent = data.error || data.message;
-                }
-            } catch (e) {
-                resultEl.className = 'pdf-result err';
-                resultEl.textContent = e.message;
-            } finally {
-                btn.disabled = false;
-            }
-        }
-    </script>
-</body>
-</html>
