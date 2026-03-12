@@ -300,25 +300,59 @@
         async function addTask() {
             const urlInput = document.getElementById('urlInput');
             const urls = urlInput.value.trim().split('\n').filter(u => u.trim());
-            
+
             if (urls.length === 0) {
                 alert('请输入视频URL');
                 return;
             }
-            
+
+            let warnings = [];
+
             for (const url of urls) {
                 try {
-                    await fetch('/api/add_task', {
+                    const res = await fetch('/api/add_task', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({url: url.trim()})
                     });
+                    const data = await res.json();
+
+                    // 收集警告信息
+                    if (data.warning) {
+                        warnings.push(data.warning);
+                    }
                 } catch (e) {
                     console.error('Failed to add task:', e);
                 }
             }
-            
+
             urlInput.value = '';
+
+            // 显示警告
+            if (warnings.length > 0) {
+                showUrlWarning(warnings[0]);
+            }
+        }
+
+        // 显示 URL 不支持警告
+        function showUrlWarning(message) {
+            // 创建警告弹窗
+            const overlay = document.createElement('div');
+            overlay.className = 'fixed inset-0 bg-black/70 flex items-center justify-center z-50';
+            overlay.innerHTML = `
+                <div class="bg-gray-800 border border-yellow-600 rounded-xl p-6 max-w-lg mx-4">
+                    <div class="flex items-center gap-3 mb-4 text-yellow-400">
+                        <i class="fas fa-exclamation-triangle text-2xl"></i>
+                        <h3 class="text-lg font-semibold">链接类型警告</h3>
+                    </div>
+                    <div class="text-gray-300 text-sm whitespace-pre-wrap mb-6">${message}</div>
+                    <button onclick="this.closest('.fixed').remove()"
+                            class="w-full btn-primary py-2 rounded-lg font-medium">
+                        我知道了
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(overlay);
         }
         
         // 获取状态图标
@@ -401,7 +435,10 @@
                         ` : ''}
                         
                         ${task.status === 'failed' && task.error_message ? `
-                            <p class="text-xs text-red-400 mt-2">${task.error_message.substring(0, 100)}</p>
+                            <div class="mt-2 p-2 bg-red-900/30 border border-red-800 rounded">
+                                <p class="text-xs text-red-400 whitespace-pre-wrap">${task.error_message.substring(0, 300)}</p>
+                                ${task.error_message.length > 300 ? '<p class="text-xs text-gray-500 mt-1">... (错误信息已截断)</p>' : ''}
+                            </div>
                         ` : ''}
                     </div>
                 `).join('');

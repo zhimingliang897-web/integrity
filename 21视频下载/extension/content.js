@@ -1,217 +1,126 @@
-// content.js - 页面内容脚本
-// 在每个页面注入，检测视频并添加下载按钮
+// content.js v3.0
+// 页面内视频嗅探：补充 webRequest 无法捕获的场景
+// （比如 blob URL、页内 video 标签、JS 动态播放）
 
-(function() {
-    // 防止重复注入
-    if (window.__21VideoDownloaderInjected) return;
-    window.__21VideoDownloaderInjected = true;
+(function () {
+    if (window.__vdSnifferRunning) return;
+    window.__vdSnifferRunning = true;
 
-    const API_BASE = 'http://127.0.0.1:8000';
-    
-    // 创建下载按钮
-    function createDownloadButton() {
-        const btn = document.createElement('div');
-        btn.id = 'video-download-btn';
-        btn.innerHTML = `
-            <style>
-                #video-download-btn {
-                    position: fixed;
-                    bottom: 20px;
-                    right: 20px;
-                    z-index: 999999;
-                    cursor: pointer;
-                }
-                #video-download-btn .btn {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                    padding: 12px 20px;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    color: white;
-                    border-radius: 25px;
-                    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-                    font-size: 14px;
-                    font-weight: 500;
-                    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-                    transition: all 0.3s ease;
-                }
-                #video-download-btn .btn:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-                }
-                #video-download-btn .icon {
-                    width: 20px;
-                    height: 20px;
-                }
-                #video-download-btn .tooltip {
-                    position: absolute;
-                    bottom: 100%;
-                    right: 0;
-                    margin-bottom: 8px;
-                    padding: 8px 12px;
-                    background: rgba(0,0,0,0.8);
-                    color: white;
-                    border-radius: 8px;
-                    font-size: 12px;
-                    white-space: nowrap;
-                    opacity: 0;
-                    visibility: hidden;
-                    transition: all 0.3s ease;
-                }
-                #video-download-btn:hover .tooltip {
-                    opacity: 1;
-                    visibility: visible;
-                }
-            </style>
-            <div class="btn">
-                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                <span>21下载</span>
-            </div>
-            <div class="tooltip">发送到下载器</div>
-        `;
-        
-        btn.addEventListener('click', async () => {
-            const url = getVideoUrl();
+    // ── 视频判断 ────────────────────────────────────────────
+    const VIDEO_RE = [
+        /\.m3u8(\?|#|$)/i,
+        /\.mp4(\?|#|$)/i,
+        /\.webm(\?|#|$)/i,
+        /\.flv(\?|#|$)/i,
+        /\.ts(\?|#|$)/i,
+        /\.m4v(\?|#|$)/i,
+    ];
+    const SKIP_RE = [/thumbnail/i, /poster/i, /\.jpg/i, /\.png/i, /analytics/i];
 
-            if (!url || url === 'NEED_IFRAME') {
-                showNotification('⚠️ 此页面是视频入口页，请点击进入实际视频播放页面后再下载');
-                return;
-            }
+    function getExt(url) {
+        const m = url.match(/\.(m3u8|mp4|webm|flv|ts|m4v)/i);
+        return m ? m[1].toLowerCase() : 'stream';
+    }
 
-            try {
-                const res = await fetch(`${API_BASE}/api/add_task`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        url: url,
-                        source: 'content_button'
-                    })
-                });
+    function isVideo(url) {
+        if (!url || typeof url !== 'string') return false;
+        if (url.startsWith('blob:') || url.startsWith('data:')) return false;
+        if (SKIP_RE.some(r => r.test(url))) return false;
+        return VIDEO_RE.some(r => r.test(url));
+    }
 
-                const data = await res.json();
+    // 上报给 background（去重在 background 做）
+    function report(url, source) {
+        if (!isVideo(url)) return;
+        chrome.runtime.sendMessage({
+            type: 'REPORT_VIDEO',
+            url,
+            ext: getExt(url),
+            source,
+        }).catch(() => {});
+    }
 
-                if (data.status === 'ok') {
-                    showNotification('✅ 已添加到下载队列！');
-                } else {
-                    showNotification('❌ 添加失败: ' + (data.message || '未知错误'));
-                }
-            } catch (e) {
-                showNotification('❌ 网络错误，请确保下载器已启动');
-            }
+    // ── 拦截 fetch ──────────────────────────────────────────
+    const _fetch = window.fetch;
+    window.fetch = function (...args) {
+        try {
+            const url = typeof args[0] === 'string' ? args[0]
+                : (args[0]?.url || '');
+            report(url, 'fetch');
+        } catch {}
+        return _fetch.apply(this, args);
+    };
+
+    // ── 拦截 XHR ────────────────────────────────────────────
+    const _xhrOpen = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function (method, url, ...rest) {
+        try { report(url, 'xhr'); } catch {}
+        return _xhrOpen.call(this, method, url, ...rest);
+    };
+
+    // ── 扫描 video/source 标签 ──────────────────────────────
+    function scanEl(el) {
+        if (!el || !el.querySelectorAll) return;
+        el.querySelectorAll('video, source').forEach(v => {
+            [v.src, v.currentSrc, v.getAttribute('src')].forEach(u => {
+                if (u) report(u, 'dom');
+            });
         });
-        
-        return btn;
-    }
-    
-    // 显示通知
-    function showNotification(text) {
-        const notification = document.createElement('div');
-        notification.innerHTML = `
-            <style>
-                #video-download-notification {
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    z-index: 9999999;
-                    padding: 16px 24px;
-                    background: ${text.includes('✅') ? 'rgba(16, 185, 129, 0.9)' : 'rgba(239, 68, 68, 0.9)'};
-                    color: white;
-                    border-radius: 12px;
-                    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-                    font-size: 14px;
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-                    animation: slideIn 0.3s ease;
-                }
-                @keyframes slideIn {
-                    from {
-                        transform: translateX(100%);
-                        opacity: 0;
-                    }
-                    to {
-                        transform: translateX(0);
-                        opacity: 1;
-                    }
-                }
-            </style>
-            <div>${text}</div>
-        `;
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => notification.remove(), 300);
-        }, 3000);
-    }
-    
-    // 获取最合适的视频URL
-    function getVideoUrl() {
-        const hostname = window.location.hostname;
-        const currentUrl = window.location.href;
-
-        // NTU页面：尝试从iframe找真实视频地址
-        if (hostname.includes('ntu.edu')) {
-            const panoptoIframe = document.querySelector('iframe[src*="panopto"]');
-            if (panoptoIframe) return panoptoIframe.src;
-
-            const kalturaIframe = document.querySelector('iframe[src*="kaltura"]');
-            if (kalturaIframe) return kalturaIframe.src;
-
-            const mediaIframe = document.querySelector('iframe[src*="/media/"], iframe[src*="mediasite"], iframe[src*="lecture"]');
-            if (mediaIframe) return mediaIframe.src;
-
-            // LTI wrapper：尝试从 URL 的 toolHref 参数解析实际地址
-            if (currentUrl.includes('launchFrame') || currentUrl.includes('/lti/')) {
-                try {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const toolHref = urlParams.get('toolHref');
-                    if (toolHref) {
-                        const decoded = decodeURIComponent(toolHref.replace(/~2F/gi, '/'));
-                        if (decoded.includes('panopto') || decoded.includes('kaltura')) {
-                            return decoded;
-                        }
-                    }
-                } catch (e) {}
-                return 'NEED_IFRAME';
-            }
-        }
-
-        return currentUrl;
-    }
-
-    // 检测是否应该显示按钮
-    function shouldShowButton() {
-        const hostname = window.location.hostname;
-        
-        // B站
-        if (hostname.includes('bilibili.com')) return true;
-        
-        // NTU相关
-        if (hostname.includes('ntu.edu') || hostname.includes('learn.ntu')) return true;
-        
-        // 其他视频网站可以在这里添加
-        return false;
-    }
-    
-    // 初始化
-    function init() {
-        if (shouldShowButton()) {
-            const btn = createDownloadButton();
-            document.body.appendChild(btn);
+        // 也检查自身
+        if (el.tagName === 'VIDEO' || el.tagName === 'SOURCE') {
+            [el.src, el.currentSrc].forEach(u => { if (u) report(u, 'dom'); });
         }
     }
-    
-    // 页面加载完成后初始化
+
+    // 初始扫描
+    function initialScan() {
+        scanEl(document);
+        // 特殊：检查 iframe
+        document.querySelectorAll('iframe').forEach(iframe => {
+            try {
+                const src = iframe.src || iframe.getAttribute('src');
+                if (src) report(src, 'iframe');
+            } catch {}
+        });
+    }
+
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded', initialScan);
     } else {
-        init();
+        initialScan();
     }
+
+    // 监听动态加载的节点
+    const obs = new MutationObserver(muts => {
+        for (const m of muts) {
+            m.addedNodes.forEach(n => {
+                if (n.nodeType === 1) scanEl(n);
+            });
+        }
+    });
+
+    const startObs = () => {
+        if (document.body) {
+            obs.observe(document.body, { childList: true, subtree: true });
+        }
+    };
+
+    if (document.body) { startObs(); }
+    else { document.addEventListener('DOMContentLoaded', startObs); }
+
+    // ── 拦截 HTMLMediaElement.src setter（捕获 JS 动态赋值）──
+    try {
+        const proto = HTMLMediaElement.prototype;
+        const desc = Object.getOwnPropertyDescriptor(proto, 'src');
+        if (desc && desc.set) {
+            Object.defineProperty(proto, 'src', {
+                ...desc,
+                set(value) {
+                    try { report(value, 'mediaSrc'); } catch {}
+                    desc.set.call(this, value);
+                }
+            });
+        }
+    } catch {}
+
 })();

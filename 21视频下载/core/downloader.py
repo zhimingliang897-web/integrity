@@ -6,12 +6,47 @@
 """
 
 import os
+import re
 import uuid
 import subprocess
 import threading
 import time
-from typing import Dict, Callable, Optional, List
+from typing import Dict, Callable, Optional, List, Tuple
 from datetime import datetime
+from urllib.parse import urlparse, unquote
+
+
+# 不支持的 URL 模式及其提示
+UNSUPPORTED_URL_PATTERNS = [
+    {
+        "pattern": r"ntulearn\.ntu\.edu\.sg.*lti.*launchFrame",
+        "name": "NTU Learn LTI",
+        "hint": "这是跳转链接。请先在浏览器中播放视频，使用插件自动检测，或按F12打开Network面板筛选.m3u8"
+    },
+    {
+        "pattern": r"ntulearn\.ntu\.edu\.sg.*blackboard",
+        "name": "NTU Blackboard",
+        "hint": "请使用浏览器插件自动检测视频，或手动从Network面板提取"
+    },
+    {
+        "pattern": r"ntulive\.ntu\.edu\.sg/Panopto",
+        "name": "NTU Panopto",
+        "hint": "请确保已上传NTU的Cookie，然后使用插件下载"
+    }
+]
+
+
+def check_url_support(url: str) -> Tuple[bool, Optional[str], Optional[str]]:
+    """
+    检查 URL 是否被支持
+
+    Returns:
+        (is_supported, error_name, error_hint)
+    """
+    for pattern_info in UNSUPPORTED_URL_PATTERNS:
+        if re.search(pattern_info["pattern"], url, re.IGNORECASE):
+            return False, pattern_info["name"], pattern_info["hint"]
+    return True, None, None
 
 
 class DownloadTask:
@@ -91,20 +126,29 @@ class VideoDownloaderCore:
         
         return results
     
-    def create_task(self, url: str) -> str:
+    def create_task(self, url: str, skip_url_check: bool = False) -> Tuple[str, Optional[str]]:
         """
         创建下载任务
-        
+
         Args:
             url: 视频URL
-            
+            skip_url_check: 跳过 URL 支持检查
+
         Returns:
-            str: 任务ID
+            Tuple[str, Optional[str]]: (任务ID, 警告信息)
         """
+        warning = None
+
+        # 检查 URL 是否支持
+        if not skip_url_check:
+            is_supported, error_name, error_hint = check_url_support(url)
+            if not is_supported:
+                warning = f"[{error_name}] {error_hint}"
+
         task_id = str(uuid.uuid4())[:8]
         task = DownloadTask(task_id, url, self.download_dir)
         self.tasks[task_id] = task
-        return task_id
+        return task_id, warning
     
     def start_download(self, task_id: str, progress_callback: Optional[Callable] = None):
         """

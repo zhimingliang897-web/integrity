@@ -1,197 +1,211 @@
-// popup.js - 插件弹窗逻辑
+// popup.js v3.0
 
-const API_BASE = 'http://127.0.0.1:8000';
-let currentUrl = '';
-let isOnline = false;
+let tabId = null;
+let videos = [];
 
-// DOM元素
-const statusDot = document.getElementById('statusDot');
-const statusText = document.getElementById('statusText');
-const pageUrl = document.getElementById('pageUrl');
-const videoTitleContainer = document.getElementById('videoTitleContainer');
-const videoTitle = document.getElementById('videoTitle');
-const downloadBtn = document.getElementById('downloadBtn');
-const captureBtn = document.getElementById('captureBtn');
-const messageEl = document.getElementById('message');
-const openWebLink = document.getElementById('openWeb');
+const listEl      = document.getElementById('list');
+const emptyState  = document.getElementById('emptyState');
+const countLabel  = document.getElementById('countLabel');
+const refreshBtn  = document.getElementById('refreshBtn');
+const toast       = document.getElementById('toast');
+const btnCopyAll  = document.getElementById('btnCopyAll');
+const btnOpenDir  = document.getElementById('btnOpenDir');
 
-// 初始化
+// ── 初始化 ──────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', async () => {
-    await checkServiceStatus();
-    await getCurrentTab();
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (!tab) return;
+    tabId = tab.id;
+    await fetchAndRender();
 });
 
-// 检查服务状态
-async function checkServiceStatus() {
+// ── 获取视频列表并渲染 ─────────────────────────────────────
+async function fetchAndRender() {
+    refreshBtn.classList.add('spinning');
+    countLabel.textContent = '检测中…';
+
     try {
-        const res = await fetch(`${API_BASE}/health`, {
-            method: 'GET',
-            mode: 'no-cors'
-        });
-        isOnline = true;
-        statusDot.className = 'status-dot online';
-        statusText.textContent = '服务在线';
-        downloadBtn.disabled = false;
-        captureBtn.disabled = false;
+        const res = await chrome.runtime.sendMessage({ type: 'GET_VIDEOS', tabId });
+        videos = res?.videos || [];
+        render(videos);
     } catch (e) {
-        isOnline = false;
-        statusDot.className = 'status-dot offline';
-        statusText.textContent = '服务离线 - 请先启动下载器';
-        downloadBtn.disabled = true;
+        showToast('获取失败: ' + e.message);
     }
+
+    refreshBtn.classList.remove('spinning');
 }
 
-// 获取当前标签页信息
-async function getCurrentTab() {
-    try {
-        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-        if (tabs.length > 0) {
-            currentUrl = tabs[0].url;
-            pageUrl.textContent = truncateUrl(currentUrl);
-            
-            // 尝试获取视频标题
-            try {
-                const results = await chrome.scripting.executeScript({
-                    target: { tabId: tabs[0].id },
-                    function: getPageTitle
-                });
-                
-                if (results && results[0] && results[0].result) {
-                    const title = results[0].result;
-                    if (title && title.length > 5) {
-                        videoTitle.textContent = title;
-                        videoTitleContainer.style.display = 'block';
-                    }
-                }
-            } catch (e) {
-                console.log('Cannot get page title:', e);
-            }
-        }
-    } catch (e) {
-        pageUrl.textContent = '无法获取页面信息';
+refreshBtn.addEventListener('click', fetchAndRender);
+
+// ── 渲染视频卡片 ───────────────────────────────────────────
+function render(list) {
+    // 清除旧卡片（保留 emptyState）
+    [...listEl.children].forEach(el => {
+        if (el.id !== 'emptyState') el.remove();
+    });
+
+    if (!list || list.length === 0) {
+        emptyState.style.display = 'flex';
+        countLabel.textContent = '未找到视频';
+        return;
     }
+
+    emptyState.style.display = 'none';
+    countLabel.textContent = `共 ${list.length} 个视频`;
+
+    list.forEach((v, idx) => {
+        const card = makeCard(v, idx);
+        listEl.appendChild(card);
+    });
 }
 
-// 获取页面标题函数（会在页面上下文中执行）
-function getPageTitle() {
-    // 尝试获取B站视频标题
-    const bilibiliTitle = document.querySelector('.video-info-title, h1.title, .videoTitle');
-    if (bilibiliTitle) {
-        return bilibiliTitle.textContent.trim();
-    }
-    
-    // 尝试获取页面标题
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) {
-        return ogTitle.getAttribute('content');
-    }
-    
-    return document.title;
+function makeCard(v, idx) {
+    const ext = v.ext || 'other';
+    const isDirectDl = ['mp4', 'webm', 'flv', 'm4v', 'mkv', 'mov'].includes(ext);
+    const stripeClass = ['m3u8', 'mp4', 'webm', 'flv'].includes(ext) ? ext : 'other';
+    const tagClass    = ['m3u8', 'mp4', 'webm', 'flv', 'ts'].includes(ext) ? ext : 'other';
+
+    const sizeStr = v.size ? formatSize(v.size) : '';
+    const displayUrl = shortenUrl(v.url);
+
+    const card = document.createElement('div');
+    card.className = 'vcard';
+    card.innerHTML = `
+        <div class="vcard-stripe stripe-${stripeClass}"></div>
+        <div class="vcard-body">
+            <div class="vcard-meta">
+                <span class="tag tag-${tagClass}">${ext.toUpperCase()}</span>
+                ${sizeStr ? `<span class="vcard-size">${sizeStr}</span>` : ''}
+                ${v.source ? `<span class="vcard-source">${v.source}</span>` : ''}
+            </div>
+            <div class="vcard-url" title="${v.url}">${displayUrl}</div>
+        </div>
+        <div class="vcard-actions">
+            <button class="vbtn ${isDirectDl ? 'dl-direct' : 'dl-cmd'}" data-idx="${idx}" data-action="primary">
+                ${isDirectDl ? '⬇️ 下载' : '📋 复制'}
+            </button>
+            <button class="vbtn dl-cmd" data-idx="${idx}" data-action="copy-cmd">
+                📝 命令
+            </button>
+        </div>
+    `;
+
+    // 点击事件
+    card.querySelectorAll('.vbtn').forEach(btn => {
+        btn.addEventListener('click', () => handleAction(btn, v));
+    });
+
+    return card;
 }
 
-// 下载按钮点击事件
-downloadBtn.addEventListener('click', async () => {
-    if (!currentUrl || !isOnline) return;
-    
-    // 显示加载状态
-    downloadBtn.disabled = true;
-    downloadBtn.innerHTML = '<i class="fas fa-spinner spinner"></i> 发送中...';
-    hideMessage();
-    
-    try {
-        const res = await fetch(`${API_BASE}/api/add_task`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                url: currentUrl,
-                source: 'extension'
-            })
-        });
-        
-        const data = await res.json();
-        
-        if (data.status === 'ok') {
-            showMessage('success', `✅ 已添加到下载队列！\n任务ID: ${data.task_id}`);
-        } else {
-            showMessage('error', '❌ 添加任务失败');
-        }
-    } catch (e) {
-        showMessage('error', '❌ 网络错误: ' + e.message);
-    }
-    
-    // 恢复按钮状态
-    downloadBtn.disabled = false;
-    downloadBtn.innerHTML = '<i class="fas fa-download"></i> 发送到下载器';
-});
+// ── 按钮动作 ───────────────────────────────────────────────
+async function handleAction(btn, v) {
+    const action = btn.dataset.action;
+    const ext = v.ext || '';
 
-// 自动从浏览器获取Cookie
-captureBtn.addEventListener('click', async () => {
-    captureBtn.disabled = true;
-    captureBtn.textContent = '获取中...';
-    hideMessage();
-
-    try {
-        const targetDomains = ['bilibili.com', 'ntulearn.ntu.edu.sg', 'ntu.edu.sg', 'ntu.edu.tw'];
-        let allCookies = [];
-        for (const domain of targetDomains) {
-            const cookies = await chrome.cookies.getAll({ domain });
-            allCookies = allCookies.concat(cookies);
-        }
-
-        // 去重（同 domain+name 保留最新）
-        const seen = new Set();
-        const unique = allCookies.filter(c => {
-            const key = `${c.domain}|${c.name}`;
-            if (seen.has(key)) return false;
-            seen.add(key);
-            return true;
-        });
-
-        if (unique.length === 0) {
-            showMessage('error', '未找到Cookie，请确保已在浏览器中登录B站或NTU');
-        } else {
-            const res = await fetch(`${API_BASE}/api/cookies/capture`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cookies: unique })
+    if (action === 'primary') {
+        // 直接链接 → 浏览器原生下载
+        if (['mp4', 'webm', 'flv', 'm4v', 'mkv', 'mov'].includes(ext)) {
+            btn.textContent = '⏳ 下载中';
+            const res = await chrome.runtime.sendMessage({
+                type: 'DIRECT_DOWNLOAD',
+                url: v.url,
             });
-            const data = await res.json();
-            if (data.status === 'ok') {
-                showMessage('success', `✅ ${data.message}`);
+            if (res?.ok) {
+                btn.textContent = '✅ 已开始';
+                showToast('✅ 下载已开始！保存到默认下载文件夹');
             } else {
-                showMessage('error', '保存失败');
+                // 下载API失败，降级复制命令
+                copyCmd(v.url, ext);
+                btn.textContent = '📋 已复制';
+                showToast('⚠️ 直接下载失败，已复制 yt-dlp 命令');
             }
+            setTimeout(() => { btn.textContent = ext === 'mp4' ? '⬇️ 下载' : '📋 复制'; }, 2500);
+        } else {
+            // m3u8 等流媒体 → 复制 yt-dlp 命令
+            copyCmd(v.url, ext);
+            btn.textContent = '✅ 已复制';
+            btn.classList.add('copied');
+            showToast('📋 yt-dlp 命令已复制！粘贴到终端运行');
+            setTimeout(() => {
+                btn.textContent = '📋 复制';
+                btn.classList.remove('copied');
+            }, 2000);
         }
-    } catch (e) {
-        showMessage('error', '获取Cookie出错: ' + e.message);
     }
 
-    captureBtn.textContent = '🍪 自动获取浏览器Cookie';
-    captureBtn.disabled = false;
-});
-
-// 打开Web界面
-openWebLink.addEventListener('click', (e) => {
-    e.preventDefault();
-    chrome.tabs.create({ url: API_BASE });
-});
-
-// 工具函数
-function truncateUrl(url) {
-    if (url.length > 40) {
-        return url.substring(0, 40) + '...';
+    if (action === 'copy-cmd') {
+        copyCmd(v.url, ext);
+        btn.textContent = '✅ 已复制';
+        btn.classList.add('copied');
+        showToast('📋 命令已复制！');
+        setTimeout(() => {
+            btn.textContent = '📝 命令';
+            btn.classList.remove('copied');
+        }, 2000);
     }
-    return url;
 }
 
-function showMessage(type, text) {
-    messageEl.className = `message ${type}`;
-    messageEl.textContent = text;
-    messageEl.style.display = 'block';
+function copyCmd(url, ext) {
+    // 针对不同格式生成最合适的命令
+    let cmd;
+    if (ext === 'm3u8' || ext === 'ts') {
+        cmd = `yt-dlp -f "bestvideo+bestaudio/best" --merge-output-format mp4 "${url}"`;
+    } else if (['mp4', 'webm', 'flv'].includes(ext)) {
+        cmd = `yt-dlp "${url}"`;
+    } else {
+        cmd = `yt-dlp -f "bestvideo+bestaudio/best" --merge-output-format mp4 "${url}"`;
+    }
+    navigator.clipboard.writeText(cmd).catch(() => {
+        // 备用方案
+        const el = document.createElement('textarea');
+        el.value = cmd;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        el.remove();
+    });
+    return cmd;
 }
 
-function hideMessage() {
-    messageEl.style.display = 'none';
+// ── 底部按钮 ───────────────────────────────────────────────
+btnCopyAll.addEventListener('click', () => {
+    if (videos.length === 0) { showToast('没有视频可复制'); return; }
+    const cmds = videos.map(v => copyCmd(v.url, v.ext)).join('\n');
+    navigator.clipboard.writeText(cmds);
+    showToast(`📋 已复制 ${videos.length} 条命令`);
+});
+
+btnOpenDir.addEventListener('click', () => {
+    // 打开 chrome://downloads 页面
+    chrome.tabs.create({ url: 'chrome://downloads/' });
+});
+
+// ── 工具函数 ───────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+}
+
+function shortenUrl(url) {
+    try {
+        const u = new URL(url);
+        // 显示域名 + 路径末尾
+        const path = u.pathname;
+        const short = u.hostname + (path.length > 30 ? '…' + path.slice(-24) : path);
+        return short.length > 52 ? short.substring(0, 52) + '…' : short;
+    } catch {
+        return url.substring(0, 52) + (url.length > 52 ? '…' : '');
+    }
+}
+
+function formatSize(bytes) {
+    if (!bytes) return '';
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    if (bytes < 1024 * 1024 * 1024) return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+    return (bytes / 1024 / 1024 / 1024).toFixed(2) + ' GB';
 }

@@ -178,22 +178,28 @@ async def add_task(request: AddTaskRequest):
     """添加下载任务"""
     if not request.url:
         raise HTTPException(status_code=400, detail="URL不能为空")
-    
-    # 创建任务
-    task_id = downloader.create_task(request.url)
-    
+
+    # 创建任务（会进行 URL 支持检查）
+    task_id, warning = downloader.create_task(request.url)
+
     # 后台启动下载线程
     def run_download():
         downloader.start_download(task_id)
-    
+
     thread = threading.Thread(target=run_download, daemon=True)
     thread.start()
-    
-    return {
+
+    response = {
         "status": "ok",
         "task_id": task_id,
         "message": "任务已添加"
     }
+
+    # 如果有警告（不支持的 URL 类型），返回给前端
+    if warning:
+        response["warning"] = warning
+
+    return response
 
 
 @app.get("/api/tasks")

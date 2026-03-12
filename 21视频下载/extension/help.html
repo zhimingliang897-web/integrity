@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>安装说明 - 21视频下载器</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f0f13;
+    color: #e8e8f0;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    line-height: 1.7;
+}
+h1 { font-size: 26px; margin-bottom: 6px;
+    background: linear-gradient(135deg,#a78bfa,#60a5fa);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.subtitle { color:#666; font-size:14px; margin-bottom:32px; }
+h2 { font-size: 15px; font-weight:600; color:#a78bfa; margin: 28px 0 10px; }
+p  { font-size:14px; color:#b0b0c0; margin-bottom:8px; }
+.step {
+    display:flex; gap:14px; align-items:flex-start;
+    padding:14px 16px; margin-bottom:10px;
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.07);
+    border-radius:10px;
+}
+.step-num {
+    flex-shrink:0; width:26px; height:26px;
+    background:linear-gradient(135deg,#7c3aed,#2563eb);
+    border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:12px; font-weight:700;
+}
+.step-body { font-size:13px; color:#c0c0d0; }
+.step-body strong { color:#e8e8f0; }
+code {
+    font-family: 'Fira Code', monospace;
+    background:rgba(139,92,246,0.15); color:#c4b5fd;
+    padding:2px 6px; border-radius:4px; font-size:12px;
+}
+.badge {
+    display:inline-block; padding:2px 8px; border-radius:20px;
+    font-size:11px; font-weight:600;
+}
+.badge.green { background:rgba(16,185,129,0.2); color:#6ee7b7; }
+.badge.blue  { background:rgba(59,130,246,0.2);  color:#93c5fd; }
+.tip {
+    margin-top:24px; padding:14px;
+    background:rgba(245,158,11,0.08);
+    border:1px solid rgba(245,158,11,0.2);
+    border-radius:10px; font-size:13px; color:#fcd34d;
+}
+</style>
+</head>
+<body>
+<h1>📥 21视频下载器</h1>
+<div class="subtitle">一键安装说明 · 无需服务器</div>
+
+<h2>⚡ 快速安装（推荐）</h2>
+
+<div class="step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+        双击运行 <strong>install.bat</strong><br>
+        <span style="color:#666;font-size:12px">位置：21视频下载/install.bat</span><br>
+        脚本会自动检测 Python、安装 yt-dlp 并完成注册
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+        打开浏览器，访问 <code>chrome://extensions/</code><br>
+        开启右上角的 <strong>开发者模式</strong>
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+        点击 <strong>加载已解压的扩展程序</strong><br>
+        选择文件夹：<code>21视频下载/extension</code>
+    </div>
+</div>
+
+<div class="step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+        🎉 完成！打开任意视频页面，播放视频后：<br>
+        • 右下角会出现 <span class="badge green">⬇️ 下载视频</span> 悬浮按钮<br>
+        • 或点击浏览器工具栏的插件图标
+    </div>
+</div>
+
+<h2>🔧 手动安装（如 bat 脚本失败）</h2>
+<p>1. 安装依赖：<code>pip install yt-dlp</code></p>
+<p>2. 生成注册文件：参考 <code>install.bat</code> 内容手动执行</p>
+<p>3. 注册表路径：<code>HKCU\Software\Google\Chrome\NativeMessagingHosts\com.videodl.native</code></p>
+
+<h2>💡 使用方式</h2>
+<div class="step">
+    <div class="step-num">A</div>
+    <div class="step-body">
+        <strong>自动模式</strong>：页面播放视频后，右下角自动出现下载按钮，点击即下载<br>
+        <span class="badge green">推荐</span>
+    </div>
+</div>
+<div class="step">
+    <div class="step-num">B</div>
+    <div class="step-body">
+        <strong>插件弹窗</strong>：点工具栏插件图标，选择检测到的视频流，点"开始下载"<br>
+        <span class="badge blue">备用</span>
+    </div>
+</div>
+<div class="step">
+    <div class="step-num">C</div>
+    <div class="step-body">
+        <strong>复制命令</strong>：如未安装 native host，点"复制命令"，粘贴到终端运行<br>
+        <span style="color:#666;font-size:12px">无需安装任何东西，任何时候都能用</span>
+    </div>
+</div>
+
+<div class="tip">
+    📂 所有视频默认下载到 <strong>21视频下载/downloads/</strong> 文件夹
+</div>
+
+</body>
+</html>
