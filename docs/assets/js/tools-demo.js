@@ -5,6 +5,38 @@
 
 const API_BASE = window.location.origin;
 
+function showToast(message, type = 'info') {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.remove(), 3000);
+}
+
+function createTypewriterEffect(element, text, speed = 20) {
+    return new Promise(resolve => {
+        element.innerHTML = '';
+        let i = 0;
+        const interval = setInterval(() => {
+            if (i < text.length) {
+                element.innerHTML += text.charAt(i);
+                i++;
+            } else {
+                clearInterval(interval);
+                resolve();
+            }
+        }, speed);
+    });
+}
+
+function createLoadingHTML(text = '处理中') {
+    return `<span class="loading-pulse">${text}</span> <span class="loading-dots"><span></span><span></span><span></span></span>`;
+}
+
 // ========== Tab 切换 ==========
 function switchTab(tabName) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -47,31 +79,43 @@ function initVisionDemo() {
             if (isScanning) return;
             isScanning = true;
             visionBtn.disabled = true;
-            visionBtn.textContent = '分析中...';
+            visionBtn.innerHTML = createLoadingHTML('分析中');
             
-            if (demoImg) demoImg.style.filter = 'brightness(1.1) contrast(1.1)';
+            if (demoImg) {
+                demoImg.style.filter = 'brightness(1.2) contrast(1.1)';
+                demoImg.style.transition = 'filter 0.3s';
+            }
             
-            visionOutput.innerHTML = '<span style="color:var(--primary);">分析中...</span>';
+            visionOutput.innerHTML = `<div style="color:var(--primary);display:flex;align-items:center;gap:8px;">
+                <span class="loading-spinner"></span> 正在调用 Qwen-VL 分析图片...
+            </div>`;
             
-            await new Promise(r => setTimeout(r, 1500));
+            await new Promise(r => setTimeout(r, 1200));
             
-            if (demoImg) demoImg.style.filter = 'grayscale(0%)';
+            visionOutput.innerHTML = `<div style="color:#10b981;display:flex;align-items:center;gap:8px;">
+                ✓ 图片分析完成，生成提示词...
+            </div>`;
+            
+            await new Promise(r => setTimeout(r, 500));
+            
+            if (demoImg) demoImg.style.filter = '';
             
             const promptText = "A stunning cyberpunk cityscape at night. Neon signs in magenta and cyan, reflecting off wet asphalt. Flying vehicles between towering skyscrapers. Cinematic lighting, photorealistic.";
             
-            visionOutput.innerHTML = '';
-            const targetSpan = document.createElement('span');
-            targetSpan.style.color = '#e2e8f0';
-            visionOutput.appendChild(targetSpan);
+            visionOutput.innerHTML = `
+                <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;">
+                    ✓ Qwen-VL-Max 生成的 DALL-E 提示词
+                </div>
+                <div id="vision-typewriter" style="color:#e2e8f0;line-height:1.6;"></div>
+            `;
             
-            for (let i = 0; i < promptText.length; i++) {
-                targetSpan.innerHTML += promptText.charAt(i);
-                await new Promise(r => setTimeout(r, 20));
-            }
+            const typewriterEl = document.getElementById('vision-typewriter');
+            await createTypewriterEffect(typewriterEl, promptText, 15);
             
             isScanning = false;
             visionBtn.disabled = false;
             visionBtn.textContent = '重新提取';
+            showToast('提示词提取完成！', 'success');
         });
     }
 }
@@ -86,52 +130,57 @@ function initCompareDemo() {
         'max': 'Large Language Model (LLM) is an AI trained on massive text data. Key features: 1) Transformer architecture, 2) Billions of parameters, 3) Multi-task capabilities, 4) Emergent abilities at scale.'
     };
 
+    const modelColors = {
+        'qwen': '#f59e0b',
+        'turbo': '#3b82f6',
+        'max': '#10b981'
+    };
+
     if (compareBtn) {
         compareBtn.addEventListener('click', async () => {
             if (compareBtn.disabled) return;
             compareBtn.disabled = true;
-            compareBtn.textContent = '对比中...';
+            compareBtn.innerHTML = createLoadingHTML('对比中');
             
             const qwenEl = document.querySelector('#model-qwen > div:last-child');
             const turboEl = document.querySelector('#model-turbo > div:last-child');
             const maxEl = document.querySelector('#model-max > div:last-child');
             
-            if (qwenEl) qwenEl.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
-            if (turboEl) turboEl.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
-            if (maxEl) maxEl.innerHTML = '<span style="color:var(--primary);">● 思考中...</span>';
+            const elements = [qwenEl, turboEl, maxEl];
+            const models = ['qwen', 'turbo', 'max'];
             
-            await new Promise(r => setTimeout(r, 600));
-            
-            if (qwenEl) {
-                qwenEl.innerHTML = '';
-                for (let c of modelResponses.qwen) {
-                    qwenEl.innerHTML += c;
-                    await new Promise(r => setTimeout(r, 15));
+            elements.forEach((el, i) => {
+                if (el) {
+                    el.innerHTML = `<div style="display:flex;align-items:center;gap:6px;color:${modelColors[models[i]]}">
+                        <span class="loading-spinner" style="border-top-color:${modelColors[models[i]]}"></span>
+                        思考中...
+                    </div>`;
                 }
-            }
+            });
             
-            await new Promise(r => setTimeout(r, 300));
+            await new Promise(r => setTimeout(r, 500));
             
-            if (turboEl) {
-                turboEl.innerHTML = '';
-                for (let c of modelResponses.turbo) {
-                    turboEl.innerHTML += c;
-                    await new Promise(r => setTimeout(r, 12));
+            for (let i = 0; i < models.length; i++) {
+                const el = elements[i];
+                const model = models[i];
+                
+                if (el) {
+                    el.innerHTML = '';
+                    const textSpan = document.createElement('span');
+                    textSpan.style.color = '#e2e8f0';
+                    el.appendChild(textSpan);
+                    
+                    await createTypewriterEffect(textSpan, modelResponses[model], 12);
                 }
-            }
-            
-            await new Promise(r => setTimeout(r, 300));
-            
-            if (maxEl) {
-                maxEl.innerHTML = '';
-                for (let c of modelResponses.max) {
-                    maxEl.innerHTML += c;
-                    await new Promise(r => setTimeout(r, 10));
+                
+                if (i < models.length - 1) {
+                    await new Promise(r => setTimeout(r, 200));
                 }
             }
             
             compareBtn.disabled = false;
             compareBtn.textContent = '重新对比';
+            showToast('多模型对比完成！', 'success');
         });
     }
 }
@@ -145,31 +194,51 @@ function initDebateDemo() {
         debateBtn.addEventListener('click', async () => {
             if (debateBtn.disabled) return;
             debateBtn.disabled = true;
-            debateBtn.textContent = '辩论中...';
+            debateBtn.innerHTML = createLoadingHTML('辩论中');
+            
+            debateOutput.innerHTML = `
+                <div style="text-align:center;padding:20px;color:var(--text-muted);">
+                    <span class="loading-spinner" style="width:32px;height:32px;"></span>
+                    <div style="margin-top:12px;">正反双方辩手就位中...</div>
+                </div>
+            `;
+            
+            await new Promise(r => setTimeout(r, 800));
             
             debateOutput.innerHTML = '';
             
             const messages = [
-                { role: '正方', speaker: '千问·论道', text: '我认为AI不会让人类变懒，而是解放了人类的创造力...' },
-                { role: '反方', speaker: '千问·辨析', text: '恰恰相反，过度依赖AI会导致人类思维能力退化...' },
-                { role: '正方', speaker: '千问·论道', text: '这种担忧在每次技术革命时都会出现，但历史证明技术总是推动进步...' }
+                { role: '正方', speaker: '千问·论道', text: '我认为AI不会让人类变懒，而是解放了人类的创造力。就像计算器没有让人类丧失数学能力，AI只会让我们专注于更高层次的思考。', color: '#10b981' },
+                { role: '反方', speaker: '千问·辨析', text: '恰恰相反，过度依赖AI会导致人类思维能力退化。当所有问题都有AI解答，我们还会主动思考吗？', color: '#ef4444' },
+                { role: '正方', speaker: '千问·论道', text: '这种担忧在每次技术革命时都会出现，但历史证明技术总是推动进步。AI是人类思维的扩展，而非替代。', color: '#10b981' }
             ];
             
             for (const msg of messages) {
                 const msgDiv = document.createElement('div');
-                msgDiv.style.cssText = 'margin-bottom:12px;padding:12px;background:var(--bg-card);border-radius:8px;border-left:3px solid ' + (msg.role === '正方' ? '#10b981' : '#ef4444');
-                msgDiv.innerHTML = `<div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">${msg.role} - ${msg.speaker}</div><div id="msg-text"></div>`;
+                msgDiv.style.cssText = 'margin-bottom:12px;padding:12px;background:var(--bg-card);border-radius:8px;border-left:3px solid ' + msg.color + ';opacity:0;transform:translateX(-10px);transition:all 0.3s';
+                msgDiv.innerHTML = `
+                    <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+                        <span style="color:${msg.color};font-weight:600;">${msg.role}</span>
+                        <span>-</span>
+                        <span>${msg.speaker}</span>
+                    </div>
+                    <div class="debate-text" style="line-height:1.6;"></div>
+                `;
                 debateOutput.appendChild(msgDiv);
                 
-                const textEl = msgDiv.querySelector('#msg-text');
-                for (let c of msg.text) {
-                    textEl.innerHTML += c;
-                    await new Promise(r => setTimeout(r, 30));
-                }
+                await new Promise(r => setTimeout(r, 50));
+                msgDiv.style.opacity = '1';
+                msgDiv.style.transform = 'translateX(0)';
+                
+                const textEl = msgDiv.querySelector('.debate-text');
+                await createTypewriterEffect(textEl, msg.text, 25);
+                
+                await new Promise(r => setTimeout(r, 300));
             }
             
             debateBtn.disabled = false;
             debateBtn.textContent = '重新开始';
+            showToast('辩论演示完成！', 'success');
         });
     }
 }
@@ -180,12 +249,24 @@ function initTokenCalc() {
 
     if (calcTokenBtn) {
         calcTokenBtn.addEventListener('click', async () => {
-            const model = document.getElementById('token-model')?.value || 'qwen-plus';
-            const lang = document.getElementById('token-lang')?.value || 'zh';
-            const chars = parseInt(document.getElementById('token-chars')?.value) || 100;
+            const modelEl = document.getElementById('token-model');
+            const langEl = document.getElementById('token-lang');
+            const charsEl = document.getElementById('token-chars');
+            
+            const model = modelEl ? modelEl.value : 'qwen-plus';
+            const lang = langEl ? langEl.value : 'zh';
+            const chars = charsEl ? parseInt(charsEl.value) || 100 : 100;
             
             calcTokenBtn.disabled = true;
-            calcTokenBtn.textContent = '计算中...';
+            calcTokenBtn.innerHTML = createLoadingHTML('计算中');
+            
+            const promptEl = document.getElementById('result-prompt');
+            const completionEl = document.getElementById('result-completion');
+            const costEl = document.getElementById('result-cost');
+            
+            if (promptEl) promptEl.innerHTML = '<span class="loading-pulse">-</span>';
+            if (completionEl) completionEl.innerHTML = '<span class="loading-pulse">-</span>';
+            if (costEl) costEl.innerHTML = '<span class="loading-pulse">-</span>';
             
             try {
                 const res = await fetch(API_BASE + '/api/tools/token-calc', {
@@ -193,18 +274,35 @@ function initTokenCalc() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ model, lang, chars })
                 });
+                
+                if (!res.ok) throw new Error('API 请求失败');
+                
                 const data = await res.json();
                 
-                const promptEl = document.getElementById('result-prompt');
-                const completionEl = document.getElementById('result-completion');
-                const costEl = document.getElementById('result-cost');
+                await new Promise(r => setTimeout(r, 300));
                 
-                if (promptEl) promptEl.textContent = data.prompt_tokens || '-';
-                if (completionEl) completionEl.textContent = data.completion_tokens || '-';
-                if (costEl) costEl.textContent = '$' + (data.total_cost || 0).toFixed(6);
+                if (promptEl) {
+                    promptEl.style.animation = 'pulse 0.3s';
+                    promptEl.textContent = data.prompt_tokens || '-';
+                }
+                if (completionEl) {
+                    completionEl.style.animation = 'pulse 0.3s';
+                    completionEl.textContent = data.completion_tokens || '-';
+                }
+                if (costEl) {
+                    costEl.style.animation = 'pulse 0.3s';
+                    costEl.textContent = '$' + (data.total_cost || 0).toFixed(6);
+                }
+                
+                showToast('Token 计算完成！', 'success');
             } catch (e) {
-                const costEl = document.getElementById('result-cost');
-                if (costEl) costEl.textContent = 'API 错误';
+                if (promptEl) promptEl.textContent = '-';
+                if (completionEl) completionEl.textContent = '-';
+                if (costEl) {
+                    costEl.textContent = 'API 错误';
+                    costEl.style.color = '#ef4444';
+                }
+                showToast('计算失败：' + e.message, 'error');
             }
             
             calcTokenBtn.disabled = false;

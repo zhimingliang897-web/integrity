@@ -5,8 +5,6 @@
 
 const API_BASE = window.location.origin;
 
-// ============ 通用工具函数 ============
-
 function getToken() {
     return localStorage.getItem('token');
 }
@@ -18,11 +16,28 @@ function showResult(elementId, html, isError = false) {
     }
 }
 
-function showLoading(elementId) {
+function showLoading(elementId, text = '处理中') {
     const el = document.getElementById(elementId);
     if (el) {
-        el.innerHTML = '<div style="padding:12px;color:var(--text-muted);">处理中...</div>';
+        el.innerHTML = `
+            <div style="padding:16px;text-align:center;color:var(--text-muted);">
+                <div class="loading-spinner" style="width:24px;height:24px;margin:0 auto 12px;"></div>
+                <div>${text}...</div>
+            </div>
+        `;
     }
+}
+
+function showToast(message, type = 'info') {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.remove(), 3000);
 }
 
 // ============ 折叠展开功能 ============
@@ -51,11 +66,14 @@ async function startAICompare() {
         return;
     }
 
-    const question = document.getElementById('ai-compare-question').value.trim();
-    const systemPrompt = document.getElementById('ai-compare-system').value.trim();
+    const questionEl = document.getElementById('ai-compare-question');
+    const question = questionEl ? questionEl.value.trim() : '';
+    const systemPromptEl = document.getElementById('ai-compare-system');
+    const systemPrompt = systemPromptEl ? systemPromptEl.value.trim() : '';
     
     if (!question) {
         showResult('ai-compare-result', '请输入问题', true);
+        showToast('请输入问题', 'warning');
         return;
     }
 
@@ -64,10 +82,11 @@ async function startAICompare() {
     
     if (models.length === 0) {
         showResult('ai-compare-result', '请至少选择一个模型', true);
+        showToast('请至少选择一个模型', 'warning');
         return;
     }
 
-    showLoading('ai-compare-result');
+    showLoading('ai-compare-result', `正在对比 ${models.length} 个模型`);
 
     const results = [];
     
@@ -87,11 +106,16 @@ async function startAICompare() {
                 })
             });
 
+            if (!res.ok) {
+                const errData = await res.json().catch(() => ({}));
+                throw new Error(errData.error || `HTTP ${res.status}`);
+            }
+
             const data = await res.json();
             results.push({
                 model: model,
-                success: data.success,
-                content: data.content || data.error,
+                success: data.success !== false,
+                content: data.content || data.error || '无响应',
                 elapsed: data.elapsed
             });
         } catch (e) {
@@ -108,7 +132,7 @@ async function startAICompare() {
         html += `
             <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:12px;">
                 <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
-                    <strong style="color:var(--primary);">${r.model}</strong>
+                    <strong style="color:${r.success ? 'var(--primary)' : '#ef4444'};">${r.model}</strong>
                     ${r.elapsed ? `<span style="color:var(--text-muted);font-size:12px;">${r.elapsed}s</span>` : ''}
                 </div>
                 <div style="font-size:14px;line-height:1.6;color:${r.success ? '#e2e8f0' : '#ef4444'};">${r.content}</div>
@@ -118,6 +142,7 @@ async function startAICompare() {
     html += '</div>';
 
     showResult('ai-compare-result', html);
+    showToast('模型对比完成！', 'success');
 }
 
 // ============ 图文互转 ============
@@ -130,14 +155,16 @@ async function analyzeImage() {
     }
 
     const fileInput = document.getElementById('image-prompt-file');
-    const style = document.getElementById('image-prompt-style').value;
+    const styleEl = document.getElementById('image-prompt-style');
+    const style = styleEl ? styleEl.value : 'dalle';
 
-    if (!fileInput.files || fileInput.files.length === 0) {
+    if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
         showResult('image-prompt-result', '请上传图片', true);
+        showToast('请上传图片', 'warning');
         return;
     }
 
-    showLoading('image-prompt-result');
+    showLoading('image-prompt-result', '正在分析图片');
 
     const formData = new FormData();
     formData.append('image', fileInput.files[0]);
@@ -150,18 +177,27 @@ async function analyzeImage() {
             body: formData
         });
 
+        if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.error || `HTTP ${res.status}`);
+        }
+
         const data = await res.json();
 
         if (data.success) {
             showResult('image-prompt-result', `
-                <div style="margin-bottom:8px;"><strong>生成的提示词：</strong></div>
-                <div style="background:var(--bg-card);padding:12px;border-radius:8px;font-family:monospace;white-space:pre-wrap;">${data.prompt}</div>
+                <div style="margin-bottom:8px;font-weight:600;">生成的提示词 (${data.style === 'sd' ? 'Stable Diffusion' : 'DALL-E'} 风格)</div>
+                <div style="background:var(--bg-card);padding:12px;border-radius:8px;font-family:monospace;white-space:pre-wrap;line-height:1.6;">${data.prompt}</div>
+                <div style="margin-top:8px;font-size:12px;color:var(--text-muted);">✓ 可直接复制使用</div>
             `);
+            showToast('提示词生成完成！', 'success');
         } else {
             showResult('image-prompt-result', data.error || '分析失败', true);
+            showToast('分析失败', 'error');
         }
     } catch (e) {
         showResult('image-prompt-result', '请求失败: ' + e.message, true);
+        showToast('请求失败: ' + e.message, 'error');
     }
 }
 
@@ -174,16 +210,25 @@ async function startDebate() {
         return;
     }
 
-    const topic = document.getElementById('debate-topic').value.trim();
-    const rounds = parseInt(document.getElementById('debate-rounds').value);
+    const topicEl = document.getElementById('debate-topic');
+    const roundsEl = document.getElementById('debate-rounds');
+    
+    const topic = topicEl ? topicEl.value.trim() : '';
+    const rounds = roundsEl ? parseInt(roundsEl.value) : 4;
 
     if (!topic) {
         showResult('debate-result', '请输入辩题', true);
+        showToast('请输入辩题', 'warning');
         return;
     }
 
     const resultEl = document.getElementById('debate-result');
-    resultEl.innerHTML = '<div style="padding:12px;color:var(--text-muted);">辩论进行中...</div>';
+    resultEl.innerHTML = `
+        <div style="padding:16px;text-align:center;color:var(--text-muted);">
+            <div class="loading-spinner" style="width:24px;height:24px;margin:0 auto 12px;"></div>
+            <div>辩论进行中...</div>
+        </div>
+    `;
 
     try {
         const res = await fetch(API_BASE + '/api/tools/ai-debate/start', {
@@ -194,6 +239,11 @@ async function startDebate() {
             },
             body: JSON.stringify({ topic, rounds })
         });
+
+        if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.error || `HTTP ${res.status}`);
+        }
 
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
@@ -212,7 +262,7 @@ async function startDebate() {
                 if (line.startsWith('data: ')) {
                     try {
                         const data = JSON.parse(line.substring(6));
-                        if (data.content) {
+                        if (data.content || data.text) {
                             messages.push(data);
                             renderDebateMessages(resultEl, messages);
                         }
@@ -223,9 +273,12 @@ async function startDebate() {
 
         if (messages.length === 0) {
             showResult('debate-result', '辩论完成，但未收到消息', true);
+        } else {
+            showToast('辩论完成！', 'success');
         }
     } catch (e) {
         showResult('debate-result', '请求失败: ' + e.message, true);
+        showToast('请求失败: ' + e.message, 'error');
     }
 }
 

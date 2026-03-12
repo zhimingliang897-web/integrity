@@ -252,9 +252,9 @@
                         <div class="pdf-form-row">
                             <label>选择模型</label>
                             <div style="display:flex; gap:16px;">
-                                <label><input type="checkbox" id="cb-qwen-turbo" checked> Qwen-Turbo</label>
-                                <label><input type="checkbox" id="cb-qwen-plus"> Qwen-Plus</label>
-                                <label><input type="checkbox" id="cb-qwen-max"> Qwen-Max</label>
+                                <label><input type="checkbox" id="cb-qwen-turbo" value="qwen-turbo" checked> Qwen-Turbo</label>
+                                <label><input type="checkbox" id="cb-qwen-plus" value="qwen-plus"> Qwen-Plus</label>
+                                <label><input type="checkbox" id="cb-qwen-max" value="qwen-max"> Qwen-Max</label>
                             </div>
                         </div>
                         <button class="pdf-btn" onclick="startAICompare()">开始对比</button>
@@ -276,6 +276,13 @@
                         <div class="pdf-form-row">
                             <label>上传图片</label>
                             <input type="file" id="image-prompt-file" accept="image/*">
+                        </div>
+                        <div class="pdf-form-row">
+                            <label>提示词风格</label>
+                            <select id="image-prompt-style" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;">
+                                <option value="dalle">DALL-E 风格（自然语言）</option>
+                                <option value="sd">Stable Diffusion 风格（关键词）</option>
+                            </select>
                         </div>
                         <button class="pdf-btn" onclick="analyzeImage()">生成提示词</button>
                         <div id="image-prompt-result" style="margin-top:16px;"></div>
@@ -385,6 +392,10 @@
                                     <option value="end">最后面</option>
                                 </select>
                             </div>
+                            <div class="pdf-form-row" id="p-insert-page-row" style="display:none;">
+                                <label>在第几页之后插入</label>
+                                <input type="number" id="p-insert-page" value="1" min="1" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;">
+                            </div>
                             <button class="pdf-btn" onclick="pdfOp('insert')">插入</button>
                             <div class="pdf-result" id="r-insert"></div>
                         </div>
@@ -413,17 +424,38 @@
                             <p style="color:#888;margin-bottom:12px;">PDF 转图片</p>
                             <div class="pdf-form-row">
                                 <label>上传 PDF</label>
-                                <input type="file" id="p-toimg-file" accept=".pdf">
+                                <input type="file" id="p-toimg-file" accept=".pdf" onchange="autoFillEndPage(this)">
                             </div>
                             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
                                 <div class="pdf-form-row">
                                     <label>起始页</label>
-                                    <input type="number" id="p-toimg-start" value="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
+                                    <input type="number" id="p-toimg-start" value="1" min="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
                                 </div>
                                 <div class="pdf-form-row">
                                     <label>结束页</label>
-                                    <input type="number" id="p-toimg-end" value="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
+                                    <input type="number" id="p-toimg-end" value="1" min="1" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
                                 </div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+                                <div class="pdf-form-row">
+                                    <label>DPI</label>
+                                    <select id="p-toimg-dpi" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
+                                        <option value="72">72 (快速)</option>
+                                        <option value="150" selected>150 (标准)</option>
+                                        <option value="300">300 (高清)</option>
+                                    </select>
+                                </div>
+                                <div class="pdf-form-row">
+                                    <label>格式</label>
+                                    <select id="p-toimg-fmt" style="width:100%;padding:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:#fff;">
+                                        <option value="png">PNG</option>
+                                        <option value="jpg" selected>JPG</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="pdf-form-row" style="display:flex;align-items:center;gap:8px;">
+                                <input type="checkbox" id="p-toimg-long">
+                                <label for="p-toimg-long">合并为长图</label>
                             </div>
                             <button class="pdf-btn" onclick="pdfOp('to_images')">导出图片</button>
                             <div class="pdf-result" id="r-to_images"></div>
@@ -518,5 +550,17 @@
     <script src="assets/js/tools-demo.js"></script>
     <script src="assets/js/tools-pdf.js"></script>
     <script src="assets/js/tools-online.js"></script>
+    <script>
+        // 插入 PDF 位置选择逻辑
+        document.addEventListener('DOMContentLoaded', function() {
+            const insertPos = document.getElementById('p-insert-pos');
+            const pageRow = document.getElementById('p-insert-page-row');
+            if (insertPos && pageRow) {
+                insertPos.addEventListener('change', function() {
+                    pageRow.style.display = this.value === 'after' ? 'block' : 'none';
+                });
+            }
+        });
+    </script>
 </body>
 </html>

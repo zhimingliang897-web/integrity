@@ -6,7 +6,18 @@
 const API_BASE = window.location.origin;
 let isRegisterMode = false;
 
-// 检查登录状态
+function showToast(message, type = 'info') {
+    const existing = document.querySelector('.toast');
+    if (existing) existing.remove();
+    
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.remove(), 3000);
+}
+
 function checkAuth() {
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('username');
@@ -15,55 +26,80 @@ function checkAuth() {
     const onlineContent = document.getElementById('online-tools-content');
     
     if (token && username) {
-        btn.textContent = username;
-        btn.classList.add('logged-in');
-        btn.onclick = () => { if(confirm('确定退出登录？')) logout(); };
+        if (btn) {
+            btn.textContent = username;
+            btn.classList.add('logged-in');
+            btn.onclick = () => { if(confirm('确定退出登录？')) logout(); };
+        }
         if (loginPrompt) loginPrompt.style.display = 'none';
         if (onlineContent) onlineContent.style.display = 'block';
     } else {
-        btn.textContent = '登录';
-        btn.classList.remove('logged-in');
-        btn.onclick = showAuthModal;
+        if (btn) {
+            btn.textContent = '登录';
+            btn.classList.remove('logged-in');
+            btn.onclick = showAuthModal;
+        }
         if (loginPrompt) loginPrompt.style.display = 'block';
         if (onlineContent) onlineContent.style.display = 'none';
     }
 }
 
-// 显示/隐藏登录弹窗
 function showAuthModal() {
-    document.getElementById('auth-modal').style.display = 'flex';
-    document.getElementById('auth-error').style.display = 'none';
+    const modal = document.getElementById('auth-modal');
+    const errorEl = document.getElementById('auth-error');
+    if (modal) modal.style.display = 'flex';
+    if (errorEl) errorEl.style.display = 'none';
 }
 
 function hideAuthModal() {
-    document.getElementById('auth-modal').style.display = 'none';
-    document.getElementById('auth-username').value = '';
-    document.getElementById('auth-password').value = '';
-    document.getElementById('auth-invite').value = '';
+    const modal = document.getElementById('auth-modal');
+    const usernameEl = document.getElementById('auth-username');
+    const passwordEl = document.getElementById('auth-password');
+    const inviteEl = document.getElementById('auth-invite');
+    const errorEl = document.getElementById('auth-error');
+    
+    if (modal) modal.style.display = 'none';
+    if (usernameEl) usernameEl.value = '';
+    if (passwordEl) passwordEl.value = '';
+    if (inviteEl) inviteEl.value = '';
+    if (errorEl) errorEl.style.display = 'none';
 }
 
-// 切换登录/注册模式
 function toggleAuthMode() {
     isRegisterMode = !isRegisterMode;
-    document.getElementById('auth-title').textContent = isRegisterMode ? '注册' : '登录';
-    document.getElementById('auth-submit').textContent = isRegisterMode ? '注册' : '登录';
-    document.getElementById('invite-code-wrap').style.display = isRegisterMode ? 'block' : 'none';
-    document.getElementById('switch-text').textContent = isRegisterMode ? '已有账号？' : '没有账号？';
-    document.getElementById('switch-link').textContent = isRegisterMode ? '登录' : '注册';
-    document.getElementById('auth-error').style.display = 'none';
+    
+    const titleEl = document.getElementById('auth-title');
+    const submitEl = document.getElementById('auth-submit');
+    const inviteWrapEl = document.getElementById('invite-code-wrap');
+    const switchTextEl = document.getElementById('switch-text');
+    const switchLinkEl = document.getElementById('switch-link');
+    const errorEl = document.getElementById('auth-error');
+    
+    if (titleEl) titleEl.textContent = isRegisterMode ? '注册' : '登录';
+    if (submitEl) submitEl.textContent = isRegisterMode ? '注册' : '登录';
+    if (inviteWrapEl) inviteWrapEl.style.display = isRegisterMode ? 'block' : 'none';
+    if (switchTextEl) switchTextEl.textContent = isRegisterMode ? '已有账号？' : '没有账号？';
+    if (switchLinkEl) switchLinkEl.textContent = isRegisterMode ? '登录' : '注册';
+    if (errorEl) errorEl.style.display = 'none';
     return false;
 }
 
-// 处理登录/注册
 async function handleAuth() {
-    const username = document.getElementById('auth-username').value.trim();
-    const password = document.getElementById('auth-password').value;
-    const invite = document.getElementById('auth-invite').value.trim();
+    const usernameEl = document.getElementById('auth-username');
+    const passwordEl = document.getElementById('auth-password');
+    const inviteEl = document.getElementById('auth-invite');
     const errorEl = document.getElementById('auth-error');
+    const submitEl = document.getElementById('auth-submit');
+    
+    const username = usernameEl ? usernameEl.value.trim() : '';
+    const password = passwordEl ? passwordEl.value : '';
+    const invite = inviteEl ? inviteEl.value.trim() : '';
     
     if (!username || !password) {
-        errorEl.textContent = '请填写用户名和密码';
-        errorEl.style.display = 'block';
+        if (errorEl) {
+            errorEl.textContent = '请填写用户名和密码';
+            errorEl.style.display = 'block';
+        }
         return;
     }
     
@@ -71,6 +107,11 @@ async function handleAuth() {
     const body = isRegisterMode 
         ? { username, password, invite_code: invite }
         : { username, password };
+    
+    if (submitEl) {
+        submitEl.disabled = true;
+        submitEl.textContent = isRegisterMode ? '注册中...' : '登录中...';
+    }
     
     try {
         const res = await fetch(API_BASE + endpoint, {
@@ -81,27 +122,38 @@ async function handleAuth() {
         const data = await res.json();
         
         if (data.error) {
-            errorEl.textContent = data.error;
-            errorEl.style.display = 'block';
+            if (errorEl) {
+                errorEl.textContent = data.error;
+                errorEl.style.display = 'block';
+            }
+            showToast(data.error, 'error');
         } else {
             localStorage.setItem('token', data.token);
             localStorage.setItem('username', data.username);
             hideAuthModal();
             checkAuth();
+            showToast(isRegisterMode ? '注册成功！' : '登录成功！', 'success');
         }
     } catch (e) {
-        errorEl.textContent = '网络错误: ' + e.message;
-        errorEl.style.display = 'block';
+        if (errorEl) {
+            errorEl.textContent = '网络错误: ' + e.message;
+            errorEl.style.display = 'block';
+        }
+        showToast('网络错误: ' + e.message, 'error');
         console.error('Auth error:', e);
+    } finally {
+        if (submitEl) {
+            submitEl.disabled = false;
+            submitEl.textContent = isRegisterMode ? '注册' : '登录';
+        }
     }
 }
 
-// 退出登录
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
     checkAuth();
+    showToast('已退出登录', 'info');
 }
 
-// 页面加载时检查登录状态
 document.addEventListener('DOMContentLoaded', checkAuth);

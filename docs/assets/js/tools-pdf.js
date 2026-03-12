@@ -82,12 +82,14 @@ async function pdfOp(op) {
 
     const resultId = 'r-' + op;
     const resultEl = document.getElementById(resultId);
+    if (!resultEl) return;
+    
     const btn = resultEl.previousElementSibling;
 
     resultEl.className = 'pdf-result';
     resultEl.innerHTML = '处理中...';
     resultEl.style.display = 'block';
-    btn.disabled = true;
+    if (btn) btn.disabled = true;
 
     const fd = new FormData();
     let endpoint = '';
@@ -97,7 +99,8 @@ async function pdfOp(op) {
             const files = document.getElementById('p-img2pdf-files').files;
             if (!files.length) throw new Error('请选择图片');
             for (const f of files) fd.append('images', f);
-            if (document.getElementById('p-img2pdf-landscape').checked) fd.append('force_landscape', '1');
+            const landscapeEl = document.getElementById('p-img2pdf-landscape');
+            if (landscapeEl && landscapeEl.checked) fd.append('force_landscape', '1');
             endpoint = '/api/tools/pdf/images_to_pdf';
 
         } else if (op === 'merge') {
@@ -122,7 +125,8 @@ async function pdfOp(op) {
             fd.append('main_pdf', main);
             fd.append('insert_pdf', ins);
             fd.append('position', document.getElementById('p-insert-pos').value);
-            fd.append('page_index', document.getElementById('p-insert-page').value);
+            const pageIdxEl = document.getElementById('p-insert-page');
+            if (pageIdxEl) fd.append('page_index', pageIdxEl.value);
             endpoint = '/api/tools/pdf/insert';
 
         } else if (op === 'reorder') {
@@ -143,10 +147,12 @@ async function pdfOp(op) {
             fd.append('pdf', file);
             fd.append('start_page', document.getElementById('p-toimg-start').value);
             fd.append('end_page', document.getElementById('p-toimg-end').value);
-            fd.append('dpi', document.getElementById('p-toimg-dpi').value);
-            fd.append('format', document.getElementById('p-toimg-fmt').value);
-            fd.append('max_size', document.getElementById('p-toimg-maxsize').value);
-            if (document.getElementById('p-toimg-long').checked) fd.append('long_image', '1');
+            const dpiEl = document.getElementById('p-toimg-dpi');
+            fd.append('dpi', dpiEl ? dpiEl.value : '150');
+            const fmtEl = document.getElementById('p-toimg-fmt');
+            fd.append('format', fmtEl ? fmtEl.value : 'jpg');
+            const longEl = document.getElementById('p-toimg-long');
+            if (longEl && longEl.checked) fd.append('long_image', '1');
             endpoint = '/api/tools/pdf/to_images';
         }
 
@@ -169,6 +175,6 @@ async function pdfOp(op) {
         resultEl.className = 'pdf-result err';
         resultEl.textContent = e.message;
     } finally {
-        btn.disabled = false;
+        if (btn) btn.disabled = false;
     }
 }
