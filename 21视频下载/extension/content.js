@@ -77,8 +77,8 @@
         btn.addEventListener('click', async () => {
             const url = getVideoUrl();
 
-            if (!url) {
-                showNotification('⚠️ 请先进入视频播放页面再点击下载');
+            if (!url || url === 'NEED_IFRAME') {
+                showNotification('⚠️ 此页面是视频入口页，请点击进入实际视频播放页面后再下载');
                 return;
             }
 
@@ -158,18 +158,28 @@
 
         // NTU页面：尝试从iframe找真实视频地址
         if (hostname.includes('ntu.edu')) {
-            const panoptoIframe = document.querySelector('iframe[src*="panopto.com"]');
+            const panoptoIframe = document.querySelector('iframe[src*="panopto"]');
             if (panoptoIframe) return panoptoIframe.src;
 
-            const kalturaIframe = document.querySelector('iframe[src*="kaltura.com"]');
+            const kalturaIframe = document.querySelector('iframe[src*="kaltura"]');
             if (kalturaIframe) return kalturaIframe.src;
 
             const mediaIframe = document.querySelector('iframe[src*="/media/"], iframe[src*="mediasite"], iframe[src*="lecture"]');
             if (mediaIframe) return mediaIframe.src;
 
-            // LTI wrapper URL 无法下载，提示用户
+            // LTI wrapper：尝试从 URL 的 toolHref 参数解析实际地址
             if (currentUrl.includes('launchFrame') || currentUrl.includes('/lti/')) {
-                return null;
+                try {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const toolHref = urlParams.get('toolHref');
+                    if (toolHref) {
+                        const decoded = decodeURIComponent(toolHref.replace(/~2F/gi, '/'));
+                        if (decoded.includes('panopto') || decoded.includes('kaltura')) {
+                            return decoded;
+                        }
+                    }
+                } catch (e) {}
+                return 'NEED_IFRAME';
             }
         }
 

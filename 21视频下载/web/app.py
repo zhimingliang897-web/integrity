@@ -42,9 +42,11 @@ app.add_middleware(
 
 # 配置静态文件和模板
 base_dir = os.path.dirname(os.path.abspath(__file__))
-web_dir = os.path.join(os.path.dirname(base_dir), "web")
-app.mount("/static", StaticFiles(directory=os.path.join(web_dir, "static")), name="static")
-templates = Jinja2Templates(directory=os.path.join(web_dir, "templates"))
+web_dir = os.path.dirname(base_dir)
+static_dir = os.path.join(base_dir, "static")
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+templates = Jinja2Templates(directory=os.path.join(base_dir, "templates"))
 
 
 # ==================== 数据模型 ====================

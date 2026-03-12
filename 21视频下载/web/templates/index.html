@@ -87,13 +87,24 @@
                     <!-- Cookie配置 -->
                     <div class="mb-4">
                         <label class="block text-sm text-gray-400 mb-2">Cookie (可选)</label>
-                        <textarea 
-                            id="cookiesInput" 
+                        <div id="cookieStatus" class="hidden mb-2 p-2 bg-green-900/40 border border-green-700 rounded-lg text-xs text-green-400 flex items-center gap-2">
+                            <i class="fas fa-check-circle"></i>
+                            <span id="cookieStatusText"></span>
+                        </div>
+                        <div class="p-3 bg-blue-900/30 border border-blue-700/50 rounded-lg mb-2">
+                            <p class="text-xs text-blue-300 mb-2">
+                                <i class="fas fa-puzzle-piece mr-1"></i>
+                                推荐：安装浏览器扩展，在B站/NTU页面一键同步Cookie
+                            </p>
+                            <p class="text-xs text-gray-400">或手动粘贴 cookies.txt 内容：</p>
+                        </div>
+                        <textarea
+                            id="cookiesInput"
                             class="w-full bg-gray-800/50 border border-gray-700 rounded-lg p-3 text-sm focus:outline-none focus:border-purple-500 resize-none"
-                            rows="4"
+                            rows="3"
                             placeholder="粘贴cookies.txt内容..."
                         ></textarea>
-<p class="text-xs text-gray-500 mt-1">用于下载B站高清视频和NTU课程</p>
+                        <p class="text-xs text-gray-500 mt-1">用于下载B站高清视频和NTU课程</p>
                     </div>
                     
                     <!-- 保存目录 -->
@@ -205,13 +216,15 @@
             try {
                 const res = await fetch('/api/config');
                 const data = await res.json();
-                
+
                 if (data.cookies_exists) {
-                    // 只显示长度，不显示内容
-                    document.getElementById('cookiesInput').placeholder = 
-                        `Cookie已配置 (${data.cookies_length} 字符)`;
+                    const statusEl = document.getElementById('cookieStatus');
+                    const statusText = document.getElementById('cookieStatusText');
+                    statusEl.classList.remove('hidden');
+                    statusText.textContent = `Cookie 已配置（${data.cookies_length} 字符）`;
+                    document.getElementById('cookiesInput').placeholder = '留空则保留已有Cookie，重新粘贴则覆盖';
                 }
-                
+
                 document.getElementById('downloadDirInput').value = data.download_dir;
             } catch (e) {
                 console.error('Failed to load config:', e);
