@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token 消耗对比工具 - Integrity Lab</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../tools-modules/tools-styles.css">
+    <style>
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 16px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th {
+            background: var(--bg-body);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .comparison-table td {
+            color: var(--text-muted);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table .highlight {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .comparison-table .good {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .comparison-table .bad {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .input-modes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .mode-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .mode-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .mode-card .icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .mode-card h4 {
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .mode-card p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .insight-box {
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05));
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .insight-box h3 {
+            color: #fbbf24;
+            margin-bottom: 16px;
+        }
+
+        .insight-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .insight-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .insight-list li:last-child {
+            border-bottom: none;
+        }
+
+        .insight-list .icon {
+            color: #fbbf24;
+            font-size: 18px;
+        }
+
+        .model-support {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .model-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .model-item .provider {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .model-item .model-name {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .workflow-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .workflow-step {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .workflow-step .step-num {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .workflow-step .content h4 {
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .workflow-step .content p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .code-block {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: #a5b4fc;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tech-tag {
+            padding: 4px 12px;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid #fbbf24;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #fbbf24;
+        }
+
+        @media (max-width: 768px) {
+            .input-modes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">Integrity Lab</a>
+                <div class="nav-links">
+                    <a href="../index.html">首页</a>
+                    <a href="../news.html">AI 热点</a>
+                    <a href="../tools.html">工具库</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>🪙 Token 消耗对比工具</h1>
+        <p>量化测试相同语义在不同语言和模型下的 Token 开销差异</p>
+    </div>
+
+    <div class="container">
+        <section class="demo-section">
+            <h2>三种输入模式</h2>
+            
+            <div class="input-modes">
+                <div class="mode-card">
+                    <div class="icon">🇨🇳</div>
+                    <h4>中文文本</h4>
+                    <p>直接输入中文问题，模型用中文回答</p>
+                </div>
+                <div class="mode-card">
+                    <div class="icon">🇺🇸</div>
+                    <h4>英文文本</h4>
+                    <p>输入英文问题，强制模型用中文回答</p>
+                </div>
+                <div class="mode-card">
+                    <div class="icon">🖼️</div>
+                    <h4>图片中文</h4>
+                    <p>图片 + 中文指令，多模态模型处理</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>Token 消耗对比示例</h2>
+            
+            <p style="color: var(--text-muted); margin-bottom: 16px;">相同语义问题 "请解释什么是机器学习" 在不同模型下的 Token 消耗：</p>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>模型</th>
+                        <th>中文输入</th>
+                        <th>英文输入</th>
+                        <th>图片输入</th>
+                        <th>差异分析</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>qwen-turbo</strong></td>
+                        <td class="good">156 tokens</td>
+                        <td class="highlight">203 tokens</td>
+                        <td class="bad">N/A</td>
+                        <td>中文节省 23%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>qwen-plus</strong></td>
+                        <td class="good">148 tokens</td>
+                        <td class="highlight">195 tokens</td>
+                        <td class="bad">N/A</td>
+                        <td>中文节省 24%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>qwen-max</strong></td>
+                        <td class="good">152 tokens</td>
+                        <td class="highlight">198 tokens</td>
+                        <td class="bad">N/A</td>
+                        <td>中文节省 23%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>qwen-vl-plus</strong></td>
+                        <td class="good">164 tokens</td>
+                        <td class="highlight">212 tokens</td>
+                        <td class="bad">1,847 tokens</td>
+                        <td>图片消耗最高</td>
+                    </tr>
+                    <tr>
+                        <td><strong>gpt-4o</strong></td>
+                        <td class="good">142 tokens</td>
+                        <td class="highlight">178 tokens</td>
+                        <td class="bad">1,523 tokens</td>
+                        <td>中文节省 20%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>gpt-4o-mini</strong></td>
+                        <td class="good">138 tokens</td>
+                        <td class="highlight">172 tokens</td>
+                        <td class="bad">1,456 tokens</td>
+                        <td>性价比最高</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="demo-section">
+            <h2>关键发现</h2>
+            
+            <div class="insight-box">
+                <h3>💡 优化建议</h3>
+                <ul class="insight-list">
+                    <li>
+                        <span class="icon">💰</span>
+                        <div>
+                            <strong>中文输入更省 Token</strong>
+                            <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 14px;">
+                                相同语义下，中文比英文节省约 20-25% 的 Token 消耗
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="icon">🖼️</span>
+                        <div>
+                            <strong>图片输入成本最高</strong>
+                            <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 14px;">
+                                图片会转换为大量 Token，成本是文本的 10 倍以上
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="icon">🎯</span>
+                        <div>
+                            <strong>选择合适的模型</strong>
+                            <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 14px;">
+                                简单任务用 qwen-turbo/gpt-4o-mini，复杂任务用 qwen-max/gpt-4o
+                            </p>
+                        </div>
+                    </li>
+                    <li>
+                        <span class="icon">📝</span>
+                        <div>
+                            <strong>Prompt 优化</strong>
+                            <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 14px;">
+                                精简 Prompt，避免冗余描述，可显著降低成本
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>支持的模型</h2>
+            
+            <div class="example-grid">
+                <div class="feature-card">
+                    <div class="icon">☁️</div>
+                    <h3>阿里云 Qwen 系列</h3>
+                    <p>qwen-turbo、qwen-plus、qwen-max、qwen-vl-plus</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🤖</div>
+                    <h3>OpenAI GPT 系列</h3>
+                    <p>gpt-4o、gpt-4o-mini、gpt-4-turbo</p>
+                </div>
+            </div>
+
+            <div class="model-support">
+                <div class="model-item">
+                    <span class="provider">Qwen</span>
+                    <span class="model-name">qwen-turbo</span>
+                </div>
+                <div class="model-item">
+                    <span class="provider">Qwen</span>
+                    <span class="model-name">qwen-plus</span>
+                </div>
+                <div class="model-item">
+                    <span class="provider">Qwen</span>
+                    <span class="model-name">qwen-max</span>
+                </div>
+                <div class="model-item">
+                    <span class="provider">Qwen</span>
+                    <span class="model-name">qwen-vl-plus</span>
+                </div>
+                <div class="model-item">
+                    <span class="provider">OpenAI</span>
+                    <span class="model-name">gpt-4o</span>
+                </div>
+                <div class="model-item">
+                    <span class="provider">OpenAI</span>
+                    <span class="model-name">gpt-4o-mini</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>使用流程</h2>
+            
+            <div class="workflow-section">
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="step-num">1</div>
+                        <div class="content">
+                            <h4>输入问题</h4>
+                            <p>输入你想要测试的问题内容</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">2</div>
+                        <div class="content">
+                            <h4>选择输入模式</h4>
+                            <p>选择中文文本、英文文本或图片中文</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">3</div>
+                        <div class="content">
+                            <h4>选择模型</h4>
+                            <p>选择要测试的大模型</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">4</div>
+                        <div class="content">
+                            <h4>查看结果</h4>
+                            <p>实时显示 Prompt/Completion/Total Token 消耗</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>快速开始</h2>
+            
+            <div class="code-block">
+                <code>
+# 安装依赖<br>
+pip install -r requirements.txt<br><br>
+
+# 配置 API Key（在 main.py 中）<br>
+DASHSCOPE_API_KEY = "your-aliyun-key"<br>
+OPENAI_API_KEY = "your-openai-key"<br><br>
+
+# 运行<br>
+python main.py
+                </code>
+            </div>
+
+            <div class="alert-box" style="background: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.3); color: #fbbf24; border-radius: 8px; padding: 16px; margin: 16px 0;">
+                💡 <strong>注意</strong>：图片中文模式仅支持 qwen-vl-plus 模型
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>技术实现</h2>
+            
+            <div class="example-grid">
+                <div class="feature-card">
+                    <div class="icon">🐍</div>
+                    <h3>Python 核心</h3>
+                    <p>基于 Python 3.8+ 开发，兼容性好。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🖼️</div>
+                    <h3>Pillow</h3>
+                    <p>图片处理库，支持图片输入模式。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🖥️</div>
+                    <h3>Tkinter</h3>
+                    <p>Python 自带 GUI 库，无需额外安装。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🌐</div>
+                    <h3>Requests</h3>
+                    <p>HTTP 请求库，调用各大模型 API。</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 32px;">技术栈</h3>
+            <div class="tech-stack">
+                <span class="tech-tag">Python 3.8+</span>
+                <span class="tech-tag">Tkinter</span>
+                <span class="tech-tag">Pillow</span>
+                <span class="tech-tag">Requests</span>
+                <span class="tech-tag">DashScope</span>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <div class="feature-highlight" style="text-align: center; background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05)); border-color: rgba(251, 191, 36, 0.2);">
+                <h3 style="color: #fbbf24;">📥 获取源码</h3>
+                <p style="margin-bottom: 20px;">优化你的 Prompt 成本</p>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/18tokens" 
+                   style="display: inline-block; padding: 12px 32px; background: #fbbf24; color: white; border-radius: 8px; text-decoration: none; font-weight: bold;"
+                   target="_blank">
+                    查看源码 →
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Integrity Lab. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com/zhimingliang897-web/integrity" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

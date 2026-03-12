@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小红书图片生成器 - Integrity Lab</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../tools-modules/tools-styles.css">
+    <style>
+        .slide-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .slide-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .slide-card .slide-img {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .slide-card.cover .slide-img {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+        }
+
+        .slide-card.content .slide-img {
+            background: #fff;
+        }
+
+        .slide-card .slide-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .slide-card .slide-subtitle {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .slide-card .color-block {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin: 4px 0;
+            font-size: 11px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .slide-card .color-block.normal {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .slide-card .color-block.key {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .slide-card .color-block.bad {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .slide-card .color-block.good {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .slide-card .slide-label {
+            padding: 8px 12px;
+            background: var(--bg-body);
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .color-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .legend-item .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-item.normal { background: #f5f5f5; }
+        .legend-item.normal .dot { background: #e5e5e5; }
+
+        .legend-item.key { background: #fef3c7; }
+        .legend-item.key .dot { background: #fbbf24; }
+
+        .legend-item.bad { background: #fee2e2; }
+        .legend-item.bad .dot { background: #ef4444; }
+
+        .legend-item.good { background: #d1fae5; }
+        .legend-item.good .dot { background: #10b981; }
+
+        .legend-item.note { background: #dbeafe; }
+        .legend-item.note .dot { background: #3b82f6; }
+
+        .workflow-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .workflow-step {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .workflow-step .step-num {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #ec4899, #f43f5e);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .workflow-step .content h4 {
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .workflow-step .content p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .feature-highlight {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(244, 63, 94, 0.05));
+            border: 1px solid rgba(236, 72, 153, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .feature-highlight h3 {
+            color: #ec4899;
+            margin-bottom: 16px;
+        }
+
+        .code-block {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: #a5b4fc;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tech-tag {
+            padding: 4px 12px;
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px solid #ec4899;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #ec4899;
+        }
+
+        .persona-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .persona-box h3 {
+            color: #ec4899;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .persona-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .persona-feature {
+            padding: 12px 16px;
+            background: var(--bg-body);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .persona-feature strong {
+            color: #ec4899;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">Integrity Lab</a>
+                <div class="nav-links">
+                    <a href="../index.html">首页</a>
+                    <a href="../news.html">AI 热点</a>
+                    <a href="../tools.html">工具库</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>🖼️ 小红书图片生成器</h1>
+        <p>将文章一键转换为精美小红书多图，AI 智能拆分内容</p>
+    </div>
+
+    <div class="container">
+        <section class="demo-section">
+            <h2>生成效果预览</h2>
+            
+            <div class="slide-preview">
+                <div class="slide-card cover">
+                    <div class="slide-img">
+                        <div class="slide-title">AI 工具的正确打开方式</div>
+                        <div class="slide-subtitle">别再当韭菜了</div>
+                    </div>
+                    <div class="slide-label">封面图</div>
+                </div>
+                <div class="slide-card content">
+                    <div class="slide-img">
+                        <div class="color-block normal">大家都在说 AI 能提高效率</div>
+                        <div class="color-block key">说白了：大部分人只会问问题</div>
+                        <div class="color-block bad">韭菜行为：充了会员从不用</div>
+                        <div class="color-block good">认真的：先学会提问技巧</div>
+                    </div>
+                    <div class="slide-label">内容页 1</div>
+                </div>
+                <div class="slide-card content">
+                    <div class="slide-img">
+                        <div class="color-block normal">Prompt 写得好不好</div>
+                        <div class="color-block key">说白了：决定了你是不是在浪费时间</div>
+                        <div class="color-block good">认真的：结构化你的需求</div>
+                        <div class="color-block normal">给示例，给格式，给约束</div>
+                    </div>
+                    <div class="slide-label">内容页 2</div>
+                </div>
+                <div class="slide-card content">
+                    <div class="slide-img">
+                        <div class="color-block bad">韭菜行为：复制粘贴 Prompt</div>
+                        <div class="color-block key">说白了：别人场景和你不一样</div>
+                        <div class="color-block good">认真的：根据需求调整优化</div>
+                        <div class="color-block normal">AI 是工具，不是万能钥匙</div>
+                    </div>
+                    <div class="slide-label">内容页 3</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>色块含义</h2>
+            
+            <div class="color-legend">
+                <div class="legend-item normal">
+                    <div class="dot"></div>
+                    <span>铺垫背景</span>
+                </div>
+                <div class="legend-item key">
+                    <div class="dot"></div>
+                    <span>扎心真相「说白了」</span>
+                </div>
+                <div class="legend-item bad">
+                    <div class="dot"></div>
+                    <span>毒舌吐槽「韭菜行为」</span>
+                </div>
+                <div class="legend-item good">
+                    <div class="dot"></div>
+                    <span>正经建议「认真的」</span>
+                </div>
+                <div class="legend-item note">
+                    <div class="dot"></div>
+                    <span>补刀彩蛋「多嘴一句」</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>内容风格：毒舌但真诚</h2>
+            
+            <div class="persona-box">
+                <h3>🎭 人设特点</h3>
+                <div class="persona-features">
+                    <div class="persona-feature">
+                        <strong>直击痛点</strong><br>
+                        不说废话，直接指出问题本质
+                    </div>
+                    <div class="persona-feature">
+                        <strong>毒舌表达</strong><br>
+                        用犀利语言吸引注意力
+                    </div>
+                    <div class="persona-feature">
+                        <strong>真诚建议</strong><br>
+                        吐槽背后给出实用方案
+                    </div>
+                    <div class="persona-feature">
+                        <strong>幽默风趣</strong><br>
+                        让人笑着接受批评
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>工作流程</h2>
+            
+            <div class="workflow-section">
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="step-num">1</div>
+                        <div class="content">
+                            <h4>输入文章</h4>
+                            <p>将你的文章保存为 .txt 文件，放入 input 目录</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">2</div>
+                        <div class="content">
+                            <h4>AI 智能拆分</h4>
+                            <p>通义千问分析文章，拆分为 4-6 张内容图的结构</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">3</div>
+                        <div class="content">
+                            <h4>风格化改写</h4>
+                            <p>用"毒舌但真诚"人设重新表达每个要点</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">4</div>
+                        <div class="content">
+                            <h4>图片渲染</h4>
+                            <p>Pillow 自动生成封面图和内容图（1080×1440 px）</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">5</div>
+                        <div class="content">
+                            <h4>评论区文案</h4>
+                            <p>自动生成 3 条实在建议 + 5 个话题标签</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>核心功能</h2>
+            
+            <div class="example-grid">
+                <div class="feature-card">
+                    <div class="icon">📄</div>
+                    <h3>智能拆分</h3>
+                    <p>AI 自动分析文章结构，拆分为适合小红书的多图形式。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🎨</div>
+                    <h3>精美样式</h3>
+                    <p>1080×1440 标准竖版图片，视觉冲击力强。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🎭</div>
+                    <h3>个性人设</h3>
+                    <p>毒舌但真诚的风格，让内容更有记忆点。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">💬</div>
+                    <h3>评论区文案</h3>
+                    <p>自动生成评论区互动内容和话题标签。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>快速开始</h2>
+            
+            <div class="feature-highlight">
+                <h3>📦 安装依赖</h3>
+                <div class="code-block">
+                    <code>pip install -r requirements.txt</code>
+                </div>
+            </div>
+
+            <div class="feature-highlight">
+                <h3>⚙️ 配置 API Key</h3>
+                <div class="code-block">
+                    <code>
+# config.yaml<br>
+api:<br>
+  api_key: sk-xxxxxxxxxxxxxxxx<br>
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1<br>
+  model: qwen3.5-plus
+                    </code>
+                </div>
+            </div>
+
+            <div class="feature-highlight">
+                <h3>🚀 运行</h3>
+                <div class="code-block">
+                    <code>
+# 完整生成（图片 + 评论区）<br>
+python scripts/main.py input/my_article.txt<br><br>
+
+# 只生成图片<br>
+python scripts/main.py input/my_article.txt --no-comments
+                    </code>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>输出结构</h2>
+            
+            <div class="code-block" style="background: var(--bg-card); border: 1px solid var(--border);">
+                <code style="color: var(--text-primary);">
+output/&lt;文章名&gt;/ <br>
+├── slide_00_cover.png   # 封面图<br>
+├── slide_01.png         # 内容页 1<br>
+├── slide_02.png         # 内容页 2<br>
+├── slide_03.png         # 内容页 3<br>
+├── slide_04.png         # 内容页 4<br>
+└── comments.txt         # 评论区文案
+                </code>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>技术实现</h2>
+            <div class="example-grid">
+                <div class="feature-card">
+                    <div class="icon">🐍</div>
+                    <h3>Python 核心</h3>
+                    <p>基于 Python 3.10+ 开发，模块化设计。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🧠</div>
+                    <h3>通义千问</h3>
+                    <p>使用阿里云大模型进行内容分析和改写。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🖼️</div>
+                    <h3>Pillow</h3>
+                    <p>高质量图片渲染，支持自定义字体。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📝</div>
+                    <h3>Prompt 工程</h3>
+                    <p>精心设计的提示词，确保输出质量。</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 32px;">技术栈</h3>
+            <div class="tech-stack">
+                <span class="tech-tag">Python 3.10+</span>
+                <span class="tech-tag">Qwen API</span>
+                <span class="tech-tag">Pillow</span>
+                <span class="tech-tag">OpenAI SDK</span>
+                <span class="tech-tag">PyYAML</span>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <div class="feature-highlight" style="text-align: center;">
+                <h3>📥 获取源码</h3>
+                <p style="margin-bottom: 20px;">让你的文章变身小红书爆款图文</p>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/20AIer-xhs" 
+                   style="display: inline-block; padding: 12px 32px; background: #ec4899; color: white; border-radius: 8px; text-decoration: none; font-weight: bold;"
+                   target="_blank">
+                    查看源码 →
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Integrity Lab. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com/zhimingliang897-web/integrity" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

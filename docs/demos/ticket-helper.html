@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大麦抢票助手 - Integrity Lab</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../tools-modules/tools-styles.css">
+    <style>
+        .warning-banner {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05));
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .warning-banner .icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .warning-banner h3 {
+            color: #ef4444;
+            margin-bottom: 8px;
+        }
+
+        .warning-banner p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .workflow-diagram {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 24px 0;
+            text-align: center;
+        }
+
+        .workflow-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .flow-box {
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .flow-box.phone {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .flow-box.usb {
+            background: rgba(251, 191, 36, 0.2);
+            border: 1px solid #fbbf24;
+            color: #fbbf24;
+        }
+
+        .flow-box.pc {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid #10b981;
+            color: #10b981;
+        }
+
+        .flow-box.action {
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .flow-arrow {
+            font-size: 20px;
+            color: var(--text-muted);
+        }
+
+        .tech-architecture {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .arch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .arch-item {
+            background: var(--bg-body);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .arch-item .icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .arch-item .name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .arch-item .desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .step-list {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 16px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .step-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .step-item .step-num {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-item .content h4 {
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .step-item .content p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .feature-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .feature-item h4 {
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .feature-item p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .private-notice {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            color: #ef4444;
+            text-align: center;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tech-tag {
+            padding: 4px 12px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #ef4444;
+        }
+
+        .code-block {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: #a5b4fc;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .workflow-flow {
+                flex-direction: column;
+            }
+            
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">Integrity Lab</a>
+                <div class="nav-links">
+                    <a href="../index.html">首页</a>
+                    <a href="../news.html">AI 热点</a>
+                    <a href="../tools.html">工具库</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>🎫 大麦抢票助手</h1>
+        <p>通过电脑控制手机，自动完成大麦APP抢票流程</p>
+    </div>
+
+    <div class="container">
+        <section class="demo-section">
+            <div class="warning-banner">
+                <div class="icon">⚠️</div>
+                <div>
+                    <h3>免责声明</h3>
+                    <p>此工具仅供学习研究目的。请遵守相关法律法规和平台用户协议。使用自动化工具可能违反平台规则，请自行承担风险。本项目不公开源码。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>工作原理</h2>
+            
+            <div class="workflow-diagram">
+                <div class="workflow-flow">
+                    <div class="flow-box phone">📱 手机 (大麦APP)</div>
+                    <div class="flow-arrow">↔</div>
+                    <div class="flow-box usb">🔌 USB 调试</div>
+                    <div class="flow-arrow">↔</div>
+                    <div class="flow-box pc">💻 电脑 (Python脚本)</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-box action">🎯 自动抢票</div>
+                </div>
+            </div>
+
+            <div class="example-grid" style="margin-top: 24px;">
+                <div class="feature-card">
+                    <div class="icon">⏱️</div>
+                    <h3>精准计时</h3>
+                    <p>精确到毫秒级，在开票瞬间自动执行抢票操作。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🤖</div>
+                    <h3>自动化流程</h3>
+                    <p>自动点击购买按钮、选择场次、选择票价、确认订单。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">👤</div>
+                    <h3>实名认证</h3>
+                    <p>自动选择已添加的实名观演人信息。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🎯</div>
+                    <h3>多价位策略</h3>
+                    <p>支持票价优先级配置，首选价位抢不到自动降级。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>技术架构</h2>
+            
+            <div class="tech-architecture">
+                <h4 style="margin-bottom: 16px; color: var(--text-primary);">核心技术组件</h4>
+                <div class="arch-grid">
+                    <div class="arch-item">
+                        <div class="icon">🐍</div>
+                        <div class="name">Python</div>
+                        <div class="desc">主控脚本语言</div>
+                    </div>
+                    <div class="arch-item">
+                        <div class="icon">🤖</div>
+                        <div class="name">uiautomator2</div>
+                        <div class="desc">Android 自动化框架</div>
+                    </div>
+                    <div class="arch-item">
+                        <div class="icon">🔌</div>
+                        <div class="name">ADB</div>
+                        <div class="desc">Android 调试桥</div>
+                    </div>
+                    <div class="arch-item">
+                        <div class="icon">📱</div>
+                        <div class="name">大麦 APP</div>
+                        <div class="desc">目标应用</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>使用流程</h2>
+            
+            <div class="step-list">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <div class="content">
+                        <h4>手机端准备</h4>
+                        <p>开启 USB 调试模式，登录大麦 APP，添加实名观演人信息</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <div class="content">
+                        <h4>电脑端配置</h4>
+                        <p>安装 ADB 工具，创建 Conda 环境，安装依赖</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <div class="content">
+                        <h4>连接设备</h4>
+                        <p>USB 连接手机，运行测试脚本验证连接</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <div class="content">
+                        <h4>配置抢票信息</h4>
+                        <p>设置抢票时间、票价优先级、观演人姓名</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">5</div>
+                    <div class="content">
+                        <h4>运行脚本</h4>
+                        <p>提前 5 分钟运行，等待开票时间自动执行</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">6</div>
+                    <div class="content">
+                        <h4>完成支付</h4>
+                        <p>抢票成功后，在手机上完成支付流程</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>配置示例</h2>
+            
+            <div class="code-block">
+                <code>
+# config.py<br><br>
+
+# 抢票时间（精确到秒）<br>
+TARGET_TIME = "2026-03-20 10:00:00"<br><br>
+
+# 观演人姓名（必须与大麦APP中一致）<br>
+VIEWER_NAMES = ["张三", "李四"]<br><br>
+
+# 票价优先级（从高到低）<br>
+PRICE_PRIORITY = ["580", "380", "280"]<br><br>
+
+# 抢票失败重试次数<br>
+MAX_RETRY = 3
+                </code>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>注意事项</h2>
+            
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <h4>⏰ 提前测试</h4>
+                    <p>建议先用冷门演出测试完整流程，熟悉操作步骤。</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📱 保持屏幕常亮</h4>
+                    <p>抢票过程中手机屏幕需保持常亮，避免锁屏影响操作。</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🌐 网络稳定</h4>
+                    <p>确保网络连接稳定，建议使用 WiFi 环境。</p>
+                </div>
+                <div class="feature-item">
+                    <h4>⚠️ 风险提示</h4>
+                    <p>热门演出竞争激烈，自动化工具不保证 100% 成功。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>技术栈</h2>
+            <div class="tech-stack">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">uiautomator2</span>
+                <span class="tech-tag">ADB</span>
+                <span class="tech-tag">Conda</span>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <div class="private-notice">
+                🔒 <strong>私有项目</strong><br>
+                此项目仅供学习研究，不公开源码
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Integrity Lab. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com/zhimingliang897-web/integrity" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

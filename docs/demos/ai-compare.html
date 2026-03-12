@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>多模型对比平台 - Integrity Lab</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../tools-modules/tools-styles.css">
+    <style>
+        .compare-setup {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .model-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .model-chip {
+            padding: 6px 14px;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .model-chip:hover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .model-chip.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .model-chip .provider {
+            font-weight: 600;
+        }
+
+        .model-chip .model-name {
+            opacity: 0.9;
+        }
+
+        .providers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .provider-card {
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-body);
+        }
+
+        .provider-card.has-key {
+            border-color: var(--primary);
+        }
+
+        .provider-card .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .provider-card .name {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .provider-card .status {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .provider-card .status.ready {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .provider-card .status.not-ready {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+
+        .models-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .model-item {
+            padding: 4px 10px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .model-item:hover {
+            border-color: var(--primary);
+        }
+
+        .model-item.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .compare-results {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 16px;
+        }
+
+        .result-card {
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .result-card .card-header {
+            padding: 12px 16px;
+            background: rgba(59, 130, 246, 0.05);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-card .card-title {
+            font-weight: bold;
+            font-size: 14px;
+            color: var(--primary);
+        }
+
+        .result-card .card-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .result-card .card-body {
+            padding: 16px;
+            min-height: 100px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .result-card .card-body.error {
+            color: #f87171;
+        }
+
+        .result-card .loading-text {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .quick-actions button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+
+        .params-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .params-row .form-group {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .params-row .form-group.small {
+            max-width: 100px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tech-tag {
+            padding: 4px 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--primary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .badge.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .badge.warning {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">Integrity Lab</a>
+                <div class="nav-links">
+                    <a href="../index.html">首页</a>
+                    <a href="../news.html">AI 热点</a>
+                    <a href="../tools.html">工具库</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span id="username-display"></span>
+                <button id="auth-btn" onclick="handleAuth()">登录</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>⚖️ 多模型对比平台</h1>
+        <p>同一个问题，横向对比多个 AI 模型的回答质量</p>
+    </div>
+
+    <div class="container">
+        <section class="demo-section">
+            <h2>在线对比</h2>
+            
+            <div class="compare-setup">
+                <h3>输入问题</h3>
+                <div class="form-group">
+                    <textarea id="question" class="form-control" rows="3" 
+                              placeholder="输入你的问题，例如：请解释什么是机器学习？"></textarea>
+                </div>
+
+                <div class="params-row">
+                    <div class="form-group">
+                        <label>系统提示词（可选）</label>
+                        <input type="text" id="system-prompt" class="form-control" 
+                               placeholder="例如：你是一个专业的技术顾问">
+                    </div>
+                    <div class="form-group small">
+                        <label>温度</label>
+                        <input type="number" id="temperature" class="form-control" 
+                               min="0" max="2" step="0.1" value="0.7">
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 24px;">选择模型</h3>
+                <div class="quick-actions">
+                    <button class="btn-secondary" onclick="selectAll()">全选</button>
+                    <button class="btn-secondary" onclick="deselectAll()">全不选</button>
+                </div>
+
+                <div id="providers-grid" class="providers-grid">
+                </div>
+
+                <button id="start-compare-btn" class="btn-primary" onclick="startCompare()">
+                    开始对比
+                </button>
+            </div>
+
+            <div id="compare-results" class="compare-results" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>对比结果</h3>
+                    <button class="btn-secondary" onclick="exportResults()">导出 Markdown</button>
+                </div>
+                <div id="results-grid" class="results-grid"></div>
+            </div>
+        </section>
+
+        <section class="guide-section">
+            <h2>使用说明</h2>
+            <div class="guide-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>输入问题</h3>
+                        <p>在输入框中输入你想要测试的问题，可以设置系统提示词和温度参数。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>选择模型</h3>
+                        <p>选择你想要对比的 AI 模型，支持多供应商多模型同时对比。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>开始对比</h3>
+                        <p>点击"开始对比"按钮，系统将并发调用所选模型，实时展示回复结果。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>分析结果</h3>
+                        <p>查看每个模型的回复内容、响应时间等指标，导出对比结果进行深入分析。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="example-section">
+            <h2>功能特性</h2>
+            <div class="example-grid">
+                <div class="feature-card">
+                    <div class="icon">🔄</div>
+                    <h3>多供应商集成</h3>
+                    <p>支持 Qwen、Doubao、DeepSeek、Kimi、OpenAI 等主流 AI 供应商，一站式对比。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">⚡</div>
+                    <h3>并发调用</h3>
+                    <p>同时向多个模型发起请求，大幅提升对比效率，节省等待时间。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📊</div>
+                    <h3>响应统计</h3>
+                    <p>自动统计每个模型的响应时间，帮助你评估模型性能差异。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">💾</div>
+                    <h3>结果导出</h3>
+                    <p>一键导出对比结果为 Markdown 格式，方便保存和分享。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">➕</div>
+                    <h3>自定义模型</h3>
+                    <p>支持添加自定义模型，灵活扩展对比范围。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">💾</div>
+                    <h3>本地持久化</h3>
+                    <p>模型选择和设置自动保存到浏览器，下次访问自动恢复。</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 32px;">技术栈</h3>
+            <div class="tech-stack">
+                <span class="tech-tag">Node.js</span>
+                <span class="tech-tag">Express</span>
+                <span class="tech-tag">OpenAI API Format</span>
+                <span class="tech-tag">Vanilla JS</span>
+                <span class="tech-tag">SSE</span>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Integrity Lab. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com/zhimingliang897-web/integrity" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../tools-modules/demos-common.js"></script>
+    <script src="../tools-modules/tools-auth.js"></script>
+    
+    <script>
+        const API_BASE = 'https://api.liangyiren.top';
+        
+        const providers = [
+            {
+                name: 'Qwen',
+                models: ['qwen-turbo', 'qwen-plus', 'qwen-max'],
+                selectedModels: ['qwen-turbo'],
+                hasKey: true
+            },
+            {
+                name: 'DeepSeek',
+                models: ['deepseek-chat', 'deepseek-coder'],
+                selectedModels: ['deepseek-chat'],
+                hasKey: true
+            },
+            {
+                name: 'Doubao',
+                models: ['doubao-pro-32k', 'doubao-pro-128k'],
+                selectedModels: [],
+                hasKey: true
+            },
+            {
+                name: 'Kimi',
+                models: ['moonshot-v1-8k', 'moonshot-v1-32k'],
+                selectedModels: [],
+                hasKey: true
+            },
+            {
+                name: 'OpenAI',
+                models: ['gpt-4o', 'gpt-4o-mini', 'gpt-3.5-turbo'],
+                selectedModels: [],
+                hasKey: false
+            }
+        ];
+
+        let results = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const { isLoggedIn, username } = DemoUtils.checkAuth();
+            updateAuthUI(isLoggedIn, username);
+            loadSettings();
+            renderProviders();
+        });
+
+        function loadSettings() {
+            const saved = localStorage.getItem('ai-compare-settings');
+            if (saved) {
+                try {
+                    const settings = JSON.parse(saved);
+                    if (settings.providers) {
+                        settings.providers.forEach(sp => {
+                            const provider = providers.find(p => p.name === sp.name);
+                            if (provider) {
+                                provider.selectedModels = sp.selectedModels || [];
+                            }
+                        });
+                    }
+                    if (settings.question) {
+                        document.getElementById('question').value = settings.question;
+                    }
+                    if (settings.temperature !== undefined) {
+                        document.getElementById('temperature').value = settings.temperature;
+                    }
+                } catch (e) {}
+            }
+        }
+
+        function saveSettings() {
+            const settings = {
+                providers: providers.map(p => ({
+                    name: p.name,
+                    selectedModels: p.selectedModels
+                })),
+                question: document.getElementById('question').value,
+                temperature: document.getElementById('temperature').value
+            };
+            localStorage.setItem('ai-compare-settings', JSON.stringify(settings));
+        }
+
+        function renderProviders() {
+            const grid = document.getElementById('providers-grid');
+            grid.innerHTML = '';
+
+            providers.forEach(provider => {
+                const card = document.createElement('div');
+                card.className = `provider-card ${provider.hasKey ? 'has-key' : ''}`;
+                
+                card.innerHTML = `
+                    <div class="header">
+                        <span class="name">${provider.name}</span>
+                        <span class="status ${provider.hasKey ? 'ready' : 'not-ready'}">
+                            ${provider.hasKey ? '已配置' : '未配置'}
+                        </span>
+                    </div>
+                    <div class="models-list">
+                        ${provider.models.map(model => `
+                            <span class="model-item ${provider.selectedModels.includes(model) ? 'selected' : ''}"
+                                  data-provider="${provider.name}" data-model="${model}"
+                                  onclick="toggleModel('${provider.name}', '${model}')">
+                                ${model}
+                            </span>
+                        `).join('')}
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleModel(providerName, model) {
+            const provider = providers.find(p => p.name === providerName);
+            if (!provider) return;
+
+            const index = provider.selectedModels.indexOf(model);
+            if (index > -1) {
+                provider.selectedModels.splice(index, 1);
+            } else {
+                provider.selectedModels.push(model);
+            }
+
+            saveSettings();
+            renderProviders();
+        }
+
+        function selectAll() {
+            providers.forEach(p => {
+                p.selectedModels = [...p.models];
+            });
+            saveSettings();
+            renderProviders();
+        }
+
+        function deselectAll() {
+            providers.forEach(p => {
+                p.selectedModels = [];
+            });
+            saveSettings();
+            renderProviders();
+        }
+
+        function updateAuthUI(isLoggedIn, username) {
+            const authBtn = document.getElementById('auth-btn');
+            const usernameDisplay = document.getElementById('username-display');
+            
+            if (isLoggedIn) {
+                usernameDisplay.textContent = username;
+                authBtn.textContent = '退出';
+                authBtn.onclick = logout;
+            } else {
+                usernameDisplay.textContent = '';
+                authBtn.textContent = '登录';
+                authBtn.onclick = () => window.location.href = '../tools.html';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            DemoUtils.showMessage('已退出登录', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }
+
+        function handleAuth() {
+            const { isLoggedIn } = DemoUtils.checkAuth();
+            if (isLoggedIn) {
+                logout();
+            } else {
+                window.location.href = '../tools.html';
+            }
+        }
+
+        async function startCompare() {
+            const { token, isLoggedIn } = DemoUtils.checkAuth();
+            if (!isLoggedIn) {
+                DemoUtils.showMessage('请先登录', 'error');
+                setTimeout(() => window.location.href = '../tools.html', 1500);
+                return;
+            }
+
+            const question = document.getElementById('question').value.trim();
+            if (!question) {
+                DemoUtils.showMessage('请输入问题', 'error');
+                return;
+            }
+
+            const selectedRequests = [];
+            providers.forEach(p => {
+                p.selectedModels.forEach(model => {
+                    selectedRequests.push({
+                        provider: p.name,
+                        model: model
+                    });
+                });
+            });
+
+            if (selectedRequests.length === 0) {
+                DemoUtils.showMessage('请至少选择一个模型', 'error');
+                return;
+            }
+
+            saveSettings();
+
+            const startBtn = document.getElementById('start-compare-btn');
+            startBtn.disabled = true;
+            startBtn.textContent = '对比中...';
+
+            results = selectedRequests.map(r => ({
+                provider: r.provider,
+                model: r.model,
+                content: '',
+                latencyMs: 0,
+                loading: true,
+                error: null
+            }));
+
+            document.getElementById('compare-results').style.display = 'block';
+            renderResults();
+
+            const temperature = parseFloat(document.getElementById('temperature').value) || 0.7;
+            const systemPrompt = document.getElementById('system-prompt').value.trim();
+
+            const promises = selectedRequests.map(async (req, index) => {
+                const startTime = Date.now();
+                try {
+                    const response = await fetch(`${API_BASE}/api/tools/ai-compare`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            question: question,
+                            systemPrompt: systemPrompt,
+                            temperature: temperature,
+                            provider: req.provider,
+                            model: req.model
+                        })
+                    });
+
+                    const endTime = Date.now();
+                    const data = await response.json();
+
+                    results[index].loading = false;
+                    results[index].latencyMs = endTime - startTime;
+
+                    if (response.ok && data.content) {
+                        results[index].content = data.content;
+                    } else {
+                        results[index].error = data.error || '请求失败';
+                    }
+                } catch (error) {
+                    results[index].loading = false;
+                    results[index].error = error.message || '网络错误';
+                }
+                renderResults();
+            });
+
+            await Promise.all(promises);
+
+            startBtn.disabled = false;
+            startBtn.textContent = '开始对比';
+        }
+
+        function renderResults() {
+            const grid = document.getElementById('results-grid');
+            grid.innerHTML = '';
+
+            results.forEach(result => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+
+                let bodyContent = '';
+                if (result.loading) {
+                    bodyContent = '<span class="loading-text">请求中...</span>';
+                } else if (result.error) {
+                    bodyContent = `<span class="error">${result.error}</span>`;
+                } else {
+                    bodyContent = result.content;
+                }
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="card-title">${result.provider} · ${result.model}</span>
+                        <div class="card-meta">
+                            ${result.latencyMs ? `<span>${result.latencyMs} ms</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="card-body ${result.error ? 'error' : ''}">${bodyContent}</div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function exportResults() {
+            if (results.length === 0 || results.every(r => r.loading)) {
+                DemoUtils.showMessage('没有可导出的结果', 'error');
+                return;
+            }
+
+            const question = document.getElementById('question').value.trim();
+            const systemPrompt = document.getElementById('system-prompt').value.trim();
+
+            let markdown = '# AI 模型对比结果\n\n';
+            markdown += `**问题：** ${question}\n\n`;
+            if (systemPrompt) {
+                markdown += `**系统提示词：** ${systemPrompt}\n\n`;
+            }
+            markdown += '---\n\n';
+
+            results.forEach(result => {
+                if (!result.loading) {
+                    markdown += `## ${result.provider} - ${result.model}\n\n`;
+                    if (result.error) {
+                        markdown += `**错误：**\n\`\`\`\n${result.error}\n\`\`\`\n\n`;
+                    } else {
+                        markdown += `**延迟：** ${result.latencyMs} ms\n\n`;
+                        markdown += `**回复：**\n\`\`\`markdown\n${result.content}\n\`\`\`\n\n`;
+                    }
+                    markdown += '---\n\n';
+                }
+            });
+
+            const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ai-compare-${Date.now()}.md`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            DemoUtils.showMessage('导出成功', 'success');
+        }
+    </script>
+</body>
+</html>

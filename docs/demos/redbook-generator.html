@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小红书内容生成器 - Integrity Lab</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../tools-modules/tools-styles.css">
+    <style>
+        .preview-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            max-width: 360px;
+            margin: 0 auto;
+        }
+
+        .preview-card .cover {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            padding: 40px 24px;
+            text-align: center;
+            color: white;
+        }
+
+        .preview-card .cover h3 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .preview-card .cover p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .preview-card .content {
+            padding: 20px;
+        }
+
+        .preview-card .phrase-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .preview-card .phrase-item .en {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .preview-card .phrase-item .cn {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .category-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .category-item:hover {
+            border-color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.05);
+        }
+
+        .category-item .icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .category-item .name {
+            font-size: 13px;
+            color: var(--text-primary);
+        }
+
+        .workflow-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .workflow-step {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .workflow-step .step-num {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .workflow-step .content h4 {
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .workflow-step .content p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .feature-highlight {
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 142, 83, 0.05));
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .feature-highlight h3 {
+            color: #ff6b6b;
+            margin-bottom: 16px;
+        }
+
+        .output-example {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 24px 0;
+        }
+
+        .output-example .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .output-example .tab {
+            padding: 8px 16px;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .output-example .tab.active {
+            background: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+        }
+
+        .output-example .content-area {
+            background: var(--bg-body);
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 200px;
+        }
+
+        .code-block {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            color: #a5b4fc;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tech-tag {
+            padding: 4px 12px;
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid #ff6b6b;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #ff6b6b;
+        }
+
+        .alert-box {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid rgba(255, 107, 107, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            color: #ff6b6b;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">Integrity Lab</a>
+                <div class="nav-links">
+                    <a href="../index.html">首页</a>
+                    <a href="../news.html">AI 热点</a>
+                    <a href="../tools.html">工具库</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>📕 小红书内容生成器</h1>
+        <p>AI 全自动生成英语教育图文笔记，一键发布到小红书</p>
+    </div>
+
+    <div class="container">
+        <section class="demo-section">
+            <h2>内容预览示例</h2>
+            
+            <div class="preview-card">
+                <div class="cover">
+                    <h3>🍽️ 餐厅点餐</h3>
+                    <p>实用英语表达 · 轻松学</p>
+                </div>
+                <div class="content">
+                    <div class="phrase-item">
+                        <div>
+                            <div class="en">I'd like to order...</div>
+                            <div class="cn">我想要点...</div>
+                        </div>
+                    </div>
+                    <div class="phrase-item">
+                        <div>
+                            <div class="en">Could I see the menu?</div>
+                            <div class="cn">我可以看下菜单吗？</div>
+                        </div>
+                    </div>
+                    <div class="phrase-item">
+                        <div>
+                            <div class="en">Is this dish spicy?</div>
+                            <div class="cn">这道菜辣吗？</div>
+                        </div>
+                    </div>
+                    <div class="phrase-item">
+                        <div>
+                            <div class="en">Can I get the check, please?</div>
+                            <div class="cn">请结账</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>支持的分类</h2>
+            
+            <div class="category-grid">
+                <div class="category-item">
+                    <div class="icon">🍽️</div>
+                    <div class="name">餐饮美食</div>
+                </div>
+                <div class="category-item">
+                    <div class="icon">🚗</div>
+                    <div class="name">交通出行</div>
+                </div>
+                <div class="category-item">
+                    <div class="icon">🛍️</div>
+                    <div class="name">购物消费</div>
+                </div>
+                <div class="category-item">
+                    <div class="icon">💼</div>
+                    <div class="name">职场办公</div>
+                </div>
+                <div class="category-item">
+                    <div class="icon">💬</div>
+                    <div class="name">社交聊天</div>
+                </div>
+                <div class="category-item">
+                    <div class="icon">✈️</div>
+                    <div class="name">旅行住宿</div>
+                </div>
+                <div class="category-item">
+                    <div class="icon">🏥</div>
+                    <div class="name">医疗健康</div>
+                </div>
+                <div class="category-item">
+                    <div class="icon">🏠</div>
+                    <div class="name">租房生活</div>
+                </div>
+                <div class="category-item">
+                    <div class="icon">📚</div>
+                    <div class="name">校园学习</div>
+                </div>
+                <div class="category-item">
+                    <div class="icon">🎮</div>
+                    <div class="name">娱乐休闲</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>工作流程</h2>
+            
+            <div class="workflow-section">
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="step-num">1</div>
+                        <div class="content">
+                            <h4>选择分类或输入主题</h4>
+                            <p>从预设分类中选择，或输入自定义主题如"咖啡店点单"</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">2</div>
+                        <div class="content">
+                            <h4>AI 生成内容</h4>
+                            <p>通义千问自动生成选题、知识点、英语表达和中文解释</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">3</div>
+                        <div class="content">
+                            <h4>自动生成图片</h4>
+                            <p>Pillow 渲染生成精美封面和内容页图片</p>
+                        </div>
+                    </div>
+                    <div class="workflow-step">
+                        <div class="step-num">4</div>
+                        <div class="content">
+                            <h4>预览与发布</h4>
+                            <p>预览生成效果，支持一键发布到小红书（公开/私密）</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>核心功能</h2>
+            
+            <div class="example-grid">
+                <div class="feature-card">
+                    <div class="icon">🤖</div>
+                    <h3>AI 自动生成</h3>
+                    <p>智能生成选题、文案、知识点，无需人工编写内容。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🎨</div>
+                    <h3>精美封面</h3>
+                    <p>自动生成视觉吸引力强的封面和内容页图片。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📱</div>
+                    <h3>一键发布</h3>
+                    <p>Playwright 自动化控制浏览器，一键发布到小红书。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📝</div>
+                    <h3>内容管理</h3>
+                    <p>查看待发布和已发布内容，支持批量管理。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🔄</div>
+                    <h3>Cookie 自动刷新</h3>
+                    <p>自动打开浏览器登录，获取并更新 Cookie。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📚</div>
+                    <h3>Obsidian 集成</h3>
+                    <p>导出到 Obsidian 进行内容管理和二次编辑。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>快速开始</h2>
+            
+            <div class="feature-highlight">
+                <h3>📦 安装依赖</h3>
+                <div class="code-block">
+                    <code>pip install -r requirements.txt<br>playwright install chromium</code>
+                </div>
+            </div>
+
+            <div class="feature-highlight">
+                <h3>🚀 启动图形界面</h3>
+                <div class="code-block">
+                    <code>python gui.py</code>
+                </div>
+                <p style="color: var(--text-muted); font-size: 14px; margin-top: 12px;">
+                    浏览器自动打开 http://127.0.0.1:7860
+                </p>
+            </div>
+
+            <div class="feature-highlight">
+                <h3>💻 命令行使用</h3>
+                <div class="code-block">
+                    <code>
+# 只生成内容<br>
+python main.py -c "餐饮美食"<br><br>
+
+# 自定义主题<br>
+python main.py --topic "咖啡店点单"<br><br>
+
+# 生成并私密发布<br>
+python main.py -c "交通出行" --publish --private
+                    </code>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>输出示例</h2>
+            
+            <div class="output-example">
+                <div class="content-area">
+                    <h4 style="margin-bottom: 12px; color: #ff6b6b;">📁 输出目录结构</h4>
+                    <pre style="margin: 0; color: var(--text-muted); font-size: 13px; line-height: 1.8;">
+output/{batch_id}/
+├── cover.png          # 封面图片
+├── slide_1.png        # 内容页1
+├── slide_2.png        # 内容页2
+├── slide_3.png        # 内容页3
+├── content.json       # 内容数据
+├── caption.txt        # 小红书文案
+└── publish_status.json # 发布状态
+                    </pre>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>技术实现</h2>
+            <div class="example-grid">
+                <div class="feature-card">
+                    <div class="icon">🐍</div>
+                    <h3>Python 核心</h3>
+                    <p>基于 Python 开发，模块化设计，易于扩展。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🧠</div>
+                    <h3>通义千问</h3>
+                    <p>使用阿里云大模型生成高质量内容。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🎭</div>
+                    <h3>Playwright</h3>
+                    <p>自动化控制浏览器，实现一键发布。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🖼️</div>
+                    <h3>Pillow</h3>
+                    <p>图片渲染生成精美封面和内容页。</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 32px;">技术栈</h3>
+            <div class="tech-stack">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">Playwright</span>
+                <span class="tech-tag">Qwen API</span>
+                <span class="tech-tag">Pillow</span>
+                <span class="tech-tag">Gradio</span>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <div class="feature-highlight" style="text-align: center;">
+                <h3>📥 获取源码</h3>
+                <p style="margin-bottom: 20px;">开启你的小红书内容创作之旅</p>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/15redbook" 
+                   style="display: inline-block; padding: 12px 32px; background: #ff6b6b; color: white; border-radius: 8px; text-decoration: none; font-weight: bold;"
+                   target="_blank">
+                    查看源码 →
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Integrity Lab. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com/zhimingliang897-web/integrity" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

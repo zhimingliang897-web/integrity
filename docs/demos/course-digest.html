@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CourseDigest 智能助考 - Integrity Lab</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../tools-modules/tools-styles.css">
+    <style>
+        .workflow-diagram {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            margin: 24px 0;
+        }
+
+        .workflow-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .flow-step {
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .flow-step .icon-box {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 12px;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .flow-step .label {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .flow-arrow {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .scenario-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 20px;
+        }
+
+        .scenario-card h4 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scenario-card .code-example {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            overflow-x: auto;
+        }
+
+        .scenario-card .code-example code {
+            color: #a5b4fc;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 13px;
+        }
+
+        .output-preview {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+
+        .output-preview .section {
+            margin-bottom: 16px;
+        }
+
+        .output-preview .section h5 {
+            color: #2563eb;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .output-preview .section ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .output-preview .section li {
+            color: #475569;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .output-preview .question-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+
+        .output-preview .question-card .q-num {
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        .output-preview .question-card .answer {
+            color: #10b981;
+            font-size: 12px;
+        }
+
+        .feature-comparison {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .feature-col {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .feature-col h4 {
+            text-align: center;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        .feature-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .feature-col li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .feature-col li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-col li::before {
+            content: "✓ ";
+            color: #10b981;
+        }
+
+        .install-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .install-tab {
+            padding: 8px 16px;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .install-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .install-content {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .install-content.active {
+            display: block;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tech-tag {
+            padding: 4px 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--primary);
+        }
+
+        .alert-box {
+            background: rgba(37, 99, 235, 0.1);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            .feature-comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .workflow-flow {
+                flex-direction: column;
+            }
+            
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">Integrity Lab</a>
+                <div class="nav-links">
+                    <a href="../index.html">首页</a>
+                    <a href="../news.html">AI 热点</a>
+                    <a href="../tools.html">工具库</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <h1>🎓 CourseDigest 智能助考</h1>
+        <p>将录播课视频与 PPT 讲义转化为考试导向复习大纲，自动生成模拟试题</p>
+    </div>
+
+    <div class="container">
+        <section class="demo-section">
+            <h2>工作流程</h2>
+            
+            <div class="workflow-diagram">
+                <div class="workflow-flow">
+                    <div class="flow-step">
+                        <div class="icon-box">🎬</div>
+                        <div class="label">视频/PPT</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="icon-box">🎙️</div>
+                        <div class="label">Whisper 转录</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="icon-box">📄</div>
+                        <div class="label">文本提取</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="icon-box">🤖</div>
+                        <div class="label">AI 分析</div>
+                    </div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">
+                        <div class="icon-box">📝</div>
+                        <div class="label">学习指南</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>核心特性</h2>
+            
+            <div class="example-grid">
+                <div class="feature-card">
+                    <div class="icon">🎙️</div>
+                    <h3>本地语音转录</h3>
+                    <p>基于 faster-whisper，完全本地运行，高精度且免费，保护隐私安全。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📄</div>
+                    <h3>多维资料整合</h3>
+                    <p>自动提取 PDF/PPT 文本，整合课件、视频逻辑与往年真题。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🎯</div>
+                    <h3>考试导向分析</h3>
+                    <p>提取高频考点（带时间戳），自动对比往年真题对应关系。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📝</div>
+                    <h3>模拟试题生成</h3>
+                    <p>一键生成 40+ 道选择题和填空题，附带详细知识点分析。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🤖</div>
+                    <h3>多模型支持</h3>
+                    <p>兼容阿里百炼（DashScope）与 Groq API，适配各种预算需求。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">⏰</div>
+                    <h3>时间戳标注</h3>
+                    <p>每个考点都标注视频时间戳，方便快速定位复习。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>三大应用场景</h2>
+
+            <div class="scenario-card">
+                <h4>📚 场景一：视频 + 课件深度精读</h4>
+                <p>最标准的用法，将视频与对应 PPT 传入，生成带时间戳的学习指南。</p>
+                <div class="code-example">
+                    <code>python main.py "lecture1.mp4" --ppt "slides.pdf" --exams "past_exams.pdf"</code>
+                </div>
+                <p style="color: var(--text-muted); font-size: 14px;">输出：包含必学考点、可跳过内容、真题关联的学习指南 Markdown</p>
+            </div>
+
+            <div class="scenario-card">
+                <h4>⚡ 场景二：考前突击模拟实战</h4>
+                <p>针对紧急考试设计。无需视频，直接扫描 PDF 讲义，一键生成深度考点及模拟题。</p>
+                <div class="code-example">
+                    <code>python process_cv_exam.py</code>
+                </div>
+                <p style="color: var(--text-muted); font-size: 14px;">输出：全章节考点图谱 + 40 道选择题 + 6 道填空题 + 详细解析</p>
+            </div>
+
+            <div class="scenario-card">
+                <h4>🔗 场景三：智能资料匹配</h4>
+                <p>不知道哪节课对应哪个 PPT？让 AI 自动帮你匹配。</p>
+                <div class="code-example">
+                    <code>python auto_match.py</code>
+                </div>
+                <p style="color: var(--text-muted); font-size: 14px;">输出：自动生成可执行的批处理脚本</p>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>输出示例</h2>
+            
+            <div class="output-preview">
+                <div class="section">
+                    <h5>📋 考点分析示例</h5>
+                    <ul>
+                        <li>⭐⭐⭐ [00:15:30-00:22:45] CNN 架构 → 掌握卷积层、池化层原理 → 考试可能考参数计算</li>
+                        <li>⭐⭐⭐ [00:35:00-00:42:15] Attention 机制 → 理解 Q/K/V 计算 → 常见于简答题</li>
+                        <li>⭐⭐ [01:10:00-01:18:30] YOLO 检测 → 了解 Anchor Box 设计 → 选择题形式</li>
+                    </ul>
+                </div>
+
+                <div class="section">
+                    <h5>📝 模拟试题示例</h5>
+                    <div class="question-card">
+                        <div class="q-num">MCQ 1:</div>
+                        <p style="margin: 8px 0; font-size: 14px;">在 Transformer 中，Self-Attention 的计算公式是？</p>
+                        <p style="font-size: 13px; color: var(--text-muted);">
+                            A. softmax(QK)V<br>
+                            B. softmax(QK^T/√d)V<br>
+                            C. QKV^T<br>
+                            D. softmax(Q+K+V)
+                        </p>
+                        <div class="answer">✓ 正确答案: B | 知识点: Self-Attention 缩放点积</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>安装指南</h2>
+
+            <div class="install-tabs">
+                <button class="install-tab active" onclick="showInstall('env')">环境准备</button>
+                <button class="install-tab" onclick="showInstall('config')">配置 API</button>
+                <button class="install-tab" onclick="showInstall('run')">运行示例</button>
+            </div>
+
+            <div id="install-env" class="install-content active">
+                <h4>创建 Python 环境</h4>
+                <div class="code-example">
+                    <code>
+# 使用 Conda 创建环境<br>
+conda create -n coursedigest python=3.11 -y<br>
+conda activate coursedigest<br><br>
+
+# 安装依赖<br>
+pip install -r requirements.txt
+                    </code>
+                </div>
+                <div class="alert-box">
+                    💡 建议使用 Python 3.10+ 版本。如有 Nvidia 显卡，安装 CUDA 版 PyTorch 可获得 10 倍速提升。
+                </div>
+            </div>
+
+            <div id="install-config" class="install-content">
+                <h4>配置 API Key</h4>
+                <p style="color: var(--text-muted); margin-bottom: 12px;">在项目根目录的 config.yaml 中填入 API 密钥：</p>
+                <div class="code-example">
+                    <code>
+# config.yaml<br><br>
+api:<br>
+  provider: "dashscope"  # 或 "groq"<br>
+  api_key: "sk-your-key-here"<br>
+  model: "qwen-max"
+                    </code>
+                </div>
+                <p style="color: var(--text-muted); font-size: 14px; margin-top: 12px;">
+                    支持：阿里百炼、Groq (Llama 3) 等
+                </p>
+            </div>
+
+            <div id="install-run" class="install-content">
+                <h4>运行示例</h4>
+                <div class="code-example">
+                    <code>
+# 完整模式（推荐）<br>
+python main.py lecture1.mp4 --ppt slides.pdf --exams past_exams.pdf<br><br>
+
+# 批量处理<br>
+python main.py lecture1.mp4 lecture2.mp4 lecture3.mp4 --syllabus syllabus.pdf<br><br>
+
+# 考前突击模式<br>
+python process_cv_exam.py
+                    </code>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>费用说明</h2>
+            
+            <div class="feature-comparison">
+                <div class="feature-col">
+                    <h4>🎙️ Whisper 转录</h4>
+                    <ul>
+                        <li>完全免费</li>
+                        <li>本地计算</li>
+                        <li>无限制使用</li>
+                        <li>隐私安全</li>
+                    </ul>
+                </div>
+                <div class="feature-col">
+                    <h4>📄 PDF/PPT 提取</h4>
+                    <ul>
+                        <li>完全免费</li>
+                        <li>本地计算</li>
+                        <li>pdfplumber</li>
+                        <li>支持多种格式</li>
+                    </ul>
+                </div>
+                <div class="feature-col">
+                    <h4>🤖 AI 分析</h4>
+                    <ul>
+                        <li>按量计费</li>
+                        <li>阿里百炼/Groq</li>
+                        <li>价格低廉</li>
+                        <li>效果稳定</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <h2>技术实现</h2>
+            <div class="example-grid">
+                <div class="feature-card">
+                    <div class="icon">🐍</div>
+                    <h3>Python 核心</h3>
+                    <p>基于 Python 3.10+ 开发，模块化设计，易于扩展和维护。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🎧</div>
+                    <h3>faster-whisper</h3>
+                    <p>使用 CTranslate2 优化的 Whisper 实现，转录速度快 4 倍。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">📊</div>
+                    <h3>pdfplumber</h3>
+                    <p>强大的 PDF 文本提取库，支持复杂表格和布局。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🧠</div>
+                    <h3>Prompt 工程</h3>
+                    <p>精心设计的提示词模板，确保输出结构化和高质量。</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 32px;">技术栈</h3>
+            <div class="tech-stack">
+                <span class="tech-tag">Python 3.10+</span>
+                <span class="tech-tag">faster-whisper</span>
+                <span class="tech-tag">pdfplumber</span>
+                <span class="tech-tag">Qwen API</span>
+                <span class="tech-tag">Groq</span>
+                <span class="tech-tag">PyTorch</span>
+            </div>
+        </section>
+
+        <section class="demo-section">
+            <div class="feature-highlight" style="text-align: center;">
+                <h3>📥 获取源码</h3>
+                <p style="margin-bottom: 20px;">克隆项目仓库，开始智能助考之旅</p>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/13course_digest" 
+                   style="display: inline-block; padding: 12px 32px; background: var(--primary); color: white; border-radius: 8px; text-decoration: none; font-weight: bold;"
+                   target="_blank">
+                    查看源码 →
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Integrity Lab. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com/zhimingliang897-web/integrity" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showInstall(tab) {
+            document.querySelectorAll('.install-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.install-content').forEach(c => c.classList.remove('active'));
+            
+            document.querySelector(`.install-tab[onclick="showInstall('${tab}')"]`).classList.add('active');
+            document.getElementById(`install-${tab}`).classList.add('active');
+        }
+    </script>
+</body>
+</html>
