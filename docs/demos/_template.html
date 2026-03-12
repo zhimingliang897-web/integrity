@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目名称 - Integrity Lab</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../tools-modules/tools-styles.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">Integrity Lab</a>
+                <div class="nav-links">
+                    <a href="../index.html">首页</a>
+                    <a href="../news.html">AI 热点</a>
+                    <a href="../tools.html">工具库</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span id="username-display"></span>
+                <button id="auth-btn" onclick="handleAuth()">登录</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <h1>🎬 项目名称</h1>
+        <p>项目简介描述</p>
+    </div>
+
+    <!-- 主要内容区 -->
+    <div class="container">
+        <!-- 功能演示区 -->
+        <section class="demo-section">
+            <h2>功能演示</h2>
+            <div class="demo-card">
+                <div class="demo-header">
+                    <div class="demo-title">
+                        <span class="icon">🎯</span>
+                        <h3>演示功能</h3>
+                    </div>
+                </div>
+                <div class="demo-body">
+                    <!-- 演示内容 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 使用说明 -->
+        <section class="guide-section">
+            <h2>使用说明</h2>
+            <div class="guide-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>第一步</h3>
+                        <p>步骤说明</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>第二步</h3>
+                        <p>步骤说明</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 示例展示 -->
+        <section class="example-section">
+            <h2>示例展示</h2>
+            <div class="example-grid">
+                <!-- 示例内容 -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Integrity Lab. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com/zhimingliang897-web/integrity" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 通用脚本 -->
+    <script src="../tools-modules/demos-common.js"></script>
+    <script src="../tools-modules/tools-auth.js"></script>
+    
+    <!-- 页面特定脚本 -->
+    <script>
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态
+            const { isLoggedIn, username } = DemoUtils.checkAuth();
+            updateAuthUI(isLoggedIn, username);
+        });
+
+        // 更新认证 UI
+        function updateAuthUI(isLoggedIn, username) {
+            const authBtn = document.getElementById('auth-btn');
+            const usernameDisplay = document.getElementById('username-display');
+            
+            if (isLoggedIn) {
+                usernameDisplay.textContent = username;
+                authBtn.textContent = '退出';
+                authBtn.onclick = logout;
+            } else {
+                usernameDisplay.textContent = '';
+                authBtn.textContent = '登录';
+                authBtn.onclick = () => window.location.href = '../tools.html';
+            }
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            DemoUtils.showMessage('已退出登录', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }
+
+        // 处理认证
+        function handleAuth() {
+            const { isLoggedIn } = DemoUtils.checkAuth();
+            if (isLoggedIn) {
+                logout();
+            } else {
+                window.location.href = '../tools.html';
+            }
+        }
+    </script>
+</body>
+</html>

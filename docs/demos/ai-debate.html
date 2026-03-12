@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 辩论赛 - Integrity Lab</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../tools-modules/tools-styles.css">
+    <style>
+        .debate-setup {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .topic-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 12px 0;
+        }
+
+        .topic-chip {
+            padding: 6px 14px;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+
+        .topic-chip:hover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .topic-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .debaters-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .debater-card {
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid;
+        }
+
+        .debater-card.pro {
+            background: rgba(59, 130, 246, 0.05);
+            border-color: var(--primary);
+        }
+
+        .debater-card.con {
+            background: rgba(239, 68, 68, 0.05);
+            border-color: #ef4444;
+        }
+
+        .debater-card .name {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .debater-card .meta {
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .debate-arena {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            min-height: 400px;
+        }
+
+        .debate-stage {
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: rgba(59, 130, 246, 0.05);
+            border-radius: 8px;
+        }
+
+        .debate-stage h3 {
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .debate-messages {
+            max-height: 500px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+
+        .debate-message {
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border-left: 3px solid;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .debate-message.pro {
+            background: rgba(59, 130, 246, 0.05);
+            border-left-color: var(--primary);
+        }
+
+        .debate-message.con {
+            background: rgba(239, 68, 68, 0.05);
+            border-left-color: #ef4444;
+        }
+
+        .debate-message.judge {
+            background: rgba(139, 92, 246, 0.05);
+            border-left-color: var(--secondary);
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .message-speaker {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .message-time {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .message-content {
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+
+        .debate-result {
+            text-align: center;
+            padding: 24px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .debate-result h3 {
+            color: var(--secondary);
+            margin-bottom: 12px;
+        }
+
+        .winner-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 18px;
+            margin: 12px 0;
+        }
+
+        .example-video {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .example-video video {
+            width: 100%;
+            height: auto;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tech-tag {
+            padding: 4px 12px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            font-size: 12px;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">Integrity Lab</a>
+                <div class="nav-links">
+                    <a href="../index.html">首页</a>
+                    <a href="../news.html">AI 热点</a>
+                    <a href="../tools.html">工具库</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span id="username-display"></span>
+                <button id="auth-btn" onclick="handleAuth()">登录</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <h1>🎭 AI 辩论赛</h1>
+        <p>让不同的 AI 模型进行激烈辩论，体验思想的碰撞</p>
+    </div>
+
+    <!-- 主要内容区 -->
+    <div class="container">
+        <!-- 功能演示区 -->
+        <section class="demo-section">
+            <h2>在线辩论</h2>
+            
+            <!-- 辩论设置 -->
+            <div class="debate-setup">
+                <h3>辩论设置</h3>
+                
+                <div class="form-group">
+                    <label>选择辩题</label>
+                    <div class="topic-presets">
+                        <div class="topic-chip active" data-topic="人工智能的发展利大于弊">人工智能的发展利大于弊</div>
+                        <div class="topic-chip" data-topic="远程办公优于传统办公">远程办公优于传统办公</div>
+                        <div class="topic-chip" data-topic="技术进步会导致失业">技术进步会导致失业</div>
+                        <div class="topic-chip" data-topic="社交媒体利大于弊">社交媒体利大于弊</div>
+                    </div>
+                    <input type="text" id="debate-topic" class="form-control" 
+                           placeholder="或输入自定义辩题" 
+                           value="人工智能的发展利大于弊">
+                </div>
+
+                <div class="form-group">
+                    <label>辩论轮数</label>
+                    <select id="debate-rounds" class="form-control">
+                        <option value="3">3 轮（快速）</option>
+                        <option value="4" selected>4 轮（标准）</option>
+                        <option value="6">6 轮（深入）</option>
+                    </select>
+                </div>
+
+                <!-- 辩手阵容 -->
+                <h3 style="margin-top: 24px;">辩手阵容</h3>
+                <div class="debaters-grid">
+                    <div class="debater-card pro">
+                        <div class="name">🔵 正方一辩：千问·论道</div>
+                        <div class="meta">
+                            模型：通义千问<br>
+                            风格：立论型，擅长逻辑推理<br>
+                            特点：类黄执中，善于构建论证体系
+                        </div>
+                    </div>
+                    <div class="debater-card con">
+                        <div class="name">🔴 反方一辩：Kimi·锐评</div>
+                        <div class="meta">
+                            模型：Kimi<br>
+                            风格：反驳型，擅长找漏洞<br>
+                            特点：类马薇薇，犀利直接
+                        </div>
+                    </div>
+                    <div class="debater-card pro">
+                        <div class="name">🔵 正方二辩：豆包·善辩</div>
+                        <div class="meta">
+                            模型：豆包<br>
+                            风格：攻辩型，擅长质询<br>
+                            特点：类陈铭，温和而有力
+                        </div>
+                    </div>
+                    <div class="debater-card con">
+                        <div class="name">🔴 反方二辩：深思·明辨</div>
+                        <div class="meta">
+                            模型：DeepSeek<br>
+                            风格：思辨型，擅长总结<br>
+                            特点：类庞颖，深度分析
+                        </div>
+                    </div>
+                </div>
+
+                <button id="start-debate-btn" class="btn-primary" onclick="startDebate()">
+                    开始辩论
+                </button>
+            </div>
+
+            <!-- 辩论场 -->
+            <div id="debate-arena" class="debate-arena" style="display: none;">
+                <div class="debate-stage">
+                    <h3 id="current-stage">准备中...</h3>
+                    <p id="stage-desc" style="color: var(--text-muted); margin-top: 8px;"></p>
+                </div>
+
+                <div id="debate-messages" class="debate-messages">
+                    <!-- 辩论消息将动态添加到这里 -->
+                </div>
+
+                <div id="debate-result" class="debate-result" style="display: none;">
+                    <h3>🏆 辩论结果</h3>
+                    <div class="winner-badge" id="winner-text"></div>
+                    <p id="judge-comment" style="margin-top: 16px; line-height: 1.8;"></p>
+                </div>
+
+                <button id="stop-debate-btn" class="btn-secondary" onclick="stopDebate()" 
+                        style="width: 100%; margin-top: 16px;">
+                    停止辩论
+                </button>
+            </div>
+        </section>
+
+        <!-- 使用说明 -->
+        <section class="guide-section">
+            <h2>使用说明</h2>
+            <div class="guide-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>选择辩题</h3>
+                        <p>从预设辩题中选择，或输入自定义辩题。辩题应该是有争议性的观点。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>设置参数</h3>
+                        <p>选择辩论轮数。轮数越多，辩论越深入，但耗时也越长。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>开始辩论</h3>
+                        <p>点击"开始辩论"按钮，AI 辩手将按照标准赛制进行辩论。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>查看结果</h3>
+                        <p>辩论结束后，AI 裁判将给出评分和点评，宣布获胜方。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 辩论赛制说明 -->
+        <section class="example-section">
+            <h2>标准赛制</h2>
+            <div class="guide-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>开篇立论</h3>
+                        <p>正方一辩和反方一辩分别阐述己方观点，建立论证框架。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>攻辩质询</h3>
+                        <p>双方二辩交叉质询对方一辩，寻找论证漏洞。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>攻辩小结</h3>
+                        <p>双方一辩总结攻辩阶段的收获，强化己方观点。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>自由辩论</h3>
+                        <p>双方交替发言，针对核心问题展开激烈交锋。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h3>总结陈词</h3>
+                        <p>双方二辩进行最后陈述，升华己方观点。</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">6</div>
+                    <div class="step-content">
+                        <h3>裁判点评</h3>
+                        <p>AI 裁判综合评分，宣布获胜方并给出点评。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技术特性 -->
+        <section class="example-section">
+            <h2>技术特性</h2>
+            <div class="example-grid">
+                <div class="feature-card">
+                    <div class="icon">🤖</div>
+                    <h3>多模型对抗</h3>
+                    <p>集成通义千问、Kimi、豆包、DeepSeek 等主流 AI 模型，每个辩手使用不同模型，展现不同的思维风格。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">⚡</div>
+                    <h3>流式输出</h3>
+                    <p>使用 SSE（Server-Sent Events）技术实现实时流式输出，让辩论过程更加生动自然。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🎯</div>
+                    <h3>标准赛制</h3>
+                    <p>完整实现辩论赛标准流程：立论、攻辩、自由辩论、总结、裁判点评。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🎨</div>
+                    <h3>个性化人设</h3>
+                    <p>每个 AI 辩手都有独特的性格和辩论风格，模拟真实辩手的特点。</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 32px;">技术栈</h3>
+            <div class="tech-stack">
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">Flask</span>
+                <span class="tech-tag">OpenAI API</span>
+                <span class="tech-tag">SSE</span>
+                <span class="tech-tag">Edge TTS</span>
+                <span class="tech-tag">FFmpeg</span>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Integrity Lab. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com/zhimingliang897-web/integrity" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 通用脚本 -->
+    <script src="../tools-modules/demos-common.js"></script>
+    <script src="../tools-modules/tools-auth.js"></script>
+    
+    <!-- 页面特定脚本 -->
+    <script>
+        const API_BASE = 'https://api.liangyiren.top';
+        let debateInProgress = false;
+        let eventSource = null;
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            const { isLoggedIn, username } = DemoUtils.checkAuth();
+            updateAuthUI(isLoggedIn, username);
+
+            // 辩题选择
+            document.querySelectorAll('.topic-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    document.querySelectorAll('.topic-chip').forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    document.getElementById('debate-topic').value = this.dataset.topic;
+                });
+            });
+        });
+
+        // 更新认证 UI
+        function updateAuthUI(isLoggedIn, username) {
+            const authBtn = document.getElementById('auth-btn');
+            const usernameDisplay = document.getElementById('username-display');
+            
+            if (isLoggedIn) {
+                usernameDisplay.textContent = username;
+                authBtn.textContent = '退出';
+                authBtn.onclick = logout;
+            } else {
+                usernameDisplay.textContent = '';
+                authBtn.textContent = '登录';
+                authBtn.onclick = () => window.location.href = '../tools.html';
+            }
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            DemoUtils.showMessage('已退出登录', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }
+
+        // 处理认证
+        function handleAuth() {
+            const { isLoggedIn } = DemoUtils.checkAuth();
+            if (isLoggedIn) {
+                logout();
+            } else {
+                window.location.href = '../tools.html';
+            }
+        }
+
+        // 开始辩论
+        async function startDebate() {
+            const { token, isLoggedIn } = DemoUtils.checkAuth();
+            if (!isLoggedIn) {
+                DemoUtils.showMessage('请先登录', 'error');
+                setTimeout(() => window.location.href = '../tools.html', 1500);
+                return;
+            }
+
+            const topic = document.getElementById('debate-topic').value.trim();
+            if (!topic) {
+                DemoUtils.showMessage('请输入辩题', 'error');
+                return;
+            }
+
+            const rounds = document.getElementById('debate-rounds').value;
+
+            // 显示辩论场
+            document.getElementById('debate-arena').style.display = 'block';
+            document.getElementById('debate-messages').innerHTML = '';
+            document.getElementById('debate-result').style.display = 'none';
+            
+            // 禁用开始按钮
+            const startBtn = document.getElementById('start-debate-btn');
+            startBtn.disabled = true;
+            startBtn.textContent = '辩论进行中...';
+
+            debateInProgress = true;
+
+            // 模拟辩论过程（实际应该连接后端 SSE）
+            simulateDebate(topic, parseInt(rounds));
+        }
+
+        // 模拟辩论过程
+        async function simulateDebate(topic, rounds) {
+            const stages = [
+                { name: '开篇立论', desc: '双方一辩阐述观点' },
+                { name: '攻辩质询', desc: '双方二辩交叉质询' },
+                { name: '攻辩小结', desc: '双方一辩总结攻辩' },
+                { name: '自由辩论', desc: '双方交替发言' },
+                { name: '总结陈词', desc: '双方二辩最后陈述' }
+            ];
+
+            const debaters = [
+                { name: '千问·论道', side: 'pro', role: '正方一辩' },
+                { name: 'Kimi·锐评', side: 'con', role: '反方一辩' },
+                { name: '豆包·善辩', side: 'pro', role: '正方二辩' },
+                { name: '深思·明辨', side: 'con', role: '反方二辩' }
+            ];
+
+            for (let i = 0; i < stages.length && debateInProgress; i++) {
+                updateStage(stages[i].name, stages[i].desc);
+                await sleep(1000);
+
+                // 每个阶段的发言
+                const stageRounds = i === 3 ? rounds : 2; // 自由辩论使用设定轮数
+                for (let j = 0; j < stageRounds && debateInProgress; j++) {
+                    const debater = debaters[j % debaters.length];
+                    const content = generateDebateContent(topic, stages[i].name, debater, j);
+                    addDebateMessage(debater.name, debater.role, debater.side, content);
+                    await sleep(2000);
+                }
+            }
+
+            if (debateInProgress) {
+                // 裁判点评
+                updateStage('裁判点评', 'AI 裁判综合评分');
+                await sleep(1500);
+                showDebateResult(topic);
+            }
+
+            // 恢复按钮
+            const startBtn = document.getElementById('start-debate-btn');
+            startBtn.disabled = false;
+            startBtn.textContent = '开始辩论';
+            debateInProgress = false;
+        }
+
+        // 生成辩论内容（模拟）
+        function generateDebateContent(topic, stage, debater, round) {
+            const templates = {
+                '开篇立论': [
+                    `关于"${topic}"这个辩题，我方认为这是一个值得深入探讨的问题。从多个维度来看，我方的观点具有充分的理论支撑和实践依据。`,
+                    `感谢主席。对方辩友的观点我们已经听到了，但我方认为这个问题需要从更全面的角度来审视。让我来阐述我方的核心论点。`
+                ],
+                '攻辩质询': [
+                    `请问对方辩友，您刚才提到的论据是否考虑到了实际应用中的复杂性？`,
+                    `对方辩友的逻辑链条似乎存在一个明显的漏洞，请问您如何解释这个矛盾？`
+                ],
+                '攻辩小结': [
+                    `通过刚才的攻辩环节，我们可以清楚地看到，对方的论证存在明显的不足。`,
+                    `对方辩友在回答问题时的回避态度，恰恰说明了我方观点的合理性。`
+                ],
+                '自由辩论': [
+                    `对方辩友一直在强调理论，但实践中的情况远比理论复杂。`,
+                    `我方的数据和案例都清楚地表明，我方的观点更符合实际情况。`,
+                    `对方辩友的论证忽略了一个关键因素，那就是...`,
+                    `让我们回到问题的本质，这个辩题的核心在于...`
+                ],
+                '总结陈词': [
+                    `综合整场辩论，我方的观点始终如一，论证严密。对方虽然提出了一些质疑，但都未能动摇我方的核心论点。`,
+                    `今天的辩论让我们看到了这个问题的复杂性，但也更加坚定了我方的立场。感谢各位评委和观众。`
+                ]
+            };
+
+            const stageTemplates = templates[stage] || templates['自由辩论'];
+            return stageTemplates[round % stageTemplates.length];
+        }
+
+        // 更新阶段
+        function updateStage(name, desc) {
+            document.getElementById('current-stage').textContent = name;
+            document.getElementById('stage-desc').textContent = desc;
+        }
+
+        // 添加辩论消息
+        function addDebateMessage(name, role, side, content) {
+            const messagesDiv = document.getElementById('debate-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `debate-message ${side}`;
+            
+            const now = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                <div class="message-header">
+                    <span class="message-speaker">${name}（${role}）</span>
+                    <span class="message-time">${now}</span>
+                </div>
+                <div class="message-content">${content}</div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // 显示辩论结果
+        function showDebateResult(topic) {
+            const resultDiv = document.getElementById('debate-result');
+            const winnerText = document.getElementById('winner-text');
+            const judgeComment = document.getElementById('judge-comment');
+
+            const winner = Math.random() > 0.5 ? '正方' : '反方';
+            winnerText.textContent = `${winner}获胜`;
+            
+            judgeComment.textContent = `经过激烈的辩论，双方辩手都展现了出色的论辩能力。${winner}在论证的严密性、逻辑的连贯性以及对核心问题的把握上略胜一筹。特别是在自由辩论环节，${winner}的应对更加灵活，论据更加充分。感谢双方辩手为我们带来的精彩辩论。`;
+            
+            resultDiv.style.display = 'block';
+            
+            // 添加裁判点评消息
+            addDebateMessage('AI 裁判', '裁判', 'judge', judgeComment.textContent);
+        }
+
+        // 停止辩论
+        function stopDebate() {
+            debateInProgress = false;
+            if (eventSource) {
+                eventSource.close();
+                eventSource = null;
+            }
+            
+            const startBtn = document.getElementById('start-debate-btn');
+            startBtn.disabled = false;
+            startBtn.textContent = '开始辩论';
+            
+            DemoUtils.showMessage('辩论已停止', 'info');
+        }
+
+        // 辅助函数：延迟
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+    </script>
+</body>
+</html>

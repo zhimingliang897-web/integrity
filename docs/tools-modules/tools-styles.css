@@ -561,3 +561,50 @@
     50% { top: calc(100% - 14px); opacity: 0.8; }
     100% { top: 12px; opacity: 1; }
 }
+
+/* ========================================
+   演示链接样式
+   ======================================== */
+
+.card-links {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.demo-link {
+    flex: 1;
+    text-align: center;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.demo-link:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+.source-link-wrapper {
+    flex: 1;
+}
+
+.source-link-wrapper .source-link {
+    display: block;
+    text-align: center;
+    padding: 8px 16px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid var(--primary);
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+
+.source-link-wrapper .source-link:hover {
+    background: rgba(59, 130, 246, 0.2);
+    text-decoration: none;
+}

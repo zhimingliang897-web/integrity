@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>演示页面索引 - Integrity Lab</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .page-header h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+        }
+        
+        .demo-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        
+        .demo-card.completed {
+            border-color: var(--primary);
+        }
+        
+        .demo-card.pending {
+            opacity: 0.6;
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-badge.completed {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        
+        .status-badge.pending {
+            background: rgba(251, 191, 36, 0.2);
+            color: #fbbf24;
+        }
+        
+        .demo-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .demo-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        
+        .demo-desc {
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .demo-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+        
+        .demo-link:hover {
+            transform: translateY(-2px);
+        }
+        
+        .demo-link.disabled {
+            background: var(--border);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            margin-bottom: 60px;
+        }
+        
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px 32px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label {
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">Integrity Lab</a>
+                <div class="nav-links">
+                    <a href="../index.html">首页</a>
+                    <a href="../news.html">AI 热点</a>
+                    <a href="../tools.html">工具库</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1>🎯 演示页面索引</h1>
+            <p style="color: var(--text-muted); font-size: 18px;">
+                探索 Integrity Lab 的所有项目演示
+            </p>
+        </div>
+
+        <!-- 统计数据 -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">4</div>
+                <div class="stat-label">已完成</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">10</div>
+                <div class="stat-label">待完成</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">29%</div>
+                <div class="stat-label">完成度</div>
+            </div>
+        </div>
+
+        <!-- 已完成的演示 -->
+        <section class="section">
+            <h2 class="section-title">✅ 已完成的演示</h2>
+            <div class="demo-grid">
+                <!-- 分镜视频生成器 -->
+                <div class="demo-card completed">
+                    <span class="status-badge completed">已完成</span>
+                    <div class="demo-icon">🎬</div>
+                    <h3 class="demo-title">分镜视频生成器</h3>
+                    <p class="demo-desc">
+                        AI 剧本 → 分镜插图 → 配音 → 字幕 → 学习海报，一键出片
+                    </p>
+                    <a href="video-maker.html" class="demo-link">查看演示 →</a>
+                </div>
+
+                <!-- 台词学习工具 -->
+                <div class="demo-card completed">
+                    <span class="status-badge completed">已完成</span>
+                    <div class="demo-icon">📚</div>
+                    <h3 class="demo-title">台词学习工具</h3>
+                    <p class="demo-desc">
+                        从扇贝单词导出生词卡片，自动检索对应美剧/电影台词，结合语境高效记忆单词
+                    </p>
+                    <a href="dialogue-learning.html" class="demo-link">查看演示 →</a>
+                </div>
+
+                <!-- AI 辩论赛 -->
+                <div class="demo-card completed">
+                    <span class="status-badge completed">已完成</span>
+                    <div class="demo-icon">🎭</div>
+                    <h3 class="demo-title">AI 辩论赛</h3>
+                    <p class="demo-desc">
+                        多模型驱动的 AI 辩论竞技场。集成 Qwen/DeepSeek 等模型，还原标准华语辩论赛制
+                    </p>
+                    <a href="ai-debate.html" class="demo-link">查看演示 →</a>
+                </div>
+
+                <!-- 图文互转工具 -->
+                <div class="demo-card completed">
+                    <span class="status-badge completed">已完成</span>
+                    <div class="demo-icon">🎨</div>
+                    <h3 class="demo-title">图文互转工具</h3>
+                    <p class="demo-desc">
+                        AI 图片 ↔ 提示词双向转换工具箱。图片逆向生成提示词，或从提示词批量生成图片
+                    </p>
+                    <a href="image-prompt.html" class="demo-link">查看演示 →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 高优先级待完成 -->
+        <section class="section">
+            <h2 class="section-title">🔥 高优先级（待完成）</h2>
+            <div class="demo-grid">
+                <!-- 多模型对比平台 -->
+                <div class="demo-card pending">
+                    <span class="status-badge pending">开发中</span>
+                    <div class="demo-icon">⚖️</div>
+                    <h3 class="demo-title">多模型对比平台</h3>
+                    <p class="demo-desc">
+                        同一个界面横向对比 Qwen、Doubao、DeepSeek 等大模型，直观评测回复质量差异
+                    </p>
+                    <a href="#" class="demo-link disabled">即将推出</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 中优先级待完成 -->
+        <section class="section">
+            <h2 class="section-title">📦 中优先级（待完成）</h2>
+            <div class="demo-grid">
+                <!-- EasyApply -->
+                <div class="demo-card pending">
+                    <span class="status-badge pending">计划中</span>
+                    <div class="demo-icon">📋</div>
+                    <h3 class="demo-title">EasyApply 浏览器插件</h3>
+                    <p class="demo-desc">
+                        求职助手浏览器扩展。自动抓取招聘页面信息，一键导出为 Excel 表格
+                    </p>
+                    <a href="#" class="demo-link disabled">即将推出</a>
+                </div>
+
+                <!-- CourseDigest -->
+                <div class="demo-card pending">
+                    <span class="status-badge pending">计划中</span>
+                    <div class="demo-icon">📖</div>
+                    <h3 class="demo-title">CourseDigest 智能助考</h3>
+                    <p class="demo-desc">
+                        将录播课视频与 PPT 讲义转化为考试导向复习大纲，自动生成模拟试题
+                    </p>
+                    <a href="#" class="demo-link disabled">即将推出</a>
+                </div>
+
+                <!-- 文件助手 Agent -->
+                <div class="demo-card pending">
+                    <span class="status-badge pending">计划中</span>
+                    <div class="demo-icon">📁</div>
+                    <h3 class="demo-title">个人文件助手 Agent</h3>
+                    <p class="demo-desc">
+                        用大白话控制电脑极速秒搜全盘文件的大模型管家，支持手机端远程内网访问
+                    </p>
+                    <a href="#" class="demo-link disabled">即将推出</a>
+                </div>
+
+                <!-- 小红书内容生成器 -->
+                <div class="demo-card pending">
+                    <span class="status-badge pending">计划中</span>
+                    <div class="demo-icon">📝</div>
+                    <h3 class="demo-title">小红书内容生成器</h3>
+                    <p class="demo-desc">
+                        AI 全自动生成英语教育图文笔记，支持控制浏览器一键自动发布
+                    </p>
+                    <a href="#" class="demo-link disabled">即将推出</a>
+                </div>
+
+                <!-- 小红书图片生成器 -->
+                <div class="demo-card pending">
+                    <span class="status-badge pending">计划中</span>
+                    <div class="demo-icon">🖼️</div>
+                    <h3 class="demo-title">小红书图片生成器</h3>
+                    <p class="demo-desc">
+                        将文章一键转换为精美小红书多图，LLM 自动拆分文章为多页内容
+                    </p>
+                    <a href="#" class="demo-link disabled">即将推出</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 其他项目 -->
+        <section class="section">
+            <h2 class="section-title">🔧 其他项目</h2>
+            <div class="demo-grid">
+                <!-- AI 每日情报 -->
+                <div class="demo-card completed">
+                    <span class="status-badge completed">已完成</span>
+                    <div class="demo-icon">📡</div>
+                    <h3 class="demo-title">AI 每日情报 Agent</h3>
+                    <p class="demo-desc">
+                        全自动化的 AI 资讯情报官。聚合全球 12+ 技术信源，智能评级与摘要
+                    </p>
+                    <a href="../news.html" class="demo-link">查看演示 →</a>
+                </div>
+
+                <!-- PDF 工具集 -->
+                <div class="demo-card completed">
+                    <span class="status-badge completed">已完成</span>
+                    <div class="demo-icon">📄</div>
+                    <h3 class="demo-title">PDF 工具集</h3>
+                    <p class="demo-desc">
+                        在线 PDF 处理工具：图片转PDF、PDF合并、删页、插入PDF、页面重排等
+                    </p>
+                    <a href="../tools.html" class="demo-link">查看演示 →</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer style="margin-top: 80px; padding: 40px 0; border-top: 1px solid var(--border); text-align: center;">
+        <p style="color: var(--text-muted);">&copy; 2026 Integrity Lab. All rights reserved.</p>
+        <div style="margin-top: 16px;">
+            <a href="https://github.com/zhimingliang897-web/integrity" target="_blank" style="color: var(--primary); text-decoration: none;">GitHub</a>
+        </div>
+    </footer>
+</body>
+</html>

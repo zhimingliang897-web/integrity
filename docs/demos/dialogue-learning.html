@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台词学习工具 - Integrity Lab</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../tools-modules/tools-styles.css">
+    <style>
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--bg-card);
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .word-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .word-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .word-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .word-phonetic {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        .play-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .play-btn:hover {
+            background: var(--secondary);
+        }
+        
+        .quote-item {
+            background: rgba(59, 130, 246, 0.05);
+            border-left: 3px solid var(--primary);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+        }
+        
+        .quote-source {
+            color: var(--text-muted);
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .quote-text {
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+        
+        .quote-translation {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s;
+        }
+        
+        .status-text {
+            text-align: center;
+            color: var(--text-muted);
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">Integrity Lab</a>
+                <div class="nav-links">
+                    <a href="../index.html">首页</a>
+                    <a href="../news.html">AI 热点</a>
+                    <a href="../tools.html">工具库</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span id="username-display"></span>
+                <button id="auth-btn" onclick="handleAuth()">登录</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <h1>📚 台词学习工具</h1>
+        <p>从扇贝单词导出生词卡片，自动检索对应美剧/电影台词，结合语境高效记忆单词</p>
+    </div>
+
+    <!-- 主要内容区 -->
+    <div class="container">
+        <!-- 上传区 -->
+        <section class="demo-section">
+            <h2>上传 PDF</h2>
+            <div class="demo-card">
+                <div class="demo-body">
+                    <div class="upload-area" id="upload-area" onclick="document.getElementById('pdf-input').click()">
+                        <div class="upload-icon">📄</div>
+                        <p>点击或拖拽 PDF 文件到这里</p>
+                        <p style="color: var(--text-muted); font-size: 14px; margin-top: 10px;">
+                            支持扇贝单词导出的 PDF 文件
+                        </p>
+                    </div>
+                    <input type="file" id="pdf-input" accept=".pdf" style="display: none;" onchange="handleFileSelect(event)">
+                    
+                    <div id="progress-area" style="display: none; margin-top: 20px;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                        </div>
+                        <div class="status-text" id="status-text">准备中...</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 结果展示区 -->
+        <section class="demo-section" id="results-section" style="display: none;">
+            <h2>学习材料</h2>
+            <div id="words-container"></div>
+        </section>
+
+        <!-- 功能特性 -->
+        <section class="guide-section">
+            <h2>功能特性</h2>
+            <div class="demo-card">
+                <div class="demo-body">
+                    <ul class="feature-list">
+                        <li>自动从 PDF 提取单词列表</li>
+                        <li>查询影视剧台词，提供真实语境</li>
+                        <li>显示音标和发音</li>
+                        <li>AI 整理学习笔记和例句</li>
+                        <li>生成单词和台词的 TTS 语音</li>
+                        <li>自动生成情景故事帮助记忆</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 使用说明 -->
+        <section class="guide-section">
+            <h2>使用说明</h2>
+            <div class="guide-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>导出 PDF</h3>
+                        <p>从扇贝单词 APP 导出生词本为 PDF 文件</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>上传文件</h3>
+                        <p>点击或拖拽 PDF 文件到上传区域</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>等待处理</h3>
+                        <p>系统自动提取单词、查询台词、生成学习材料（约需 1-3 分钟）</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>开始学习</h3>
+                        <p>查看单词的影视台词例句，点击播放按钮听发音</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 示例展示 -->
+        <section class="example-section">
+            <h2>示例单词</h2>
+            <div class="word-card">
+                <div class="word-header">
+                    <div>
+                        <div class="word-title">serendipity</div>
+                        <div class="word-phonetic">/ˌserənˈdɪpəti/</div>
+                    </div>
+                    <button class="play-btn" onclick="playDemo()">🔊 播放</button>
+                </div>
+                <div class="quote-item">
+                    <div class="quote-source">《老友记》S01E01</div>
+                    <div class="quote-text">
+                        "It's just pure serendipity that we met at that coffee shop."
+                    </div>
+                    <div class="quote-translation">
+                        我们在那家咖啡店相遇纯属偶然。
+                    </div>
+                </div>
+                <div class="quote-item">
+                    <div class="quote-source">《生活大爆炸》S03E12</div>
+                    <div class="quote-text">
+                        "Sometimes the best discoveries come from serendipity."
+                    </div>
+                    <div class="quote-translation">
+                        有时候最好的发现来自于意外的惊喜。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技术说明 -->
+        <section class="guide-section">
+            <h2>技术栈</h2>
+            <div class="demo-card">
+                <div class="demo-body">
+                    <p style="color: var(--text-muted); line-height: 1.8;">
+                        <strong>PDF 处理：</strong>pdfplumber（提取文本）<br>
+                        <strong>台词查询：</strong>BeautifulSoup（网页爬取）<br>
+                        <strong>AI 整理：</strong>Qwen Plus（生成学习笔记）<br>
+                        <strong>语音合成：</strong>Edge TTS（单词发音和台词朗读）<br>
+                        <strong>音标查询：</strong>Free Dictionary API<br>
+                        <strong>后端框架：</strong>Python + Flask
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Integrity Lab. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com/zhimingliang897-web/integrity" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 通用脚本 -->
+    <script src="../tools-modules/demos-common.js"></script>
+    <script src="../tools-modules/tools-auth.js"></script>
+    
+    <!-- 页面特定脚本 -->
+    <script>
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            const { isLoggedIn, username } = DemoUtils.checkAuth();
+            updateAuthUI(isLoggedIn, username);
+            
+            // 设置拖拽上传
+            setupDragAndDrop();
+        });
+
+        // 更新认证 UI
+        function updateAuthUI(isLoggedIn, username) {
+            const authBtn = document.getElementById('auth-btn');
+            const usernameDisplay = document.getElementById('username-display');
+            
+            if (isLoggedIn) {
+                usernameDisplay.textContent = username;
+                authBtn.textContent = '退出';
+                authBtn.onclick = logout;
+            } else {
+                usernameDisplay.textContent = '';
+                authBtn.textContent = '登录';
+                authBtn.onclick = () => window.location.href = '../tools.html';
+            }
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            DemoUtils.showMessage('已退出登录', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }
+
+        // 处理认证
+        function handleAuth() {
+            const { isLoggedIn } = DemoUtils.checkAuth();
+            if (isLoggedIn) {
+                logout();
+            } else {
+                window.location.href = '../tools.html';
+            }
+        }
+
+        // 设置拖拽上传
+        function setupDragAndDrop() {
+            const uploadArea = document.getElementById('upload-area');
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFile(files[0]);
+                }
+            });
+        }
+
+        // 处理文件选择
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                handleFile(file);
+            }
+        }
+
+        // 处理文件上传
+        async function handleFile(file) {
+            const { token, isLoggedIn } = DemoUtils.checkAuth();
+            if (!isLoggedIn) {
+                DemoUtils.showMessage('请先登录', 'error');
+                window.location.href = '../tools.html';
+                return;
+            }
+
+            if (!file.name.endsWith('.pdf')) {
+                DemoUtils.showMessage('请上传 PDF 文件', 'error');
+                return;
+            }
+
+            // 显示进度区域
+            document.getElementById('progress-area').style.display = 'block';
+            updateProgress(0, '上传中...');
+
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const response = await fetch(API_BASE + '/api/tools/dialogue-learning/process', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('处理失败');
+                }
+
+                // 轮询处理状态
+                const data = await response.json();
+                if (data.task_id) {
+                    pollTaskStatus(data.task_id, token);
+                } else {
+                    throw new Error('未返回任务 ID');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                DemoUtils.showMessage('处理失败: ' + error.message, 'error');
+                document.getElementById('progress-area').style.display = 'none';
+            }
+        }
+
+        // 轮询任务状态
+        async function pollTaskStatus(taskId, token) {
+            const interval = setInterval(async () => {
+                try {
+                    const response = await fetch(API_BASE + '/api/tools/dialogue-learning/status/' + taskId, {
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.status === 'completed') {
+                        clearInterval(interval);
+                        updateProgress(100, '处理完成！');
+                        displayResults(data.results);
+                        DemoUtils.showMessage('处理完成！', 'success');
+                    } else if (data.status === 'failed') {
+                        clearInterval(interval);
+                        throw new Error(data.error || '处理失败');
+                    } else {
+                        // 更新进度
+                        updateProgress(data.progress || 0, data.message || '处理中...');
+                    }
+                } catch (error) {
+                    clearInterval(interval);
+                    console.error('Error:', error);
+                    DemoUtils.showMessage('处理失败: ' + error.message, 'error');
+                    document.getElementById('progress-area').style.display = 'none';
+                }
+            }, 2000);
+        }
+
+        // 更新进度
+        function updateProgress(percent, message) {
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('status-text').textContent = message;
+        }
+
+        // 显示结果
+        function displayResults(results) {
+            const container = document.getElementById('words-container');
+            const section = document.getElementById('results-section');
+            
+            container.innerHTML = '';
+            
+            results.words.forEach((word, index) => {
+                const wordCard = createWordCard(word, index);
+                container.appendChild(wordCard);
+            });
+            
+            section.style.display = 'block';
+            section.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // 创建单词卡片
+        function createWordCard(word, index) {
+            const card = document.createElement('div');
+            card.className = 'word-card';
+            
+            let quotesHTML = '';
+            if (word.quotes && word.quotes.length > 0) {
+                quotesHTML = word.quotes.map(quote => `
+                    <div class="quote-item">
+                        <div class="quote-source">${quote.source || '未知来源'}</div>
+                        <div class="quote-text">${quote.text}</div>
+                        ${quote.translation ? `<div class="quote-translation">${quote.translation}</div>` : ''}
+                    </div>
+                `).join('');
+            }
+            
+            card.innerHTML = `
+                <div class="word-header">
+                    <div>
+                        <div class="word-title">${word.word}</div>
+                        ${word.phonetic ? `<div class="word-phonetic">${word.phonetic}</div>` : ''}
+                    </div>
+                    <button class="play-btn" onclick="playWord('${word.audio_url}')">🔊 播放</button>
+                </div>
+                ${quotesHTML}
+            `;
+            
+            return card;
+        }
+
+        // 播放单词发音
+        function playWord(audioUrl) {
+            if (!audioUrl) {
+                DemoUtils.showMessage('暂无音频', 'error');
+                return;
+            }
+            
+            const audio = new Audio(audioUrl);
+            audio.play().catch(error => {
+                console.error('Play error:', error);
+                DemoUtils.showMessage('播放失败', 'error');
+            });
+        }
+
+        // 播放示例
+        function playDemo() {
+            DemoUtils.showMessage('这是示例，请上传 PDF 查看真实结果', 'info');
+        }
+    </script>
+</body>
+</html>

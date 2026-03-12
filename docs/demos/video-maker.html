@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分镜视频生成器 - Integrity Lab</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../tools-modules/tools-styles.css">
+    <style>
+        .video-preview {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .video-preview video {
+            width: 100%;
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: transform 0.2s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .example-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .example-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+        
+        .example-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .example-card h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .example-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-list li::before {
+            content: "✓";
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="../index.html" class="logo">Integrity Lab</a>
+                <div class="nav-links">
+                    <a href="../index.html">首页</a>
+                    <a href="../news.html">AI 热点</a>
+                    <a href="../tools.html">工具库</a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span id="username-display"></span>
+                <button id="auth-btn" onclick="handleAuth()">登录</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页面标题 -->
+    <div class="page-header">
+        <h1>🎬 分镜视频生成器</h1>
+        <p>AI 剧本 → 分镜插图 → 配音 → 字幕 → 学习海报，一键出片</p>
+    </div>
+
+    <!-- 主要内容区 -->
+    <div class="container">
+        <!-- 功能演示区 -->
+        <section class="demo-section">
+            <h2>在线生成</h2>
+            <div class="demo-card">
+                <div class="demo-body">
+                    <form id="video-form" onsubmit="generateVideo(event)">
+                        <div class="form-group">
+                            <label for="project-name">项目名称</label>
+                            <input type="text" id="project-name" placeholder="例如：咖啡店点单" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="scene-desc">场景描述</label>
+                            <textarea id="scene-desc" placeholder="例如：在咖啡店点一杯拿铁，和店员交流" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="video-type">视频方案</label>
+                            <select id="video-type">
+                                <option value="multi">多图方案 - 每个场景单独生成图片</option>
+                                <option value="grid">四宫格方案 - 一张四格漫画图</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary" id="generate-btn">
+                            开始生成
+                        </button>
+                    </form>
+                    
+                    <div id="result-area" style="margin-top: 30px; display: none;">
+                        <h3>生成结果</h3>
+                        <div class="video-preview">
+                            <video id="result-video" controls></video>
+                        </div>
+                        <button class="btn-primary" onclick="downloadVideo()">下载视频</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 功能特性 -->
+        <section class="guide-section">
+            <h2>功能特性</h2>
+            <div class="demo-card">
+                <div class="demo-body">
+                    <ul class="feature-list">
+                        <li>AI 自动生成英语对话剧本</li>
+                        <li>自动生成分镜插图（支持多图和四宫格两种方案）</li>
+                        <li>Edge TTS 自动配音（支持多种英语声音）</li>
+                        <li>自动添加中英文字幕</li>
+                        <li>生成学习海报（核心表达提取）</li>
+                        <li>支持手动编辑剧本后重新生成</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 使用说明 -->
+        <section class="guide-section">
+            <h2>使用说明</h2>
+            <div class="guide-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>输入场景信息</h3>
+                        <p>填写项目名称和场景描述，例如"在咖啡店点单"</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>选择视频方案</h3>
+                        <p>多图方案：场景变化大，视觉丰富<br>四宫格方案：风格统一，叙事连贯</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>等待生成</h3>
+                        <p>AI 自动生成剧本、图片、配音和字幕（约需 2-5 分钟）</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>下载视频</h3>
+                        <p>预览生成的视频，满意后下载到本地</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 示例展示 -->
+        <section class="example-section">
+            <h2>示例场景</h2>
+            <div class="example-grid">
+                <div class="example-card">
+                    <h4>☕ 咖啡店点单</h4>
+                    <p>学习如何在咖啡店用英语点单，包括询问价格、选择杯型等常用表达</p>
+                </div>
+                <div class="example-card">
+                    <h4>🏥 药店买药</h4>
+                    <p>学习在药店描述症状、询问药品用法等医疗相关英语表达</p>
+                </div>
+                <div class="example-card">
+                    <h4>🚗 租车对话</h4>
+                    <p>学习租车时的英语交流，包括车型选择、保险咨询等</p>
+                </div>
+                <div class="example-card">
+                    <h4>🛒 超市购物</h4>
+                    <p>学习在超市购物时的英语表达，包括询问位置、讨价还价等</p>
+                </div>
+                <div class="example-card">
+                    <h4>🏨 酒店入住</h4>
+                    <p>学习酒店入住登记、房间服务等相关英语对话</p>
+                </div>
+                <div class="example-card">
+                    <h4>✈️ 机场登机</h4>
+                    <p>学习机场值机、安检、登机等场景的英语表达</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技术说明 -->
+        <section class="guide-section">
+            <h2>技术栈</h2>
+            <div class="demo-card">
+                <div class="demo-body">
+                    <p style="color: var(--text-muted); line-height: 1.8;">
+                        <strong>AI 模型：</strong>Qwen Plus（剧本生成）+ Qwen Image Max（图片生成）<br>
+                        <strong>语音合成：</strong>Edge TTS（支持多种英语声音）<br>
+                        <strong>视频处理：</strong>FFmpeg（视频合成、字幕添加）<br>
+                        <strong>图像处理：</strong>Pillow（图片裁切、海报生成）<br>
+                        <strong>后端框架：</strong>Python + Flask
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 Integrity Lab. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="https://github.com/zhimingliang897-web/integrity" target="_blank">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 通用脚本 -->
+    <script src="../tools-modules/demos-common.js"></script>
+    <script src="../tools-modules/tools-auth.js"></script>
+    
+    <!-- 页面特定脚本 -->
+    <script>
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            const { isLoggedIn, username } = DemoUtils.checkAuth();
+            updateAuthUI(isLoggedIn, username);
+        });
+
+        // 更新认证 UI
+        function updateAuthUI(isLoggedIn, username) {
+            const authBtn = document.getElementById('auth-btn');
+            const usernameDisplay = document.getElementById('username-display');
+            
+            if (isLoggedIn) {
+                usernameDisplay.textContent = username;
+                authBtn.textContent = '退出';
+                authBtn.onclick = logout;
+            } else {
+                usernameDisplay.textContent = '';
+                authBtn.textContent = '登录';
+                authBtn.onclick = () => window.location.href = '../tools.html';
+            }
+        }
+
+        // 退出登录
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            DemoUtils.showMessage('已退出登录', 'success');
+            setTimeout(() => location.reload(), 1000);
+        }
+
+        // 处理认证
+        function handleAuth() {
+            const { isLoggedIn } = DemoUtils.checkAuth();
+            if (isLoggedIn) {
+                logout();
+            } else {
+                window.location.href = '../tools.html';
+            }
+        }
+
+        // 生成视频
+        async function generateVideo(event) {
+            event.preventDefault();
+            
+            const { token, isLoggedIn } = DemoUtils.checkAuth();
+            if (!isLoggedIn) {
+                DemoUtils.showMessage('请先登录', 'error');
+                window.location.href = '../tools.html';
+                return;
+            }
+
+            const projectName = document.getElementById('project-name').value;
+            const sceneDesc = document.getElementById('scene-desc').value;
+            const videoType = document.getElementById('video-type').value;
+            const generateBtn = document.getElementById('generate-btn');
+
+            DemoUtils.showLoading(generateBtn, '生成中，请稍候...');
+
+            try {
+                const response = await fetch(API_BASE + '/api/tools/video-maker/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        project_name: projectName,
+                        scene_description: sceneDesc,
+                        video_type: videoType
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('生成失败');
+                }
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    // 显示结果
+                    document.getElementById('result-area').style.display = 'block';
+                    const video = document.getElementById('result-video');
+                    video.src = data.video_url;
+                    
+                    DemoUtils.showMessage('视频生成成功！', 'success');
+                    
+                    // 滚动到结果区域
+                    document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    throw new Error(data.message || '生成失败');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                DemoUtils.showMessage('生成失败: ' + error.message, 'error');
+            } finally {
+                DemoUtils.hideLoading(generateBtn);
+            }
+        }
+
+        // 下载视频
+        function downloadVideo() {
+            const video = document.getElementById('result-video');
+            const videoUrl = video.src;
+            
+            if (!videoUrl) {
+                DemoUtils.showMessage('没有可下载的视频', 'error');
+                return;
+            }
+
+            const a = document.createElement('a');
+            a.href = videoUrl;
+            a.download = 'video_' + Date.now() + '.mp4';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            DemoUtils.showMessage('开始下载...', 'success');
+        }
+    </script>
+</body>
+</html>
