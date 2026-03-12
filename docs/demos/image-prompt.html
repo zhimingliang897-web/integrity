@@ -624,29 +624,63 @@
             const btn = document.getElementById('generate-prompt-btn');
             DemoUtils.showLoading(btn, '生成中...');
 
-            // 模拟生成提示词
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
             const promptList = document.getElementById('prompt-list');
             promptList.innerHTML = '';
 
-            selectedFiles.forEach((file, index) => {
-                const prompt = generateMockPrompt(file.name, selectedStyle);
-                const item = document.createElement('div');
-                item.className = 'result-item';
-                item.innerHTML = `
-                    <div class="result-header">
-                        <span class="result-title">${file.name}</span>
-                        <button class="copy-btn" onclick="copyPrompt(this, '${prompt.replace(/'/g, "\\'")}')">复制</button>
-                    </div>
-                    <div class="result-text">${prompt}</div>
-                `;
-                promptList.appendChild(item);
-            });
+            for (const file of selectedFiles) {
+                try {
+                    const formData = new FormData();
+                    formData.append('image', file);
+                    formData.append('style', selectedStyle);
+
+                    const response = await fetch(`${API_BASE}/api/tools/image-prompt/analyze`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: formData
+                    });
+
+                    const data = await response.json();
+
+                    const item = document.createElement('div');
+                    item.className = 'result-item';
+                    
+                    if (response.ok && data.success) {
+                        const prompt = data.prompt;
+                        item.innerHTML = `
+                            <div class="result-header">
+                                <span class="result-title">${file.name}</span>
+                                <button class="copy-btn" onclick="copyPrompt(this, \`${prompt.replace(/`/g, '\\`')}\`)">复制</button>
+                            </div>
+                            <div class="result-text">${prompt}</div>
+                        `;
+                    } else {
+                        item.innerHTML = `
+                            <div class="result-header">
+                                <span class="result-title">${file.name}</span>
+                            </div>
+                            <div class="result-text" style="color: #ef4444;">${data.error || '生成失败'}</div>
+                        `;
+                    }
+                    
+                    promptList.appendChild(item);
+                } catch (error) {
+                    const item = document.createElement('div');
+                    item.className = 'result-item';
+                    item.innerHTML = `
+                        <div class="result-header">
+                            <span class="result-title">${file.name}</span>
+                        </div>
+                        <div class="result-text" style="color: #ef4444;">请求失败: ${error.message}</div>
+                    `;
+                    promptList.appendChild(item);
+                }
+            }
 
             document.getElementById('prompt-results').style.display = 'block';
             DemoUtils.hideLoading(btn);
-            DemoUtils.showMessage('提示词生成成功', 'success');
+            DemoUtils.showMessage('提示词生成完成', 'success');
         }
 
         // 生成模拟提示词
@@ -690,29 +724,51 @@
             const btn = document.getElementById('generate-image-btn');
             DemoUtils.showLoading(btn, '生成中...');
 
-            // 模拟生成图片
-            await new Promise(resolve => setTimeout(resolve, 3000));
+            try {
+                const response = await fetch(`${API_BASE}/api/tools/image-prompt/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        prompt: prompt,
+                        size: size,
+                        count: count
+                    })
+                });
 
-            const container = document.getElementById('generated-images');
-            container.innerHTML = '';
-            container.style.display = 'grid';
+                const data = await response.json();
+                const container = document.getElementById('generated-images');
+                container.innerHTML = '';
+                container.style.display = 'grid';
 
-            for (let i = 0; i < count; i++) {
-                const item = document.createElement('div');
-                item.className = 'generated-item';
-                item.innerHTML = `
-                    <img src="https://via.placeholder.com/${size.replace('x', 'x')}/3b82f6/ffffff?text=Generated+Image+${i + 1}" 
-                         alt="Generated ${i + 1}">
-                    <div class="generated-actions">
-                        <button class="action-btn" onclick="downloadImage(this)">下载</button>
-                        <button class="action-btn" onclick="shareImage(this)">分享</button>
-                    </div>
-                `;
-                container.appendChild(item);
+                if (response.ok && data.success) {
+                    // 显示优化后的提示词
+                    const item = document.createElement('div');
+                    item.className = 'result-item';
+                    item.style.gridColumn = '1 / -1';
+                    item.innerHTML = `
+                        <div class="result-header">
+                            <span class="result-title">优化后的提示词</span>
+                            <button class="copy-btn" onclick="copyPrompt(this, \`${(data.optimized_prompt || prompt).replace(/`/g, '\\`')}\`)">复制</button>
+                        </div>
+                        <div class="result-text">${data.optimized_prompt || prompt}</div>
+                        ${data.message ? `<div style="margin-top: 12px; padding: 12px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; font-size: 13px; color: var(--text-muted);">💡 ${data.message}</div>` : ''}
+                    `;
+                    container.appendChild(item);
+                    
+                    DemoUtils.showMessage(data.message || '提示词优化成功', 'success');
+                } else {
+                    throw new Error(data.error || '生成失败');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                DemoUtils.showMessage('生成失败: ' + error.message, 'error');
+                document.getElementById('generated-images').style.display = 'none';
+            } finally {
+                DemoUtils.hideLoading(btn);
             }
-
-            DemoUtils.hideLoading(btn);
-            DemoUtils.showMessage('图片生成成功', 'success');
         }
 
         // 下载图片

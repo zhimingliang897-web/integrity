@@ -308,6 +308,8 @@
     
     <!-- 页面特定脚本 -->
     <script>
+        const API_BASE = 'https://api.liangyiren.top';
+
         // 页面初始化
         document.addEventListener('DOMContentLoaded', function() {
             const { isLoggedIn, username } = DemoUtils.checkAuth();
@@ -364,9 +366,10 @@
             const videoType = document.getElementById('video-type').value;
             const generateBtn = document.getElementById('generate-btn');
 
-            DemoUtils.showLoading(generateBtn, '生成中，请稍候...');
+            DemoUtils.showLoading(generateBtn, '提交任务中...');
 
             try {
+                // 提交任务
                 const response = await fetch(API_BASE + '/api/tools/video-maker/generate', {
                     method: 'POST',
                     headers: {
@@ -381,30 +384,97 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('生成失败');
+                    throw new Error('提交失败');
                 }
 
                 const data = await response.json();
                 
-                if (data.success) {
-                    // 显示结果
-                    document.getElementById('result-area').style.display = 'block';
-                    const video = document.getElementById('result-video');
-                    video.src = data.video_url;
-                    
-                    DemoUtils.showMessage('视频生成成功！', 'success');
-                    
-                    // 滚动到结果区域
-                    document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
+                if (data.task_id) {
+                    // 开始轮询任务状态
+                    DemoUtils.showLoading(generateBtn, '生成中...');
+                    pollVideoStatus(data.task_id, token, generateBtn);
                 } else {
-                    throw new Error(data.message || '生成失败');
+                    throw new Error(data.error || '未返回任务ID');
                 }
             } catch (error) {
                 console.error('Error:', error);
                 DemoUtils.showMessage('生成失败: ' + error.message, 'error');
-            } finally {
                 DemoUtils.hideLoading(generateBtn);
             }
+        }
+
+        // 轮询视频状态
+        async function pollVideoStatus(taskId, token, generateBtn) {
+            const maxAttempts = 60;
+            let attempts = 0;
+
+            const interval = setInterval(async () => {
+                attempts++;
+                
+                if (attempts > maxAttempts) {
+                    clearInterval(interval);
+                    DemoUtils.showMessage('生成超时，请稍后重试', 'error');
+                    DemoUtils.hideLoading(generateBtn);
+                    return;
+                }
+
+                try {
+                    const response = await fetch(API_BASE + '/api/tools/video-maker/status/' + taskId, {
+                        headers: {
+                            'Authorization': 'Bearer ' + token
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (data.status === 'completed') {
+                        clearInterval(interval);
+                        DemoUtils.hideLoading(generateBtn);
+
+                        if (data.video_url) {
+                            document.getElementById('result-area').style.display = 'block';
+                            const video = document.getElementById('result-video');
+                            video.src = API_BASE + data.video_url;
+                            DemoUtils.showMessage('视频生成成功！', 'success');
+                            document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
+                        } else if (data.script) {
+                            // 没有视频，显示剧本
+                            DemoUtils.showMessage(data.message || '剧本生成成功，视频合成不可用', 'info');
+                            showScriptResult(data.script);
+                        }
+                    } else if (data.status === 'failed') {
+                        clearInterval(interval);
+                        DemoUtils.showMessage('生成失败: ' + (data.error || '未知错误'), 'error');
+                        DemoUtils.hideLoading(generateBtn);
+                    } else {
+                        // 更新进度
+                        const progress = data.progress || 0;
+                        DemoUtils.showLoading(generateBtn, `生成中... ${progress}%`);
+                    }
+                } catch (error) {
+                    console.error('Poll error:', error);
+                }
+            }, 3000);
+        }
+
+        // 显示剧本结果
+        function showScriptResult(script) {
+            const resultArea = document.getElementById('result-area');
+            resultArea.style.display = 'block';
+            resultArea.innerHTML = `
+                <h3>生成的剧本</h3>
+                <div style="background: var(--bg-card); padding: 20px; border-radius: 8px; margin-top: 16px;">
+                    <h4>${script.title || '视频剧本'}</h4>
+                    ${script.scenes ? script.scenes.map((scene, i) => `
+                        <div style="margin: 16px 0; padding: 16px; background: rgba(59, 130, 246, 0.05); border-radius: 8px;">
+                            <h5>场景 ${i + 1}</h5>
+                            <p style="color: var(--text-muted); margin: 8px 0;">${scene.description || ''}</p>
+                            <p style="font-style: italic;">"${scene.narration || ''}"</p>
+                        </div>
+                    `).join('') : '<p>剧本内容不可用</p>'}
+                </div>
+            `;
+            resultArea.scrollIntoView({ behavior: 'smooth' });
         }
 
         // 下载视频

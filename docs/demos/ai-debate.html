@@ -545,7 +545,7 @@
                 return;
             }
 
-            const rounds = document.getElementById('debate-rounds').value;
+            const rounds = parseInt(document.getElementById('debate-rounds').value);
 
             // 显示辩论场
             document.getElementById('debate-arena').style.display = 'block';
@@ -559,8 +559,126 @@
 
             debateInProgress = true;
 
-            // 模拟辩论过程（实际应该连接后端 SSE）
-            simulateDebate(topic, parseInt(rounds));
+            // 连接 SSE
+            connectDebateSSE(topic, rounds, token);
+        }
+
+        // 连接辩论 SSE
+        async function connectDebateSSE(topic, rounds, token) {
+            const startBtn = document.getElementById('start-debate-btn');
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/tools/ai-debate/start`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        topic: topic,
+                        rounds: rounds
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('连接失败');
+                }
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+
+                while (debateInProgress) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop() || '';
+
+                    for (const line of lines) {
+                        if (line.startsWith('event: ')) {
+                            const eventType = line.substring(7).trim();
+                            continue;
+                        }
+                        if (line.startsWith('data: ')) {
+                            try {
+                                const data = JSON.parse(line.substring(6));
+                                handleDebateEvent(data);
+                            } catch (e) {
+                                console.error('Parse error:', e);
+                            }
+                        }
+                    }
+                }
+
+            } catch (error) {
+                console.error('SSE Error:', error);
+                if (debateInProgress) {
+                    // 如果 SSE 失败，使用模拟数据
+                    DemoUtils.showMessage('SSE 连接失败，使用模拟数据', 'warning');
+                    simulateDebate(topic, rounds);
+                    return;
+                }
+            }
+
+            startBtn.disabled = false;
+            startBtn.textContent = '开始辩论';
+            debateInProgress = false;
+        }
+
+        // 处理辩论事件
+        function handleDebateEvent(data) {
+            if (data.stage) {
+                // 阶段事件
+                updateStage(data.stage, data.desc || '');
+            } else if (data.chunk) {
+                // 流式文本块
+                appendDebateChunk(data);
+            } else if (data.content) {
+                // 完整消息
+                addDebateMessage(data.speaker, data.role, data.side, data.content);
+            } else if (data.winner) {
+                // 结果事件
+                showDebateResultDirect(data.winner, data.comment || '');
+            }
+        }
+
+        let currentMessageContent = '';
+        let currentSpeaker = '';
+
+        // 追加流式文本块
+        function appendDebateChunk(data) {
+            if (currentSpeaker !== data.speaker) {
+                currentSpeaker = data.speaker;
+                currentMessageContent = '';
+            }
+            currentMessageContent += data.text || '';
+            
+            // 更新最后一条消息
+            const messagesDiv = document.getElementById('debate-messages');
+            let lastMessage = messagesDiv.lastElementChild;
+            
+            if (!lastMessage || !lastMessage.dataset.speaker || lastMessage.dataset.speaker !== data.speaker) {
+                addDebateMessage(data.speaker, data.role, data.side, currentMessageContent, true);
+            } else {
+                lastMessage.querySelector('.message-content').textContent = currentMessageContent;
+            }
+            
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // 显示辩论结果（直接）
+        function showDebateResultDirect(winner, comment) {
+            const resultDiv = document.getElementById('debate-result');
+            const winnerText = document.getElementById('winner-text');
+            const judgeComment = document.getElementById('judge-comment');
+
+            winnerText.textContent = `${winner}获胜`;
+            judgeComment.textContent = comment;
+            
+            resultDiv.style.display = 'block';
+            addDebateMessage('AI 裁判', '裁判', 'judge', comment);
         }
 
         // 模拟辩论过程
@@ -646,10 +764,11 @@
         }
 
         // 添加辩论消息
-        function addDebateMessage(name, role, side, content) {
+        function addDebateMessage(name, role, side, content, isStreaming = false) {
             const messagesDiv = document.getElementById('debate-messages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `debate-message ${side}`;
+            messageDiv.dataset.speaker = name;
             
             const now = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
             
@@ -658,7 +777,7 @@
                     <span class="message-speaker">${name}（${role}）</span>
                     <span class="message-time">${now}</span>
                 </div>
-                <div class="message-content">${content}</div>
+                <div class="message-content">${content}${isStreaming ? '<span class="typing-cursor">▌</span>' : ''}</div>
             `;
             
             messagesDiv.appendChild(messageDiv);

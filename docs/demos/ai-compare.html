@@ -423,61 +423,77 @@
     <script>
         const API_BASE = 'https://api.liangyiren.top';
         
-        const providers = [
-            {
-                name: 'Qwen',
-                models: ['qwen-turbo', 'qwen-plus', 'qwen-max'],
-                selectedModels: ['qwen-turbo'],
-                hasKey: true
-            },
-            {
-                name: 'DeepSeek',
-                models: ['deepseek-chat', 'deepseek-coder'],
-                selectedModels: ['deepseek-chat'],
-                hasKey: true
-            },
-            {
-                name: 'Doubao',
-                models: ['doubao-pro-32k', 'doubao-pro-128k'],
-                selectedModels: [],
-                hasKey: true
-            },
-            {
-                name: 'Kimi',
-                models: ['moonshot-v1-8k', 'moonshot-v1-32k'],
-                selectedModels: [],
-                hasKey: true
-            },
-            {
-                name: 'OpenAI',
-                models: ['gpt-4o', 'gpt-4o-mini', 'gpt-3.5-turbo'],
-                selectedModels: [],
-                hasKey: false
-            }
-        ];
-
+        let providers = [];
         let results = [];
 
         document.addEventListener('DOMContentLoaded', function() {
             const { isLoggedIn, username } = DemoUtils.checkAuth();
             updateAuthUI(isLoggedIn, username);
             loadSettings();
-            renderProviders();
+            loadProvidersFromAPI();
         });
+
+        async function loadProvidersFromAPI() {
+            try {
+                const response = await fetch(`${API_BASE}/api/tools/ai-compare/providers`);
+                if (response.ok) {
+                    const data = await response.json();
+                    providers = data.providers.map(p => ({
+                        ...p,
+                        selectedModels: p.models.length > 0 ? [p.models[0].id] : [],
+                        hasKey: true
+                    }));
+                    
+                    const saved = localStorage.getItem('ai-compare-settings');
+                    if (saved) {
+                        try {
+                            const settings = JSON.parse(saved);
+                            if (settings.providers) {
+                                settings.providers.forEach(sp => {
+                                    const provider = providers.find(p => p.id === sp.id);
+                                    if (provider) {
+                                        provider.selectedModels = sp.selectedModels || [];
+                                    }
+                                });
+                            }
+                        } catch (e) {}
+                    }
+                    
+                    renderProviders();
+                } else {
+                    console.error('Failed to load providers');
+                    providers = getDefaultProviders();
+                    renderProviders();
+                }
+            } catch (error) {
+                console.error('Error loading providers:', error);
+                providers = getDefaultProviders();
+                renderProviders();
+            }
+        }
+
+        function getDefaultProviders() {
+            return [
+                {
+                    id: 'qwen',
+                    name: '千问',
+                    models: [
+                        { id: 'qwen-turbo', name: 'qwen-turbo' },
+                        { id: 'qwen-plus', name: 'qwen-plus' },
+                        { id: 'qwen-max', name: 'qwen-max' },
+                        { id: 'qwen3.5-plus', name: 'qwen3.5-plus' }
+                    ],
+                    selectedModels: ['qwen-turbo'],
+                    hasKey: true
+                }
+            ];
+        }
 
         function loadSettings() {
             const saved = localStorage.getItem('ai-compare-settings');
             if (saved) {
                 try {
                     const settings = JSON.parse(saved);
-                    if (settings.providers) {
-                        settings.providers.forEach(sp => {
-                            const provider = providers.find(p => p.name === sp.name);
-                            if (provider) {
-                                provider.selectedModels = sp.selectedModels || [];
-                            }
-                        });
-                    }
                     if (settings.question) {
                         document.getElementById('question').value = settings.question;
                     }
@@ -486,18 +502,6 @@
                     }
                 } catch (e) {}
             }
-        }
-
-        function saveSettings() {
-            const settings = {
-                providers: providers.map(p => ({
-                    name: p.name,
-                    selectedModels: p.selectedModels
-                })),
-                question: document.getElementById('question').value,
-                temperature: document.getElementById('temperature').value
-            };
-            localStorage.setItem('ai-compare-settings', JSON.stringify(settings));
         }
 
         function renderProviders() {
@@ -517,10 +521,10 @@
                     </div>
                     <div class="models-list">
                         ${provider.models.map(model => `
-                            <span class="model-item ${provider.selectedModels.includes(model) ? 'selected' : ''}"
-                                  data-provider="${provider.name}" data-model="${model}"
-                                  onclick="toggleModel('${provider.name}', '${model}')">
-                                ${model}
+                            <span class="model-item ${provider.selectedModels.includes(model.id || model) ? 'selected' : ''}"
+                                  data-provider="${provider.id || provider.name}" data-model="${model.id || model}"
+                                  onclick="toggleModel('${provider.id || provider.name}', '${model.id || model}')">
+                                ${model.name || model}
                             </span>
                         `).join('')}
                     </div>
@@ -530,15 +534,15 @@
             });
         }
 
-        function toggleModel(providerName, model) {
-            const provider = providers.find(p => p.name === providerName);
+        function toggleModel(providerId, modelId) {
+            const provider = providers.find(p => (p.id || p.name) === providerId);
             if (!provider) return;
 
-            const index = provider.selectedModels.indexOf(model);
+            const index = provider.selectedModels.indexOf(modelId);
             if (index > -1) {
                 provider.selectedModels.splice(index, 1);
             } else {
-                provider.selectedModels.push(model);
+                provider.selectedModels.push(modelId);
             }
 
             saveSettings();
@@ -547,7 +551,7 @@
 
         function selectAll() {
             providers.forEach(p => {
-                p.selectedModels = [...p.models];
+                p.selectedModels = p.models.map(m => m.id || m);
             });
             saveSettings();
             renderProviders();
@@ -559,6 +563,18 @@
             });
             saveSettings();
             renderProviders();
+        }
+
+        function saveSettings() {
+            const settings = {
+                providers: providers.map(p => ({
+                    id: p.id || p.name,
+                    selectedModels: p.selectedModels
+                })),
+                question: document.getElementById('question').value,
+                temperature: document.getElementById('temperature').value
+            };
+            localStorage.setItem('ai-compare-settings', JSON.stringify(settings));
         }
 
         function updateAuthUI(isLoggedIn, username) {
@@ -608,10 +624,10 @@
 
             const selectedRequests = [];
             providers.forEach(p => {
-                p.selectedModels.forEach(model => {
+                p.selectedModels.forEach(modelId => {
                     selectedRequests.push({
-                        provider: p.name,
-                        model: model
+                        provider: p.id || p.name.toLowerCase(),
+                        model: modelId
                     });
                 });
             });
@@ -645,7 +661,7 @@
             const promises = selectedRequests.map(async (req, index) => {
                 const startTime = Date.now();
                 try {
-                    const response = await fetch(`${API_BASE}/api/tools/ai-compare`, {
+                    const response = await fetch(`${API_BASE}/api/tools/ai-compare/query`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -666,8 +682,9 @@
                     results[index].loading = false;
                     results[index].latencyMs = endTime - startTime;
 
-                    if (response.ok && data.content) {
+                    if (response.ok && data.success) {
                         results[index].content = data.content;
+                        results[index].provider = data.provider || req.provider;
                     } else {
                         results[index].error = data.error || '请求失败';
                     }
