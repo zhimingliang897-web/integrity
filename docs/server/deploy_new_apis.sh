@@ -21,7 +21,7 @@ ls -la app/tools/
 
 # 4. 安装新依赖
 echo "正在安装新依赖..."
-pip install openai pdfplumber beautifulsoup4 edge-tts -q
+pip install openai pdfplumber beautifulsoup4 edge-tts pillow pypdf requests -q
 
 # 5. 检查依赖安装
 echo "检查依赖..."
@@ -45,7 +45,7 @@ gunicorn -w 2 -b 0.0.0.0:5000 app.main:app --daemon \
   --env INVITE_CODES=demo2026,friend2026,test2026
 
 # 8. 等待服务启动
-sleep 2
+sleep 3
 
 # 9. 验证服务
 echo "验证服务..."

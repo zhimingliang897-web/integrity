@@ -29,6 +29,9 @@ image_prompt_bp = Blueprint('image_prompt', __name__, url_prefix='/api/tools/ima
 UPLOAD_FOLDER = os.path.join(tempfile.gettempdir(), 'integrity_images')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+DASHSCOPE_API_KEY = os.environ.get('DASHSCOPE_API_KEY', 'sk-0ef56d1b3ba54a188ce28a46c54e2a24')
+DASHSCOPE_BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+
 
 def require_token(f):
     """JWT Token 认证装饰器"""
@@ -52,28 +55,25 @@ def get_vision_client():
     if not HAS_OPENAI:
         return None, '缺少 openai 库'
     
-    qwen_api_key = os.environ.get('QWEN_API_KEY')
-    if qwen_api_key:
+    if DASHSCOPE_API_KEY:
         return OpenAI(
-            api_key=qwen_api_key,
-            base_url='https://dashscope.aliyuncs.com/compatible-mode/v1'
+            api_key=DASHSCOPE_API_KEY,
+            base_url=DASHSCOPE_BASE_URL
         ), None
-    
-    openai_api_key = os.environ.get('OPENAI_API_KEY')
-    if openai_api_key:
-        return OpenAI(api_key=openai_api_key), None
     
     return None, '未配置 API Key'
 
 
 def get_image_gen_client():
-    """获取图片生成客户端"""
+    """获取图片生成客户端（使用 Qwen VL）"""
     if not HAS_OPENAI:
         return None, '缺少 openai 库'
     
-    openai_api_key = os.environ.get('OPENAI_API_KEY')
-    if openai_api_key:
-        return OpenAI(api_key=openai_api_key), 'dalle'
+    if DASHSCOPE_API_KEY:
+        return OpenAI(
+            api_key=DASHSCOPE_API_KEY,
+            base_url=DASHSCOPE_BASE_URL
+        ), 'qwen'
     
     return None, '未配置图片生成 API Key'
 
@@ -147,7 +147,7 @@ def analyze_image():
 直接输出提示词，不要有其他解释。"""
         
         response = client.chat.completions.create(
-            model='qwen-vl-max' if os.environ.get('QWEN_API_KEY') else 'gpt-4o',
+            model='qwen-vl-max',
             messages=[
                 {
                     'role': 'user',
@@ -216,27 +216,33 @@ def generate_image():
     
     try:
         client, gen_type = get_image_gen_client()
-        if error := (client if isinstance(client, str) else None):
-            return jsonify({'error': error}), 400
+        if not client:
+            return jsonify({'error': gen_type}), 400
         
-        if gen_type == 'dalle':
-            response = client.images.generate(
-                model='dall-e-3',
-                prompt=prompt,
-                size=size,
-                quality='standard',
-                n=count
-            )
-            
-            images = [img.url for img in response.data]
-            
-            return jsonify({
-                'success': True,
-                'images': images,
-                'model': 'dall-e-3'
-            })
+        response = client.chat.completions.create(
+            model='qwen3.5-plus',
+            messages=[
+                {
+                    'role': 'system',
+                    'content': '你是一个专业的图像提示词优化助手。用户会给你一个简单的描述，请你扩展成一个详细的、适合AI绘图的提示词。要求：1. 用英文输出 2. 包含主体、风格、构图、光线、色彩等要素 3. 简洁有力，不超过100词'
+                },
+                {
+                    'role': 'user',
+                    'content': f'请为以下描述生成一个详细的绘图提示词：{prompt}'
+                }
+            ],
+            max_tokens=500
+        )
         
-        return jsonify({'error': '暂不支持的生成方式'}), 400
+        optimized_prompt = response.choices[0].message.content.strip()
+        
+        return jsonify({
+            'success': True,
+            'message': '提示词已优化，请使用其他服务（如 Midjourney/DALL-E）生成图片',
+            'original_prompt': prompt,
+            'optimized_prompt': optimized_prompt,
+            'model': 'qwen3.5-plus'
+        })
     
     except Exception as e:
         return jsonify({'error': f'生成失败: {str(e)}'}), 500

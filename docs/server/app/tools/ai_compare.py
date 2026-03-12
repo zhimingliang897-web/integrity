@@ -18,50 +18,44 @@ except ImportError:
 
 ai_compare_bp = Blueprint('ai_compare', __name__, url_prefix='/api/tools/ai-compare')
 
+DASHSCOPE_API_KEY = os.environ.get('DASHSCOPE_API_KEY', 'sk-0ef56d1b3ba54a188ce28a46c54e2a24')
+DASHSCOPE_BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+
 MODEL_CONFIGS = {
     'qwen': {
         'name': '千问',
-        'api_key_env': 'QWEN_API_KEY',
-        'base_url': 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+        'api_key': DASHSCOPE_API_KEY,
+        'base_url': DASHSCOPE_BASE_URL,
         'models': {
             'qwen-turbo': 'qwen-turbo',
             'qwen-plus': 'qwen-plus',
             'qwen-max': 'qwen-max',
+            'qwen3.5-plus': 'qwen3.5-plus',
         }
     },
     'doubao': {
-        'name': '豆包',
-        'api_key_env': 'DOUBAO_API_KEY',
-        'base_url': 'https://ark.cn-beijing.volces.com/api/v3',
+        'name': '豆包(千问模拟)',
+        'api_key': DASHSCOPE_API_KEY,
+        'base_url': DASHSCOPE_BASE_URL,
         'models': {
-            'doubao-pro-32k': 'doubao-pro-32k',
-            'doubao-pro-128k': 'doubao-pro-128k',
+            'qwen-turbo': 'qwen-turbo',
+            'qwen-plus': 'qwen-plus',
         }
     },
     'deepseek': {
-        'name': 'DeepSeek',
-        'api_key_env': 'DEEPSEEK_API_KEY',
-        'base_url': 'https://api.deepseek.com',
+        'name': 'DeepSeek(千问模拟)',
+        'api_key': DASHSCOPE_API_KEY,
+        'base_url': DASHSCOPE_BASE_URL,
         'models': {
-            'deepseek-chat': 'deepseek-chat',
+            'qwen-plus': 'qwen-plus',
         }
     },
     'kimi': {
-        'name': 'Kimi',
-        'api_key_env': 'KIMI_API_KEY',
-        'base_url': 'https://api.moonshot.cn/v1',
+        'name': 'Kimi(千问模拟)',
+        'api_key': DASHSCOPE_API_KEY,
+        'base_url': DASHSCOPE_BASE_URL,
         'models': {
-            'moonshot-v1-8k': 'moonshot-v1-8k',
-            'moonshot-v1-32k': 'moonshot-v1-32k',
-        }
-    },
-    'openai': {
-        'name': 'OpenAI',
-        'api_key_env': 'OPENAI_API_KEY',
-        'base_url': None,
-        'models': {
-            'gpt-4o': 'gpt-4o',
-            'gpt-4o-mini': 'gpt-4o-mini',
+            'qwen-plus': 'qwen-plus',
         }
     },
 }
@@ -93,11 +87,10 @@ def get_client(provider):
     if not config:
         return None, f'不支持的提供商: {provider}'
     
-    api_key = os.environ.get(config['api_key_env'])
-    if not api_key:
+    if not config['api_key']:
         return None, f'未配置 {config["name"]} API Key'
     
-    client_kwargs = {'api_key': api_key}
+    client_kwargs = {'api_key': config['api_key']}
     if config['base_url']:
         client_kwargs['base_url'] = config['base_url']
     

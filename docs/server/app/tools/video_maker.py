@@ -40,6 +40,9 @@ video_maker_bp = Blueprint('video_maker', __name__, url_prefix='/api/tools/video
 UPLOAD_FOLDER = os.path.join(tempfile.gettempdir(), 'integrity_video')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+DASHSCOPE_API_KEY = os.environ.get('DASHSCOPE_API_KEY', 'sk-0ef56d1b3ba54a188ce28a46c54e2a24')
+DASHSCOPE_BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+
 task_results = {}
 
 
@@ -65,16 +68,11 @@ def get_ai_client():
     if not HAS_OPENAI:
         return None
     
-    api_key = os.environ.get('QWEN_API_KEY')
-    if api_key:
+    if DASHSCOPE_API_KEY:
         return OpenAI(
-            api_key=api_key,
-            base_url='https://dashscope.aliyuncs.com/compatible-mode/v1'
+            api_key=DASHSCOPE_API_KEY,
+            base_url=DASHSCOPE_BASE_URL
         )
-    
-    api_key = os.environ.get('OPENAI_API_KEY')
-    if api_key:
-        return OpenAI(api_key=api_key)
     
     return None
 
@@ -105,7 +103,7 @@ def generate_script(scene_description):
     
     try:
         response = client.chat.completions.create(
-            model='qwen-plus' if os.environ.get('QWEN_API_KEY') else 'gpt-4o-mini',
+            model='qwen3.5-plus',
             messages=[{'role': 'user', 'content': prompt}],
             max_tokens=2000
         )

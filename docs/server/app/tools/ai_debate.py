@@ -20,34 +20,37 @@ except ImportError:
 
 ai_debate_bp = Blueprint('ai_debate', __name__, url_prefix='/api/tools/ai-debate')
 
+DASHSCOPE_API_KEY = os.environ.get('DASHSCOPE_API_KEY', 'sk-0ef56d1b3ba54a188ce28a46c54e2a24')
+DASHSCOPE_BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+
 DEBATER_CONFIGS = [
     {
         'id': 'qwen_pro',
         'name': '千问·论道',
-        'api_key_env': 'QWEN_API_KEY',
-        'base_url': 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+        'api_key': DASHSCOPE_API_KEY,
+        'base_url': DASHSCOPE_BASE_URL,
+        'model': 'qwen3.5-plus'
+    },
+    {
+        'id': 'qwen_turbo',
+        'name': '千问·明理',
+        'api_key': DASHSCOPE_API_KEY,
+        'base_url': DASHSCOPE_BASE_URL,
+        'model': 'qwen-turbo'
+    },
+    {
+        'id': 'qwen_max',
+        'name': '千问·深思',
+        'api_key': DASHSCOPE_API_KEY,
+        'base_url': DASHSCOPE_BASE_URL,
+        'model': 'qwen-max'
+    },
+    {
+        'id': 'qwen_plus',
+        'name': '千问·辨析',
+        'api_key': DASHSCOPE_API_KEY,
+        'base_url': DASHSCOPE_BASE_URL,
         'model': 'qwen-plus'
-    },
-    {
-        'id': 'doubao_pro',
-        'name': '豆包·明理',
-        'api_key_env': 'DOUBAO_API_KEY',
-        'base_url': 'https://ark.cn-beijing.volces.com/api/v3',
-        'model': 'doubao-pro-32k'
-    },
-    {
-        'id': 'deepseek_pro',
-        'name': 'DeepSeek·深思',
-        'api_key_env': 'DEEPSEEK_API_KEY',
-        'base_url': 'https://api.deepseek.com',
-        'model': 'deepseek-chat'
-    },
-    {
-        'id': 'kimi_pro',
-        'name': 'Kimi·辨析',
-        'api_key_env': 'KIMI_API_KEY',
-        'base_url': 'https://api.moonshot.cn/v1',
-        'model': 'moonshot-v1-8k'
     }
 ]
 
@@ -73,12 +76,11 @@ def require_token(f):
 
 def get_client_for_debater(debater_config):
     """获取辩手的 API 客户端"""
-    api_key = os.environ.get(debater_config['api_key_env'])
-    if not api_key:
+    if not debater_config['api_key']:
         return None
     
     return OpenAI(
-        api_key=api_key,
+        api_key=debater_config['api_key'],
         base_url=debater_config['base_url']
     )
 
