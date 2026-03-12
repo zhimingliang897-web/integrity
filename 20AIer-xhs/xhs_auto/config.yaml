@@ -1,0 +1,53 @@
+api:
+  api_key: sk-0ef56d1b3ba54a188ce28a46c54e2a24
+  base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+  model: qwen3.5-plus
+  provider: dashscope
+
+style:
+  img_width: 1080
+  img_height: 1440
+  margin: 40
+  max_slides: 6
+  output_base_dir: ./output
+
+  # 字体配置 (跨平台自动检测)
+  font_path: /System/Library/Fonts/Hiragino Sans GB.ttc
+  font_index_regular: 0
+  font_index_bold: 1
+
+  # 简化的主题配置
+  theme:
+    bg: "#E8F4FD"
+    card_bg: "#FFFFFF"
+    title: "#2D5A8A"
+    body: "#4A4A4A"
+    divider: "#E0E0E0"
+    page_num: "#999999"
+    top_bar: "#667EEA"
+    top_bar2: "#764BA2"
+    key_bg: "#FFF9E6"
+    key_bar: "#F5A623"
+    key_text: "#8B5A00"
+    key_lbl: "#F5A623"
+    bad_bg: "#FFEFEF"
+    bad_bar: "#E74C3C"
+    bad_text: "#8B2828"
+    bad_lbl: "#E74C3C"
+    good_bg: "#E8F8F0"
+    good_bar: "#27AE60"
+    good_text: "#1E6B3A"
+    good_lbl: "#27AE60"
+    note_bg: "#F0F4FF"
+    note_bar: "#5B7FFF"
+    note_text: "#2A4A8B"
+    note_lbl: "#5B7FFF"
+    tag_bg: "#FCE8F3"
+    tag_text: "#E83E8C"
+
+  font_sizes:
+    title: 42
+    body: 28
+    label: 24
+    tag: 26
+    page_num: 22

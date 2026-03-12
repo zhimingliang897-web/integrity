@@ -822,8 +822,22 @@ function exportToExcel() {
       XLSX.utils.book_append_sheet(wb, ws2, '📑 详细记录（可编辑后导回）');
 
       const fileName = `投递记录_${new Date().toLocaleDateString('zh-CN').replace(/\//g,'-')}.xlsx`;
-      XLSX.writeFile(wb, fileName);
-      showStatus(`✅ 已导出 ${records.length} 条，Sheet2 改完可直接导回`);
+      // 使用 chrome.downloads 并弹出「另存为」对话框，方便选择保存位置
+      const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+      const blob = new Blob([wbout], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      chrome.downloads.download({
+        url,
+        filename: fileName,
+        saveAs: true  // 弹出另存为对话框
+      }, (downloadId) => {
+        setTimeout(() => URL.revokeObjectURL(url), 10000);
+        if (chrome.runtime.lastError) {
+          showStatus('导出失败：' + chrome.runtime.lastError.message);
+        } else {
+          showStatus(`✅ 已导出 ${records.length} 条，Sheet2 改完可直接导回`);
+        }
+      });
     } catch(e) {
       console.error('Export error', e);
       showStatus('导出失败，请重试');

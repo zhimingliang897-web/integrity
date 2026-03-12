@@ -14,9 +14,31 @@
                 <a href="index.html">首页</a>
                 <a href="news.html">AI 热点</a>
                 <a href="tools.html" class="active">工具库</a>
+                <button id="auth-btn" class="auth-btn" onclick="showAuthModal()">登录</button>
             </div>
         </div>
     </nav>
+
+    <!-- 登录/注册弹窗 -->
+    <div id="auth-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="modal-close" onclick="hideAuthModal()">&times;</span>
+            <h3 id="auth-title">登录</h3>
+            <div id="auth-form">
+                <input type="text" id="auth-username" placeholder="用户名" autocomplete="username">
+                <input type="password" id="auth-password" placeholder="密码" autocomplete="current-password">
+                <div id="invite-code-wrap" style="display:none;">
+                    <input type="text" id="auth-invite" placeholder="邀请码">
+                </div>
+                <p id="auth-error" style="color:#ef4444;font-size:0.85rem;display:none;"></p>
+                <button id="auth-submit" onclick="handleAuth()">登录</button>
+                <p class="auth-switch">
+                    <span id="switch-text">没有账号？</span>
+                    <a href="#" id="switch-link" onclick="toggleAuthMode()">注册</a>
+                </p>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <div class="page-header">
@@ -288,6 +310,33 @@
                 <a href="https://github.com/zhimingliang897-web/integrity/tree/main/15redbook" class="tool-link">查看源码 →</a>
             </div>
 
+            <!-- 20. 小红书图片自动化 -->
+            <div class="tool-card">
+                <div class="tool-icon">🎨</div>
+                <h3>小红书图片自动化生成器</h3>
+                <p class="tool-desc">将文章一键转换为精美小红书多图。LLM 自动拆分文章为多页内容，PIL 渲染生成配图，支持自定义主题样式。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Qwen API</span>
+                    <span class="tech-tag">Pillow</span>
+                    <span class="tech-tag">YAML</span>
+                </div>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/20AIer-xhs/xhs_auto" class="tool-link">查看源码 →</a>
+            </div>
+
+            <!-- 智能文件夹整理 -->
+            <div class="tool-card">
+                <div class="tool-icon">🗂️</div>
+                <h3>智能文件夹整理助手</h3>
+                <p class="tool-desc">基于 LLM 的目录整理 Agent。采用 ReAct 循环自主探索文件内容后给出整理建议，代码和配置文件受双重保护绝不会被误移动。</p>
+                <div class="tech-tags">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">ReAct Agent</span>
+                    <span class="tech-tag">LLM</span>
+                </div>
+                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/tools(不好用)" class="tool-link">查看源码 →</a>
+            </div>
+
             <!-- 17. 多模型对比平台 -->
             <div class="tool-card">
                 <div class="tool-icon">⚖️</div>
@@ -343,7 +392,7 @@
                     <span class="tech-tag">requests</span>
                     <span class="tech-tag">Tkinter</span>
                 </div>
-                <span class="tool-link" style="color:#666;">私有仓库</span>
+                <span class="tool-link" style="color:#666;">私有项目 (7爬虫)</span>
             </div>
 
             <div class="tool-card" style="opacity: 0.7;">
@@ -355,7 +404,7 @@
                     <span class="tech-tag">OpenAI API</span>
                     <span class="tech-tag">SQLite</span>
                 </div>
-                <span class="tool-link" style="color:#666;">私有仓库</span>
+                <span class="tool-link" style="color:#666;">私有项目 (8评论)</span>
             </div>
 
             <div class="tool-card" style="opacity: 0.7;">
@@ -485,27 +534,87 @@
         const tokenRatios = { 'zh': 0.5, 'en': 0.25, 'img': 1.5 }; // chars to tokens ratio
         
         if (calcTokenBtn) {
-            calcTokenBtn.addEventListener('click', () => {
+            calcTokenBtn.addEventListener('click', async () => {
                 const model = document.getElementById('token-model').value;
                 const lang = document.getElementById('token-lang').value;
                 const chars = parseInt(document.getElementById('token-chars').value) || 100;
                 
-                const ratio = tokenRatios[lang];
-                const promptTokens = Math.ceil(chars * ratio);
-                const completionTokens = Math.ceil(promptTokens * 0.3);
-                const prices = tokenPrices[model];
+                calcTokenBtn.disabled = true;
+                calcTokenBtn.textContent = '计算中...';
                 
-                const inputCost = (promptTokens / 1000) * prices.input;
-                const outputCost = (completionTokens / 1000) * prices.output;
-                const totalCost = inputCost + outputCost;
+                try {
+                    const res = await fetch(API_BASE + '/api/tools/token-calc', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ model, lang, chars })
+                    });
+                    const data = await res.json();
+                    
+                    document.getElementById('result-prompt').textContent = data.prompt_tokens;
+                    document.getElementById('result-completion').textContent = data.completion_tokens;
+                    document.getElementById('result-cost').textContent = '$' + data.total_cost.toFixed(6);
+                } catch (e) {
+                    document.getElementById('result-cost').textContent = 'API 错误';
+                }
                 
-                document.getElementById('result-prompt').textContent = promptTokens;
-                document.getElementById('result-completion').textContent = completionTokens;
-                document.getElementById('result-cost').textContent = '$' + totalCost.toFixed(6);
+                calcTokenBtn.disabled = false;
+                calcTokenBtn.textContent = '计算消耗 💰';
             });
         }
     </script>
     <style>
+        /* 登录按钮样式 */
+        .auth-btn {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 6px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .auth-btn:hover { background: var(--primary); color: #fff; }
+        .auth-btn.logged-in { background: #10b981; border-color: #10b981; color: #fff; }
+        
+        /* 弹窗样式 */
+        .modal {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            width: 360px;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute; top: 16px; right: 20px;
+            font-size: 24px; cursor: pointer; color: var(--text-muted);
+        }
+        .modal-close:hover { color: #fff; }
+        .modal h3 { margin-bottom: 24px; color: #fff; }
+        .modal input {
+            width: 100%; padding: 12px 16px;
+            background: var(--bg-body); border: 1px solid var(--border);
+            border-radius: 8px; color: #fff; font-size: 1rem;
+            margin-bottom: 16px;
+        }
+        .modal input:focus { outline: none; border-color: var(--primary); }
+        .modal button {
+            width: 100%; padding: 12px;
+            background: var(--primary); border: none;
+            border-radius: 8px; color: #fff; font-weight: 600;
+            cursor: pointer; font-size: 1rem;
+        }
+        .modal button:hover { background: #2563eb; }
+        .auth-switch { text-align: center; margin-top: 16px; color: var(--text-muted); font-size: 0.9rem; }
+        .auth-switch a { color: var(--primary); }
+        
         @keyframes scan {
             0% { top: 8px; opacity: 1; }
             50% { top: calc(100% - 14px); opacity: 0.8; }
@@ -516,5 +625,97 @@
             .vision-image-box, .vision-prompt-box { width: 100%; }
         }
     </style>
+    <script>
+        // API 配置
+        const API_BASE = 'http://8.138.164.133:5000';
+        let isRegisterMode = false;
+        
+        // 检查登录状态
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const username = localStorage.getItem('username');
+            const btn = document.getElementById('auth-btn');
+            if (token && username) {
+                btn.textContent = username;
+                btn.classList.add('logged-in');
+                btn.onclick = () => { if(confirm('确定退出登录？')) { logout(); } };
+            } else {
+                btn.textContent = '登录';
+                btn.classList.remove('logged-in');
+                btn.onclick = showAuthModal;
+            }
+        }
+        
+        function showAuthModal() {
+            document.getElementById('auth-modal').style.display = 'flex';
+            document.getElementById('auth-error').style.display = 'none';
+        }
+        
+        function hideAuthModal() {
+            document.getElementById('auth-modal').style.display = 'none';
+            document.getElementById('auth-username').value = '';
+            document.getElementById('auth-password').value = '';
+            document.getElementById('auth-invite').value = '';
+        }
+        
+        function toggleAuthMode() {
+            isRegisterMode = !isRegisterMode;
+            document.getElementById('auth-title').textContent = isRegisterMode ? '注册' : '登录';
+            document.getElementById('auth-submit').textContent = isRegisterMode ? '注册' : '登录';
+            document.getElementById('invite-code-wrap').style.display = isRegisterMode ? 'block' : 'none';
+            document.getElementById('switch-text').textContent = isRegisterMode ? '已有账号？' : '没有账号？';
+            document.getElementById('switch-link').textContent = isRegisterMode ? '登录' : '注册';
+            document.getElementById('auth-error').style.display = 'none';
+        }
+        
+        async function handleAuth() {
+            const username = document.getElementById('auth-username').value.trim();
+            const password = document.getElementById('auth-password').value;
+            const invite = document.getElementById('auth-invite').value.trim();
+            const errorEl = document.getElementById('auth-error');
+            
+            if (!username || !password) {
+                errorEl.textContent = '请填写用户名和密码';
+                errorEl.style.display = 'block';
+                return;
+            }
+            
+            const endpoint = isRegisterMode ? '/api/auth/register' : '/api/auth/login';
+            const body = isRegisterMode 
+                ? { username, password, invite_code: invite }
+                : { username, password };
+            
+            try {
+                const res = await fetch(API_BASE + endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const data = await res.json();
+                
+                if (data.error) {
+                    errorEl.textContent = data.error;
+                    errorEl.style.display = 'block';
+                } else {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('username', data.username);
+                    hideAuthModal();
+                    checkAuth();
+                }
+            } catch (e) {
+                errorEl.textContent = '网络错误，请稍后重试';
+                errorEl.style.display = 'block';
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            checkAuth();
+        }
+        
+        // 页面加载时检查登录状态
+        checkAuth();
+    </script>
 </body>
 </html>
