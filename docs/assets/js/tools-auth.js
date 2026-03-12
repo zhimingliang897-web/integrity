@@ -3,7 +3,7 @@
  * 处理登录、注册、Token 管理
  */
 
-const API_BASE = 'https://api.liangyiren.top';
+const API_BASE = 'http://8.138.164.133:5000';
 let isRegisterMode = false;
 
 // 检查登录状态

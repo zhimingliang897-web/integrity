@@ -1,6 +1,6 @@
 // 演示页面通用脚本
-// API 基础地址
-const API_BASE = 'https://api.liangyiren.top';
+// API 基础地址（使用 IP:端口，避免域名备案问题）
+const API_BASE = 'http://8.138.164.133:5000';
 
 // 通用工具函数
 const DemoUtils = {
