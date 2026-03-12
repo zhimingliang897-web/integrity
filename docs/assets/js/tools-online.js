@@ -1,6 +1,9 @@
 /**
  * 在线工具功能模块
  * 处理 AI 对比、图文互转、AI 辩论、台词学习、视频生成
+ * 
+ * 重要设计：
+ * - 仅在云服务器上使用，GitHub Pages 会跳转到服务器
  */
 
 const API_BASE = window.location.origin;

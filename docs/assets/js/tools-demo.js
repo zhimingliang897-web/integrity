@@ -1,9 +1,15 @@
 /**
  * 演示功能模块
  * 图文互转、多模型对比、AI 辩论赛、Token 计算器
+ * 
+ * 重要设计：
+ * - GitHub Pages: 纯静态模拟，所有功能都是演示
+ * - 云服务器: 真实 API 调用
  */
 
+const SERVER_URL = 'http://8.138.164.133:5000';
 const API_BASE = window.location.origin;
+const IS_GITHUB_PAGES = window.location.hostname.includes('github.io');
 
 function showToast(message, type = 'info') {
     const existing = document.querySelector('.toast');
@@ -268,6 +274,34 @@ function initTokenCalc() {
             if (completionEl) completionEl.innerHTML = '<span class="loading-pulse">-</span>';
             if (costEl) costEl.innerHTML = '<span class="loading-pulse">-</span>';
             
+            // GitHub Pages 上使用静态模拟数据
+            if (IS_GITHUB_PAGES) {
+                await new Promise(r => setTimeout(r, 500));
+                
+                const tokenPrices = {
+                    'qwen-plus': { input: 0.004, output: 0.012 },
+                    'qwen-turbo': { input: 0.001, output: 0.002 },
+                    'gpt-4o': { input: 0.0025, output: 0.01 }
+                };
+                
+                const tokenRatios = { 'zh': 0.5, 'en': 0.25 };
+                const ratio = tokenRatios[lang] || 0.5;
+                const promptTokens = Math.round(chars * ratio);
+                const completionTokens = Math.round(promptTokens * 0.3);
+                const prices = tokenPrices[model] || tokenPrices['qwen-plus'];
+                const totalCost = (promptTokens / 1000) * prices.input + (completionTokens / 1000) * prices.output;
+                
+                if (promptEl) promptEl.textContent = promptTokens;
+                if (completionEl) completionEl.textContent = completionTokens;
+                if (costEl) costEl.textContent = '$' + totalCost.toFixed(6);
+                
+                calcTokenBtn.disabled = false;
+                calcTokenBtn.textContent = '计算消耗';
+                showToast('Token 计算完成（演示数据）', 'success');
+                return;
+            }
+            
+            // 服务器上调用真实 API
             try {
                 const res = await fetch(API_BASE + '/api/tools/token-calc', {
                     method: 'POST',

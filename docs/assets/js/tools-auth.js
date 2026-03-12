@@ -1,9 +1,15 @@
 /**
  * 认证功能模块
  * 处理登录、注册、Token 管理
+ * 
+ * 重要设计：
+ * - GitHub Pages (静态托管): 只做展示，登录跳转到服务器
+ * - 云服务器: 真实登录和 API 调用
  */
 
+const SERVER_URL = 'http://8.138.164.133:5000';
 const API_BASE = window.location.origin;
+const IS_GITHUB_PAGES = window.location.hostname.includes('github.io');
 let isRegisterMode = false;
 
 function showToast(message, type = 'info') {
@@ -25,6 +31,24 @@ function checkAuth() {
     const loginPrompt = document.getElementById('login-prompt');
     const onlineContent = document.getElementById('online-tools-content');
     
+    if (IS_GITHUB_PAGES) {
+        if (btn) {
+            btn.textContent = '前往在线工具';
+            btn.classList.remove('logged-in');
+            btn.onclick = () => { window.location.href = SERVER_URL + '/app/tools.html'; };
+        }
+        if (loginPrompt) {
+            loginPrompt.innerHTML = `
+                <div class="icon">🚀</div>
+                <h3>在线工具部署在独立服务器</h3>
+                <p>演示体验可在此页面直接使用，在线工具需要跳转到服务器</p>
+                <a href="${SERVER_URL}/app/tools.html" style="margin-top:16px; padding:12px 32px; background:var(--primary); color:#fff; border:none; border-radius:8px; cursor:pointer; display:inline-block; text-decoration:none;">前往在线工具 →</a>
+            `;
+        }
+        if (onlineContent) onlineContent.style.display = 'none';
+        return;
+    }
+    
     if (token && username) {
         if (btn) {
             btn.textContent = username;
@@ -45,6 +69,10 @@ function checkAuth() {
 }
 
 function showAuthModal() {
+    if (IS_GITHUB_PAGES) {
+        window.location.href = SERVER_URL + '/app/tools.html';
+        return;
+    }
     const modal = document.getElementById('auth-modal');
     const errorEl = document.getElementById('auth-error');
     if (modal) modal.style.display = 'flex';
