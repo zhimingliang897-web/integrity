@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI 工具库 - Integrity Lab</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="tools-modules/tools-styles.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/tools-styles.css">
 </head>
 <body>
     <nav>
@@ -38,13 +38,147 @@
                     <a href="#" id="switch-link" onclick="toggleAuthMode()">注册</a>
                 </p>
             </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>AI 工具库</h1>
+            <p style="color:#888; margin-top:6px;">自己动手做的 AI 工具合集，全部开源，持续更新</p>
+        </div>
+
+        <!-- Tab 导航 -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('demo')">演示体验</button>
+            <button class="tab-btn" onclick="switchTab('online')">在线工具</button>
+            <button class="tab-btn" onclick="switchTab('source')">源码浏览</button>
+        </div>
+
+        <!-- 演示体验区 -->
+        <div id="tab-demo" class="tab-content active">
+            <div class="section-title">体验 AI 工具的核心功能</div>
+            <div class="demo-grid">
+                <!-- Demo 1: 图文互转 -->
+                <div class="demo-card">
+                    <div class="demo-header">
+                        <div class="demo-title">
+                            <span class="icon">🎨</span>
+                            <h3>图文互转体验</h3>
+                        </div>
+                        <button id="start-vision-btn" class="demo-btn">提取提示词</button>
+                    </div>
+                    <div class="demo-body" style="padding:24px; display:flex; gap:24px; background:#0d0d14; align-items:flex-start;">
+                        <div style="flex:1; border: 1px dashed var(--border); border-radius: 12px; padding: 8px; text-align:center; position:relative;">
+                            <img id="vision-demo-img" src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=400" alt="demo sample" style="width:100%; border-radius:8px; display:block; filter: grayscale(20%); transition: filter 0.5s;">
+                            <div id="scan-line" style="position:absolute; top:8px; left:8px; right:8px; height:2px; background:var(--primary); box-shadow: 0 0 8px var(--primary); display:none; border-radius: 2px;"></div>
+                        </div>
+                        <div style="flex:1.5; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:16px; min-height: 200px; display:flex; flex-direction:column;">
+                            <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:1px;"><span style="color:#10b981;">●</span> Qwen-VL Prompt Output</div>
+                            <div id="vision-output" style="font-family: monospace; color:#e2e8f0; line-height:1.6; font-size:0.9rem; flex:1;">
+                                <span style="opacity:0.5; font-style:italic;">等待传入图片进行反推...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo 2: 多模型对比 -->
+                <div class="demo-card">
+                    <div class="demo-header">
+                        <div class="demo-title">
+                            <span class="icon">⚖️</span>
+                            <h3>多模型对比平台</h3>
+                        </div>
+                        <button id="start-compare-btn" class="demo-btn">开始对比</button>
+                    </div>
+                    <div class="demo-body" style="background:#0d0d14; padding:20px;">
+                        <div style="margin-bottom: 16px;">
+                            <input type="text" id="compare-input" placeholder="输入你的问题..." value="解释一下什么是大语言模型" style="width:100%; padding:12px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff; font-size:14px;">
+                        </div>
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;">
+                            <div id="model-qwen" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                                    <span style="color:#f59e0b; font-weight:600;">🟡</span> <strong>Qwen-Plus</strong>
+                                </div>
+                                <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+                                    <span style="opacity:0.5;">点击开始对比查看回复...</span>
+                                </div>
+                            </div>
+                            <div id="model-deepseek" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                                    <span style="color:#3b82f6; font-weight:600;">🔵</span> <strong>DeepSeek-V3</strong>
+                                </div>
+                                <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+                                    <span style="opacity:0.5;">点击开始对比查看回复...</span>
+                                </div>
+                            </div>
+                            <div id="model-gpt" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
+                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                                    <span style="color:#10b981; font-weight:600;">🟢</span> <strong>GPT-4o-mini</strong>
+                                </div>
+                                <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
+                                    <span style="opacity:0.5;">点击开始对比查看回复...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo 3: Token 计算器 -->
+                <div class="demo-card">
+                    <div class="demo-header">
+                        <div class="demo-title">
+                            <span class="icon">🪙</span>
+                            <h3>Token 消耗计算器</h3>
+                        </div>
+                        <button id="calc-token-btn" class="demo-btn">计算消耗</button>
+                    </div>
+                    <div class="demo-body" style="background:#0d0d14; padding:20px;">
+                        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:16px;">
+                            <div>
+                                <label style="display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px;">模型</label>
+                                <select id="token-model" style="width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
+                                    <option value="qwen-plus">Qwen-Plus</option>
+                                    <option value="qwen-turbo">Qwen-Turbo</option>
+                                    <option value="gpt-4o">GPT-4o</option>
+                                    <option value="gpt-4o-mini">GPT-4o Mini</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px;">输入语言</label>
+                                <select id="token-lang" style="width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
+                                    <option value="zh">中文</option>
+                                    <option value="en">英文</option>
+                                    <option value="img">图片+中文</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px;">字符数</label>
+                                <input type="number" id="token-chars" value="100" style="width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
+                            </div>
+                        </div>
+                        <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:16px; display:flex; justify-content:space-around; text-align:center;">
+                            <div>
+                                <div style="font-size:24px; color:var(--primary); font-weight:700;" id="result-prompt">-</div>
+                                <div style="font-size:12px; color:var(--text-muted);">输入 Token</div>
+                            </div>
+                            <div>
+                                <div style="font-size:24px; color:var(--secondary); font-weight:700;" id="result-completion">-</div>
+                                <div style="font-size:12px; color:var(--text-muted);">输出 Token</div>
+                            </div>
+                            <div>
+                                <div style="font-size:24px; color:#10b981; font-weight:700;" id="result-cost">-</div>
+                                <div style="font-size:12px; color:var(--text-muted);">预估费用</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- 在线工具区 -->
         <div id="tab-online" class="tab-content">
             <div class="section-title">登录后可在浏览器直接使用</div>
-            
+
             <!-- 登录提示 -->
             <div id="login-prompt" class="login-prompt">
                 <div class="icon">🔒</div>
@@ -215,86 +349,6 @@
                             <div class="pdf-result" id="r-to_images"></div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-    <div class="container">
-        <div class="page-header">
-            <h1>🛠️ AI 工具库</h1>
-            <p style="color:#888; margin-top:6px;">自己动手做的 AI 工具合集，全部开源，持续更新</p>
-        </div>
-
-        <!-- Tab 导航 -->
-        <div class="tab-nav">
-            <button class="tab-btn active" onclick="switchTab('demo')">✨ 演示体验</button>
-            <button class="tab-btn" onclick="switchTab('online')">⚡ 在线工具</button>
-            <button class="tab-btn" onclick="switchTab('source')">📦 源码浏览</button>
-        </div>
-
-        <!-- 演示体验区 -->
-        <div id="tab-demo" class="tab-content active">
-            <div class="section-title">体验 AI 工具的核心功能</div>
-            <div class="demo-grid">
-                <!-- Demo 1: 图文互转 -->
-                <div class="demo-card">
-                    <div class="demo-header">
-                        <div class="demo-title">
-                            <span class="icon">🎨</span>
-                            <h3>图文互转体验</h3>
-                        </div>
-                        <button id="start-vision-btn" class="demo-btn">提取提示词 ⚡</button>
-                    </div>
-                    <div class="demo-body" style="padding:24px; display:flex; gap:24px; background:#0d0d14; align-items:flex-start;">
-                        <div style="flex:1; border: 1px dashed var(--border); border-radius: 12px; padding: 8px; text-align:center; position:relative;">
-                            <img id="vision-demo-img" src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=400" alt="demo sample" style="width:100%; border-radius:8px; display:block; filter: grayscale(20%); transition: filter 0.5s;">
-                            <div id="scan-line" style="position:absolute; top:8px; left:8px; right:8px; height:2px; background:var(--primary); box-shadow: 0 0 8px var(--primary); display:none; border-radius: 2px;"></div>
-                        </div>
-                        <div style="flex:1.5; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:16px; min-height: 200px; display:flex; flex-direction:column;">
-                            <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:1px;"><span style="color:#10b981;">●</span> Qwen-VL Prompt Output</div>
-                            <div id="vision-output" style="font-family: monospace; color:#e2e8f0; line-height:1.6; font-size:0.9rem; flex:1;">
-                                <span style="opacity:0.5; font-style:italic;">等待传入图片进行反推...</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Demo 2: 多模型对比 -->
-                <div class="demo-card">
-                    <div class="demo-header">
-                        <div class="demo-title">
-                            <span class="icon">⚖️</span>
-                            <h3>多模型对比平台</h3>
-                        </div>
-                        <button id="start-compare-btn" class="demo-btn">开始对比 🎯</button>
-                    </div>
-                    <div class="demo-body" style="background:#0d0d14; padding:20px;">
-                        <div style="margin-bottom: 16px;">
-                            <input type="text" id="compare-input" placeholder="输入你的问题..." value="解释一下什么是大语言模型" style="width:100%; padding:12px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff; font-size:14px;">
-                        </div>
-                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:12px;">
-                            <div id="model-qwen" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
-                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-                                    <span style="color:#f59e0b; font-weight:600;">🟡</span> <strong>Qwen-Plus</strong>
-                                </div>
-                                <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
-                                    <span style="opacity:0.5;">点击开始对比查看回复...</span>
-                                </div>
-                            </div>
-                            <div id="model-deepseek" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
-                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-                                    <span style="color:#3b82f6; font-weight:600;">🔵</span> <strong>DeepSeek-V3</strong>
-                                </div>
-                                <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
-                                    <span style="opacity:0.5;">点击开始对比查看回复...</span>
-                                </div>
-                            </div>
-                            <div id="model-gpt" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
-                                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-                                    <span style="color:#10b981; font-weight:600;">🟢</span> <strong>GPT-4o-mini</strong>
-                                </div>
-                                <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
-                                    <span style="opacity:0.5;">点击开始对比查看回复...</span>
                 </div>
             </div>
         </div>
@@ -564,61 +618,8 @@
     </footer>
 
     <!-- 引入 JS 模块 -->
-    <script src="tools-modules/tools-auth.js"></script>
-    <script src="tools-modules/tools-demo.js"></script>
-    <script src="tools-modules/tools-pdf.js"></script>
+    <script src="assets/js/tools-auth.js"></script>
+    <script src="assets/js/tools-demo.js"></script>
+    <script src="assets/js/tools-pdf.js"></script>
 </body>
 </html>
-                </div>
-
-                <!-- Demo 3: Token 计算器 -->
-                <div class="demo-card">
-                    <div class="demo-header">
-                        <div class="demo-title">
-                            <span class="icon">🪙</span>
-                            <h3>Token 消耗计算器</h3>
-                        </div>
-                        <button id="calc-token-btn" class="demo-btn">计算消耗 💰</button>
-                    </div>
-                    <div class="demo-body" style="background:#0d0d14; padding:20px;">
-                        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; margin-bottom:16px;">
-                            <div>
-                                <label style="display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px;">模型</label>
-                                <select id="token-model" style="width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
-                                    <option value="qwen-plus">Qwen-Plus</option>
-                                    <option value="qwen-turbo">Qwen-Turbo</option>
-                                    <option value="gpt-4o">GPT-4o</option>
-                                    <option value="gpt-4o-mini">GPT-4o Mini</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label style="display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px;">输入语言</label>
-                                <select id="token-lang" style="width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
-                                    <option value="zh">中文</option>
-                                    <option value="en">英文</option>
-                                    <option value="img">图片+中文</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label style="display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px;">字符数</label>
-                                <input type="number" id="token-chars" value="100" style="width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
-                            </div>
-                        </div>
-                        <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:16px; display:flex; justify-content:space-around; text-align:center;">
-                            <div>
-                                <div style="font-size:24px; color:var(--primary); font-weight:700;" id="result-prompt">-</div>
-                                <div style="font-size:12px; color:var(--text-muted);">输入 Token</div>
-                            </div>
-                            <div>
-                                <div style="font-size:24px; color:var(--secondary); font-weight:700;" id="result-completion">-</div>
-                                <div style="font-size:12px; color:var(--text-muted);">输出 Token</div>
-                            </div>
-                            <div>
-                                <div style="font-size:24px; color:#10b981; font-weight:700;" id="result-cost">-</div>
-                                <div style="font-size:12px; color:var(--text-muted);">预估费用</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
