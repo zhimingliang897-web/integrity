@@ -39,7 +39,7 @@
 ## 依赖安装
 
 ```bat
-pip install requests pdfplumber flask edge-tts
+pip install -r requirements.txt
 ```
 
 ## 运行方式
@@ -53,7 +53,7 @@ pip install requests pdfplumber flask edge-tts
 说明：
 
 - 启动脚本会在项目目录创建并使用虚拟环境：`./.venv`
-- 如依赖缺失会自动安装：`flask`、`requests`、`pdfplumber`、`edge-tts`
+- 如依赖缺失会自动安装（读取 `requirements.txt`）
 - 会等待后端服务就绪后再打开浏览器，避免偶发 "Not Found"
 - 如果电脑没有 Python，但安装了 Docker Desktop，会自动用 Docker 启动
 - 虚拟环境与依赖均在项目目录中，互不影响系统环境
@@ -65,7 +65,7 @@ set DASHSCOPE_API_KEY=你的API密钥
 python app.py
 ```
 
-浏览器打开 `http://localhost:5000`。
+浏览器打开 `http://localhost:8765`。
 
 ### 方式三：命令行逐步执行
 
@@ -88,7 +88,7 @@ python tts_generator.py word/day1/day1_study.md  & :: 步骤4: 生成语音
    docker compose up -d
    ```
 
-3. 浏览器打开 `http://localhost:5000`
+3. 浏览器打开 `http://localhost:8765`
 
 镜像已包含运行所需依赖（含 edge-tts），并挂载 `word/` 为数据卷。
 
@@ -98,4 +98,5 @@ python tts_generator.py word/day1/day1_study.md  & :: 步骤4: 生成语音
 - 单词真人发音 + 台词 TTS 朗读（edge-tts 预生成 mp3）
 - 网页端设置 API Key（保存到本地 config.json，不上传 GitHub）
 - 拖拽上传 PDF，自动完成全部处理流水线
-- 处理进度实时显示（extracting → scraping → formatting → tts → done）
+- 处理进度实时显示（extracting → scraping → formatting → tts → story → done）
+- 情景故事生成：根据当天生词数量自适应生成短文 + 对话（迷你/标准/加长/双场景）

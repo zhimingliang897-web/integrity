@@ -292,6 +292,16 @@ def run_pipeline(day_num: int):
             from tts_generator import generate as tts_generate
             tts_generate(parsed_words, audio_dir)
 
+        # Step 5: study.md -> story.md (situational practice)
+        story_path = day_dir / f"{day_name}_story.md"
+        if md_path.exists() and not story_path.exists():
+            processing_status[day_num] = {"step": "story", "error": None}
+            text = md_path.read_text("utf-8")
+            parsed_words = parse_study_md(text)
+            from story_generator import StoryGenerator
+            gen = StoryGenerator()
+            gen.process_day(day_dir, parsed_words, day_num)
+
         processing_status[day_num] = {"step": "done", "error": None}
 
     except Exception as e:
@@ -327,6 +337,45 @@ def api_day(n):
     words = parse_study_md(text)
     has_audio = (WORD_DIR / day_name / "audio").is_dir()
     return jsonify({"day": n, "words": words, "has_audio": has_audio})
+
+
+@app.route("/api/day/<int:n>/story")
+def api_day_story(n):
+    day_name = f"day{n}"
+    story_path = WORD_DIR / day_name / f"{day_name}_story.md"
+    if not story_path.exists():
+        abort(404)
+    return jsonify({"day": n, "content": story_path.read_text("utf-8")})
+
+
+@app.route("/api/day/<int:n>/story/generate", methods=["POST"])
+def api_day_story_generate(n):
+    """手动触发（重新）生成情景故事."""
+    day_name = f"day{n}"
+    day_dir = WORD_DIR / day_name
+    md_path = day_dir / f"{day_name}_study.md"
+    if not md_path.exists():
+        return jsonify({"error": f"Day {n} study notes not ready yet"}), 404
+
+    sys_path_entry = str(BASE_DIR / "tools")
+    if sys_path_entry not in sys.path:
+        sys.path.insert(0, sys_path_entry)
+
+    def _run():
+        try:
+            processing_status[n] = {"step": "story", "error": None}
+            from story_generator import StoryGenerator
+            text = md_path.read_text("utf-8")
+            parsed_words = parse_study_md(text)
+            gen = StoryGenerator()
+            gen.process_day(day_dir, parsed_words, n)
+            processing_status[n] = {"step": "done", "error": None}
+        except Exception as e:
+            processing_status[n] = {"step": "error", "error": str(e)}
+
+    t = threading.Thread(target=_run, daemon=True)
+    t.start()
+    return jsonify({"day": n, "status": "generating"})
 
 
 @app.route("/audio/<path:filename>")
@@ -453,7 +502,8 @@ def api_save_settings():
 
 # ===========================================================================
 if __name__ == "__main__":
+    port = int(os.getenv("PORT", "8765"))
     print(f"Word dir: {WORD_DIR}")
-    print(f"Open http://localhost:5000 in your browser")
+    print(f"Open http://localhost:{port} in your browser")
     debug = os.getenv("FLASK_DEBUG", "1") == "1"
-    app.run(host="0.0.0.0", debug=debug, port=5000)
+    app.run(host="0.0.0.0", debug=debug, port=port)
