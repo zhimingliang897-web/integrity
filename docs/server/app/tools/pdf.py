@@ -1,7 +1,9 @@
 """
 PDF 工具集 Blueprint
-路径前缀: /pdf
+路径前缀: /api/tools/pdf
 需要 JWT 认证（处理接口），下载接口公开（随机文件名已作为保护）
+
+本地备份 | 云端部署
 """
 
 import os
@@ -18,22 +20,24 @@ from PIL import Image
 from pypdf import PdfReader, PdfWriter
 import jwt
 
+# PyMuPDF（用于 PDF 转图片）
 try:
     import fitz
     HAS_FITZ = True
 except ImportError:
     HAS_FITZ = False
 
-pdf_bp = Blueprint('pdf', __name__, url_prefix='/pdf')
+pdf_bp = Blueprint('pdf', __name__, url_prefix='/api/tools/pdf')
 
 # 临时文件目录（持久，不随请求销毁）
 UPLOAD_FOLDER = os.path.join(tempfile.gettempdir(), 'integrity_pdf')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
-# ─── 认证 ───────────────────────────────────────────────
+# ─── 认证装饰器 ───────────────────────────────────────────────
 
 def require_token(f):
+    """JWT Token 认证装饰器"""
     @wraps(f)
     def decorated(*args, **kwargs):
         import flask
@@ -49,9 +53,10 @@ def require_token(f):
     return decorated
 
 
-# ─── 工具函数 ────────────────────────────────────────────
+# ─── 工具函数 ────────────────────────────────────────────────
 
 def safe_temp_path(original_filename, suffix=None):
+    """生成安全的临时文件路径"""
     safe_name = secure_filename(original_filename)
     if not safe_name:
         safe_name = 'upload' + (suffix or '.pdf')
@@ -59,12 +64,14 @@ def safe_temp_path(original_filename, suffix=None):
 
 
 def format_size(size_bytes):
+    """格式化文件大小"""
     if size_bytes > 1024 * 1024:
         return f'{size_bytes / 1024 / 1024:.1f}MB'
     return f'{size_bytes / 1024:.1f}KB'
 
 
 def close_reader(reader):
+    """安全关闭 PdfReader"""
     try:
         if hasattr(reader, 'stream') and reader.stream:
             reader.stream.close()
@@ -73,6 +80,7 @@ def close_reader(reader):
 
 
 def get_pdf_info(pdf_path):
+    """获取 PDF 信息"""
     reader = PdfReader(pdf_path)
     total = len(reader.pages)
     portrait = sum(1 for p in reader.pages if float(p.mediabox.height) > float(p.mediabox.width))
@@ -81,6 +89,7 @@ def get_pdf_info(pdf_path):
 
 
 def parse_page_range(pages_str, total_pages):
+    """解析页码字符串，支持 1,3,5 或 1-5 或 1,3-5,8 格式"""
     pages = set()
     for part in pages_str.replace(' ', '').split(','):
         if '-' in part:
@@ -101,11 +110,34 @@ def parse_page_range(pages_str, total_pages):
     return pages
 
 
-# ─── 路由 ────────────────────────────────────────────────
+def _compress_jpg(img, max_kb, path):
+    """压缩 JPG 图片到指定大小以下"""
+    max_bytes = max_kb * 1024
+    for q in range(95, 10, -5):
+        buf = BytesIO()
+        img.save(buf, format='JPEG', quality=q)
+        if buf.tell() <= max_bytes:
+            img.save(path, format='JPEG', quality=q)
+            return
+    scale = 0.9
+    while scale > 0.1:
+        r = img.resize((int(img.width * scale), int(img.height * scale)), Image.LANCZOS)
+        for q in range(85, 10, -10):
+            buf = BytesIO()
+            r.save(buf, format='JPEG', quality=q)
+            if buf.tell() <= max_bytes:
+                r.save(path, format='JPEG', quality=q)
+                return
+        scale -= 0.1
+    img.resize((int(img.width * 0.3), int(img.height * 0.3)), Image.LANCZOS).save(path, format='JPEG', quality=20)
+
+
+# ─── API 路由 ────────────────────────────────────────────────
 
 @pdf_bp.route('/info', methods=['POST'])
 @require_token
 def api_pdf_info():
+    """获取 PDF 信息"""
     if 'pdf' not in request.files:
         return jsonify({'info': '未上传文件'})
     temp = safe_temp_path(request.files['pdf'].filename)
@@ -122,6 +154,7 @@ def api_pdf_info():
 @pdf_bp.route('/images_to_pdf', methods=['POST'])
 @require_token
 def api_images_to_pdf():
+    """图片转 PDF"""
     files = request.files.getlist('images')
     if not files or files[0].filename == '':
         return jsonify({'success': False, 'message': '请上传图片'})
@@ -138,7 +171,7 @@ def api_images_to_pdf():
         out = f'images_to_pdf_{os.urandom(4).hex()}.pdf'
         out_path = os.path.join(UPLOAD_FOLDER, out)
         images[0].save(out_path, save_all=True, append_images=images[1:])
-        return jsonify({'success': True, 'message': f'✅ {len(images)} 张图片合成 PDF', 'download_url': f'/pdf/download/{out}'})
+        return jsonify({'success': True, 'message': f'✅ {len(images)} 张图片合成 PDF', 'download_url': f'/api/tools/pdf/download/{out}'})
     except Exception as e:
         return jsonify({'success': False, 'message': f'处理失败: {e}'})
 
@@ -146,6 +179,7 @@ def api_images_to_pdf():
 @pdf_bp.route('/merge', methods=['POST'])
 @require_token
 def api_merge_pdfs():
+    """合并多个 PDF"""
     files = request.files.getlist('pdfs')
     if len(files) < 2:
         return jsonify({'success': False, 'message': '请上传至少 2 个 PDF'})
@@ -166,7 +200,7 @@ def api_merge_pdfs():
         out_path = os.path.join(UPLOAD_FOLDER, out)
         with open(out_path, 'wb') as fp:
             writer.write(fp)
-        return jsonify({'success': True, 'message': f'✅ {len(files)} 个文件合并，共 {total} 页', 'download_url': f'/pdf/download/{out}'})
+        return jsonify({'success': True, 'message': f'✅ {len(files)} 个文件合并，共 {total} 页', 'download_url': f'/api/tools/pdf/download/{out}'})
     except Exception as e:
         return jsonify({'success': False, 'message': f'处理失败: {e}'})
     finally:
@@ -178,6 +212,7 @@ def api_merge_pdfs():
 @pdf_bp.route('/remove_pages', methods=['POST'])
 @require_token
 def api_remove_pages():
+    """删除 PDF 页面"""
     pages_str = request.form.get('pages', '').strip()
     if not pages_str:
         return jsonify({'success': False, 'message': '请输入页码'})
@@ -196,7 +231,7 @@ def api_remove_pages():
         out_path = os.path.join(UPLOAD_FOLDER, out)
         with open(out_path, 'wb') as fp:
             writer.write(fp)
-        return jsonify({'success': True, 'message': f'✅ 原 {total} 页，删除 {len(to_remove)} 页', 'download_url': f'/pdf/download/{out}'})
+        return jsonify({'success': True, 'message': f'✅ 原 {total} 页，删除 {len(to_remove)} 页', 'download_url': f'/api/tools/pdf/download/{out}'})
     except Exception as e:
         return jsonify({'success': False, 'message': f'处理失败: {e}'})
     finally:
@@ -207,6 +242,7 @@ def api_remove_pages():
 @pdf_bp.route('/insert', methods=['POST'])
 @require_token
 def api_insert_pdf():
+    """在指定位置插入 PDF"""
     if 'main_pdf' not in request.files or 'insert_pdf' not in request.files:
         return jsonify({'success': False, 'message': '请上传两个 PDF'})
     position = request.form.get('position', 'after')
@@ -251,7 +287,7 @@ def api_insert_pdf():
         out_path = os.path.join(UPLOAD_FOLDER, out)
         with open(out_path, 'wb') as fp:
             writer.write(fp)
-        return jsonify({'success': True, 'message': f'✅ 在{pos_text}插入 {ins_count} 页', 'download_url': f'/pdf/download/{out}'})
+        return jsonify({'success': True, 'message': f'✅ 在{pos_text}插入 {ins_count} 页', 'download_url': f'/api/tools/pdf/download/{out}'})
     except Exception as e:
         return jsonify({'success': False, 'message': f'处理失败: {e}'})
     finally:
@@ -263,6 +299,7 @@ def api_insert_pdf():
 @pdf_bp.route('/reorder', methods=['POST'])
 @require_token
 def api_reorder_pages():
+    """页面重排（竖版在前，横版在后）"""
     temp = safe_temp_path(request.files['pdf'].filename)
     try:
         request.files['pdf'].save(temp)
@@ -278,7 +315,7 @@ def api_reorder_pages():
         out_path = os.path.join(UPLOAD_FOLDER, out)
         with open(out_path, 'wb') as fp:
             writer.write(fp)
-        return jsonify({'success': True, 'message': f'✅ 竖版 {len(portrait)} 页在前，横版 {len(landscape)} 页在后', 'download_url': f'/pdf/download/{out}'})
+        return jsonify({'success': True, 'message': f'✅ 竖版 {len(portrait)} 页在前，横版 {len(landscape)} 页在后', 'download_url': f'/api/tools/pdf/download/{out}'})
     except Exception as e:
         return jsonify({'success': False, 'message': f'处理失败: {e}'})
     finally:
@@ -289,6 +326,7 @@ def api_reorder_pages():
 @pdf_bp.route('/normalize', methods=['POST'])
 @require_token
 def api_normalize_landscape():
+    """统一横向页面尺寸"""
     temp = safe_temp_path(request.files['pdf'].filename)
     try:
         request.files['pdf'].save(temp)
@@ -314,7 +352,7 @@ def api_normalize_landscape():
         out_path = os.path.join(UPLOAD_FOLDER, out)
         with open(out_path, 'wb') as fp:
             writer.write(fp)
-        return jsonify({'success': True, 'message': f'✅ 统一 {count} 个横向页面为 {tw:.0f}x{th:.0f}', 'download_url': f'/pdf/download/{out}'})
+        return jsonify({'success': True, 'message': f'✅ 统一 {count} 个横向页面为 {tw:.0f}x{th:.0f}', 'download_url': f'/api/tools/pdf/download/{out}'})
     except Exception as e:
         return jsonify({'success': False, 'message': f'处理失败: {e}'})
     finally:
@@ -322,30 +360,10 @@ def api_normalize_landscape():
             os.remove(temp)
 
 
-def _compress_jpg(img, max_kb, path):
-    max_bytes = max_kb * 1024
-    for q in range(95, 10, -5):
-        buf = BytesIO()
-        img.save(buf, format='JPEG', quality=q)
-        if buf.tell() <= max_bytes:
-            img.save(path, format='JPEG', quality=q)
-            return
-    scale = 0.9
-    while scale > 0.1:
-        r = img.resize((int(img.width * scale), int(img.height * scale)), Image.LANCZOS)
-        for q in range(85, 10, -10):
-            buf = BytesIO()
-            r.save(buf, format='JPEG', quality=q)
-            if buf.tell() <= max_bytes:
-                r.save(path, format='JPEG', quality=q)
-                return
-        scale -= 0.1
-    img.resize((int(img.width * 0.3), int(img.height * 0.3)), Image.LANCZOS).save(path, format='JPEG', quality=20)
-
-
 @pdf_bp.route('/to_images', methods=['POST'])
 @require_token
 def api_pdf_to_images():
+    """PDF 转图片"""
     if not HAS_FITZ:
         return jsonify({'success': False, 'message': '服务器缺少 PyMuPDF，请联系管理员'})
     try:
@@ -395,7 +413,7 @@ def api_pdf_to_images():
             else:
                 canvas.save(out_path, format='JPEG', quality=85)
             sz = format_size(os.path.getsize(out_path))
-            return jsonify({'success': True, 'message': f'✅ 第 {start}-{end} 页合并长图（{mw}x{th}，{sz}）', 'download_url': f'/pdf/download/{out}'})
+            return jsonify({'success': True, 'message': f'✅ 第 {start}-{end} 页合并长图（{mw}x{th}，{sz}）', 'download_url': f'/api/tools/pdf/download/{out}'})
 
         temp_dir = tempfile.mkdtemp()
         paths, total_sz = [], 0
@@ -417,7 +435,7 @@ def api_pdf_to_images():
         with zipfile.ZipFile(out_path, 'w', zipfile.ZIP_DEFLATED) as zf:
             for p in paths:
                 zf.write(p, os.path.basename(p))
-        return jsonify({'success': True, 'message': f'✅ 导出第 {start}-{end} 页，共 {len(paths)} 张（{format_size(total_sz)}）', 'download_url': f'/pdf/download/{out}'})
+        return jsonify({'success': True, 'message': f'✅ 导出第 {start}-{end} 页，共 {len(paths)} 张（{format_size(total_sz)}）', 'download_url': f'/api/tools/pdf/download/{out}'})
     except Exception as e:
         return jsonify({'success': False, 'message': f'处理失败: {e}'})
     finally:
@@ -429,6 +447,7 @@ def api_pdf_to_images():
 
 @pdf_bp.route('/download/<filename>')
 def download_file(filename):
+    """下载文件（无需认证，文件名随机已作为保护）"""
     safe_dir = Path(UPLOAD_FOLDER).resolve()
     target = (safe_dir / filename).resolve()
     if not str(target).startswith(str(safe_dir)):

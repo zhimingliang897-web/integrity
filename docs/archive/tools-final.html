@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 工具库 - Integrity Lab</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-inner">
+            <span class="logo">Integrity Lab</span>
+            <div class="nav-links">
+                <a href="index.html">首页</a>
+                <a href="news.html">AI 热点</a>
+                <a href="tools.html" class="active">工具库</a>
+                <button id="auth-btn" class="auth-btn" onclick="showAuthModal()">登录</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 登录/注册弹窗 -->
+    <div id="auth-modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="modal-close" onclick="hideAuthModal()">&times;</span>
+            <h3 id="auth-title">登录</h3>
+            <div id="auth-form">
+                <input type="text" id="auth-username" placeholder="用户名" autocomplete="username">
+                <input type="password" id="auth-password" placeholder="密码" autocomplete="current-password">
+                <div id="invite-code-wrap" style="display:none;">
+                    <input type="text" id="auth-invite" placeholder="邀请码">
+                </div>
+                <p id="auth-error" style="color:#ef4444;font-size:0.85rem;display:none;"></p>
+                <button id="auth-submit" onclick="handleAuth()">登录</button>
+                <p class="auth-switch">
+                    <span id="switch-text">没有账号？</span>
+                    <a href="#" id="switch-link" onclick="toggleAuthMode()">注册</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="page-header">
+            <h1>🛠️ AI 工具库</h1>
+            <p style="color:#888; margin-top:6px;">自己动手做的 AI 工具合集，全部开源，持续更新</p>
+        </div>
+
+        <!-- Tab 导航 -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('demo')">✨ 演示体验</button>
+            <button class="tab-btn" onclick="switchTab('online')">⚡ 在线工具</button>
+            <button class="tab-btn" onclick="switchTab('source')">📦 源码浏览</button>
+        </div>
+
+        <!-- Tab 1: 演示体验 -->
+        <div id="tab-demo" class="tab-content active">
+            <div class="section-title">无需登录，直接体验工具效果</div>
+            <div class="demo-grid">
