@@ -1,0 +1,189 @@
+{
+  "name": "frontend-refactor",
+  "version": "1.0.0",
+  "description": "前端模块化重构与补全 Skill",
+  "author": "Integrity Lab",
+  "created": "2026-03-12",
+  
+  "workflow": {
+    "steps": [
+      {
+        "step": 1,
+        "name": "了解项目现状",
+        "actions": [
+          "查看 .mcp.json 配置",
+          "阅读进度文档（*PROGRESS.md, *SUMMARY.md, DEPLOY_LOG.md）",
+          "分析备份文件和现有模块"
+        ],
+        "tools": ["read", "glob"]
+      },
+      {
+        "step": 2,
+        "name": "创建任务清单",
+        "actions": [
+          "使用 todowrite 创建详细任务列表",
+          "按优先级和依赖关系排序",
+          "标记第一个任务为 in_progress"
+        ],
+        "tools": ["todowrite"]
+      },
+      {
+        "step": 3,
+        "name": "模块化补全",
+        "actions": [
+          "从备份文件读取需要的内容",
+          "使用 edit 工具补全目标文件",
+          "确保 ID/class 与 CSS/JS 匹配",
+          "每完成一个任务就更新 todowrite 状态"
+        ],
+        "tools": ["read", "edit", "todowrite"]
+      },
+      {
+        "step": 4,
+        "name": "功能测试",
+        "actions": [
+          "启动本地服务器（python3 -m http.server）",
+          "测试后端 API（curl）",
+          "验证文件结构（grep -c）",
+          "检查文件完整性（wc -l, ls）"
+        ],
+        "tools": ["bash"]
+      },
+      {
+        "step": 5,
+        "name": "提交和部署",
+        "actions": [
+          "git status 查看更改",
+          "git add 添加文件",
+          "git commit 提交（详细说明）",
+          "git push 推送到远程"
+        ],
+        "tools": ["bash"]
+      },
+      {
+        "step": 6,
+        "name": "更新文档",
+        "actions": [
+          "更新进度文档",
+          "记录完成情况",
+          "列出下一步建议",
+          "标记所有 todo 为 completed"
+        ],
+        "tools": ["edit", "todowrite"]
+      }
+    ]
+  },
+  
+  "patterns": {
+    "tab_navigation": {
+      "html": "<div class=\"tab-nav\">\n  <button class=\"tab-btn active\" onclick=\"switchTab('name')\">Label</button>\n</div>\n<div id=\"tab-name\" class=\"tab-content active\">Content</div>",
+      "js": "function switchTab(name) {\n  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));\n  document.getElementById('tab-' + name).classList.add('active');\n}"
+    },
+    "card_grid": {
+      "html": "<div class=\"card-grid\">\n  <div class=\"card\">\n    <div class=\"card-header\">Title</div>\n    <div class=\"card-body\">Content</div>\n  </div>\n</div>"
+    },
+    "api_call": {
+      "js": "const res = await fetch(API_BASE + '/endpoint', {\n  method: 'POST',\n  headers: {'Authorization': 'Bearer ' + token},\n  body: formData\n});\nconst data = await res.json();"
+    },
+    "auth_check": {
+      "js": "function checkAuth() {\n  const token = localStorage.getItem('token');\n  if (token) {\n    // Update UI for logged in state\n  }\n}\nwindow.addEventListener('DOMContentLoaded', checkAuth);"
+    }
+  },
+  
+  "validation": {
+    "structure": [
+      "grep -c 'tab-content' file.html",
+      "grep -c 'card-class' file.html",
+      "wc -l file.html"
+    ],
+    "files": [
+      "ls -lh *.js *.css"
+    ],
+    "api": [
+      "curl http://server:port/",
+      "curl -X POST http://server:port/api/auth/login -d '{...}'"
+    ]
+  },
+  
+  "best_practices": {
+    "naming": {
+      "css": "kebab-case (demo-card, tab-content)",
+      "js": "camelCase (switchTab, handleAuth)",
+      "id": "descriptive and unique (auth-modal, pdf-tools)"
+    },
+    "code_organization": {
+      "css": "Global styles + Page-specific styles",
+      "js": "Separate modules by functionality",
+      "html": "Semantic structure with clear sections"
+    },
+    "error_handling": {
+      "pattern": "try-catch with user-friendly messages",
+      "logging": "console.error for debugging"
+    }
+  },
+  
+  "common_issues": {
+    "cors_error": {
+      "cause": "Frontend and backend on different domains",
+      "solution": "Configure CORS on backend: CORS(app, origins=[...])"
+    },
+    "token_expired": {
+      "cause": "JWT token has expiration time",
+      "solution": "Implement token verification and refresh logic"
+    },
+    "file_upload_fail": {
+      "cause": "File size or format restrictions",
+      "solution": "Add frontend validation before upload"
+    },
+    "responsive_layout": {
+      "cause": "Missing or incomplete media queries",
+      "solution": "Add @media queries for different screen sizes"
+    }
+  },
+  
+  "checklist": {
+    "functionality": [
+      "Tab switching works",
+      "Login/Register works",
+      "Demo features work",
+      "Online tools require login",
+      "API calls succeed",
+      "File upload/download works",
+      "Error messages are friendly"
+    ],
+    "styling": [
+      "Card layout correct",
+      "Responsive layout (mobile)",
+      "Hover animations work",
+      "Tab active states",
+      "Button styles consistent",
+      "Color theme consistent"
+    ],
+    "browsers": [
+      "Chrome",
+      "Firefox",
+      "Safari",
+      "Edge",
+      "Mobile browsers"
+    ],
+    "performance": [
+      "Page load speed",
+      "API response time",
+      "File upload speed",
+      "Memory usage"
+    ]
+  },
+  
+  "example_case": {
+    "project": "Integrity Lab Tools Page Refactor",
+    "original_file": "tools.html.backup (1125 lines)",
+    "result": "tools.html (537 lines) + 4 module files",
+    "time": "~2 hours",
+    "improvements": [
+      "Code reduced by 50%+ through modularization",
+      "Maintainability greatly improved",
+      "All features working correctly",
+      "Successfully deployed to GitHub Pages"
+    ]
+  }
+}
