@@ -20,7 +20,6 @@
         </div>
     </nav>
 
-    <!-- 登录/注册弹窗 -->
     <div id="auth-modal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="modal-close" onclick="hideAuthModal()">&times;</span>
@@ -47,7 +46,6 @@
             <p style="color:#888; margin-top:6px;">自己动手做的 AI 工具合集，全部开源，持续更新</p>
         </div>
 
-        <!-- Tab 导航 -->
         <div class="tab-nav">
             <button class="tab-btn active" onclick="switchTab('demo')">演示体验</button>
             <button class="tab-btn" onclick="switchTab('online')">在线工具</button>
@@ -69,12 +67,11 @@
                     </div>
                     <div class="demo-body" style="padding:24px; display:flex; gap:24px; background:#0d0d14; align-items:flex-start;">
                         <div style="flex:1; border: 1px dashed var(--border); border-radius: 12px; padding: 8px; text-align:center; position:relative;">
-                            <img id="vision-demo-img" src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=400" alt="demo sample" style="width:100%; border-radius:8px; display:block; filter: grayscale(20%); transition: filter 0.5s;">
-                            <div id="scan-line" style="position:absolute; top:8px; left:8px; right:8px; height:2px; background:var(--primary); box-shadow: 0 0 8px var(--primary); display:none; border-radius: 2px;"></div>
+                            <img id="vision-demo-img" src="https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?auto=format&fit=crop&q=80&w=400" alt="demo sample" style="width:100%; border-radius:8px; display:block;">
                         </div>
-                        <div style="flex:1.5; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:16px; min-height: 200px; display:flex; flex-direction:column;">
-                            <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:1px;"><span style="color:#10b981;">●</span> Qwen-VL Prompt Output</div>
-                            <div id="vision-output" style="font-family: monospace; color:#e2e8f0; line-height:1.6; font-size:0.9rem; flex:1;">
+                        <div style="flex:1.5; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:12px; padding:16px; min-height: 200px;">
+                            <div style="font-size:0.85rem; color:var(--text-muted); margin-bottom:12px;"><span style="color:#10b981;">●</span> Qwen-VL Output</div>
+                            <div id="vision-output" style="font-family: monospace; color:#e2e8f0; line-height:1.6; font-size:0.9rem;">
                                 <span style="opacity:0.5; font-style:italic;">等待传入图片进行反推...</span>
                             </div>
                         </div>
@@ -105,7 +102,7 @@
                             </div>
                             <div id="model-deepseek" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
                                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-                                    <span style="color:#3b82f6; font-weight:600;">🔵</span> <strong>DeepSeek-V3</strong>
+                                    <span style="color:#3b82f6; font-weight:600;">🔵</span> <strong>Qwen-Turbo</strong>
                                 </div>
                                 <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
                                     <span style="opacity:0.5;">点击开始对比查看回复...</span>
@@ -113,7 +110,7 @@
                             </div>
                             <div id="model-gpt" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:120px;">
                                 <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
-                                    <span style="color:#10b981; font-weight:600;">🟢</span> <strong>GPT-4o-mini</strong>
+                                    <span style="color:#10b981; font-weight:600;">🟢</span> <strong>Qwen-Max</strong>
                                 </div>
                                 <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">
                                     <span style="opacity:0.5;">点击开始对比查看回复...</span>
@@ -123,7 +120,28 @@
                     </div>
                 </div>
 
-                <!-- Demo 3: Token 计算器 -->
+                <!-- Demo 3: AI 辩论赛 -->
+                <div class="demo-card">
+                    <div class="demo-header">
+                        <div class="demo-title">
+                            <span class="icon">🎭</span>
+                            <h3>AI 辩论赛模拟</h3>
+                        </div>
+                        <button id="start-debate-btn" class="demo-btn">开始辩论</button>
+                    </div>
+                    <div class="demo-body" style="background:#0d0d14; padding:20px;">
+                        <div style="margin-bottom: 16px;">
+                            <input type="text" id="debate-topic-input" placeholder="输入辩题..." value="AI 是否会让人类变得更懒惰？" style="width:100%; padding:12px 16px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff; font-size:14px;">
+                        </div>
+                        <div id="debate-output" style="background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:14px; min-height:150px; max-height:200px; overflow-y:auto;">
+                            <div style="color:var(--text-muted); font-size:13px;">
+                                <span style="opacity:0.5;">点击开始辩论，观看 AI 选手激烈交锋...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo 4: Token 计算器 -->
                 <div class="demo-card">
                     <div class="demo-header">
                         <div class="demo-title">
@@ -140,7 +158,6 @@
                                     <option value="qwen-plus">Qwen-Plus</option>
                                     <option value="qwen-turbo">Qwen-Turbo</option>
                                     <option value="gpt-4o">GPT-4o</option>
-                                    <option value="gpt-4o-mini">GPT-4o Mini</option>
                                 </select>
                             </div>
                             <div>
@@ -148,7 +165,6 @@
                                 <select id="token-lang" style="width:100%; padding:10px; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; color:#fff;">
                                     <option value="zh">中文</option>
                                     <option value="en">英文</option>
-                                    <option value="img">图片+中文</option>
                                 </select>
                             </div>
                             <div>
@@ -172,6 +188,52 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Demo 5: 台词学习预览 -->
+                <div class="demo-card">
+                    <div class="demo-header">
+                        <div class="demo-title">
+                            <span class="icon">📝</span>
+                            <h3>台词学习预览</h3>
+                        </div>
+                        <a href="demos/dialogue-learning.html" class="demo-btn" style="text-decoration:none;">查看完整版 →</a>
+                    </div>
+                    <div class="demo-body" style="background:#0d0d14; padding:20px;">
+                        <div style="color:var(--text-muted); font-size:14px; line-height:1.8;">
+                            <p>🎯 <strong style="color:#fff;">功能特色：</strong></p>
+                            <ul style="margin:12px 0; padding-left:20px;">
+                                <li>上传扇贝单词 PDF 导出生词</li>
+                                <li>自动检索对应影视台词</li>
+                                <li>AI 整理释义和记忆技巧</li>
+                                <li>生成 TTS 发音音频</li>
+                            </ul>
+                            <p style="color:#10b981;">💡 在语境中高效记忆单词</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Demo 6: 视频生成预览 -->
+                <div class="demo-card">
+                    <div class="demo-header">
+                        <div class="demo-title">
+                            <span class="icon">🎬</span>
+                            <h3>分镜视频生成</h3>
+                        </div>
+                        <a href="demos/video-maker.html" class="demo-btn" style="text-decoration:none;">查看完整版 →</a>
+                    </div>
+                    <div class="demo-body" style="background:#0d0d14; padding:20px;">
+                        <div style="color:var(--text-muted); font-size:14px; line-height:1.8;">
+                            <p>🎬 <strong style="color:#fff;">功能特色：</strong></p>
+                            <ul style="margin:12px 0; padding-left:20px;">
+                                <li>AI 生成英文对话剧本</li>
+                                <li>自动创建分镜插图</li>
+                                <li>Edge TTS 生成配音</li>
+                                <li>合成短视频（需 FFmpeg）</li>
+                            </ul>
+                            <p style="color:#f59e0b;">⚡ 一键生成 AI 短视频</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -179,16 +241,155 @@
         <div id="tab-online" class="tab-content">
             <div class="section-title">登录后可在浏览器直接使用</div>
 
-            <!-- 登录提示 -->
             <div id="login-prompt" class="login-prompt">
                 <div class="icon">🔒</div>
                 <h3>登录后使用在线工具</h3>
-                <p>登录后可在浏览器直接使用 PDF 工具等功能</p>
+                <p>登录后可在浏览器直接使用所有在线工具</p>
                 <button onclick="showAuthModal()" style="margin-top:16px; padding:10px 24px; background:var(--primary); color:#fff; border:none; border-radius:8px; cursor:pointer; font-size:14px;">立即登录</button>
             </div>
 
-            <!-- 在线工具内容（登录后显示） -->
             <div id="online-tools-content" style="display:none;">
+                
+                <!-- AI 多模型对比 -->
+                <div class="online-card">
+                    <div class="online-header" onclick="toggleSection('ai-compare-tools')">
+                        <div class="demo-title">
+                            <span class="icon">⚖️</span>
+                            <h3>AI 多模型对比</h3>
+                        </div>
+                        <span id="ai-compare-tools-arrow">▼</span>
+                    </div>
+                    <div id="ai-compare-tools" class="online-body" style="display:none;">
+                        <p style="color:#888;margin-bottom:16px;">同时向多个 AI 模型提问，对比回答质量</p>
+                        <div class="pdf-form-row">
+                            <label>输入问题</label>
+                            <textarea id="ai-compare-question" rows="3" placeholder="输入你的问题..." style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;resize:vertical;"></textarea>
+                        </div>
+                        <div class="pdf-form-row">
+                            <label>系统提示词（可选）</label>
+                            <input type="text" id="ai-compare-system" placeholder="你是一个专业的技术顾问" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;">
+                        </div>
+                        <div class="pdf-form-row">
+                            <label>选择模型</label>
+                            <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                                    <input type="checkbox" value="qwen-turbo" checked> Qwen-Turbo
+                                </label>
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                                    <input type="checkbox" value="qwen-plus"> Qwen-Plus
+                                </label>
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                                    <input type="checkbox" value="qwen-max"> Qwen-Max
+                                </label>
+                            </div>
+                        </div>
+                        <button class="pdf-btn" onclick="startAICompare()">开始对比</button>
+                        <div id="ai-compare-result" style="margin-top:16px;"></div>
+                    </div>
+                </div>
+
+                <!-- 图文互转 -->
+                <div class="online-card">
+                    <div class="online-header" onclick="toggleSection('image-prompt-tools')">
+                        <div class="demo-title">
+                            <span class="icon">🎨</span>
+                            <h3>图文互转工具</h3>
+                        </div>
+                        <span id="image-prompt-tools-arrow">▼</span>
+                    </div>
+                    <div id="image-prompt-tools" class="online-body" style="display:none;">
+                        <p style="color:#888;margin-bottom:16px;">上传图片生成 AI 绘图提示词</p>
+                        <div class="pdf-form-row">
+                            <label>上传图片</label>
+                            <input type="file" id="image-prompt-file" accept="image/*">
+                        </div>
+                        <div class="pdf-form-row">
+                            <label>提示词风格</label>
+                            <select id="image-prompt-style" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;">
+                                <option value="dalle">DALL-E 风格</option>
+                                <option value="sd">Stable Diffusion 风格</option>
+                            </select>
+                        </div>
+                        <button class="pdf-btn" onclick="analyzeImage()">生成提示词</button>
+                        <div id="image-prompt-result" style="margin-top:16px;"></div>
+                    </div>
+                </div>
+
+                <!-- AI 辩论赛 -->
+                <div class="online-card">
+                    <div class="online-header" onclick="toggleSection('ai-debate-tools')">
+                        <div class="demo-title">
+                            <span class="icon">🎭</span>
+                            <h3>AI 辩论赛</h3>
+                        </div>
+                        <span id="ai-debate-tools-arrow">▼</span>
+                    </div>
+                    <div id="ai-debate-tools" class="online-body" style="display:none;">
+                        <p style="color:#888;margin-bottom:16px;">观看两个 AI 模型进行辩论赛</p>
+                        <div class="pdf-form-row">
+                            <label>辩题</label>
+                            <input type="text" id="debate-topic" placeholder="输入辩论主题..." style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;">
+                        </div>
+                        <div class="pdf-form-row">
+                            <label>辩论轮数</label>
+                            <select id="debate-rounds" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;">
+                                <option value="2">2 轮（快速）</option>
+                                <option value="4" selected>4 轮（标准）</option>
+                            </select>
+                        </div>
+                        <button class="pdf-btn" onclick="startDebate()">开始辩论</button>
+                        <div id="debate-result" style="margin-top:16px;max-height:400px;overflow-y:auto;"></div>
+                    </div>
+                </div>
+
+                <!-- 台词学习 -->
+                <div class="online-card">
+                    <div class="online-header" onclick="toggleSection('dialogue-tools')">
+                        <div class="demo-title">
+                            <span class="icon">📝</span>
+                            <h3>台词学习工具</h3>
+                        </div>
+                        <span id="dialogue-tools-arrow">▼</span>
+                    </div>
+                    <div id="dialogue-tools" class="online-body" style="display:none;">
+                        <p style="color:#888;margin-bottom:16px;">上传扇贝单词 PDF，自动检索影视台词</p>
+                        <div class="pdf-form-row">
+                            <label>上传单词 PDF</label>
+                            <input type="file" id="dialogue-pdf" accept=".pdf">
+                        </div>
+                        <button class="pdf-btn" onclick="startDialogueLearning()">开始处理</button>
+                        <div id="dialogue-result" style="margin-top:16px;"></div>
+                    </div>
+                </div>
+
+                <!-- 视频生成 -->
+                <div class="online-card">
+                    <div class="online-header" onclick="toggleSection('video-tools')">
+                        <div class="demo-title">
+                            <span class="icon">🎬</span>
+                            <h3>分镜视频生成</h3>
+                        </div>
+                        <span id="video-tools-arrow">▼</span>
+                    </div>
+                    <div id="video-tools" class="online-body" style="display:none;">
+                        <p style="color:#888;margin-bottom:16px;">描述场景，AI 自动生成剧本和视频</p>
+                        <div class="pdf-form-row">
+                            <label>场景描述</label>
+                            <textarea id="video-scene" rows="3" placeholder="例如：在咖啡店点一杯拿铁，与服务员的对话" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;resize:vertical;"></textarea>
+                        </div>
+                        <div class="pdf-form-row">
+                            <label>视频类型</label>
+                            <select id="video-type" style="width:100%;padding:12px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;color:#fff;">
+                                <option value="multi">分镜视频（多场景）</option>
+                                <option value="grid">宫格视频</option>
+                            </select>
+                        </div>
+                        <button class="pdf-btn" onclick="startVideoGeneration()">生成视频</button>
+                        <div id="video-result" style="margin-top:16px;"></div>
+                    </div>
+                </div>
+
+                <!-- PDF 工具集 -->
                 <div class="online-card">
                     <div class="online-header" onclick="toggleSection('pdf-tools')">
                         <div class="demo-title">
@@ -197,8 +398,7 @@
                         </div>
                         <span id="pdf-tools-arrow">▼</span>
                     </div>
-                    <div id="pdf-tools" class="online-body">
-                        <!-- PDF Tab 导航 -->
+                    <div id="pdf-tools" class="online-body" style="display:none;">
                         <div class="pdf-tabs" id="pdf-tabs">
                             <button class="pdf-tab active" data-tab="p-img2pdf">图片→PDF</button>
                             <button class="pdf-tab" data-tab="p-merge">合并PDF</button>
@@ -209,7 +409,6 @@
                             <button class="pdf-tab" data-tab="p-to-img">PDF→图片</button>
                         </div>
 
-                        <!-- 图片→PDF -->
                         <div class="pdf-panel active" id="p-img2pdf">
                             <p style="color:#888;margin-bottom:12px;">将多张图片合成一个 PDF</p>
                             <div class="pdf-form-row">
@@ -224,7 +423,6 @@
                             <div class="pdf-result" id="r-img2pdf"></div>
                         </div>
 
-                        <!-- 合并PDF -->
                         <div class="pdf-panel" id="p-merge">
                             <p style="color:#888;margin-bottom:12px;">将多个 PDF 按顺序合并</p>
                             <div class="pdf-form-row">
@@ -235,7 +433,6 @@
                             <div class="pdf-result" id="r-merge"></div>
                         </div>
 
-                        <!-- 删除页面 -->
                         <div class="pdf-panel" id="p-remove">
                             <p style="color:#888;margin-bottom:12px;">删除指定页面</p>
                             <div class="pdf-form-row">
@@ -251,7 +448,6 @@
                             <div class="pdf-result" id="r-remove"></div>
                         </div>
 
-                        <!-- 插入PDF -->
                         <div class="pdf-panel" id="p-insert">
                             <p style="color:#888;margin-bottom:12px;">在指定位置插入另一个 PDF</p>
                             <div class="pdf-form-row">
@@ -282,7 +478,6 @@
                             <div class="pdf-result" id="r-insert"></div>
                         </div>
 
-                        <!-- 页面重排 -->
                         <div class="pdf-panel" id="p-reorder">
                             <p style="color:#888;margin-bottom:12px;">将竖版页面移到横版页面前面</p>
                             <div class="pdf-form-row">
@@ -294,7 +489,6 @@
                             <div class="pdf-result" id="r-reorder"></div>
                         </div>
 
-                        <!-- 统一尺寸 -->
                         <div class="pdf-panel" id="p-normalize">
                             <p style="color:#888;margin-bottom:12px;">将所有横向页面统一为相同尺寸</p>
                             <div class="pdf-form-row">
@@ -306,7 +500,6 @@
                             <div class="pdf-result" id="r-normalize"></div>
                         </div>
 
-                        <!-- PDF→图片 -->
                         <div class="pdf-panel" id="p-to-img">
                             <p style="color:#888;margin-bottom:12px;">将 PDF 页面导出为图片</p>
                             <div class="pdf-form-row">
@@ -350,6 +543,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -357,7 +551,6 @@
         <div id="tab-source" class="tab-content">
             <div class="section-title">所有项目开源，欢迎学习和使用</div>
             <div class="source-grid">
-                <!-- 1. PDF 工具集 -->
                 <div class="source-card">
                     <div class="icon">📄</div>
                     <h3>PDF 工具集</h3>
@@ -366,247 +559,79 @@
                         <span class="tech-tag">Flask</span>
                         <span class="tech-tag">pypdf</span>
                         <span class="tech-tag">Pillow</span>
-                        <span class="tech-tag">PyMuPDF</span>
                     </div>
-                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/12pdffun" class="source-link" target="_blank">查看源码 →</a>
+                    <a href="https://github.com/zhimingliang897-web/integrity" class="source-link" target="_blank">查看源码 →</a>
                 </div>
 
-                <!-- 2. 分镜视频生成器 -->
                 <div class="source-card">
-                    <div class="icon">🎬</div>
-                    <h3>分镜视频生成器</h3>
-                    <p class="desc">调用大模型生成英文对话场景，使用 AI 生图或自定义图片，自动合成带字幕和配音的短视频</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">FFmpeg</span>
-                        <span class="tech-tag">Edge TTS</span>
-                        <span class="tech-tag">DashScope</span>
-                    </div>
-                    <div class="card-links">
-                        <a href="demos/video-maker.html" class="demo-link">查看演示 →</a>
-                        <div class="source-link-wrapper">
-                            <a href="https://github.com/zhimingliang897-web/integrity/tree/main/1%E5%88%86%E9%95%9C" class="source-link" target="_blank">查看源码 →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. 台词学习工具 -->
-                <div class="source-card">
-                    <div class="icon">📝</div>
-                    <h3>台词学习工具</h3>
-                    <p class="desc">从扇贝单词导出生词卡片，程序自动检索对应美剧/电影台词，结合语境高效记忆单词</p>
+                    <div class="icon">⚖️</span></div>
+                    <h3>多模型对比平台</h3>
+                    <p class="desc">同一个界面横向对比 Qwen 等大模型，支持并发提交问题，流式输出展示</p>
                     <div class="tech-tags">
                         <span class="tech-tag">Flask</span>
-                        <span class="tech-tag">pdfplumber</span>
-                        <span class="tech-tag">BeautifulSoup</span>
-                        <span class="tech-tag">DashScope</span>
+                        <span class="tech-tag">OpenAI API</span>
                     </div>
                     <div class="card-links">
-                        <a href="demos/dialogue-learning.html" class="demo-link">查看演示 →</a>
-                        <div class="source-link-wrapper">
-                            <a href="https://github.com/zhimingliang897-web/integrity/tree/main/2%E5%8F%B0%E8%AF%8D" class="source-link" target="_blank">查看源码 →</a>
-                        </div>
+                        <a href="demos/ai-compare.html" class="demo-link">查看演示 →</a>
+                        <a href="https://github.com/zhimingliang897-web/integrity" class="source-link" target="_blank">查看源码 →</a>
                     </div>
                 </div>
 
-                <!-- 4. AI 辩论赛 -->
+                <div class="source-card">
+                    <div class="icon">🎨</div>
+                    <h3>图文互转工具</h3>
+                    <p class="desc">AI 图片 ↔ 提示词双向转换工具箱，使用 Qwen VL 视觉模型</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Qwen VL</span>
+                    </div>
+                    <div class="card-links">
+                        <a href="demos/image-prompt.html" class="demo-link">查看演示 →</a>
+                        <a href="https://github.com/zhimingliang897-web/integrity" class="source-link" target="_blank">查看源码 →</a>
+                    </div>
+                </div>
+
                 <div class="source-card">
                     <div class="icon">🎭</div>
                     <h3>AI 辩论赛</h3>
-                    <p class="desc">多模型驱动的 AI 辩论竞技场。集成 Qwen/DeepSeek 等模型，还原标准华语辩论赛制，实时语音合成辩论过程并由 AI 裁判评分</p>
+                    <p class="desc">多模型驱动的 AI 辩论竞技场，SSE 流式输出辩论过程</p>
                     <div class="tech-tags">
                         <span class="tech-tag">Flask</span>
-                        <span class="tech-tag">Multi-LLM</span>
-                        <span class="tech-tag">TTS</span>
                         <span class="tech-tag">SSE</span>
                     </div>
                     <div class="card-links">
                         <a href="demos/ai-debate.html" class="demo-link">查看演示 →</a>
-                        <div class="source-link-wrapper">
-                            <a href="https://github.com/zhimingliang897-web/integrity/tree/main/5AI%E8%BE%A9%E8%AE%BA%E8%B5%9B" class="source-link" target="_blank">查看源码 →</a>
-                        </div>
+                        <a href="https://github.com/zhimingliang897-web/integrity" class="source-link" target="_blank">查看源码 →</a>
                     </div>
                 </div>
 
-                <!-- 5. AI 每日情报 Agent -->
                 <div class="source-card">
-                    <div class="icon">📡</div>
-                    <h3>AI 每日情报 Agent</h3>
-                    <p class="desc">全自动化的 AI 资讯情报官。聚合全球 12+ 技术信源 → LLM 智能评级与摘要 → 自动推送到 Telegram 并归档网页</p>
+                    <div class="icon">📝</div>
+                    <h3>台词学习工具</h3>
+                    <p class="desc">从扇贝单词导出生词，自动检索影视台词，AI 整理记忆技巧</p>
                     <div class="tech-tags">
-                        <span class="tech-tag">GitHub Actions</span>
-                        <span class="tech-tag">RSS</span>
-                        <span class="tech-tag">Qwen API</span>
-                        <span class="tech-tag">Telegram</span>
-                    </div>
-                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/6AI%E7%83%AD%E7%82%B9" class="source-link" target="_blank">查看源码 →</a>
-                </div>
-
-                <!-- 6. 图文互转工具 -->
-                <div class="source-card">
-                    <div class="icon">🎨</div>
-                    <h3>图文互转工具</h3>
-                    <p class="desc">AI 图片 ↔ 提示词双向转换工具箱。图片逆向生成 DALL·E/SD 风格提示词，或从提示词批量生成图片</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">Qwen VL</span>
-                        <span class="tech-tag">DashScope</span>
-                        <span class="tech-tag">Volcengine</span>
-                    </div>
-                    <div class="card-links">
-                        <a href="demos/image-prompt.html" class="demo-link">查看演示 →</a>
-                        <div class="source-link-wrapper">
-                            <a href="https://github.com/zhimingliang897-web/integrity/tree/main/9%E5%9B%BE%E7%94%9F%E6%96%87%E6%96%87%E7%94%9F%E5%9B%BE" class="source-link" target="_blank">查看源码 →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 7. EasyApply 浏览器插件 -->
-                <div class="source-card">
-                    <div class="icon">📋</div>
-                    <h3>EasyApply 浏览器插件</h3>
-                    <p class="desc">求职助手浏览器扩展。自动抓取招聘页面信息，一键导出为 Excel 表格，支持 Chrome/Edge 双平台</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">JavaScript</span>
-                        <span class="tech-tag">Manifest V3</span>
-                        <span class="tech-tag">Chrome API</span>
-                        <span class="tech-tag">xlsx.js</span>
-                    </div>
-                    <div class="card-links">
-                        <a href="demos/easyapply.html" class="demo-link">查看演示 →</a>
-                        <div class="source-link-wrapper">
-                            <a href="https://github.com/zhimingliang897-web/integrity/tree/main/11easyapply" class="source-link" target="_blank">查看源码 →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 8. CourseDigest 智能助考 -->
-                <div class="source-card">
-                    <div class="icon">🎓</div>
-                    <h3>CourseDigest 智能助考</h3>
-                    <p class="desc">将录播课视频与 PPT 讲义转化为考试导向复习大纲。本地 Whisper 转录 + AI 提取考点 + 自动生成模拟试题</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">faster-whisper</span>
+                        <span class="tech-tag">Flask</span>
                         <span class="tech-tag">pdfplumber</span>
-                        <span class="tech-tag">Qwen API</span>
-                        <span class="tech-tag">Groq</span>
+                        <span class="tech-tag">Edge TTS</span>
                     </div>
                     <div class="card-links">
-                        <a href="demos/course-digest.html" class="demo-link">查看演示 →</a>
-                        <div class="source-link-wrapper">
-                            <a href="https://github.com/zhimingliang897-web/integrity/tree/main/13course_digest" class="source-link" target="_blank">查看源码 →</a>
-                        </div>
+                        <a href="demos/dialogue-learning.html" class="demo-link">查看演示 →</a>
+                        <a href="https://github.com/zhimingliang897-web/integrity" class="source-link" target="_blank">查看源码 →</a>
                     </div>
                 </div>
 
-                <!-- 9. 个人文件助手 Agent -->
                 <div class="source-card">
-                    <div class="icon">🤖</div>
-                    <h3>个人文件助手 Agent</h3>
-                    <p class="desc">用大白话控制电脑极速秒搜全盘文件的大模型管家。支持手机端远程内网访问，并能自动打包所选文件发送到指定邮箱</p>
+                    <div class="icon">🎬</div>
+                    <h3>分镜视频生成器</h3>
+                    <p class="desc">AI 生成剧本、分镜插图、配音，合成短视频</p>
                     <div class="tech-tags">
                         <span class="tech-tag">Python</span>
-                        <span class="tech-tag">DashScope</span>
-                        <span class="tech-tag">Natapp</span>
-                        <span class="tech-tag">Windows API</span>
+                        <span class="tech-tag">FFmpeg</span>
+                        <span class="tech-tag">Edge TTS</span>
                     </div>
                     <div class="card-links">
-                        <a href="demos/file-agent.html" class="demo-link">查看演示 →</a>
-                        <div class="source-link-wrapper">
-                            <a href="https://github.com/zhimingliang897-web/integrity/tree/main/14file-agent" class="source-link" target="_blank">查看源码 →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 10. 小红书内容生成器 -->
-                <div class="source-card">
-                    <div class="icon">📕</div>
-                    <h3>小红书内容生成器</h3>
-                    <p class="desc">AI 全自动生成英语教育图文笔记。自动构思知识点、生成精美封面排版，并支持控制浏览器一键自动发布</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">Playwright</span>
-                        <span class="tech-tag">LLM</span>
-                        <span class="tech-tag">Pillow</span>
-                    </div>
-                    <div class="card-links">
-                        <a href="demos/redbook-generator.html" class="demo-link">查看演示 →</a>
-                        <div class="source-link-wrapper">
-                            <a href="https://github.com/zhimingliang897-web/integrity/tree/main/15redbook" class="source-link" target="_blank">查看源码 →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 11. 多模型对比平台 -->
-                <div class="source-card">
-                    <div class="icon">⚖️</div>
-                    <h3>多模型对比平台</h3>
-                    <p class="desc">同一个界面横向对比 Qwen、Doubao、DeepSeek 等大模型。支持并发提交问题，流式输出展示，直观评测回复质量差异</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Node.js</span>
-                        <span class="tech-tag">Vanilla JS</span>
-                        <span class="tech-tag">OpenAI Format API</span>
-                    </div>
-                    <div class="card-links">
-                        <a href="demos/ai-compare.html" class="demo-link">查看演示 →</a>
-                        <div class="source-link-wrapper">
-                            <a href="https://github.com/zhimingliang897-web/integrity/tree/main/17ai-compare" class="source-link" target="_blank">查看源码 →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 12. Token 消耗对比工具 -->
-                <div class="source-card">
-                    <div class="icon">🪙</div>
-                    <h3>Token 消耗对比工具</h3>
-                    <p class="desc">量化测试相同语义在「中文/英文/带图」三种输入下的 Token 开销差异。帮助开发者优化 Prompt 成本</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">Tkinter</span>
-                        <span class="tech-tag">DashScope</span>
-                    </div>
-                    <div class="card-links">
-                        <a href="demos/token-compare.html" class="demo-link">查看演示 →</a>
-                        <div class="source-link-wrapper">
-                            <a href="https://github.com/zhimingliang897-web/integrity/tree/main/18tokens" class="source-link" target="_blank">查看源码 →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 13. 小红书图片生成器 -->
-                <div class="source-card">
-                    <div class="icon">🖼️</div>
-                    <h3>小红书图片生成器</h3>
-                    <p class="desc">将文章一键转换为精美小红书多图。LLM 自动拆分文章为多页内容，PIL 渲染生成配图</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">Qwen API</span>
-                        <span class="tech-tag">Pillow</span>
-                        <span class="tech-tag">YAML</span>
-                    </div>
-                    <div class="card-links">
-                        <a href="demos/xhs-image-generator.html" class="demo-link">查看演示 →</a>
-                        <div class="source-link-wrapper">
-                            <a href="https://github.com/zhimingliang897-web/integrity/tree/main/20AIer-xhs" class="source-link" target="_blank">查看源码 →</a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 14. 大麦抢票助手 -->
-                <div class="source-card">
-                    <div class="icon">🎫</div>
-                    <h3>大麦抢票助手</h3>
-                    <p class="desc">通过电脑控制手机，自动完成大麦APP抢票流程。uiautomator2 + ADB 实现自动化操作</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Python</span>
-                        <span class="tech-tag">uiautomator2</span>
-                        <span class="tech-tag">ADB</span>
-                    </div>
-                    <div class="card-links">
-                        <a href="demos/ticket-helper.html" class="demo-link">查看演示 →</a>
-                        <div class="source-link-wrapper">
-                            <span class="source-link" style="color: var(--text-muted); cursor: not-allowed;">私有项目</span>
-                        </div>
+                        <a href="demos/video-maker.html" class="demo-link">查看演示 →</a>
+                        <a href="https://github.com/zhimingliang897-web/integrity" class="source-link" target="_blank">查看源码 →</a>
                     </div>
                 </div>
             </div>
@@ -617,9 +642,9 @@
         Integrity Lab · 全部项目开源于 <a href="https://github.com/zhimingliang897-web/integrity" target="_blank" style="color:var(--primary);">GitHub</a>
     </footer>
 
-    <!-- 引入 JS 模块 -->
     <script src="assets/js/tools-auth.js"></script>
     <script src="assets/js/tools-demo.js"></script>
     <script src="assets/js/tools-pdf.js"></script>
+    <script src="assets/js/tools-online.js"></script>
 </body>
 </html>

@@ -1,7 +1,33 @@
 /**
  * 演示功能模块
- * 图文互转、多模型对比、Token 计算器
+ * 图文互转、多模型对比、AI 辩论赛、Token 计算器
  */
+
+const API_BASE = window.location.origin;
+
+// ========== Tab 切换 ==========
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    
+    document.querySelector(`[onclick="switchTab('${tabName}')"]`).classList.add('active');
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+}
+
+// ========== PDF Tab 切换 ==========
+document.addEventListener('DOMContentLoaded', function() {
+    const pdfTabs = document.querySelectorAll('.pdf-tab');
+    pdfTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            pdfTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            const tabId = this.dataset.tab;
+            document.querySelectorAll('.pdf-panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        });
+    });
+});
 
 // ========== 图文互转演示 ==========
 const visionBtn = document.getElementById('start-vision-btn');
