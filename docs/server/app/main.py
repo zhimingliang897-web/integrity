@@ -13,9 +13,7 @@ import datetime
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 
-app = Flask(__name__, 
-            static_folder='static',
-            template_folder='templates')
+app = Flask(__name__)
 _secret_key = os.environ.get('SECRET_KEY')
 if not _secret_key:
     raise RuntimeError('SECRET_KEY 环境变量未设置，请在 .env 中配置')
@@ -92,34 +90,36 @@ def health():
     })
 
 
-# ============ 前端页面路由 ============
+# ============ 前端页面路由（已迁移到 GitHub Pages）============
+# 前端现在由 GitHub Pages 托管：https://zhimingliang897-web.github.io/integrity/
+# 以下路由已禁用
 
-@app.route('/app/')
-@app.route('/app/<path:path>')
-def serve_app(path=''):
-    """前端应用入口"""
-    if path == '' or path == 'index.html':
-        return render_template('index.html')
-    elif path == 'tools.html':
-        return render_template('tools.html')
-    elif path == 'news.html':
-        return render_template('news.html')
-    elif path.endswith('.html'):
-        return render_template(path)
-    else:
-        return send_from_directory(app.static_folder, path)
-
-
-@app.route('/demos/<path:path>')
-def serve_demos(path):
-    """Demo 页面"""
-    return send_from_directory(os.path.join(app.static_folder, 'demos'), path)
+# @app.route('/app/')
+# @app.route('/app/<path:path>')
+# def serve_app(path=''):
+#     """前端应用入口"""
+#     if path == '' or path == 'index.html':
+#         return render_template('index.html')
+#     elif path == 'tools.html':
+#         return render_template('tools.html')
+#     elif path == 'news.html':
+#         return render_template('news.html')
+#     elif path.endswith('.html'):
+#         return render_template(path)
+#     else:
+#         return send_from_directory(app.static_folder, path)
 
 
-@app.route('/assets/<path:path>')
-def serve_assets(path):
-    """静态资源"""
-    return send_from_directory(os.path.join(app.static_folder, 'assets'), path)
+# @app.route('/demos/<path:path>')
+# def serve_demos(path):
+#     """Demo 页面"""
+#     return send_from_directory(os.path.join(app.static_folder, 'demos'), path)
+
+
+# @app.route('/assets/<path:path>')
+# def serve_assets(path):
+#     """静态资源"""
+#     return send_from_directory(os.path.join(app.static_folder, 'assets'), path)
 
 
 @app.route('/api/auth/register', methods=['POST'])
