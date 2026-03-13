@@ -28,6 +28,7 @@
         .content { line-height: 1.6; white-space: pre-wrap; }
         .nav { position: fixed; top: 0; left: 0; right: 0; background: rgba(15, 15, 26, 0.9); padding: 15px 20px; border-bottom: 1px solid #2a2a3a; }
         .nav a { color: #667eea; text-decoration: none; }
+        .status { text-align: center; color: #888; padding: 20px; }
     </style>
 </head>
 <body>
@@ -56,7 +57,7 @@
         </div>
         
         <div class="debate-area" id="debate-area">
-            <p style="text-align:center; color:#888;">点击"开始辩论"观看 AI 辩论赛</p>
+            <p class="status">点击"开始辩论"观看 AI 辩论赛</p>
         </div>
     </div>
     
@@ -81,69 +82,79 @@
             
             document.getElementById('start-btn').disabled = true;
             document.getElementById('stop-btn').style.display = 'inline-block';
-            document.getElementById('debate-area').innerHTML = '';
+            document.getElementById('debate-area').innerHTML = '<p class="status">正在初始化辩论...</p>';
             
-            try {
-                const res = await fetch('/api/debate/start', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': 'Bearer ' + token
-                    },
-                    body: JSON.stringify({ topic, pro_position: proPosition, con_position: conPosition })
-                });
-                
-                if (!res.ok) {
+            // 先连接 SSE
+            eventSource = new EventSource('/api/debate/stream');
+            
+            eventSource.onopen = async () => {
+                // SSE 连接成功后再启动辩论
+                try {
+                    const res = await fetch('/api/debate/start', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: JSON.stringify({ topic, pro_position: proPosition, con_position: conPosition })
+                    });
+                    
                     const data = await res.json();
-                    alert(data.error || '启动失败');
-                    document.getElementById('start-btn').disabled = false;
-                    return;
-                }
-                
-                eventSource = new EventSource('/api/debate/stream');
-                
-                eventSource.addEventListener('phase', (e) => {
-                    const data = JSON.parse(e.data);
-                    addPhase(data.phase, data.description);
-                });
-                
-                eventSource.addEventListener('speaker', (e) => {
-                    const data = JSON.parse(e.data);
-                    addSpeaker(data);
-                });
-                
-                eventSource.addEventListener('token', (e) => {
-                    const data = JSON.parse(e.data);
-                    appendToken(data.speaker_id, data.token);
-                });
-                
-                eventSource.addEventListener('turn_end', (e) => {
-                    const data = JSON.parse(e.data);
-                    finishTurn(data);
-                });
-                
-                eventSource.addEventListener('judge', (e) => {
-                    const data = JSON.parse(e.data);
-                    addJudge(data.content);
-                });
-                
-                eventSource.addEventListener('debate_end', () => {
+                    if (data.error) {
+                        alert(data.error);
+                        eventSource.close();
+                        document.getElementById('start-btn').disabled = false;
+                        document.getElementById('stop-btn').style.display = 'none';
+                    }
+                } catch (err) {
+                    alert('启动失败: ' + err.message);
                     eventSource.close();
                     document.getElementById('start-btn').disabled = false;
-                    document.getElementById('stop-btn').style.display = 'none';
-                });
-                
-                eventSource.addEventListener('error', (e) => {
+                }
+            };
+            
+            eventSource.addEventListener('phase', (e) => {
+                const data = JSON.parse(e.data);
+                addPhase(data.phase, data.description);
+            });
+            
+            eventSource.addEventListener('speaker', (e) => {
+                const data = JSON.parse(e.data);
+                addSpeaker(data);
+            });
+            
+            eventSource.addEventListener('token', (e) => {
+                const data = JSON.parse(e.data);
+                appendToken(data.speaker_id, data.token);
+            });
+            
+            eventSource.addEventListener('turn_end', (e) => {
+                // 回合结束
+            });
+            
+            eventSource.addEventListener('judge', (e) => {
+                const data = JSON.parse(e.data);
+                addJudge(data.content);
+            });
+            
+            eventSource.addEventListener('debate_end', () => {
+                eventSource.close();
+                document.getElementById('start-btn').disabled = false;
+                document.getElementById('stop-btn').style.display = 'none';
+            });
+            
+            eventSource.addEventListener('error', (e) => {
+                if (e.data) {
                     const data = JSON.parse(e.data);
                     alert('错误: ' + data.message);
-                    eventSource.close();
-                    document.getElementById('start-btn').disabled = false;
-                });
-                
-            } catch (err) {
-                alert('网络错误: ' + err.message);
+                }
+                eventSource.close();
                 document.getElementById('start-btn').disabled = false;
-            }
+            });
+            
+            eventSource.onerror = () => {
+                // 忽略连接错误，SSE 会自动重连
+            };
         }
         
         function stopDebate() {
@@ -161,6 +172,7 @@
             div.className = 'phase';
             div.textContent = `【${phase}】${desc}`;
             area.appendChild(div);
+            area.scrollTop = area.scrollHeight;
         }
         
         function addSpeaker(data) {
@@ -171,15 +183,16 @@
             div.innerHTML = `<div class="speaker">${data.name} (${data.side === 'pro' ? '正方' : '反方'}${data.role})</div><div class="content" id="content-${data.id}"></div>`;
             area.appendChild(div);
             currentSpeaker = data.id;
+            area.scrollTop = area.scrollHeight;
         }
         
         function appendToken(speakerId, token) {
             const content = document.getElementById('content-' + speakerId);
-            if (content) content.textContent += token;
-        }
-        
-        function finishTurn(data) {
-            currentSpeaker = null;
+            if (content) {
+                content.textContent += token;
+                const area = document.getElementById('debate-area');
+                area.scrollTop = area.scrollHeight;
+            }
         }
         
         function addJudge(content) {
@@ -188,6 +201,7 @@
             div.className = 'message judge';
             div.innerHTML = `<div class="speaker">🧑‍⚖️ AI裁判</div><div class="content">${content}</div>`;
             area.appendChild(div);
+            area.scrollTop = area.scrollHeight;
         }
     </script>
 </body>

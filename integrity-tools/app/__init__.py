@@ -33,12 +33,14 @@ def create_app():
     from app.tools.tokens import tokens_bp
     from app.tools.lines import lines_bp
     from app.tools.compare import compare_bp
+    from app.tools.pdf import pdf_bp
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(debate_bp, url_prefix='/api/debate')
     app.register_blueprint(tokens_bp, url_prefix='/api/tokens')
     app.register_blueprint(lines_bp, url_prefix='/api/lines')
     app.register_blueprint(compare_bp, url_prefix='/api/compare')
+    app.register_blueprint(pdf_bp, url_prefix='/api/pdf')
     
     from app.routes import register_frontend_routes
     register_frontend_routes(app)

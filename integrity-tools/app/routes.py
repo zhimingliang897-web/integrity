@@ -30,6 +30,10 @@ def register_frontend_routes(app):
     def compare_page():
         return render_template('compare.html')
     
+    @app.route('/pdf')
+    def pdf_page():
+        return render_template('pdf.html')
+    
     @app.route('/assets/<path:filename>')
     def serve_assets(filename):
         return send_from_directory(os.path.join(app.static_folder, 'assets'), filename)
