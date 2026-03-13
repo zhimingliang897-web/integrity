@@ -17,7 +17,7 @@ whisper:
 api:
   provider: "dashscope" # 使用百炼 API
   api_key: "sk-0ef56d1b3ba54a188ce28a46c54e2a24" # 你的千问 API Key
-  model: "qwen-plus-2025-12-01" # 千问模型: qwen-turbo, qwen-plus, qwen-max
+  model: "glm-5" # 千问模型: qwen-turbo, qwen-plus, qwen-max
 
 # 分析分块配置
 analysis:

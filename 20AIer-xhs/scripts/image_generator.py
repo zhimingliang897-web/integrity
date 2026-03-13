@@ -355,6 +355,6 @@ def generate_images(slides: list[dict], folder_name: str) -> list[str]:
         path = os.path.join(out_dir, f"slide_{i:02d}.png")
         img.save(path)
         paths.append(path)
-        print(f"  ✅ {i}/{total} → {path}")
+        print(f"  [OK] {i}/{total} -> {path}")
 
     return paths
