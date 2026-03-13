@@ -435,7 +435,7 @@
 
         async function loadProvidersFromAPI() {
             try {
-                const response = await fetch(`${API_BASE}/api/tools/ai-compare/providers`);
+                const response = await fetch(`${API_BASE}/api/compare/providers`);
                 if (response.ok) {
                     const data = await response.json();
                     providers = data.providers.map(p => ({
@@ -661,7 +661,7 @@
             const promises = selectedRequests.map(async (req, index) => {
                 const startTime = Date.now();
                 try {
-                    const response = await fetch(`${API_BASE}/api/tools/ai-compare/query`, {
+                    const response = await fetch(`${API_BASE}/api/compare`, {
                         method: 'POST',
                         headers: {
                             'Authorization': `Bearer ${token}`,

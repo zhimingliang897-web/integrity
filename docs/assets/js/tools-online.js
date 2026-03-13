@@ -83,7 +83,7 @@ async function startAICompare() {
     
     for (const model of models) {
         try {
-            const res = await fetch(API_BASE + '/api/tools/ai-compare/query', {
+            const res = await fetch(API_BASE + '/api/compare', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + token,
@@ -161,35 +161,9 @@ async function analyzeImage() {
     formData.append('image', fileInput.files[0]);
     formData.append('style', style);
 
-    try {
-        const res = await fetch(API_BASE + '/api/tools/image-prompt/analyze', {
-            method: 'POST',
-            headers: { 'Authorization': 'Bearer ' + token },
-            body: formData
-        });
-
-        if (!res.ok) {
-            const errData = await res.json().catch(() => ({}));
-            throw new Error(errData.error || `HTTP ${res.status}`);
-        }
-
-        const data = await res.json();
-
-        if (data.success) {
-            showResult('image-prompt-result', `
-                <div style="margin-bottom:8px;font-weight:600;">生成的提示词 (${data.style === 'sd' ? 'Stable Diffusion' : 'DALL-E'} 风格)</div>
-                <div style="background:var(--bg-card);padding:12px;border-radius:8px;font-family:monospace;white-space:pre-wrap;line-height:1.6;">${data.prompt}</div>
-                <div style="margin-top:8px;font-size:12px;color:var(--text-muted);">✓ 可直接复制使用</div>
-            `);
-            showToast('提示词生成完成！', 'success');
-        } else {
-            showResult('image-prompt-result', data.error || '分析失败', true);
-            showToast('分析失败', 'error');
-        }
-    } catch (e) {
-        showResult('image-prompt-result', '请求失败: ' + e.message, true);
-        showToast('请求失败: ' + e.message, 'error');
-    }
+    showResult('image-prompt-result', '该功能暂未上线，敬请期待', true);
+            showToast('功能暂未上线', 'warning');
+            return;
 }
 
 // ============ AI 辩论赛 ============
@@ -222,7 +196,7 @@ async function startDebate() {
     `;
 
     try {
-        const res = await fetch(API_BASE + '/api/tools/ai-debate/start', {
+        const res = await fetch(API_BASE + '/api/debate/start', {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + token,
@@ -346,7 +320,7 @@ async function startDialogueLearning() {
     formData.append('file', fileInput.files[0]);
 
     try {
-        const res = await fetch(API_BASE + '/api/tools/dialogue-learning/process', {
+        const res = await fetch(API_BASE + '/api/lines/upload', {
             method: 'POST',
             headers: { 'Authorization': 'Bearer ' + token },
             body: formData
@@ -354,8 +328,8 @@ async function startDialogueLearning() {
 
         const data = await res.json();
 
-        if (data.task_id) {
-            pollDialogueStatus(data.task_id, token);
+        if (data.day) {
+            pollDialogueStatus(data.day, token);
         } else {
             showResult('dialogue-result', data.error || '处理失败', true);
         }
@@ -369,7 +343,7 @@ async function pollDialogueStatus(taskId, token) {
     
     const poll = async () => {
         try {
-            const res = await fetch(API_BASE + '/api/tools/dialogue-learning/status/' + taskId, {
+            const res = await fetch(API_BASE + '/api/lines/status/' + taskId, {
                 headers: { 'Authorization': 'Bearer ' + token }
             });
             const data = await res.json();
@@ -433,29 +407,9 @@ async function startVideoGeneration() {
 
     showLoading('video-result');
 
-    try {
-        const res = await fetch(API_BASE + '/api/tools/video-maker/generate', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                scene_description: scene,
-                video_type: videoType
-            })
-        });
-
-        const data = await res.json();
-
-        if (data.task_id) {
-            pollVideoStatus(data.task_id, token);
-        } else {
-            showResult('video-result', data.error || '提交失败', true);
-        }
-    } catch (e) {
-        showResult('video-result', '请求失败: ' + e.message, true);
-    }
+    showResult('video-result', '该功能暂未上线，敬请期待', true);
+            showToast('功能暂未上线', 'warning');
+            return;
 }
 
 async function pollVideoStatus(taskId, token) {

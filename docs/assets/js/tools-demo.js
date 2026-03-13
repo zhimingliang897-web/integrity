@@ -289,7 +289,7 @@ function initTokenCalc() {
             
             // 服务器上调用真实 API
             try {
-                const res = await fetch(API_BASE + '/api/tools/token-calc', {
+                const res = await fetch(API_BASE + '/api/tokens/calc', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ model, lang, chars })

@@ -640,7 +640,7 @@
             hideError();
             
             try {
-                const response = await fetch(`${API_BASE}/api/tools/token-compare/analyze`, {
+                const response = await fetch(`${API_BASE}/api/tokens/compare`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

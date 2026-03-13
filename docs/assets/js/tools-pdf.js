@@ -44,7 +44,7 @@ async function getPdfInfo(input, infoId) {
     const fd = new FormData();
     fd.append('pdf', file);
     try {
-        const res = await fetch(API_BASE + '/api/tools/pdf/info', {
+        const res = await fetch(API_BASE + '/api/pdf/info', {
             method: 'POST',
             headers: { 'Authorization': 'Bearer ' + token },
             body: fd
@@ -64,7 +64,7 @@ async function autoFillEndPage(input) {
     const fd = new FormData();
     fd.append('pdf', file);
     try {
-        const res = await fetch(API_BASE + '/api/tools/pdf/info', {
+        const res = await fetch(API_BASE + '/api/pdf/info', {
             method: 'POST',
             headers: { 'Authorization': 'Bearer ' + token },
             body: fd
@@ -101,13 +101,13 @@ async function pdfOp(op) {
             for (const f of files) fd.append('images', f);
             const landscapeEl = document.getElementById('p-img2pdf-landscape');
             if (landscapeEl && landscapeEl.checked) fd.append('force_landscape', '1');
-            endpoint = '/api/tools/pdf/images_to_pdf';
+            endpoint = '/api/pdf/images_to_pdf';
 
         } else if (op === 'merge') {
             const files = document.getElementById('p-merge-files').files;
             if (files.length < 2) throw new Error('请选择至少 2 个 PDF');
             for (const f of files) fd.append('pdfs', f);
-            endpoint = '/api/tools/pdf/merge';
+            endpoint = '/api/pdf/merge';
 
         } else if (op === 'remove') {
             const file = document.getElementById('p-remove-file').files[0];
@@ -116,44 +116,19 @@ async function pdfOp(op) {
             if (!pages) throw new Error('请输入要删除的页码');
             fd.append('pdf', file);
             fd.append('pages', pages);
-            endpoint = '/api/tools/pdf/remove_pages';
+            endpoint = '/api/pdf/remove_pages';
 
         } else if (op === 'insert') {
-            const main = document.getElementById('p-insert-main').files[0];
-            const ins = document.getElementById('p-insert-ins').files[0];
-            if (!main || !ins) throw new Error('请选择两个 PDF 文件');
-            fd.append('main_pdf', main);
-            fd.append('insert_pdf', ins);
-            fd.append('position', document.getElementById('p-insert-pos').value);
-            const pageIdxEl = document.getElementById('p-insert-page');
-            if (pageIdxEl) fd.append('page_index', pageIdxEl.value);
-            endpoint = '/api/tools/pdf/insert';
+            throw new Error('插入功能暂未上线');
 
         } else if (op === 'reorder') {
-            const file = document.getElementById('p-reorder-file').files[0];
-            if (!file) throw new Error('请选择 PDF 文件');
-            fd.append('pdf', file);
-            endpoint = '/api/tools/pdf/reorder';
+            throw new Error('重排功能暂未上线');
 
         } else if (op === 'normalize') {
-            const file = document.getElementById('p-normalize-file').files[0];
-            if (!file) throw new Error('请选择 PDF 文件');
-            fd.append('pdf', file);
-            endpoint = '/api/tools/pdf/normalize';
+            throw new Error('统一尺寸功能暂未上线');
 
         } else if (op === 'to_images') {
-            const file = document.getElementById('p-toimg-file').files[0];
-            if (!file) throw new Error('请选择 PDF 文件');
-            fd.append('pdf', file);
-            fd.append('start_page', document.getElementById('p-toimg-start').value);
-            fd.append('end_page', document.getElementById('p-toimg-end').value);
-            const dpiEl = document.getElementById('p-toimg-dpi');
-            fd.append('dpi', dpiEl ? dpiEl.value : '150');
-            const fmtEl = document.getElementById('p-toimg-fmt');
-            fd.append('format', fmtEl ? fmtEl.value : 'jpg');
-            const longEl = document.getElementById('p-toimg-long');
-            if (longEl && longEl.checked) fd.append('long_image', '1');
-            endpoint = '/api/tools/pdf/to_images';
+            throw new Error('PDF转图片功能暂未上线');
         }
 
         const res = await fetch(API_BASE + endpoint, {

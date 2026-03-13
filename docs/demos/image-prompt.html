@@ -629,6 +629,18 @@
 
             for (const file of selectedFiles) {
                 try {
+                    // 功能暂未上线
+                    const item = document.createElement('div');
+                    item.className = 'result-item';
+                    item.innerHTML = `
+                        <div class="result-header">
+                            <span class="result-title">${file.name}</span>
+                        </div>
+                        <div class="result-text" style="color: #f59e0b;">图文互转功能暂未上线，敬请期待</div>
+                    `;
+                    promptList.appendChild(item);
+                    continue;
+
                     const formData = new FormData();
                     formData.append('image', file);
                     formData.append('style', selectedStyle);

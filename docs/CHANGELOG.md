@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2026-03-14] - Server Bug Fixes & API Path Unification
+
+### Fixed
+- **[Server] debate.html JavaScript syntax error** (`integrity-tools/app/templates/debate.html`)
+  - Removed orphaned `catch` block at line 168-173 that caused `startDebate is not defined` error
+- **[Server] PDF module 404 error** (`integrity-tools/app/__init__.py`)
+  - Added missing PDF blueprint registration: `app.register_blueprint(pdf_bp, url_prefix='/api/pdf')`
+- **[Frontend] API path unification** (docs project)
+  - Fixed all API paths to match integrity-tools backend:
+    - `/api/tools/ai-compare/*` → `/api/compare/*`
+    - `/api/tools/ai-debate/*` → `/api/debate/*`
+    - `/api/tools/token-compare/*` → `/api/tokens/*`
+    - `/api/tools/token-calc` → `/api/tokens/calc`
+    - `/api/tools/pdf/*` → `/api/pdf/*`
+    - `/api/tools/dialogue-learning/*` → `/api/lines/*`
+  - Marked video-maker and image-prompt as "功能暂未上线" (backend not implemented)
+
+### Changed
+- Local `integrity-tools/app/__init__.py` synced with server
+
 ## [2026-03-13] - Bug Fixes & Security Hardening
 
 ### Fixed

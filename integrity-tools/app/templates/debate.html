@@ -164,13 +164,6 @@
                 }
             };
         }
-                
-            } catch (err) {
-                debateArea.innerHTML = '<p class="status" style="color:#ef4444;">启动失败: ' + err.message + '</p>';
-                document.getElementById('start-btn').disabled = false;
-                document.getElementById('stop-btn').style.display = 'none';
-            }
-        }
         
         function stopDebate() {
             fetch('/api/debate/stop', { method: 'POST' });

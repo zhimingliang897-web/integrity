@@ -393,7 +393,7 @@
                 const formData = new FormData();
                 formData.append('file', file);
 
-                const response = await fetch(API_BASE + '/api/tools/dialogue-learning/process', {
+                const response = await fetch(API_BASE + '/api/lines/upload', {
                     method: 'POST',
                     headers: {
                         'Authorization': 'Bearer ' + token
@@ -407,10 +407,10 @@
                 }
 
                 // 轮询处理状态
-                if (data.task_id) {
-                    pollTaskStatus(data.task_id, token);
+                if (data.day) {
+                    pollTaskStatus(data.day, token);
                 } else {
-                    throw new Error('未返回任务 ID');
+                    throw new Error('未返回天数');
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -423,7 +423,7 @@
         async function pollTaskStatus(taskId, token) {
             const interval = setInterval(async () => {
                 try {
-                    const response = await fetch(API_BASE + '/api/tools/dialogue-learning/status/' + taskId, {
+                    const response = await fetch(API_BASE + '/api/lines/status/' + taskId, {
                         headers: {
                             'Authorization': 'Bearer ' + token
                         }

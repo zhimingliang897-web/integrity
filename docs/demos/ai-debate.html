@@ -572,7 +572,7 @@
                 const controller = new AbortController();
                 const timeoutId = setTimeout(() => controller.abort(), 60000); // 60秒超时
                 
-                const response = await fetch(`${API_BASE}/api/tools/ai-debate/start`, {
+                const response = await fetch(`${API_BASE}/api/debate/start`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,

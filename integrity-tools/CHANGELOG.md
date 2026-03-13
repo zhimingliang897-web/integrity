@@ -1,5 +1,33 @@
 # Integrity Tools 更新日志
 
+## [1.0.1] - 2026-03-14
+
+### Bug 修复
+
+- **修复 debate.html JavaScript 语法错误**
+  - 删除第 168-173 行残留的 `catch` 代码块
+  - 解决 `startDebate is not defined` 错误
+
+- **修复 PDF 模块 404 错误**
+  - 在 `app/__init__.py` 中添加 PDF 蓝图注册
+  - `/api/pdf/*` 端点现已可用
+
+### API 验证
+
+- ✅ `/api/tokens/calc` - Token 计算正常
+- ✅ `/api/tokens/compare` - 多模型对比正常
+- ✅ `/api/compare/providers` - 提供商列表正常
+- ✅ `/api/compare` - AI 对比正常
+- ✅ `/api/debate/config` - 辩论配置正常
+- ✅ `/api/debate/start` - 辩论开始正常
+- ✅ `/api/pdf/info` - PDF 信息正常
+- ✅ `/api/pdf/images_to_pdf` - 图片转 PDF 正常
+- ✅ `/api/pdf/merge` - PDF 合并正常
+- ✅ `/api/pdf/remove_pages` - 删除页面正常
+- ✅ `/api/lines/*` - 台词学习正常
+
+---
+
 ## [1.0.0] - 2026-03-14
 
 ### 新增功能
