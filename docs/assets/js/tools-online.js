@@ -240,6 +240,7 @@ async function startDebate() {
         const decoder = new TextDecoder();
         let buffer = '';
         let messages = [];
+        let currentEvent = '';
 
         while (true) {
             const { done, value } = await reader.read();
@@ -250,14 +251,49 @@ async function startDebate() {
             buffer = lines.pop() || '';
 
             for (const line of lines) {
+                if (!line) {
+                    // 事件分隔行，重置当前事件类型
+                    currentEvent = '';
+                    continue;
+                }
+
+                if (line.startsWith('event: ')) {
+                    currentEvent = line.substring(7).trim();
+                    continue;
+                }
+
                 if (line.startsWith('data: ')) {
                     try {
                         const data = JSON.parse(line.substring(6));
-                        if (data.content || data.text) {
-                            messages.push(data);
+                        const eventType = currentEvent || data.event || '';
+
+                        // 仅对包含完整 content 的消息进行渲染，避免显示 undefined
+                        if (eventType === 'message' || (!eventType && typeof data.content === 'string')) {
+                            messages.push({
+                                speaker: data.speaker,
+                                role: data.role,
+                                side: data.side,
+                                content: data.content
+                            });
                             renderDebateMessages(resultEl, messages);
+                        } else if (eventType === 'result') {
+                            // 结果事件单独追加到结果区域下方
+                            const winner = data.winner || '';
+                            const comment = data.comment || '';
+                            const extra = winner ? `<div style="margin-bottom:4px;font-weight:600;">胜方：${winner}</div>` : '';
+                            const existing = resultEl.innerHTML || '';
+                            resultEl.innerHTML = `
+                                ${existing}
+                                <div style="margin-top:16px;padding:12px;border-radius:8px;border:1px dashed var(--border);color:var(--text-muted);">
+                                    ${extra}
+                                    <div>${comment}</div>
+                                </div>
+                            `;
                         }
-                    } catch (e) {}
+                        // 对于 chunk 等仅包含 text 的事件，这里忽略，由后端最终的 message 事件负责提供 content
+                    } catch (e) {
+                        // 忽略单条解析错误，继续处理后续行
+                    }
                 }
             }
         }
@@ -277,10 +313,11 @@ function renderDebateMessages(el, messages) {
     let html = '';
     messages.forEach(m => {
         const sideColor = m.side === 'pro' ? '#10b981' : m.side === 'con' ? '#ef4444' : '#f59e0b';
+        const content = typeof m.content === 'string' ? m.content : (typeof m.text === 'string' ? m.text : '');
         html += `
             <div style="margin-bottom:12px;padding:12px;background:var(--bg-card);border-left:3px solid ${sideColor};border-radius:0 8px 8px 0;">
                 <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">${m.speaker} (${m.role})</div>
-                <div style="line-height:1.6;">${m.content}</div>
+                <div style="line-height:1.6;">${content}</div>
             </div>
         `;
     });
