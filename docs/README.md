@@ -7,8 +7,10 @@
 | 平台 | 地址 | 说明 |
 |------|------|------|
 | GitHub Pages | https://zhimingliang897-web.github.io/integrity/ | 项目展示页 |
-| 在线工具库 | http://8.138.164.133:5000/app/tools.html | 可交互使用 |
-| 后端 API | http://8.138.164.133:5000/ | RESTful API |
+| 在线工具库 | http://8.138.164.133:8000/ | 前端 + API（需开放端口） |
+| 后端 API | http://127.0.0.1:5000/ | 服务器内部 API |
+
+> ⚠️ **重要提示**：域名 `api.liangyiren.top` 被劫持无法访问，请使用 IP + 端口访问。需在阿里云安全组开放端口 8000。详见 [部署问题文档](./documentation/DEPLOYMENT_ISSUES_AND_SOLUTIONS.md)
 
 ---
 
@@ -200,9 +202,9 @@ GET  /api/tools/pdf/download/:file # 下载文件
 
 ## 📚 相关文档
 
-- [后端实现指南](./BACKEND_IMPLEMENTATION_GUIDE.md)
-- [部署状态](./documentation/DEPLOYMENT_STATUS.md)
+- [部署问题与解决方案](./documentation/DEPLOYMENT_ISSUES_AND_SOLUTIONS.md) - **必读**
 - [任务清单](./documentation/TASK_TODO.md)
+- [部署指南](./DEPLOYMENT.md)
 - [变更日志](./CHANGELOG.md)
 
 ---
