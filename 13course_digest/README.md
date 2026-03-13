@@ -189,8 +189,9 @@ python dl_generate.py E:/integrity/13course_digest/cache/dl/AI6131
 │
 ├── dl_course.py         # dl 模式：课程目录扫描与静态分类
 ├── dl_preview.py        # dl 模式：为各类文件生成预览文本
-├── dl_course_context.py # dl 模式：LLM 角色识别 + 课程级上下文
+├── dl_course_context.py # dl 模式：LLM 角色识别 + 课程级上下文（含 LLM JSON 容错解析）
 ├── dl_generate.py       # dl 模式：一键生成复习指南 + 考试指南
+├── run_6103.bat         # Windows 一键脚本示例（可复制为 run_<课程名>.bat）
 │
 ├── input/               # 推荐放原始视频的目录
 ├── cache/               # 各类缓存与课程资料
@@ -201,12 +202,104 @@ python dl_generate.py E:/integrity/13course_digest/cache/dl/AI6131
 
 ---
 
+## ⚙️ Windows + Conda + GPU（GTX 1060）一键执行说明
+
+### 1. 第一次环境配置（已完成可跳过）
+
+1. 用 Conda 创建专用环境并安装依赖：
+
+   ```bash
+   conda create -n coursedigest python=3.11 -y
+   conda activate coursedigest
+   cd E:\integrity\13course_digest
+   pip install -r requirements.txt
+   ```
+
+2. 在该环境中安装 CUDA 12 cuBLAS 运行时（提供 `cublas64_12.dll`）：
+
+   ```bash
+   conda install -n coursedigest -c nvidia libcublas=12.9 -y
+   ```
+
+3. 确认 `ctranslate2` 能看到你的 1060：
+
+   ```bash
+   conda activate coursedigest
+   python -c "import ctranslate2; print('cuda devices:', ctranslate2.get_cuda_device_count())"
+   # 输出应为: cuda devices: 1
+   ```
+
+4. Whisper 配置（`config.yaml`）推荐如下：
+
+   ```yaml
+   whisper:
+     model: "medium"    # 如需更快可改为 "small"
+     device: "cuda"     # 固定使用 GPU
+     compute_type: "auto"  # 自动选择合适精度（会退到 int8）
+     beam_size: 1
+     language: "en"
+   ```
+
+### 2. 日常一键跑整门课（以 6103 为例）
+
+1. 确保课程资料已经按如下方式整理好：
+
+   ```text
+   13course_digest/
+     cache/
+       dl/
+         6103/
+           1.mp4
+           2.mp4
+           ...
+           其他 syllabus / exam / pdf / md 等
+   ```
+
+2. 在命令行中一键执行（GPU 加速版）：
+
+   ```bash
+   conda activate coursedigest
+   cd E:\integrity\13course_digest
+   python dl_generate.py cache/dl/6103 --transcribe-all
+   ```
+
+   - 首次会为每个视频生成 `cache/<编号>.json` 转写缓存；
+   - 之后重复运行会自动复用缓存，只做分析和文档生成。
+
+3. 生成结果：
+
+   - `output/6103_复习指南.md`
+   - `output/6103_考试指南.md`
+
+### 3. Windows 双击一键脚本（可选）
+
+如果希望直接双击运行，可以使用项目根目录下的批处理脚本，例如：
+
+```bat
+@echo off
+call "E:\anaconda_laptop\Scripts\activate.bat" coursedigest
+cd /d E:\integrity\13course_digest
+python dl_generate.py cache/dl\6103 --transcribe-all
+pause
+```
+
+可以将上面的内容保存为 `run_6103.bat`，日常只需双击该文件即可启动完整流程。
+
+---
+
 ## ❓ 常见问题
 
-- **Q: 运行报错 `No module named 'xxx'`？**
+- **Q: 运行报错 `No module named 'xxx'`？**  
   A: 请确保运行了 `pip install -r requirements.txt`。CV 专项工具需要 `pdfplumber` 和 `dashscope`。
-- **Q: 转录速度慢？**
-  A: 默认使用 CPU。如有 Nvidia 显卡，建议安装 CUDA 版 PyTorch 以获得 10 倍速提升。
+
+- **Q: 转录速度慢？**  
+  A: 默认使用 CPU。如有 Nvidia 显卡，请按上文「Windows + Conda + GPU」安装 `coursedigest` 环境并安装 `libcublas`，在 `config.yaml` 中设置 `whisper.device: "cuda"`。
+
+- **Q: `classify_files_with_llm` 报错 `JSONDecodeError: Expecting ',' delimiter`？**  
+  A: 已做容错：程序会自动修复 LLM 返回 JSON 中的未转义引号、尾逗号等。若仍报错，可重试一次或检查 API 是否返回了非 JSON 内容。
+
+- **Q: 课程目录下只有 PDF/讲义、没有视频，可以生成指南吗？**  
+  A: 可以。直接运行 `python dl_generate.py cache/dl/课程目录`（无需 `--transcribe-all`），程序会只做文档预览与 LLM 分类，照常生成复习指南与考试指南。
 
 ---
 

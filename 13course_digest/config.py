@@ -48,6 +48,8 @@ WHISPER_MODEL        = _get("whisper.model", "medium")
 WHISPER_DEVICE       = _get("whisper.device", "auto")
 WHISPER_COMPUTE_TYPE = _get("whisper.compute_type", "auto")
 WHISPER_LANGUAGE     = _get("whisper.language", "en")
+# beam_size 对速度影响很大，默认降低到 1 以优先换取速度
+WHISPER_BEAM_SIZE    = int(_get("whisper.beam_size", 1))
 
 # ── API 配置 ──────────────────────────────────────────────
 API_PROVIDER = _get("api.provider", "groq")

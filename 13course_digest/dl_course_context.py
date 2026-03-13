@@ -4,6 +4,8 @@ dl_course_context.py - 基于扫描结果和 LLM 分类构建课程级上下文
 
 from __future__ import annotations
 
+import json
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List
@@ -13,6 +15,125 @@ import prompts
 from analyze import _call_llm
 from dl_course import CourseFile, ScannedCourse
 from dl_preview import FilePreview
+
+
+def _extract_json_array(text: str) -> str:
+    """从文本中提取第一个完整的 JSON 数组（按方括号配对）。"""
+    start = text.find("[")
+    if start == -1:
+        return "[]"
+    depth = 0
+    for i in range(start, len(text)):
+        if text[i] == "[":
+            depth += 1
+        elif text[i] == "]":
+            depth -= 1
+            if depth == 0:
+                return text[start : i + 1]
+    return text[start : text.rfind("]") + 1] if text.rfind("]") >= start else "[]"
+
+
+def _fix_trailing_commas(json_str: str) -> str:
+    """去掉 JSON 中对象/数组末尾的尾逗号，便于标准解析。"""
+    return re.sub(r",\s*([}\]])", r"\1", json_str)
+
+
+def _fix_unescaped_quotes_in_strings(json_str: str) -> str:
+    """
+    在字符串值内将未转义的双引号替换为 \\"，并将未转义的换行替换为空格，避免 LLM 输出导致 JSON 解析失败。
+    """
+    result: List[str] = []
+    i = 0
+    in_string = False
+    escape_next = False
+    while i < len(json_str):
+        c = json_str[i]
+        if escape_next:
+            result.append(c)
+            escape_next = False
+        elif c == "\\" and in_string:
+            result.append(c)
+            escape_next = True
+        elif c == '"':
+            if not in_string:
+                in_string = True
+                result.append(c)
+            else:
+                rest = json_str[i + 1 :].lstrip()
+                # 正常结束键或值：下一非空字符是 : } ] , 则不转义
+                if rest.startswith(":") or rest.startswith("}") or rest.startswith("]") or rest.startswith(","):
+                    in_string = False
+                    result.append(c)
+                else:
+                    result.append('\\"')
+        elif in_string and c in "\n\r":
+            result.append(" ")
+        else:
+            result.append(c)
+        i += 1
+    return "".join(result)
+
+
+def _parse_classify_json(raw: str) -> List[dict]:
+    """
+    解析 LLM 返回的“文件角色分类”JSON，容错处理代码块、尾逗号、未转义引号等。
+    若标准 JSON 解析仍失败，则用正则逐条提取 path/role/confidence/exam_policy_notes 作为回退。
+    """
+    cleaned = raw.strip()
+    if cleaned.startswith("```"):
+        cleaned = re.sub(r"^```\s*json\s*", "", cleaned, flags=re.IGNORECASE)
+        cleaned = re.sub(r"```\s*$", "", cleaned)
+    cleaned = cleaned.strip()
+    array_str = _extract_json_array(cleaned)
+    array_str = _fix_trailing_commas(array_str)
+    array_str = _fix_unescaped_quotes_in_strings(array_str)
+
+    try:
+        return json.loads(array_str)
+    except json.JSONDecodeError:
+        pass
+
+    # 回退：用正则从原文中逐个匹配对象（只匹配我们需要的四个字段）
+    objects: List[dict] = []
+    # 匹配 "path": "xxx" 或 "path": "xxx" 其中 xxx 可能含 \"，再匹配 role、confidence、exam_policy_notes
+    block = re.findall(
+        r'\{\s*"path"\s*:\s*"((?:[^"\\]|\\.)*)"\s*,\s*"role"\s*:\s*"((?:[^"\\]|\\.)*)"\s*,\s*"confidence"\s*:\s*(\d+)\s*,\s*"exam_policy_notes"\s*:\s*"((?:[^"\\]|\\.)*)"',
+        array_str,
+        re.DOTALL,
+    )
+    for path_val, role_val, conf_val, notes_val in block:
+        def unquote(s: str) -> str:
+            return s.replace('\\"', '"').replace("\\\\", "\\")
+        objects.append({
+            "path": unquote(path_val),
+            "role": unquote(role_val),
+            "confidence": int(conf_val),
+            "exam_policy_notes": unquote(notes_val),
+        })
+    if objects:
+        return objects
+
+    # 更宽松的回退：按 "path" 分段，再在每个块里找 role / confidence / exam_policy_notes
+    parts = re.split(r'"path"\s*:\s*"', array_str)
+    for part in parts[1:]:
+        m_path = re.match(r'^((?:[^"\\]|\\.)*)"', part)
+        if not m_path:
+            continue
+        path_val = m_path.group(1).replace('\\"', '"')
+        rest = part[m_path.end() :]
+        m_role = re.search(r'"role"\s*:\s*"([^"]*)"', rest)
+        m_conf = re.search(r'"confidence"\s*:\s*(\d+)', rest)
+        m_notes = re.search(r'"exam_policy_notes"\s*:\s*"((?:[^"\\]|\\.)*)"', rest)
+        role_val = m_role.group(1) if m_role else "other"
+        conf_val = int(m_conf.group(1)) if m_conf else 0
+        notes_val = (m_notes.group(1).replace('\\"', '"') if m_notes else "") or ""
+        objects.append({
+            "path": path_val,
+            "role": role_val,
+            "confidence": conf_val,
+            "exam_policy_notes": notes_val,
+        })
+    return objects
 
 
 @dataclass
@@ -59,24 +180,9 @@ def classify_files_with_llm(previews: Dict[str, FilePreview]) -> Dict[str, FileR
     system = prompts.build_system_prompt()
     raw = _call_llm(system, user)
 
-    import json
-
-    # LLM 有可能包裹 ```json 代码块，这里做简单清洗
-    cleaned = raw.strip()
-    if cleaned.startswith("```"):
-        cleaned = cleaned.strip("`")
-        if cleaned.lstrip().startswith("json"):
-            cleaned = cleaned.lstrip()[4:]
-    try:
-        data = json.loads(cleaned)
-    except Exception:
-        # 尝试在第一对方括号内切片
-        start = cleaned.find("[")
-        end = cleaned.rfind("]")
-        if start != -1 and end != -1 and end > start:
-            data = json.loads(cleaned[start : end + 1])
-        else:
-            raise
+    data = _parse_classify_json(raw)
+    if not data:
+        raise ValueError("LLM 未返回有效的文件角色分类 JSON 数组，请重试或检查模型输出。")
 
     result: Dict[str, FileRoleInfo] = {}
     for item in data:

@@ -144,7 +144,8 @@ def transcribe(video_path: str) -> list[dict]:
 
     if model is None:
         if compute_type == "auto":
-            compute_type = "float32"
+            # GPU 默认 float16，CPU 默认 int8 以换取更高速度
+            compute_type = "float16" if device == "cuda" else "int8"
         print(f"[Whisper] 模型: {config.WHISPER_MODEL}，设备: {device}，精度: {compute_type}")
         model = WhisperModel(config.WHISPER_MODEL, device=device, compute_type=compute_type)
 
@@ -165,7 +166,9 @@ def transcribe(video_path: str) -> list[dict]:
 
                 _extract_wav(video_path, offset, seg_dur, wav_path)
                 segs_iter, _ = model.transcribe(
-                    wav_path, language=config.WHISPER_LANGUAGE, beam_size=5
+                    wav_path,
+                    language=config.WHISPER_LANGUAGE,
+                    beam_size=getattr(config, "WHISPER_BEAM_SIZE", 1),
                 )
 
                 try:
@@ -174,9 +177,17 @@ def transcribe(video_path: str) -> list[dict]:
                     if "cuda" in device and ("cublas" in str(e).lower() or "cuda" in str(e).lower()):
                         print(f"\n[Whisper] GPU 运行失败（{e}），切换到 CPU 重试...")
                         device = "cpu"
-                        model = WhisperModel(config.WHISPER_MODEL, device=device)
+                        if compute_type == "auto":
+                            compute_type = "int8"
+                        model = WhisperModel(
+                            config.WHISPER_MODEL,
+                            device=device,
+                            compute_type=compute_type,
+                        )
                         segs_iter, _ = model.transcribe(
-                            wav_path, language=config.WHISPER_LANGUAGE, beam_size=5
+                            wav_path,
+                            language=config.WHISPER_LANGUAGE,
+                            beam_size=getattr(config, "WHISPER_BEAM_SIZE", 1),
                         )
                         raw_segs = list(segs_iter)
                     else:
