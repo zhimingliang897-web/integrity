@@ -99,6 +99,17 @@ def start_debate():
     
     def run():
         global debate_status
+        # 等待至少一个 SSE 客户端连接
+        wait_count = 0
+        while len(debate_clients) == 0 and wait_count < 50:
+            time.sleep(0.1)
+            wait_count += 1
+        
+        if len(debate_clients) == 0:
+            print("[Debate] No SSE client connected, aborting")
+            debate_status = "idle"
+            return
+        
         turn_index = 0
         try:
             for event in engine.run_debate():
