@@ -379,26 +379,73 @@
             <div class="section-title">所有项目开源，欢迎学习和使用</div>
             <div class="source-grid">
                 <div class="source-card">
+                    <div class="icon">🎭</div>
+                    <h3>AI 辩论赛</h3>
+                    <p class="desc">多模型驱动的 AI 辩论竞技场，SSE 流式输出辩论过程，支持语音合成</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Flask</span>
+                        <span class="tech-tag">SSE</span>
+                        <span class="tech-tag">Edge TTS</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/integrity-tools/app/tools/debate" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <div class="source-card">
+                    <div class="icon">⚖️</div>
+                    <h3>AI 模型对比</h3>
+                    <p class="desc">同一个界面横向对比 Qwen、Doubao、Kimi、DeepSeek 等大模型</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Flask</span>
+                        <span class="tech-tag">OpenAI API</span>
+                        <span class="tech-tag">aiohttp</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/integrity-tools/app/tools/compare" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <div class="source-card">
                     <div class="icon">📄</div>
                     <h3>PDF 工具集</h3>
-                    <p class="desc">在线 PDF 处理工具：图片转PDF、合并、删页、插入、重排、统一尺寸、PDF转图片</p>
+                    <p class="desc">在线 PDF 处理工具：图片转PDF、合并、删页、页面重排</p>
                     <div class="tech-tags">
                         <span class="tech-tag">Flask</span>
                         <span class="tech-tag">pypdf</span>
                         <span class="tech-tag">Pillow</span>
                     </div>
-                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/docs/server/app/tools/pdf.py" class="source-link" target="_blank">查看源码 →</a>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/integrity-tools/app/tools/pdf" class="source-link" target="_blank">查看源码 →</a>
                 </div>
 
                 <div class="source-card">
-                    <div class="icon">⚖️</div>
-                    <h3>多模型对比平台</h3>
-                    <p class="desc">同一个界面横向对比 Qwen 等大模型，支持并发提交问题</p>
+                    <div class="icon">🪙</div>
+                    <h3>Token 计算</h3>
+                    <p class="desc">计算不同模型的 Token 消耗和成本，支持多模型对比</p>
                     <div class="tech-tags">
                         <span class="tech-tag">Flask</span>
                         <span class="tech-tag">OpenAI API</span>
                     </div>
-                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/docs/server/app/tools/ai_compare.py" class="source-link" target="_blank">查看源码 →</a>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/integrity-tools/app/tools/tokens" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <div class="source-card">
+                    <div class="icon">📝</div>
+                    <h3>台词学习工具</h3>
+                    <p class="desc">从扇贝单词导出生词，自动检索影视台词，AI 整理记忆技巧</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Flask</span>
+                        <span class="tech-tag">pdfplumber</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/integrity-tools/app/tools/lines" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <div class="source-card">
+                    <div class="icon">🔐</div>
+                    <h3>认证模块</h3>
+                    <p class="desc">用户注册、登录、JWT Token 验证、邀请码机制</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Flask</span>
+                        <span class="tech-tag">JWT</span>
+                        <span class="tech-tag">SQLite</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/integrity-tools/app/auth" class="source-link" target="_blank">查看源码 →</a>
                 </div>
 
                 <div class="source-card">
@@ -409,30 +456,7 @@
                         <span class="tech-tag">Python</span>
                         <span class="tech-tag">Qwen VL</span>
                     </div>
-                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/docs/server/app/tools/image_prompt.py" class="source-link" target="_blank">查看源码 →</a>
-                </div>
-
-                <div class="source-card">
-                    <div class="icon">🎭</div>
-                    <h3>AI 辩论赛</h3>
-                    <p class="desc">多模型驱动的 AI 辩论竞技场，SSE 流式输出辩论过程</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Flask</span>
-                        <span class="tech-tag">SSE</span>
-                    </div>
-                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/docs/server/app/tools/ai_debate.py" class="source-link" target="_blank">查看源码 →</a>
-                </div>
-
-                <div class="source-card">
-                    <div class="icon">📝</div>
-                    <h3>台词学习工具</h3>
-                    <p class="desc">从扇贝单词导出生词，自动检索影视台词，AI 整理记忆技巧</p>
-                    <div class="tech-tags">
-                        <span class="tech-tag">Flask</span>
-                        <span class="tech-tag">pdfplumber</span>
-                        <span class="tech-tag">Edge TTS</span>
-                    </div>
-                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/docs/server/app/tools/dialogue_learning.py" class="source-link" target="_blank">查看源码 →</a>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/9图生文文生图" class="source-link" target="_blank">查看源码 →</a>
                 </div>
 
                 <div class="source-card">
@@ -444,7 +468,28 @@
                         <span class="tech-tag">FFmpeg</span>
                         <span class="tech-tag">Edge TTS</span>
                     </div>
-                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/docs/server/app/tools/video_maker.py" class="source-link" target="_blank">查看源码 →</a>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/1分镜" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <div class="source-card">
+                    <div class="icon">📚</div>
+                    <h3>课程摘要生成</h3>
+                    <p class="desc">上传课程 PDF，AI 自动生成复习指南和考试指南</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Qwen</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/tree/main/13course_digest" class="source-link" target="_blank">查看源码 →</a>
+                </div>
+
+                <div class="source-card">
+                    <div class="icon">📖</div>
+                    <h3>部署文档</h3>
+                    <p class="desc">完整的部署文档，包含架构设计、添加新工具步骤、常见问题</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Markdown</span>
+                    </div>
+                    <a href="https://github.com/zhimingliang897-web/integrity/blob/main/integrity-tools/DEPLOY.md" class="source-link" target="_blank">查看文档 →</a>
                 </div>
             </div>
         </div>
