@@ -4,6 +4,7 @@ from typing import Optional
 from pathlib import Path
 from urllib.parse import quote
 import io
+import base64
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -37,12 +38,20 @@ async def preview_file(
         }
 
     elif preview_type == "image":
-        return {
-            "type": "image",
-            "url": f"/api/preview/file?path={encoded_path}",
-            "thumbnail_url": f"/api/preview/thumb?path={encoded_path}",
-            "filename": file_path.name
-        }
+        try:
+            img_data = preview_service.get_image_base64(path)
+            return {
+                "type": "image",
+                "data": img_data,
+                "filename": file_path.name
+            }
+        except Exception as e:
+            return {
+                "type": "image",
+                "url": f"/api/preview/file?path={encoded_path}",
+                "filename": file_path.name,
+                "error": str(e)
+            }
 
     elif preview_type == "video":
         return {

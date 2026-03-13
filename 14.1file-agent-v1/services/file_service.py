@@ -315,6 +315,44 @@ class FileService:
             "total_size_str": self._format_size(total_size)
         }
     
+    def get_folders_tree(self, path: str = "") -> List[dict]:
+        if not path:
+            target_path = self.root_path
+        else:
+            target_path = Path(path)
+            if not self._is_path_allowed(str(target_path)):
+                return []
+        
+        if not target_path.exists():
+            return []
+        
+        result = []
+        try:
+            for entry in sorted(target_path.iterdir(), key=lambda x: x.name.lower()):
+                if not entry.is_dir():
+                    continue
+                if entry.name.startswith('.'):
+                    continue
+                
+                item = {
+                    "name": entry.name,
+                    "path": str(entry),
+                    "children": []
+                }
+                
+                try:
+                    children = self.get_folders_tree(str(entry))
+                    if children:
+                        item["children"] = children
+                except:
+                    pass
+                
+                result.append(item)
+        except PermissionError:
+            pass
+        
+        return result
+    
     def _log_operation(self, action: str, file_path: str, details: str = None, ip: str = None):
         log = OperationLog(
             action=action,

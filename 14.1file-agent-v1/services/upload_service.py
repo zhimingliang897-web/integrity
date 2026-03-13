@@ -19,12 +19,27 @@ class UploadService:
         self.root_path = Path(settings.root_path)
         self.max_size = settings.max_upload_size_mb * 1024 * 1024
         self.uploads_path.mkdir(parents=True, exist_ok=True)
+
+        # 允许上传的根目录：主目录 + 所有挂载点
+        self.allowed_roots = [self.root_path.resolve()]
+        for mount in settings.mounts:
+            mount_path = mount.get("path")
+            if mount_path:
+                try:
+                    p = Path(mount_path)
+                    if p.exists():
+                        self.allowed_roots.append(p.resolve())
+                except Exception:
+                    continue
     
     def _is_path_allowed(self, path: str) -> bool:
+        """检查上传目标是否在允许的根目录（主目录或挂载目录）下。"""
         try:
             abs_path = Path(path).resolve()
-            root = self.root_path.resolve()
-            return str(abs_path).startswith(str(root))
+            for root in self.allowed_roots:
+                if str(abs_path).startswith(str(root)):
+                    return True
+            return False
         except Exception:
             return False
     

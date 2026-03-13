@@ -11,7 +11,10 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def verify_password(plain_password: str) -> bool:
-    return plain_password == settings.password
+    stored_password = settings.password
+    if stored_password.startswith("$2b$") or stored_password.startswith("$2a$"):
+        return pwd_context.verify(plain_password, stored_password)
+    return plain_password == stored_password
 
 
 def create_session_token(username: str = "user") -> str:

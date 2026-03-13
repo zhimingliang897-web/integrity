@@ -80,9 +80,15 @@ async def create_folder(
 @router.get("/download")
 async def download_files(
     paths: str = Query(...),
-    user: str = Depends(get_current_user)
+    user: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
+    file_service = FileService(db)
     path_list = paths.split(",")
+    
+    for p in path_list:
+        if not file_service._is_path_allowed(p):
+            raise HTTPException(status_code=403, detail="路径不允许访问")
     
     if len(path_list) == 1:
         file_path = Path(path_list[0])
@@ -205,3 +211,14 @@ async def get_stats(
 ):
     file_service = FileService(db)
     return file_service.get_stats()
+
+
+@router.get("/folders")
+async def get_folders(
+    path: str = Query(default=""),
+    user: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    file_service = FileService(db)
+    folders = file_service.get_folders_tree(path)
+    return {"folders": folders}

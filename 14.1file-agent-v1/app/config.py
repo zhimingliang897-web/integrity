@@ -112,6 +112,14 @@ class Settings:
         return self.server.get("port", 5000)
     
     @property
+    def cors(self) -> dict:
+        return self._config.get("cors", {})
+    
+    @property
+    def cors_origins(self) -> list:
+        return self.cors.get("origins", ["*"])
+    
+    @property
     def email(self) -> dict:
         return self._config.get("email", {})
     

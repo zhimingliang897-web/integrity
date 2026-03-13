@@ -26,7 +26,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=settings.cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -83,13 +83,18 @@ async def settings_page(request: Request):
     return templates.TemplateResponse("settings.html", {"request": request})
 
 
+@app.get("/mounts", response_class=HTMLResponse)
+async def mounts_page(request: Request):
+    return templates.TemplateResponse("mounts.html", {"request": request})
+
+
 @app.get("/api/config")
 async def get_config():
     return {
-        "llm_api_key": settings.llm_api_key[:10] + "..." if settings.llm_api_key else "",
+        "llm_configured": bool(settings.llm_api_key),
         "llm_model": settings.llm_model,
-        "natapp_token": settings.natapp_token[:10] + "..." if settings.natapp_token else "",
-        "email_sender": settings.email_sender,
+        "natapp_configured": bool(settings.natapp_token),
+        "email_configured": bool(settings.email_sender and settings.email_password),
         "root_path": settings.root_path,
         "max_upload_size_mb": settings.max_upload_size_mb
     }

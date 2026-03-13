@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel
 from typing import Optional
 from pathlib import Path
@@ -68,7 +68,7 @@ async def add_mount(
 
 @router.delete("")
 async def remove_mount(
-    path: str,
+    path: str = Query(...),
     user: str = Depends(get_current_user)
 ):
     success = settings.remove_mount(path)
@@ -81,7 +81,7 @@ async def remove_mount(
 
 @router.get("/check")
 async def check_path(
-    path: str,
+    path: str = Query(...),
     user: str = Depends(get_current_user)
 ):
     p = Path(path)
@@ -98,3 +98,60 @@ async def check_path(
         "mount_name": mount.get("name") if mount else None,
         "is_main_root": str(p.resolve()).startswith(str(Path(settings.root_path).resolve()))
     }
+
+
+def _list_windows_drives() -> list:
+    drives = []
+    for c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+        drive = f"{c}:\\"
+        if os.path.exists(drive):
+            drives.append({
+                "name": drive,
+                "path": drive
+            })
+    return drives
+
+
+@router.get("/dirs")
+async def list_dirs(
+    path: str = "",
+    user: str = Depends(get_current_user)
+):
+    try:
+        if not path:
+            if os.name == "nt":
+                return {
+                    "path": "",
+                    "parent": "",
+                    "dirs": _list_windows_drives()
+                }
+            return {
+                "path": "/",
+                "parent": "",
+                "dirs": [{"name": "/", "path": "/"}]
+            }
+
+        p = Path(path)
+        if not p.exists() or not p.is_dir():
+            return {"path": path, "parent": str(p.parent), "dirs": []}
+
+        dirs = []
+        for entry in p.iterdir():
+            try:
+                if entry.is_dir():
+                    dirs.append({
+                        "name": entry.name,
+                        "path": str(entry)
+                    })
+            except PermissionError:
+                continue
+
+        dirs.sort(key=lambda x: x["name"].lower())
+
+        return {
+            "path": str(p),
+            "parent": str(p.parent),
+            "dirs": dirs[:200]
+        }
+    except Exception:
+        return {"path": path, "parent": "", "dirs": []}
