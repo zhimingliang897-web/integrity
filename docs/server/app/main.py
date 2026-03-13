@@ -226,6 +226,7 @@ from app.tools.image_prompt import image_prompt_bp
 from app.tools.ai_debate import ai_debate_bp
 from app.tools.dialogue_learning import dialogue_learning_bp
 from app.tools.video_maker import video_maker_bp
+from app.tools.token_compare import token_compare_bp  # 新增
 
 app.register_blueprint(pdf_bp)
 app.register_blueprint(ai_compare_bp)
@@ -233,6 +234,7 @@ app.register_blueprint(image_prompt_bp)
 app.register_blueprint(ai_debate_bp)
 app.register_blueprint(dialogue_learning_bp)
 app.register_blueprint(video_maker_bp)
+app.register_blueprint(token_compare_bp)  # 新增
 
 
 # ============ 启动 ============

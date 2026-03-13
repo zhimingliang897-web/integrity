@@ -7,6 +7,320 @@
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/tools-styles.css">
     <style>
+        .token-compare-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .page-subtitle {
+            color: #888;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+        
+        .input-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        
+        .input-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .input-tab {
+            padding: 10px 20px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: transparent;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .input-tab:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .input-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #fff;
+        }
+        
+        .text-input-area {
+            width: 100%;
+            min-height: 150px;
+            padding: 16px;
+            background: #0d0d14;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: #fff;
+            font-size: 15px;
+            line-height: 1.6;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+        
+        .text-input-area:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .image-upload-area {
+            width: 100%;
+            padding: 40px;
+            background: #0d0d14;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .image-upload-area:hover {
+            border-color: var(--primary);
+        }
+        
+        .image-upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .upload-text {
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .model-selection {
+            margin-bottom: 20px;
+        }
+        
+        .model-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        
+        .model-checkbox {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: #0d0d14;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .model-checkbox:hover {
+            border-color: var(--primary);
+        }
+        
+        .model-checkbox input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+        
+        .model-checkbox.checked {
+            border-color: var(--primary);
+            background: rgba(102, 126, 234, 0.1);
+        }
+        
+        .model-name {
+            font-weight: 500;
+            color: #fff;
+        }
+        
+        .model-price {
+            font-size: 12px;
+            color: #888;
+            margin-left: auto;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .btn-primary {
+            padding: 14px 32px;
+            background: var(--primary);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: #5a6fd6;
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:disabled {
+            background: #444;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            padding: 14px 32px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        .results-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 30px;
+            display: none;
+        }
+        
+        .results-section.visible {
+            display: block;
+        }
+        
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .results-table th,
+        .results-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .results-table th {
+            font-weight: 600;
+            color: #888;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+        
+        .results-table td {
+            font-size: 15px;
+        }
+        
+        .results-table tr:hover {
+            background: rgba(102, 126, 234, 0.05);
+        }
+        
+        .token-count {
+            font-weight: 600;
+            color: #fff;
+        }
+        
+        .cost-highlight {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid #ef4444;
+            border-radius: 10px;
+            padding: 16px;
+            color: #ef4444;
+            margin-top: 20px;
+        }
+        
+        .char-counter {
+            text-align: right;
+            color: #888;
+            font-size: 13px;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #888;
+            text-decoration: none;
+            margin-bottom: 30px;
+            transition: color 0.3s;
+        }
+        
+        .back-link:hover {
+            color: var(--primary);
+        }
+        
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
@@ -51,497 +365,357 @@
             color: #ef4444;
             font-weight: 600;
         }
-
-        .input-modes {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin: 24px 0;
-        }
-
-        .mode-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            text-align: center;
-            transition: all 0.2s;
-        }
-
-        .mode-card:hover {
-            border-color: var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .mode-card .icon {
-            font-size: 48px;
-            margin-bottom: 12px;
-        }
-
-        .mode-card h4 {
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .mode-card p {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin: 0;
-        }
-
-        .insight-box {
-            background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05));
-            border: 1px solid rgba(251, 191, 36, 0.2);
-            border-radius: 12px;
-            padding: 24px;
-            margin: 24px 0;
-        }
-
-        .insight-box h3 {
-            color: #fbbf24;
-            margin-bottom: 16px;
-        }
-
-        .insight-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .insight-list li {
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .insight-list li:last-child {
-            border-bottom: none;
-        }
-
-        .insight-list .icon {
-            color: #fbbf24;
-            font-size: 18px;
-        }
-
-        .model-support {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin: 20px 0;
-        }
-
-        .model-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 16px;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-        }
-
-        .model-item .provider {
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .model-item .model-name {
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-
-        .workflow-section {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            margin: 24px 0;
-        }
-
-        .workflow-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .workflow-step {
-            display: flex;
-            gap: 16px;
-            align-items: flex-start;
-        }
-
-        .workflow-step .step-num {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .workflow-step .content h4 {
-            margin-bottom: 4px;
-            color: var(--text-primary);
-        }
-
-        .workflow-step .content p {
-            color: var(--text-muted);
-            font-size: 14px;
-            margin: 0;
-        }
-
-        .code-block {
-            background: #1a1a2e;
-            border-radius: 8px;
-            padding: 16px;
-            margin: 12px 0;
-            overflow-x: auto;
-        }
-
-        .code-block code {
-            color: #a5b4fc;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 13px;
-        }
-
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .tech-tag {
-            padding: 4px 12px;
-            background: rgba(251, 191, 36, 0.1);
-            border: 1px solid #fbbf24;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #fbbf24;
-        }
-
+        
         @media (max-width: 768px) {
-            .input-modes {
+            .model-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
             }
         }
     </style>
 </head>
 <body>
-    <nav>
-        <div class="nav-container">
-            <div class="nav-left">
-                <a href="../index.html" class="logo">Integrity Lab</a>
-                <div class="nav-links">
-                    <a href="../index.html">首页</a>
-                    <a href="../news.html">AI 热点</a>
-                    <a href="../tools.html">工具库</a>
+    <div class="token-compare-container">
+        <a href="../tools.html" class="back-link">
+            <span>←</span> 返回工具库
+        </a>
+        
+        <h1 class="page-title">Token 消耗对比工具</h1>
+        <p class="page-subtitle">对比相同文本在不同AI模型下的Token消耗和费用</p>
+        
+        <!-- 输入区域 -->
+        <div class="input-section">
+            <h2 class="section-title">输入方式</h2>
+            
+            <div class="input-tabs">
+                <button class="input-tab active" data-mode="zh">📝 中文文本</button>
+                <button class="input-tab" data-mode="en">🌐 英文文本</button>
+                <button class="input-tab" data-mode="image">🖼️ 图片中文</button>
+            </div>
+            
+            <!-- 文本输入 -->
+            <div id="text-input-container">
+                <textarea 
+                    id="text-input" 
+                    class="text-input-area" 
+                    placeholder="输入要分析的文本..."
+                ></textarea>
+                <div class="char-counter">
+                    <span id="char-count">0</span> 字符
                 </div>
+            </div>
+            
+            <!-- 图片输入 -->
+            <div id="image-input-container" style="display: none;">
+                <div class="image-upload-area" id="image-upload">
+                    <div class="upload-icon">📤</div>
+                    <div class="upload-text">
+                        点击上传图片或拖拽到此处<br>
+                        <small>支持 JPG、PNG、WEBP 格式</small>
+                    </div>
+                </div>
+                <input type="file" id="image-file" accept="image/*" style="display: none;">
+                <img id="preview-image" class="preview-image" style="display: none;">
             </div>
         </div>
-    </nav>
-
-    <div class="page-header">
-        <h1>🪙 Token 消耗对比工具</h1>
-        <p>量化测试相同语义在不同语言和模型下的 Token 开销差异</p>
-    </div>
-
-    <div class="container">
-        <section class="demo-section">
-            <h2>三种输入模式</h2>
-            
-            <div class="input-modes">
-                <div class="mode-card">
-                    <div class="icon">🇨🇳</div>
-                    <h4>中文文本</h4>
-                    <p>直接输入中文问题，模型用中文回答</p>
-                </div>
-                <div class="mode-card">
-                    <div class="icon">🇺🇸</div>
-                    <h4>英文文本</h4>
-                    <p>输入英文问题，强制模型用中文回答</p>
-                </div>
-                <div class="mode-card">
-                    <div class="icon">🖼️</div>
-                    <h4>图片中文</h4>
-                    <p>图片 + 中文指令，多模态模型处理</p>
+        
+        <!-- 模型选择 -->
+        <div class="input-section">
+            <h2 class="section-title">选择模型</h2>
+            <div class="model-selection">
+                <div class="model-grid">
+                    <div class="model-checkbox" data-model="qwen-turbo">
+                        <input type="checkbox" id="cb-turbo" checked>
+                        <span class="model-name">Qwen-Turbo</span>
+                        <span class="model-price">¥0.0003/1K</span>
+                    </div>
+                    <div class="model-checkbox" data-model="qwen-plus">
+                        <input type="checkbox" id="cb-plus">
+                        <span class="model-name">Qwen-Plus</span>
+                        <span class="model-price">¥0.0008/1K</span>
+                    </div>
+                    <div class="model-checkbox" data-model="qwen-max">
+                        <input type="checkbox" id="cb-max">
+                        <span class="model-name">Qwen-Max</span>
+                        <span class="model-price">¥0.002/1K</span>
+                    </div>
+                    <div class="model-checkbox" data-model="qwen-vl-plus">
+                        <input type="checkbox" id="cb-vl">
+                        <span class="model-name">Qwen-VL-Plus</span>
+                        <span class="model-price">¥0.002/1K</span>
+                    </div>
+                    <div class="model-checkbox" data-model="gpt-4o">
+                        <input type="checkbox" id="cb-gpt4o">
+                        <span class="model-name">GPT-4o</span>
+                        <span class="model-price">¥0.0175/1K</span>
+                    </div>
+                    <div class="model-checkbox" data-model="gpt-4o-mini">
+                        <input type="checkbox" id="cb-gpt4o-mini">
+                        <span class="model-name">GPT-4o-mini</span>
+                        <span class="model-price">¥0.0025/1K</span>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <section class="demo-section">
-            <h2>Token 消耗对比示例</h2>
             
-            <p style="color: var(--text-muted); margin-bottom: 16px;">相同语义问题 "请解释什么是机器学习" 在不同模型下的 Token 消耗：</p>
-            
-            <table class="comparison-table">
+            <div class="action-buttons">
+                <button id="analyze-btn" class="btn-primary">
+                    开始分析
+                </button>
+                <button id="clear-btn" class="btn-secondary">
+                    清空
+                </button>
+            </div>
+        </div>
+        
+        <!-- 加载中 -->
+        <div id="loading-section" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>正在计算Token消耗...</p>
+        </div>
+        
+        <!-- 错误提示 -->
+        <div id="error-section" class="error-message" style="display: none;">
+        </div>
+        
+        <!-- 结果展示 -->
+        <div id="results-section" class="results-section">
+            <h2 class="section-title">对比结果</h2>
+            <table class="results-table">
                 <thead>
                     <tr>
                         <th>模型</th>
-                        <th>中文输入</th>
-                        <th>英文输入</th>
-                        <th>图片输入</th>
-                        <th>差异分析</th>
+                        <th>输入 Token</th>
+                        <th>输出 Token (估算)</th>
+                        <th>总计 Token</th>
+                        <th>预估费用</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>qwen-turbo</strong></td>
-                        <td class="good">156 tokens</td>
-                        <td class="highlight">203 tokens</td>
-                        <td class="bad">N/A</td>
-                        <td>中文节省 23%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>qwen-plus</strong></td>
-                        <td class="good">148 tokens</td>
-                        <td class="highlight">195 tokens</td>
-                        <td class="bad">N/A</td>
-                        <td>中文节省 24%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>qwen-max</strong></td>
-                        <td class="good">152 tokens</td>
-                        <td class="highlight">198 tokens</td>
-                        <td class="bad">N/A</td>
-                        <td>中文节省 23%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>qwen-vl-plus</strong></td>
-                        <td class="good">164 tokens</td>
-                        <td class="highlight">212 tokens</td>
-                        <td class="bad">1,847 tokens</td>
-                        <td>图片消耗最高</td>
-                    </tr>
-                    <tr>
-                        <td><strong>gpt-4o</strong></td>
-                        <td class="good">142 tokens</td>
-                        <td class="highlight">178 tokens</td>
-                        <td class="bad">1,523 tokens</td>
-                        <td>中文节省 20%</td>
-                    </tr>
-                    <tr>
-                        <td><strong>gpt-4o-mini</strong></td>
-                        <td class="good">138 tokens</td>
-                        <td class="highlight">172 tokens</td>
-                        <td class="bad">1,456 tokens</td>
-                        <td>性价比最高</td>
-                    </tr>
+                <tbody id="results-body">
                 </tbody>
             </table>
-        </section>
-
-        <section class="demo-section">
-            <h2>关键发现</h2>
-            
-            <div class="insight-box">
-                <h3>💡 优化建议</h3>
-                <ul class="insight-list">
-                    <li>
-                        <span class="icon">💰</span>
-                        <div>
-                            <strong>中文输入更省 Token</strong>
-                            <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 14px;">
-                                相同语义下，中文比英文节省约 20-25% 的 Token 消耗
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <span class="icon">🖼️</span>
-                        <div>
-                            <strong>图片输入成本最高</strong>
-                            <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 14px;">
-                                图片会转换为大量 Token，成本是文本的 10 倍以上
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <span class="icon">🎯</span>
-                        <div>
-                            <strong>选择合适的模型</strong>
-                            <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 14px;">
-                                简单任务用 qwen-turbo/gpt-4o-mini，复杂任务用 qwen-max/gpt-4o
-                            </p>
-                        </div>
-                    </li>
-                    <li>
-                        <span class="icon">📝</span>
-                        <div>
-                            <strong>Prompt 优化</strong>
-                            <p style="margin: 4px 0 0; color: var(--text-muted); font-size: 14px;">
-                                精简 Prompt，避免冗余描述，可显著降低成本
-                            </p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="demo-section">
-            <h2>支持的模型</h2>
-            
-            <div class="example-grid">
-                <div class="feature-card">
-                    <div class="icon">☁️</div>
-                    <h3>阿里云 Qwen 系列</h3>
-                    <p>qwen-turbo、qwen-plus、qwen-max、qwen-vl-plus</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🤖</div>
-                    <h3>OpenAI GPT 系列</h3>
-                    <p>gpt-4o、gpt-4o-mini、gpt-4-turbo</p>
-                </div>
-            </div>
-
-            <div class="model-support">
-                <div class="model-item">
-                    <span class="provider">Qwen</span>
-                    <span class="model-name">qwen-turbo</span>
-                </div>
-                <div class="model-item">
-                    <span class="provider">Qwen</span>
-                    <span class="model-name">qwen-plus</span>
-                </div>
-                <div class="model-item">
-                    <span class="provider">Qwen</span>
-                    <span class="model-name">qwen-max</span>
-                </div>
-                <div class="model-item">
-                    <span class="provider">Qwen</span>
-                    <span class="model-name">qwen-vl-plus</span>
-                </div>
-                <div class="model-item">
-                    <span class="provider">OpenAI</span>
-                    <span class="model-name">gpt-4o</span>
-                </div>
-                <div class="model-item">
-                    <span class="provider">OpenAI</span>
-                    <span class="model-name">gpt-4o-mini</span>
-                </div>
-            </div>
-        </section>
-
-        <section class="demo-section">
-            <h2>使用流程</h2>
-            
-            <div class="workflow-section">
-                <div class="workflow-steps">
-                    <div class="workflow-step">
-                        <div class="step-num">1</div>
-                        <div class="content">
-                            <h4>输入问题</h4>
-                            <p>输入你想要测试的问题内容</p>
-                        </div>
-                    </div>
-                    <div class="workflow-step">
-                        <div class="step-num">2</div>
-                        <div class="content">
-                            <h4>选择输入模式</h4>
-                            <p>选择中文文本、英文文本或图片中文</p>
-                        </div>
-                    </div>
-                    <div class="workflow-step">
-                        <div class="step-num">3</div>
-                        <div class="content">
-                            <h4>选择模型</h4>
-                            <p>选择要测试的大模型</p>
-                        </div>
-                    </div>
-                    <div class="workflow-step">
-                        <div class="step-num">4</div>
-                        <div class="content">
-                            <h4>查看结果</h4>
-                            <p>实时显示 Prompt/Completion/Total Token 消耗</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="demo-section">
-            <h2>快速开始</h2>
-            
-            <div class="code-block">
-                <code>
-# 安装依赖<br>
-pip install -r requirements.txt<br><br>
-
-# 配置 API Key（在 main.py 中）<br>
-DASHSCOPE_API_KEY = "your-aliyun-key"<br>
-OPENAI_API_KEY = "your-openai-key"<br><br>
-
-# 运行<br>
-python main.py
-                </code>
-            </div>
-
-            <div class="alert-box" style="background: rgba(251, 191, 36, 0.1); border-color: rgba(251, 191, 36, 0.3); color: #fbbf24; border-radius: 8px; padding: 16px; margin: 16px 0;">
-                💡 <strong>注意</strong>：图片中文模式仅支持 qwen-vl-plus 模型
-            </div>
-        </section>
-
-        <section class="demo-section">
-            <h2>技术实现</h2>
-            
-            <div class="example-grid">
-                <div class="feature-card">
-                    <div class="icon">🐍</div>
-                    <h3>Python 核心</h3>
-                    <p>基于 Python 3.8+ 开发，兼容性好。</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🖼️</div>
-                    <h3>Pillow</h3>
-                    <p>图片处理库，支持图片输入模式。</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🖥️</div>
-                    <h3>Tkinter</h3>
-                    <p>Python 自带 GUI 库，无需额外安装。</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🌐</div>
-                    <h3>Requests</h3>
-                    <p>HTTP 请求库，调用各大模型 API。</p>
-                </div>
-            </div>
-
-            <h3 style="margin-top: 32px;">技术栈</h3>
-            <div class="tech-stack">
-                <span class="tech-tag">Python 3.8+</span>
-                <span class="tech-tag">Tkinter</span>
-                <span class="tech-tag">Pillow</span>
-                <span class="tech-tag">Requests</span>
-                <span class="tech-tag">DashScope</span>
-            </div>
-        </section>
-
-        <section class="demo-section">
-            <div class="feature-highlight" style="text-align: center; background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.05)); border-color: rgba(251, 191, 36, 0.2);">
-                <h3 style="color: #fbbf24;">📥 获取源码</h3>
-                <p style="margin-bottom: 20px;">优化你的 Prompt 成本</p>
-                <a href="https://github.com/zhimingliang897-web/integrity/tree/main/18tokens" 
-                   style="display: inline-block; padding: 12px 32px; background: #fbbf24; color: white; border-radius: 8px; text-decoration: none; font-weight: bold;"
-                   target="_blank">
-                    查看源码 →
-                </a>
-            </div>
-        </section>
-    </div>
-
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2026 Integrity Lab. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="https://github.com/zhimingliang897-web/integrity" target="_blank">GitHub</a>
-            </div>
         </div>
-    </footer>
+    </div>
+    
+    <script>
+        // API基础URL
+        const API_BASE = 'http://8.138.164.133:5000';
+        
+        // 当前输入模式
+        let currentMode = 'zh';
+        
+        // DOM元素
+        const textInput = document.getElementById('text-input');
+        const charCount = document.getElementById('char-count');
+        const imageUpload = document.getElementById('image-upload');
+        const imageFile = document.getElementById('image-file');
+        const previewImage = document.getElementById('preview-image');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const clearBtn = document.getElementById('clear-btn');
+        const loadingSection = document.getElementById('loading-section');
+        const errorSection = document.getElementById('error-section');
+        const resultsSection = document.getElementById('results-section');
+        const resultsBody = document.getElementById('results-body');
+        
+        // 输入模式切换
+        document.querySelectorAll('.input-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.input-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                currentMode = tab.dataset.mode;
+                
+                if (currentMode === 'image') {
+                    document.getElementById('text-input-container').style.display = 'none';
+                    document.getElementById('image-input-container').style.display = 'block';
+                } else {
+                    document.getElementById('text-input-container').style.display = 'block';
+                    document.getElementById('image-input-container').style.display = 'none';
+                }
+            });
+        });
+        
+        // 字符计数
+        textInput.addEventListener('input', () => {
+            charCount.textContent = textInput.value.length;
+        });
+        
+        // 模型选择
+        document.querySelectorAll('.model-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('click', (e) => {
+                if (e.target.type !== 'checkbox') {
+                    const input = checkbox.querySelector('input');
+                    input.checked = !input.checked;
+                }
+                checkbox.classList.toggle('checked', checkbox.querySelector('input').checked);
+            });
+        });
+        
+        // 图片上传
+        imageUpload.addEventListener('click', () => {
+            imageFile.click();
+        });
+        
+        imageUpload.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            imageUpload.classList.add('dragover');
+        });
+        
+        imageUpload.addEventListener('dragleave', () => {
+            imageUpload.classList.remove('dragover');
+        });
+        
+        imageUpload.addEventListener('drop', (e) => {
+            e.preventDefault();
+            imageUpload.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleImageFile(file);
+            }
+        });
+        
+        imageFile.addEventListener('change', (e) => {
+            if (e.target.files[0]) {
+                handleImageFile(e.target.files[0]);
+            }
+        });
+        
+        function handleImageFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // 开始分析
+        analyzeBtn.addEventListener('click', async () => {
+            // 获取输入
+            let text = '';
+            if (currentMode === 'image') {
+                if (!previewImage.src || previewImage.style.display === 'none') {
+                    showError('请先上传图片');
+                    return;
+                }
+                // 图片模式使用占位符文本（后端会处理）
+                text = 'image_content';
+            } else {
+                text = textInput.value.trim();
+                if (!text) {
+                    showError('请输入要分析的文本');
+                    return;
+                }
+            }
+            
+            // 获取选中的模型
+            const selectedModels = [];
+            document.querySelectorAll('.model-checkbox input:checked').forEach(cb => {
+                selectedModels.push(cb.closest('.model-checkbox').dataset.model);
+            });
+            
+            if (selectedModels.length === 0) {
+                showError('请至少选择一个模型');
+                return;
+            }
+            
+            // 图片模式只支持qwen-vl-plus
+            if (currentMode === 'image') {
+                const hasVL = selectedModels.includes('qwen-vl-plus');
+                if (!hasVL) {
+                    showError('图片模式只支持 Qwen-VL-Plus 模型');
+                    return;
+                }
+            }
+            
+            // 显示加载
+            showLoading();
+            hideError();
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/tools/token-compare/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text: text,
+                        language: currentMode,
+                        models: selectedModels
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResults(data.results);
+                } else {
+                    showError(data.error || '分析失败');
+                }
+            } catch (error) {
+                showError('网络错误，请稍后重试');
+                console.error(error);
+            } finally {
+                hideLoading();
+            }
+        });
+        
+        // 清空
+        clearBtn.addEventListener('click', () => {
+            textInput.value = '';
+            charCount.textContent = '0';
+            previewImage.src = '';
+            previewImage.style.display = 'none';
+            hideError();
+            resultsSection.classList.remove('visible');
+        });
+        
+        // 显示加载
+        function showLoading() {
+            loadingSection.style.display = 'block';
+            analyzeBtn.disabled = true;
+        }
+        
+        // 隐藏加载
+        function hideLoading() {
+            loadingSection.style.display = 'none';
+            analyzeBtn.disabled = false;
+        }
+        
+        // 显示错误
+        function showError(message) {
+            errorSection.textContent = message;
+            errorSection.style.display = 'block';
+        }
+        
+        // 隐藏错误
+        function hideError() {
+            errorSection.style.display = 'none';
+        }
+        
+        // 显示结果
+        function showResults(results) {
+            resultsBody.innerHTML = results.map(r => `
+                <tr>
+                    <td>
+                        <strong style="color: #fff;">${r.model}</strong>
+                    </td>
+                    <td class="token-count">${r.prompt_tokens.toLocaleString()}</td>
+                    <td class="token-count">${r.completion_tokens.toLocaleString()}</td>
+                    <td class="token-count">${r.total_tokens.toLocaleString()}</td>
+                    <td class="cost-highlight">¥${r.estimated_cost.toFixed(4)}</td>
+                </tr>
+            `).join('');
+            
+            resultsSection.classList.add('visible');
+        }
+    </script>
 </body>
 </html>
