@@ -8,8 +8,8 @@
  */
 
 const SERVER_URL = 'http://8.138.164.133:5000';
-const API_BASE = window.location.origin;
 const IS_GITHUB_PAGES = window.location.hostname.includes('github.io');
+const API_BASE = IS_GITHUB_PAGES ? SERVER_URL : window.location.origin;
 let isRegisterMode = false;
 
 function showToast(message, type = 'info') {
@@ -31,24 +31,6 @@ function checkAuth() {
     const loginPrompt = document.getElementById('login-prompt');
     const onlineContent = document.getElementById('online-tools-content');
     
-    if (IS_GITHUB_PAGES) {
-        if (btn) {
-            btn.textContent = '前往在线工具';
-            btn.classList.remove('logged-in');
-            btn.onclick = () => { window.location.href = SERVER_URL + '/app/tools.html'; };
-        }
-        if (loginPrompt) {
-            loginPrompt.innerHTML = `
-                <div class="icon">🚀</div>
-                <h3>当前为 GitHub 演示页面</h3>
-                <p>上方“演示体验”里的按钮为本地模拟效果，真正可用的在线工具（含登录验证）部署在云服务器上。</p>
-                <a href="${SERVER_URL}/app/tools.html" style="margin-top:16px; padding:12px 32px; background:var(--primary); color:#fff; border:none; border-radius:8px; cursor:pointer; display:inline-block; text-decoration:none;">前往服务器在线工具 →</a>
-            `;
-        }
-        if (onlineContent) onlineContent.style.display = 'none';
-        return;
-    }
-    
     if (token && username) {
         if (btn) {
             btn.textContent = username;
@@ -69,10 +51,6 @@ function checkAuth() {
 }
 
 function showAuthModal() {
-    if (IS_GITHUB_PAGES) {
-        window.location.href = SERVER_URL + '/app/tools.html';
-        return;
-    }
     const modal = document.getElementById('auth-modal');
     const errorEl = document.getElementById('auth-error');
     if (modal) modal.style.display = 'flex';
