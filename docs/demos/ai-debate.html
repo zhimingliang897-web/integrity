@@ -568,6 +568,10 @@
             const startBtn = document.getElementById('start-debate-btn');
             
             try {
+                // 添加超时控制
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 60000); // 60秒超时
+                
                 const response = await fetch(`${API_BASE}/api/tools/ai-debate/start`, {
                     method: 'POST',
                     headers: {
@@ -577,11 +581,15 @@
                     body: JSON.stringify({
                         topic: topic,
                         rounds: rounds
-                    })
+                    }),
+                    signal: controller.signal
                 });
 
+                clearTimeout(timeoutId);
+
                 if (!response.ok) {
-                    throw new Error('连接失败');
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
                 }
 
                 const reader = response.body.getReader();
@@ -614,9 +622,17 @@
 
             } catch (error) {
                 console.error('SSE Error:', error);
+                
+                let errorMessage = '连接失败';
+                if (error.name === 'AbortError') {
+                    errorMessage = '请求超时，请检查网络连接或稍后重试';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                
                 if (debateInProgress) {
                     // 如果 SSE 失败，使用模拟数据
-                    DemoUtils.showMessage('SSE 连接失败，使用模拟数据', 'warning');
+                    DemoUtils.showMessage(`${errorMessage}，使用模拟数据演示`, 'warning');
                     simulateDebate(topic, rounds);
                     return;
                 }

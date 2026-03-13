@@ -20,7 +20,7 @@ except ImportError:
 
 ai_debate_bp = Blueprint('ai_debate', __name__, url_prefix='/api/tools/ai-debate')
 
-DASHSCOPE_API_KEY = os.environ.get('DASHSCOPE_API_KEY', 'sk-0ef56d1b3ba54a188ce28a46c54e2a24')
+DASHSCOPE_API_KEY = os.environ.get('DASHSCOPE_API_KEY', '')
 DASHSCOPE_BASE_URL = 'https://dashscope.aliyuncs.com/compatible-mode/v1'
 
 DEBATER_CONFIGS = [
@@ -94,6 +94,10 @@ def stream_debate(topic, rounds):
     """流式生成辩论内容"""
     if not HAS_OPENAI:
         yield generate_sse_event('error', {'message': '服务器缺少 openai 库'})
+        return
+    
+    if not DASHSCOPE_API_KEY:
+        yield generate_sse_event('error', {'message': '服务器未配置 DASHSCOPE_API_KEY'})
         return
     
     pro_debaters = DEBATER_CONFIGS[:2]
