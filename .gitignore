@@ -9,6 +9,7 @@ __pycache__/
 18tokens/config.py
 .mcp.json
 .opencode/
+14.1file-agent-v1/config.json
 
 # Claude Code settings
 **/.claude/

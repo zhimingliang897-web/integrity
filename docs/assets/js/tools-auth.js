@@ -40,9 +40,9 @@ function checkAuth() {
         if (loginPrompt) {
             loginPrompt.innerHTML = `
                 <div class="icon">🚀</div>
-                <h3>在线工具部署在独立服务器</h3>
-                <p>演示体验可在此页面直接使用，在线工具需要跳转到服务器</p>
-                <a href="${SERVER_URL}/app/tools.html" style="margin-top:16px; padding:12px 32px; background:var(--primary); color:#fff; border:none; border-radius:8px; cursor:pointer; display:inline-block; text-decoration:none;">前往在线工具 →</a>
+                <h3>当前为 GitHub 演示页面</h3>
+                <p>上方“演示体验”里的按钮为本地模拟效果，真正可用的在线工具（含登录验证）部署在云服务器上。</p>
+                <a href="${SERVER_URL}/app/tools.html" style="margin-top:16px; padding:12px 32px; background:var(--primary); color:#fff; border:none; border-radius:8px; cursor:pointer; display:inline-block; text-decoration:none;">前往服务器在线工具 →</a>
             `;
         }
         if (onlineContent) onlineContent.style.display = 'none';
