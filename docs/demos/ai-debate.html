@@ -650,11 +650,20 @@
 
         // 处理辩论事件（后端 event: stage/chunk/message/result，chunk 含 text，message 含 content）
         function handleDebateEvent(data, eventType) {
+            // 调试日志
+            console.log('Event:', eventType, 'Data:', data);
+            
             if (data.stage || eventType === 'stage') {
                 updateStage(data.stage || '', data.desc || '');
             } else if (eventType === 'chunk' && (data.text != null)) {
                 appendDebateChunk(data);
             } else if (eventType === 'message' || (data.content != null && data.content !== '')) {
+                // 确保所有必需字段都存在
+                if (!data.speaker || !data.role || !data.side) {
+                    console.warn('Missing required fields:', data);
+                    return;
+                }
+                
                 // 若当前正在流式更新同一说话人，则只更新该条为完整内容，不新增一行
                 const messagesDiv = document.getElementById('debate-messages');
                 const lastEl = messagesDiv && messagesDiv.lastElementChild;
@@ -678,6 +687,12 @@
 
         // 追加流式文本块
         function appendDebateChunk(data) {
+            // 确保必需字段存在
+            if (!data.speaker || !data.role || !data.side) {
+                console.warn('Missing required fields in chunk:', data);
+                return;
+            }
+            
             if (currentSpeaker !== data.speaker) {
                 currentSpeaker = data.speaker;
                 currentMessageContent = '';
