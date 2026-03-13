@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-13",
+  "summary": "今日焦点集中于三大方向：一是大模型能力跃升，如Gemini 3.1 Pro与NVIDIA Rubin平台推动复杂任务与自主驾驶落地；二是推理与记忆机制突破，包括HEAL、结构化记忆及不确定性建模等新方法；三是评估范式拓展，如GhazalBench等文化适配性评测凸显多语言与领域专用能力需求。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，标志着大模型从回答转向解决，具行业里程碑意义。",
+      "tags": [
+        "AI模型",
+        "大语言模型",
+        "Google",
+        "复杂任务"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA发布Rubin平台与开放模型，聚焦自动驾驶与全栈AI生态，标志其从GPU厂商向通用AI基础设施提供商的战略跃迁，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "平台架构"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，体现大模型训练部署对高端GPU的深度绑定，标志AI基础设施新范式确立。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Agentic Control Center for Data Product Optimization",
+      "link": "https://arxiv.org/abs/2603.10133",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出AI代理驱动的数据产品持续优化框架，将数据资产转化为可观察、可调优的闭环系统，兼顾自动化与人工可控性，对数据工程和MLOps有实用价值。",
+      "tags": [
+        "AI Agent",
+        "数据产品",
+        "自动化优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Hybrid Self-evolving Structured Memory for GUI Agents",
+      "link": "https://arxiv.org/abs/2603.10291",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出HyMEM图结构记忆框架，融合符号节点与轨迹嵌入，解决GUI代理长期任务中的结构化记忆与自演化问题，是VLM驱动代理的关键进展。",
+      "tags": [
+        "GUI代理",
+        "记忆系统",
+        "图神经网络",
+        "VLM"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "HEAL: Hindsight Entropy-Assisted Learning for Reasoning Distillation",
+      "link": "https://arxiv.org/abs/2603.10359",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出HEAL框架解决推理蒸馏中'教师天花板'问题，融合ZPD理论与熵辅助修复机制，为小模型高效继承大模型推理能力提供新路径，具实用价值。",
+      "tags": [
+        "推理蒸馏",
+        "强化学习",
+        "教育理论"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Beyond Scalars: Evaluating and Understanding LLM Reasoning via Geometric Progress and Stability",
+      "link": "https://arxiv.org/abs/2603.10384",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出TRACED框架，用几何动力学分解推理轨迹的进展与稳定性，首次将拓扑特征与LLM推理质量关联，为评估提供新范式，兼具理论深度与实用潜力。",
+      "tags": [
+        "LLM评估",
+        "几何推理",
+        "理论分析"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Verbalizing LLM's Higher-order Uncertainty via Imprecise Probabilities",
+      "link": "https://arxiv.org/abs/2603.10396",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出基于模糊概率的LLM高阶不确定性建模新方法，解决经典概率框架在模糊问答、上下文学习等场景下的系统性失效问题，具实用价值。",
+      "tags": [
+        "LLM",
+        "不确定性量化",
+        "概率论"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Resource-constrained Amazons chess decision framework integrating large language models and graph attention",
+      "link": "https://arxiv.org/abs/2603.10512",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将LLM与图注意力机制结合用于资源受限的阿蒙森棋决策，提出弱到强泛化框架，兼具理论创新与工程可行性，是轻量化AI博弈的重要探索。",
+      "tags": [
+        "LLM",
+        "图神经网络",
+        "游戏AI",
+        "轻量化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "GhazalBench: Usage-Grounded Evaluation of LLMs on Persian Ghazals",
+      "link": "https://arxiv.org/abs/2603.09979",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个面向波斯语格言诗的使用场景驱动评估基准，填补多语言诗歌理解评估空白，体现LLM文化适配能力重要方向",
+      "tags": [
+        "多语言NLP",
+        "诗歌理解",
+        "评估基准"
+      ]
+    }
+  ]
+}
