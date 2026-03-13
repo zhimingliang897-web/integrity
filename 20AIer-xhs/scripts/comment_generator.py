@@ -5,9 +5,9 @@
 import json
 import re
 from openai import OpenAI
-from config import API_KEY, BASE_URL, MODEL
+from config import API_KEY, BASE_URL, MODEL, TIMEOUT_SEC
 
-_client = OpenAI(api_key=API_KEY, base_url=BASE_URL)
+_client = OpenAI(api_key=API_KEY, base_url=BASE_URL, timeout=TIMEOUT_SEC)
 
 COMMENT_SYSTEM_PROMPT = """你是真诚分享经验的老网民。不整虚的，不打广告，只给实在话。
 
@@ -42,9 +42,12 @@ def generate_comments(article_text: str, slides_summary: str = "") -> dict:
     """生成评论和Tags"""
     print("Generating comments and tags...")
 
+    # slides_summary 作为上下文补充，避免 tag/建议跑偏
+    summary_line = f"\n\nSlides summary: {slides_summary}" if slides_summary else ""
     user_prompt = f"""Based on this article, generate 3 short suggestions + 5 relevant tags.
 
 Article: {article_text[:1000]}
+{summary_line}
 
 Output as JSON only."""
 

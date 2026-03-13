@@ -7,6 +7,7 @@ import yaml
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _PROJECT_ROOT = os.path.dirname(_HERE)   # scripts/ → project root
 _CONFIG_PATH = os.path.join(_PROJECT_ROOT, "config.yaml")
+_CONFIG_LOCAL_PATH = os.path.join(_PROJECT_ROOT, "config.local.yaml")
 
 
 def _load() -> dict:
@@ -16,10 +17,40 @@ def _load() -> dict:
 
 _cfg = _load()
 
+
+def _deep_update(base: dict, patch: dict) -> dict:
+    """递归合并 dict（local 配置覆盖默认配置）。"""
+    for k, v in (patch or {}).items():
+        if isinstance(v, dict) and isinstance(base.get(k), dict):
+            _deep_update(base[k], v)
+        else:
+            base[k] = v
+    return base
+
+
+def _load_local_if_any():
+    if not os.path.isfile(_CONFIG_LOCAL_PATH):
+        return
+    with open(_CONFIG_LOCAL_PATH, "r", encoding="utf-8") as f:
+        local_cfg = yaml.safe_load(f) or {}
+    _deep_update(_cfg, local_cfg)
+
+
+_load_local_if_any()
+
 # ── API ───────────────────────────────────────────────────────────────────────
-API_KEY  = _cfg["api"]["api_key"]
-BASE_URL = _cfg["api"]["base_url"]
-MODEL    = _cfg["api"]["model"]
+_api = _cfg.get("api", {}) or {}
+
+# 环境变量优先，避免把 key 写进仓库
+API_KEY = (
+    os.getenv("XHS_API_KEY")
+    or os.getenv("DASHSCOPE_API_KEY")
+    or os.getenv("OPENAI_API_KEY")
+    or _api.get("api_key", "")
+)
+BASE_URL = os.getenv("XHS_BASE_URL") or _api.get("base_url", "")
+MODEL = os.getenv("XHS_MODEL") or _api.get("model", "")
+TIMEOUT_SEC = float(os.getenv("XHS_TIMEOUT_SEC") or _api.get("timeout_sec", 60))
 
 # ── 图片样式 ──────────────────────────────────────────────────────────────────
 _style = _cfg["style"]

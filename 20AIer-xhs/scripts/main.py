@@ -11,8 +11,8 @@ import platform
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from config import MODEL, OUTPUT_BASE
-from llm_formatter import format_text_to_slides
+from config import MODEL, OUTPUT_BASE, API_KEY, BASE_URL
+from llm_formatter import format_text_to_slides, generate_plain_summary
 from image_generator import generate_images, render_cover
 from comment_generator import generate_comments, save_comments
 
@@ -38,13 +38,19 @@ def open_folder(path: str):
 def main():
     print_banner()
 
+    if not API_KEY:
+        print("未检测到 API Key。请设置环境变量 `XHS_API_KEY`，或在 `20AIer-xhs/config.local.yaml` 里配置 `api.api_key`。")
+        print(f"当前 base_url={BASE_URL!r}, model={MODEL!r}")
+        sys.exit(1)
+
     # 解析参数
     args = sys.argv[1:]
     no_comments = "--no-comments" in args
+    comments_only = "--comments-only" in args
     args = [a for a in args if not a.startswith("--")]
 
     if len(args) < 1:
-        print("\n❌ 用法：python main.py <文章.txt> [--no-comments]\n")
+        print("\n用法：python main.py <文章.txt> [--no-comments] [--comments-only]\n")
         sys.exit(1)
 
     txt_path = os.path.abspath(args[0])
@@ -63,75 +69,97 @@ def main():
         print("❌ 文件内容为空，退出。")
         sys.exit(1)
 
-    print(f"📄 输入文件：{txt_path}  ({len(raw_text)} 字符)")
-    print(f"📁 输出文件夹：{out_dir}")
-    print(f"💬 评论区建议：{'关闭' if no_comments else '开启'}\n")
+    print(f"输入文件：{txt_path}  ({len(raw_text)} 字符)")
+    print(f"输出文件夹：{out_dir}")
+    if comments_only:
+        print("模式：仅生成评论区文案\n")
+    else:
+        print(f"评论区建议：{'关闭' if no_comments else '开启'}\n")
 
-    # Step 1: LLM 生成内容
-    print("─" * 45)
-    print("Step 1/3: 生成文案")
-    print("─" * 45)
-    try:
-        result = format_text_to_slides(raw_text)
-        slides = result["slides"]
-        cover_title = result.get("cover_title", "")
-    except Exception as e:
-        print(f"\n❌ LLM 调用失败：{e}")
-        sys.exit(1)
+    slides = []
+    cover_title = ""
+    if not comments_only:
+        # Step 1: LLM 生成内容
+        print("─" * 45)
+        print("Step 1/3: 生成文案")
+        print("─" * 45)
+        try:
+            result = format_text_to_slides(raw_text)
+            slides = result["slides"]
+            cover_title = result.get("cover_title", "")
+        except Exception as e:
+            print(f"\nLLM 调用失败：{e}")
+            sys.exit(1)
 
-    # Step 2: 渲染图片
-    print("\n" + "─" * 45)
-    print(f"Step 2/3: 渲染 {len(slides) + 1} 张图片")
-    print("─" * 45)
-    
-    try:
-        out_dir = os.path.join(OUTPUT_BASE, folder_name)
-        os.makedirs(out_dir, exist_ok=True)
-        paths = []
-        
-        # 首图：使用 LLM 生成的封面标题，fallback 到第一张 slide 标题
-        first_slide = slides[0]
-        final_cover_title = cover_title if cover_title else first_slide.get("title", "分享一些干货")
+    paths = []
+    if not comments_only:
+        # Step 2: 渲染图片
+        print("\n" + "─" * 45)
+        print(f"Step 2/3: 渲染 {len(slides) + 1} 张图片")
+        print("─" * 45)
+        try:
+            out_dir = os.path.join(OUTPUT_BASE, folder_name)
+            os.makedirs(out_dir, exist_ok=True)
 
-        img = render_cover(final_cover_title)
-        cover_path = os.path.join(out_dir, "slide_00_cover.png")
-        img.save(cover_path)
-        paths.append(cover_path)
-        print(f"  ✅ 首图 [{final_cover_title}] → {cover_path}")
-        
-        # 内容页
-        content_paths = generate_images(slides, folder_name)
-        paths.extend(content_paths)
-        
-    except Exception as e:
-        print(f"\n❌ 图片生成失败：{e}")
-        import traceback
-        traceback.print_exc()
-        sys.exit(1)
+            # 首图：使用 LLM 生成的封面标题，fallback 到第一张 slide 标题
+            first_slide = slides[0]
+            final_cover_title = cover_title if cover_title else first_slide.get("title", "分享一些干货")
+
+            img = render_cover(final_cover_title)
+            cover_path = os.path.join(out_dir, "slide_00_cover.png")
+            img.save(cover_path)
+            paths.append(cover_path)
+            print(f"  OK 封面 [{final_cover_title}] -> {cover_path}")
+
+            # 内容页
+            content_paths = generate_images(slides, folder_name)
+            paths.extend(content_paths)
+        except Exception as e:
+            print(f"\n图片生成失败：{e}")
+            import traceback
+            traceback.print_exc()
+            sys.exit(1)
+
+    # Step 2.5: 生成纯干货版本（保存到 ixnd 文件夹）
+    if not comments_only:
+        print("\n" + "─" * 45)
+        print("生成纯干货版本（用于评论区）")
+        print("─" * 45)
+        try:
+            plain_summary = generate_plain_summary(raw_text)
+            ixnd_dir = os.path.join(OUTPUT_BASE, "ixnd")
+            os.makedirs(ixnd_dir, exist_ok=True)
+            plain_path = os.path.join(ixnd_dir, f"{folder_name}.txt")
+            with open(plain_path, "w", encoding="utf-8") as f:
+                f.write(plain_summary)
+            print(f"  OK 纯干货版本 -> {plain_path}")
+        except Exception as e:
+            print(f"\n纯干货版本生成失败（不影响图片）：{e}")
 
     # Step 3: 生成评论区文案
     comment_text = None
     if not no_comments:
         print("\n" + "─" * 45)
-        print("Step 3/3: 生成评论区文案")
+        print("生成评论区文案")
         print("─" * 45)
         try:
             # 提取slides摘要给评论生成器参考
-            slides_summary = " | ".join([s.get("title", "") for s in slides])
+            slides_summary = " | ".join([s.get("title", "") for s in slides]) if slides else ""
             comment_data = generate_comments(raw_text, slides_summary)
             comment_path = os.path.join(out_dir, "comments.txt")
             comment_text = save_comments(comment_data, comment_path)
         except Exception as e:
-            print(f"\n⚠️ 评论生成失败（不影响图片）：{e}")
+            print(f"\n评论生成失败（不影响图片）：{e}")
 
     # 完成
     print(f"\n{'═'*45}")
-    print("✅ 完成！")
+    print("完成！")
     print(f"{'═'*45}")
-    print(f"\n📁 输出目录：{out_dir}")
-    print(f"   └── 🖼️  {len(paths)} 张图片")
+    print(f"\n输出目录：{out_dir}")
+    if paths:
+        print(f"  - 图片：{len(paths)} 张")
     if comment_text:
-        print(f"   └── 💬 comments.txt（评论区文案）")
+        print("  - comments.txt（评论区文案）")
 
     # 预览评论区内容
     if comment_text:

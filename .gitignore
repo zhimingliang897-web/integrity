@@ -23,6 +23,9 @@ nul
 .vscode/
 .idea/
 
+# 20AIer-xhs local secrets
+20AIer-xhs/config.local.yaml
+
 # Large video/media files (keep code, exclude large media)
 *.mp4
 *.avi

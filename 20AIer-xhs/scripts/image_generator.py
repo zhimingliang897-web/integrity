@@ -242,16 +242,25 @@ def render_slide(title: str, content: list[dict], num: int, total: int) -> Image
     # 计算可用空间和间距
     available_h = bottom_limit - content_start_y
     valid_blocks = [h for h in block_heights if h > 0]
+    n = len(valid_blocks)
 
-    if len(valid_blocks) > 1:
-        # 动态计算间距，让内容均匀分布
+    # gap 更“成品”：允许内容少时拉开间距；内容多时自动收紧
+    if n > 1:
         remaining_space = available_h - total_content_h
-        gap = max(16, min(remaining_space // (len(valid_blocks)), 40))
+        if remaining_space >= 0:
+            # 用 (n+1) 让上下也留白，观感更稳
+            gap = max(14, min(remaining_space // (n + 1), 120))
+        else:
+            gap = 12
     else:
         gap = 20
 
+    # 垂直居中：内容短时别贴上边，避免“下半页大空白”
+    used_h = total_content_h + (max(0, n - 1) * gap)
+    offset_y = max(0, (available_h - used_h) // 2)
+
     # 绘制区块
-    y = content_start_y
+    y = content_start_y + offset_y
     for i, blk in enumerate(content):
         if isinstance(blk, str):
             blk = {"type": "normal", "text": blk}

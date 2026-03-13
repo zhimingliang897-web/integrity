@@ -1,8 +1,12 @@
 api:
-  api_key: sk-0ef56d1b3ba54a188ce28a46c54e2a24
+  # 建议不要把 key 写进仓库：
+  # - 优先用环境变量：XHS_API_KEY / DASHSCOPE_API_KEY / OPENAI_API_KEY
+  # - 或者新建 config.local.yaml 覆盖（已加入 .gitignore）
+  api_key: ""
   base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
   model: qwen3.5-plus
   provider: dashscope
+  timeout_sec: 60
 
 style:
   img_width: 1080
