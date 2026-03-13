@@ -89,6 +89,14 @@ python main.py --test-cookie
 | 校园学习 | 课堂、图书馆、考试 |
 | 娱乐休闲 | 电影、健身、游戏 |
 
+## 需补充的隐私/本地配置（未随仓库提交）
+
+| 文件名 | 说明（对他人） | 样式/格式 |
+|--------|----------------|-----------|
+| **cookies.json** | 小红书登录态，用于发布与刷新 Cookie | JSON 数组，每项包含 `name`、`value`、`domain`、`path`、`expires`、`httpOnly`、`secure`、`sameSite`。可从浏览器登录小红书后导出，或运行本工具「刷新 Cookie」自动生成。 |
+
+**自己使用**：从本仓库的 **`_secrets/15redbook/cookies.json`** 拷贝到本项目 `15redbook/` 目录下（文件名保持不变）即可。
+
 ## 项目结构
 
 ```
@@ -96,6 +104,7 @@ python main.py --test-cookie
 ├── gui.py               # 图形界面
 ├── main.py              # 主程序
 ├── config.yaml          # 配置文件
+├── cookies.json         # [需自行补充] 小红书 Cookie，见上方说明
 ├── llm_client.py        # LLM调用
 ├── prompts.py           # Prompt模板
 ├── html_renderer.py     # HTML渲染

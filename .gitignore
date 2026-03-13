@@ -1,3 +1,6 @@
+# Private secrets folder (集中管理所有敏感配置)
+_secrets/
+
 # Python
 __pycache__/
 *.pyc
@@ -10,6 +13,11 @@ __pycache__/
 .mcp.json
 .opencode/
 14.1file-agent-v1/config.json
+integrity-tools/.env
+14file-agent-v0/config.json
+2台词/config.json
+15redbook/cookies.json
+wg0.conf.backup
 
 # Claude Code settings
 **/.claude/
@@ -17,7 +25,7 @@ __pycache__/
 # OS
 Thumbs.db
 .DS_Store
-nul
+n ul
 
 # IDE
 .vscode/

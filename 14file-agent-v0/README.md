@@ -35,6 +35,10 @@
 1. 打开解压好的文件夹，你会看到一个名为 `config.example.json` 的文件。
 2. 请把它**复制并粘贴出另一份**，然后将新文件重命名为 **`config.json`**。（一定要有这个文件程序才能活过来！）
 
+**需补充的隐私/本地配置（未随仓库提交）**  
+- 文件名：**config.json**（对他人：复制 `config.example.json` 为 `config.json` 后按第五步在网页里填写；样式：JSON，含 DashScope API Key、Natapp Authtoken、邮箱等）。  
+- 自己使用：从 **`_secrets/14file-agent-v0/config.json`** 拷贝到本目录（文件名不变）即可。
+
 ### 第四步：一键神启动！
 1. 找到文件夹里那个名叫 **`start.bat`** （带有齿轮图标的批处理文件）。
 2. **直接双击它！** 第一次运行时，它会自动去宇宙最深处下载所需的依赖库（大概要等一两分钟）。

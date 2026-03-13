@@ -78,6 +78,10 @@ pip install -r requirements.txt
 copy config.example.json config.json
 ```
 
+**需补充的隐私/本地配置（未随仓库提交）**  
+- 文件名：**config.json**（对他人：复制 `config.example.json` 为 `config.json` 后编辑；样式：JSON，含 storage、auth、llm、natapp、smtp 等）。  
+- 自己使用：从 **`_secrets/14.1file-agent-v1/config.json`** 拷贝到本目录（文件名不变）即可。
+
 编辑 `config.json` 填入你的配置：
 
 ```json

@@ -1,0 +1,14 @@
+[Unit]
+Description=Integrity Tools API Server
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/root/integrity-tools
+Environment="PATH=/root/miniconda3/bin"
+ExecStart=/root/miniconda3/bin/gunicorn -c gunicorn.conf.py run:app
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

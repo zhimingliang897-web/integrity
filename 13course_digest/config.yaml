@@ -9,8 +9,10 @@ output_dir: "output"
 # faster-whisper 语音转文字配置
 whisper:
   model: "medium" # 可选: tiny / base / small / medium / large-v3
-  device: "auto" # "auto" 自动检测；可指定 "cuda" 或 "cpu"
-  compute_type: "auto" # "auto"=float16(GPU)/float32(CPU)
+  device: "cuda" # 新环境下固定用 GPU
+  compute_type: "auto" # 让代码自行选择合适精度（GPU 优先 int8_float16/int8）
+  # 解码时的 beam size，数值越大精度略高但明显更慢，1 通常就足够
+  beam_size: 1
   language: "en" # 课程语言
 
 # 阿里巴巴百炼 API 配置 (千问)

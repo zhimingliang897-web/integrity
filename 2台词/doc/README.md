@@ -20,7 +20,7 @@
 ├── 启动.bat                 # 双击启动（自动开浏览器）
 ├── templates/
 │   └── index.html           # 前端页面
-├── config.json              # [自动生成] API Key 等配置（已 gitignore）
+├── config.json              # [需自行补充] API Key 等配置（已 gitignore）
 └── word/
     ├── day1/
     │   ├── day1.pdf         # [你放的] PDF 原件
@@ -35,6 +35,14 @@
     ├── day2/
     └── ...
 ```
+
+### 需补充的隐私/本地配置（未随仓库提交）
+
+| 文件名 | 说明（对他人） | 样式/格式 |
+|--------|----------------|-----------|
+| **config.json** | API Key 等配置，用于台词查询与 LLM 整理 | JSON，含 `DASHSCOPE_API_KEY` 等。首次运行可在网页右上角齿轮中设置并自动保存。 |
+
+**自己使用**：从 **`_secrets/2台词/config.json`** 拷贝到本项目 `2台词/` 根目录（文件名保持不变）即可。
 
 ## 依赖安装
 
