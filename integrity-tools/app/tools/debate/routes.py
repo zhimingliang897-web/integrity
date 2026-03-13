@@ -3,17 +3,21 @@ import json
 import threading
 import queue
 import os
+import time
 
 from app.tools.debate.engine import DebateEngine
 from app.tools.debate.tts import generate_turn_audio
 from app.auth.routes import token_required
 from config import DEBATERS, LLM_PROVIDERS, JUDGE, ZH_VOICES, MAX_WORDS, FREE_DEBATE_ROUNDS, DEBATE_TIME_LIMIT
 
+import time
+
 debate_bp = Blueprint('debate', __name__)
 
 active_debate = None
 debate_clients = []
 debate_status = "idle"
+debate_start_time = 0
 
 @debate_bp.route('/config')
 def get_config():
@@ -51,10 +55,16 @@ def get_config():
 @debate_bp.route('/start', methods=['POST'])
 @token_required
 def start_debate():
-    global active_debate, debate_status
+    global active_debate, debate_status, debate_start_time
     
+    # 如果状态是 running 但已超时，自动重置
     if debate_status == "running":
-        return jsonify({"error": "辩论正在进行中"}), 400
+        if active_debate and active_debate.finished:
+            debate_status = "idle"
+        elif time.time() - debate_start_time > DEBATE_TIME_LIMIT + 60:
+            debate_status = "idle"
+        else:
+            return jsonify({"error": "辩论正在进行中，请等待或点击停止"}), 400
     
     data = request.json
     topic = data.get("topic", "").strip()
@@ -85,6 +95,7 @@ def start_debate():
     engine.init_clients()
     active_debate = engine
     debate_status = "running"
+    debate_start_time = time.time()
     
     def run():
         global debate_status

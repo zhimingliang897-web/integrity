@@ -82,79 +82,76 @@
             
             document.getElementById('start-btn').disabled = true;
             document.getElementById('stop-btn').style.display = 'inline-block';
-            document.getElementById('debate-area').innerHTML = '<p class="status">正在初始化辩论...</p>';
+            const debateArea = document.getElementById('debate-area');
+            debateArea.innerHTML = '<p class="status">正在初始化辩论...</p>';
             
-            // 先连接 SSE
-            eventSource = new EventSource('/api/debate/stream');
-            
-            eventSource.onopen = async () => {
-                // SSE 连接成功后再启动辩论
-                try {
-                    const res = await fetch('/api/debate/start', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + token
-                        },
-                        body: JSON.stringify({ topic, pro_position: proPosition, con_position: conPosition })
-                    });
-                    
-                    const data = await res.json();
-                    if (data.error) {
-                        alert(data.error);
-                        eventSource.close();
-                        document.getElementById('start-btn').disabled = false;
-                        document.getElementById('stop-btn').style.display = 'none';
-                    }
-                } catch (err) {
-                    alert('启动失败: ' + err.message);
+            try {
+                // 先启动辩论
+                const res = await fetch('/api/debate/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ topic, pro_position: proPosition, con_position: conPosition })
+                });
+                
+                const data = await res.json();
+                if (data.error) {
+                    debateArea.innerHTML = '<p class="status" style="color:#ef4444;">' + data.error + '</p>';
+                    document.getElementById('start-btn').disabled = false;
+                    document.getElementById('stop-btn').style.display = 'none';
+                    return;
+                }
+                
+                // 然后连接 SSE
+                eventSource = new EventSource('/api/debate/stream');
+                debateArea.innerHTML = '';
+                
+                eventSource.addEventListener('phase', (e) => {
+                    const data = JSON.parse(e.data);
+                    addPhase(data.phase, data.description);
+                });
+                
+                eventSource.addEventListener('speaker', (e) => {
+                    const data = JSON.parse(e.data);
+                    addSpeaker(data);
+                });
+                
+                eventSource.addEventListener('token', (e) => {
+                    const data = JSON.parse(e.data);
+                    appendToken(data.speaker_id, data.token);
+                });
+                
+                eventSource.addEventListener('judge', (e) => {
+                    const data = JSON.parse(e.data);
+                    addJudge(data.content);
+                });
+                
+                eventSource.addEventListener('debate_end', () => {
                     eventSource.close();
                     document.getElementById('start-btn').disabled = false;
-                }
-            };
-            
-            eventSource.addEventListener('phase', (e) => {
-                const data = JSON.parse(e.data);
-                addPhase(data.phase, data.description);
-            });
-            
-            eventSource.addEventListener('speaker', (e) => {
-                const data = JSON.parse(e.data);
-                addSpeaker(data);
-            });
-            
-            eventSource.addEventListener('token', (e) => {
-                const data = JSON.parse(e.data);
-                appendToken(data.speaker_id, data.token);
-            });
-            
-            eventSource.addEventListener('turn_end', (e) => {
-                // 回合结束
-            });
-            
-            eventSource.addEventListener('judge', (e) => {
-                const data = JSON.parse(e.data);
-                addJudge(data.content);
-            });
-            
-            eventSource.addEventListener('debate_end', () => {
-                eventSource.close();
+                    document.getElementById('stop-btn').style.display = 'none';
+                });
+                
+                eventSource.addEventListener('error', (e) => {
+                    if (e.data) {
+                        const data = JSON.parse(e.data);
+                        debateArea.innerHTML += '<p class="status" style="color:#ef4444;">错误: ' + data.message + '</p>';
+                    }
+                    eventSource.close();
+                    document.getElementById('start-btn').disabled = false;
+                });
+                
+                eventSource.onerror = () => {
+                    debateArea.innerHTML += '<p class="status" style="color:#ef4444;">连接中断</p>';
+                };
+                
+            } catch (err) {
+                debateArea.innerHTML = '<p class="status" style="color:#ef4444;">启动失败: ' + err.message + '</p>';
                 document.getElementById('start-btn').disabled = false;
                 document.getElementById('stop-btn').style.display = 'none';
-            });
-            
-            eventSource.addEventListener('error', (e) => {
-                if (e.data) {
-                    const data = JSON.parse(e.data);
-                    alert('错误: ' + data.message);
-                }
-                eventSource.close();
-                document.getElementById('start-btn').disabled = false;
-            });
-            
-            eventSource.onerror = () => {
-                // 忽略连接错误，SSE 会自动重连
-            };
+            }
         }
         
         function stopDebate() {
