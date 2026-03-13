@@ -401,12 +401,12 @@
                     body: formData
                 });
 
+                const data = await response.json().catch(() => ({}));
                 if (!response.ok) {
-                    throw new Error('处理失败');
+                    throw new Error(data.error || '处理失败');
                 }
 
                 // 轮询处理状态
-                const data = await response.json();
                 if (data.task_id) {
                     pollTaskStatus(data.task_id, token);
                 } else {
@@ -429,7 +429,13 @@
                         }
                     });
 
-                    const data = await response.json();
+                    const data = await response.json().catch(() => ({}));
+                    if (!response.ok) {
+                        clearInterval(interval);
+                        DemoUtils.showMessage(data.error || '查询状态失败', 'error');
+                        document.getElementById('progress-area').style.display = 'none';
+                        return;
+                    }
                     
                     if (data.status === 'completed') {
                         clearInterval(interval);
@@ -464,6 +470,11 @@
             const section = document.getElementById('results-section');
             
             container.innerHTML = '';
+            if (!results || !results.words || !Array.isArray(results.words)) {
+                container.innerHTML = '<p style="color: var(--text-muted);">暂无解析结果</p>';
+                section.style.display = 'block';
+                return;
+            }
             
             results.words.forEach((word, index) => {
                 const wordCard = createWordCard(word, index);

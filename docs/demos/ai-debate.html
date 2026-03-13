@@ -595,6 +595,7 @@
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
                 let buffer = '';
+                let currentEvent = '';
 
                 while (debateInProgress) {
                     const { done, value } = await reader.read();
@@ -605,14 +606,18 @@
                     buffer = lines.pop() || '';
 
                     for (const line of lines) {
+                        if (!line) {
+                            currentEvent = '';
+                            continue;
+                        }
                         if (line.startsWith('event: ')) {
-                            const eventType = line.substring(7).trim();
+                            currentEvent = line.substring(7).trim();
                             continue;
                         }
                         if (line.startsWith('data: ')) {
                             try {
                                 const data = JSON.parse(line.substring(6));
-                                handleDebateEvent(data);
+                                handleDebateEvent(data, currentEvent);
                             } catch (e) {
                                 console.error('Parse error:', e);
                             }
@@ -643,20 +648,28 @@
             debateInProgress = false;
         }
 
-        // 处理辩论事件
-        function handleDebateEvent(data) {
-            if (data.stage) {
-                // 阶段事件
-                updateStage(data.stage, data.desc || '');
-            } else if (data.chunk) {
-                // 流式文本块
+        // 处理辩论事件（后端 event: stage/chunk/message/result，chunk 含 text，message 含 content）
+        function handleDebateEvent(data, eventType) {
+            if (data.stage || eventType === 'stage') {
+                updateStage(data.stage || '', data.desc || '');
+            } else if (eventType === 'chunk' && (data.text != null)) {
                 appendDebateChunk(data);
-            } else if (data.content) {
-                // 完整消息
-                addDebateMessage(data.speaker, data.role, data.side, data.content);
-            } else if (data.winner) {
-                // 结果事件
-                showDebateResultDirect(data.winner, data.comment || '');
+            } else if (eventType === 'message' || (data.content != null && data.content !== '')) {
+                // 若当前正在流式更新同一说话人，则只更新该条为完整内容，不新增一行
+                const messagesDiv = document.getElementById('debate-messages');
+                const lastEl = messagesDiv && messagesDiv.lastElementChild;
+                if (lastEl && lastEl.dataset.speaker === data.speaker && currentSpeaker === data.speaker) {
+                    const contentEl = lastEl.querySelector('.message-content');
+                    if (contentEl) {
+                        contentEl.textContent = data.content || '';
+                        contentEl.classList.remove('typing-cursor');
+                    }
+                    currentMessageContent = data.content || '';
+                } else {
+                    addDebateMessage(data.speaker, data.role, data.side, data.content || '');
+                }
+            } else if (data.winner != null || eventType === 'result') {
+                showDebateResultDirect(data.winner || '', data.comment || '');
             }
         }
 

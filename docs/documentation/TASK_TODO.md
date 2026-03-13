@@ -83,34 +83,34 @@ firewall-cmd --list-all
 
 **3.1 ai-compare.html - 多模型对比**
 
-- [ ] 修改 API 路径为 `/api/tools/ai-compare/query`
-- [ ] 删除硬编码的 providers 列表，改为从 API 获取
+- [x] 修改 API 路径为 `/api/tools/ai-compare/query`（已使用正确路径）
+- [x] 删除硬编码的 providers 列表，改为从 API 获取（已实现 loadProvidersFromAPI）
 - [ ] 测试登录后调用功能
 
 **3.2 ai-debate.html - AI 辩论赛**
 
-- [ ] 删除 `simulateDebate()` 模拟函数
-- [ ] 实现 SSE 连接到 `/api/tools/ai-debate/start`
-- [ ] 处理 `event: stage/message/result` 事件
-- [ ] 实现流式显示
+- [ ] 删除 `simulateDebate()` 模拟函数（保留为 API 失败时的降级）
+- [x] 实现 SSE 连接到 `/api/tools/ai-debate/start`
+- [x] 处理 `event: stage/message/result` 事件（含 eventType 区分 chunk/message）
+- [x] 实现流式显示（tools-online.js 与 demo 页均已修复 undefined 并支持流式）
 
 **3.3 image-prompt.html - 图文互转**
 
-- [ ] 图片转提示词：连接 `/api/tools/image-prompt/analyze`
-- [ ] 提示词优化：连接 `/api/tools/image-prompt/generate`
-- [ ] 删除模拟函数 `generateMockPrompt()`
+- [x] 图片转提示词：连接 `/api/tools/image-prompt/analyze`
+- [x] 提示词优化：连接 `/api/tools/image-prompt/generate`
+- [x] 删除模拟函数 `generateMockPrompt()`
 
 **3.4 dialogue-learning.html - 台词学习**
 
-- [ ] 确认 API 路径正确
-- [ ] 测试 PDF 上传和轮询流程
-- [ ] 添加错误处理
+- [x] 确认 API 路径正确
+- [x] 测试 PDF 上传和轮询流程
+- [x] 添加错误处理（服务器错误信息展示、轮询失败处理、results 空防护）
 
 **3.5 video-maker.html - 视频生成**
 
-- [ ] 添加任务轮询逻辑（异步任务）
-- [ ] 实现进度显示
-- [ ] 处理无 FFmpeg 的情况（仅返回剧本）
+- [x] 添加任务轮询逻辑（异步任务）
+- [x] 实现进度显示
+- [x] 处理无 FFmpeg 的情况（仅返回剧本）
 
 #### 4. 完善登录认证流程
 

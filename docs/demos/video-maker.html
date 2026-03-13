@@ -383,11 +383,10 @@
                     })
                 });
 
+                const data = await response.json().catch(() => ({}));
                 if (!response.ok) {
-                    throw new Error('提交失败');
+                    throw new Error(data.error || '提交失败');
                 }
-
-                const data = await response.json();
                 
                 if (data.task_id) {
                     // 开始轮询任务状态
@@ -452,7 +451,10 @@
                         DemoUtils.showLoading(generateBtn, `生成中... ${progress}%`);
                     }
                 } catch (error) {
+                    clearInterval(interval);
                     console.error('Poll error:', error);
+                    DemoUtils.showMessage('查询状态失败: ' + (error.message || '网络错误'), 'error');
+                    DemoUtils.hideLoading(generateBtn);
                 }
             }, 3000);
         }

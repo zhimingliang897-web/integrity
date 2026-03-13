@@ -683,15 +683,6 @@
             DemoUtils.showMessage('提示词生成完成', 'success');
         }
 
-        // 生成模拟提示词
-        function generateMockPrompt(filename, style) {
-            if (style === 'dalle') {
-                return `一张高质量的摄影作品，展现了精致的构图和光影效果。画面中心是主要元素，周围环境细节丰富，色彩和谐统一。整体氛围温馨自然，充满艺术感。采用专业相机拍摄，景深适中，细节清晰。`;
-            } else {
-                return `masterpiece, best quality, high resolution, detailed, professional photography, natural lighting, vivid colors, sharp focus, bokeh, 8k, ultra detailed`;
-            }
-        }
-
         // 复制提示词
         function copyPrompt(btn, text) {
             navigator.clipboard.writeText(text).then(() => {
