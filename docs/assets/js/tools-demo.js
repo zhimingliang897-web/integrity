@@ -1,27 +1,13 @@
 /**
  * 演示功能模块
  * 图文互转、多模型对比、AI 辩论赛、Token 计算器
- * 
+ *
  * 重要设计：
  * - GitHub Pages: 纯静态模拟，所有功能都是演示
  * - 云服务器: 真实 API 调用
+ *
+ * 注意：SERVER_URL、API_BASE、IS_GITHUB_PAGES、showToast 由 tools-auth.js 统一提供
  */
-
-const SERVER_URL = 'http://8.138.164.133:5000';
-const API_BASE = window.location.origin;
-const IS_GITHUB_PAGES = window.location.hostname.includes('github.io');
-
-function showToast(message, type = 'info') {
-    const existing = document.querySelector('.toast');
-    if (existing) existing.remove();
-    
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => toast.remove(), 3000);
-}
 
 function createTypewriterEffect(element, text, speed = 20) {
     return new Promise(resolve => {

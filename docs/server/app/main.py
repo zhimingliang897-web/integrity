@@ -11,21 +11,27 @@ from flask_sqlalchemy import SQLAlchemy
 import jwt
 import datetime
 import os
-import hashlib
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__, 
             static_folder='static',
             template_folder='templates')
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'integrity-lab-secret-key-2026')
+_secret_key = os.environ.get('SECRET_KEY')
+if not _secret_key:
+    raise RuntimeError('SECRET_KEY 环境变量未设置，请在 .env 中配置')
+app.config['SECRET_KEY'] = _secret_key
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../data/users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024  # 100MB 文件上传限制
 
 CORS(app, origins=[
     'https://zhimingliang897-web.github.io',
-    'http://localhost:*',
-    'http://127.0.0.1:*',
-    'http://8.138.164.133:*'
+    'http://localhost:3000',
+    'http://localhost:5000',
+    'http://localhost:5500',
+    'http://localhost:8080',
+    'http://127.0.0.1:5000',
+    'http://8.138.164.133:5000'
 ])
 
 db = SQLAlchemy(app)
@@ -43,8 +49,13 @@ class User(db.Model):
 
 
 def hash_password(password):
-    """SHA256 密码哈希"""
-    return hashlib.sha256(password.encode()).hexdigest()
+    """使用 werkzeug 生成带盐值的密码哈希（bcrypt）"""
+    return generate_password_hash(password)
+
+
+def verify_password(password, password_hash):
+    """验证密码"""
+    return check_password_hash(password_hash, password)
 
 
 def generate_token(user_id):
@@ -151,7 +162,7 @@ def login():
 
     user = User.query.filter_by(username=username).first()
 
-    if not user or user.password_hash != hash_password(password):
+    if not user or not verify_password(password, user.password_hash):
         return jsonify({'error': '用户名或密码错误'}), 401
 
     if not user.is_active:
@@ -168,7 +179,7 @@ def verify():
     user_id = verify_token(token)
     if not user_id:
         return jsonify({'valid': False}), 401
-    user = User.query.get(user_id)
+    user = db.session.get(User, user_id)
     if not user:
         return jsonify({'valid': False}), 401
     return jsonify({'valid': True, 'username': user.username})

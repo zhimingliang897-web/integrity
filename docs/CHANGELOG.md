@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2026-03-13] - Bug Fixes & Security Hardening
+
+### Fixed
+- **[Critical] JS 全局变量重复声明导致页面崩溃** (`tools-demo.js`, `tools-online.js`)
+  - `const API_BASE`、`const SERVER_URL`、`const IS_GITHUB_PAGES`、`function showToast` 在多个脚本中重复声明，引发 `SyntaxError`，导致 `tools.html` 所有 JS 功能（tab 切换、演示按钮、登录、PDF 工具）完全失效
+  - 修复方案：将共享常量统一由 `tools-auth.js` 提供，其他文件删除重复声明
+- **密码哈希算法升级** (`server/app/main.py`)
+  - 原始 SHA256 无盐值哈希替换为 `werkzeug.security.generate_password_hash`（PBKDF2-HMAC-SHA256，自动加盐）
+  - 登录验证改用 `check_password_hash`，兼容新哈希格式
+- **SECRET_KEY 安全加固** (`server/app/main.py`)
+  - 移除硬编码备用值 `'integrity-lab-secret-key-2026'`；环境变量未设置时直接抛出 `RuntimeError`，防止以已知明文 key 运行
+- **CORS 通配符端口修复** (`server/app/main.py`)
+  - `http://localhost:*` / `http://127.0.0.1:*` 通配符在 CORS 规范中无效，替换为明确端口列表（3000, 5000, 5500, 8080）
+- **SQLAlchemy 弃用 API 替换** (`server/app/main.py`)
+  - `User.query.get(user_id)` → `db.session.get(User, user_id)`（兼容 SQLAlchemy 2.0）
+
+### Added
+- **工具库演示体验区补全** (`docs/tools.html`)
+  - 新增 6 个缺失的演示卡片：EasyApply 浏览器插件、CourseDigest 智能助考、个人文件助手 Agent、小红书内容生成器、小红书图片生成器、大麦抢票助手
+  - 演示体验区现完整展示全部 12 个项目
+
+### Changed
+- **Demo 链接改为相对路径** (`docs/tools.html`)
+  - Demo 5（台词学习）、Demo 6（分镜视频生成）从硬编码服务器地址（`http://8.138.164.133:5000/demos/...`）改为相对路径（`demos/...`），GitHub Pages 和服务器均可直接访问
+
+---
+
 ## [2026-03-13]
 
 ### Added

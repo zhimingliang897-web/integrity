@@ -1,6 +1,6 @@
 # Integrity Lab 项目状态报告
 
-**更新日期**：2026-03-12  
+**更新日期**：2026-03-13
 **当前进度**：14/14 (100%) ✅
 
 ---
@@ -132,6 +132,18 @@ docs/
 
 ---
 
+## 🔒 已完成的安全修复（2026-03-13）
+
+| 问题 | 修复方案 | 文件 |
+|------|----------|------|
+| JS 全局 `const` 重复声明（页面崩溃） | 删除 `tools-demo.js`、`tools-online.js` 中重复声明 | `assets/js/` |
+| 密码哈希无盐值（SHA256） | 改用 `werkzeug generate_password_hash`（PBKDF2） | `server/app/main.py` |
+| SECRET_KEY 明文备用值 | 移除默认值，未设置时抛出异常 | `server/app/main.py` |
+| CORS 通配符端口无效 | 改为明确端口列表 | `server/app/main.py` |
+| Demo 链接硬编码服务器 IP | 改为相对路径 | `tools.html` |
+
+---
+
 ## ✅ 项目状态：已完成
 
-所有计划中的演示页面已全部完成！
+所有计划中的演示页面已全部完成，前端展示 12/12 个项目。
