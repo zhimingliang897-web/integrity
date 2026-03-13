@@ -4,9 +4,11 @@ __pycache__/
 *.pyo
 .env
 
-# Secrets
+# Secrets - 包含密码/密钥，不提交
 评论/config.py
 18tokens/config.py
+.mcp.json
+.opencode/
 
 # Claude Code settings
 **/.claude/

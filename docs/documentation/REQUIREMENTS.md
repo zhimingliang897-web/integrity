@@ -260,7 +260,7 @@ git push origin main
 ```bash
 # 1. SSH 连接服务器
 ssh root@8.138.164.133
-# 密码: 15232735822Aa
+# 密码: <SSH_PASSWORD>
 
 # 2. 进入项目目录
 cd /root/integrity-api/server
@@ -272,8 +272,8 @@ git pull origin main
 pkill gunicorn
 gunicorn -w 2 -b 0.0.0.0:5000 app.main:app --daemon \
   --chdir /root/integrity-api/server \
-  --env SECRET_KEY=integrity-lab-secret-2026 \
-  --env DASHSCOPE_API_KEY=sk-0ef56d1b3ba54a188ce28a46c54e2a24 \
+  --env SECRET_KEY=<SECRET_KEY> \
+  --env DASHSCOPE_API_KEY=<DASHSCOPE_API_KEY> \
   --env INVITE_CODES=demo2026,friend2026,test2026
 
 # 5. 验证服务
@@ -288,7 +288,7 @@ import paramiko
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect('8.138.164.133', port=22, username='root', password='15232735822Aa')
+ssh.connect('8.138.164.133', port=22, username='root', password='<SSH_PASSWORD>')
 
 sftp = ssh.open_sftp()
 sftp.put('本地文件路径', '/root/integrity-api/server/app/static/远程文件名')
@@ -304,8 +304,8 @@ ssh.close()
 
 | 变量名 | 值 | 用途 |
 |--------|-----|------|
-| SECRET_KEY | integrity-lab-secret-2026 | JWT 密钥 |
-| DASHSCOPE_API_KEY | sk-0ef56d1b3ba54a188ce28a46c54e2a24 | 通义千问 API |
+| SECRET_KEY | `<SECRET_KEY>` | JWT 密钥 |
+| DASHSCOPE_API_KEY | `<DASHSCOPE_API_KEY>` | 通义千问 API |
 | INVITE_CODES | demo2026,friend2026,test2026 | 注册邀请码 |
 
 ### 5.2 服务器信息
@@ -315,7 +315,7 @@ ssh.close()
 | IP | 8.138.164.133 |
 | SSH 端口 | 22 |
 | SSH 用户 | root |
-| SSH 密码 | 15232735822Aa |
+| SSH 密码 | `<SSH_PASSWORD>` |
 | HTTP 端口 | 5000 |
 | 项目路径 | /root/integrity-api/server |
 
@@ -432,7 +432,7 @@ Token 有效期 7 天，过期后需要重新登录。
 
 ```
 ssh root@8.138.164.133
-密码: 15232735822Aa
+密码: <SSH_PASSWORD>
 ```
 
 ### 邀请码速查
