@@ -8,15 +8,17 @@
 
 详见：[项目总结文档](./documentation/PROJECT_SUMMARY.md) | [部署问题文档](./documentation/DEPLOYMENT_ISSUES_AND_SOLUTIONS.md)
 
-## 🌐 访问地址
+## 🌐 访问地址与部署方式
 
 | 平台 | 地址 | 说明 |
 |------|------|------|
-| GitHub Pages | https://zhimingliang897-web.github.io/integrity/ | 项目展示页 |
-| 在线工具库 | http://8.138.164.133:8000/ | 前端 + API（需开放端口） |
+| **GitHub Pages** | https://zhimingliang897-web.github.io/integrity/ | 静态站点：首页、工具库页、演示体验区、源码浏览，均托管于此 |
+| **云服务器（在线工具）** | http://8.138.164.133:5000/app/tools.html | 仅在线工具入口跳转至此，登录与全部 API 在服务器运行 |
 | 后端 API | http://127.0.0.1:5000/ | 服务器内部 API |
 
-> ⚠️ **重要提示**：域名 `api.liangyiren.top` 被劫持无法访问，请使用 IP + 端口访问。需在阿里云安全组开放端口 8000。详见 [部署问题文档](./documentation/DEPLOYMENT_ISSUES_AND_SOLUTIONS.md)
+**部署策略**：仅保留一个「在线工具」入口跳转到云服务器；其余内容（演示、源码、说明）均在本地通过 GitHub Pages 部署。
+
+修改云服务器地址时，请同时更新：`assets/js/tools-auth.js` 中的 `SERVER_URL`、`tools.html` 中「在线工具」卡片的 `#online-tools-server-link` 的 `href`。
 
 ---
 
@@ -33,18 +35,13 @@
 | 📝 台词学习预览 | 展示单词学习功能 | ✅ |
 | 🎬 视频生成预览 | 展示 AI 视频生成功能 | ✅ |
 
-### 在线工具区（6 个，需登录）
+### 在线工具区（仅 1 个入口）
 
-| 工具 | API 端点 | 功能 |
-|------|----------|------|
-| AI 多模型对比 | `/api/tools/ai-compare/query` | 并发查询多个模型 |
-| 图文互转 | `/api/tools/image-prompt/analyze` | 图片分析生成提示词 |
-| AI 辩论赛 | `/api/tools/ai-debate/start` | SSE 流式辩论 |
-| 台词学习 | `/api/tools/dialogue-learning/process` | PDF 解析 + 台词检索 |
-| 视频生成 | `/api/tools/video-maker/generate` | AI 剧本 + 分镜 + 配音 |
-| PDF 工具集 | `/api/tools/pdf/*` | 7 种 PDF 操作 |
+- **在线工具（云服务器）**：工具库页「在线工具」Tab 内仅保留一个入口，点击后跳转到云服务器，在服务器端登录后使用以下功能：
+  - AI 多模型对比、图文互转、AI 辩论赛、台词学习、视频生成、PDF 工具集（7 种操作）
+- 上述功能的 API 与登录均在云服务器运行，本仓库 `docs/` 仅提供跳转链接。
 
-### PDF 工具集（7 种功能）
+### 云服务器上的 PDF 工具集（7 种功能）
 
 1. **图片转 PDF** - 多图合成
 2. **合并 PDF** - 多文件合并
@@ -96,10 +93,8 @@ docs/
 │   │   ├── style.css
 │   │   └── tools-styles.css
 │   └── js/
-│       ├── tools-auth.js       # 认证模块
-│       ├── tools-demo.js       # 演示功能
-│       ├── tools-online.js     # 在线工具
-│       └── tools-pdf.js        # PDF 功能
+│       ├── tools-auth.js       # 认证与跳转（GitHub 上仅跳转云服务器）
+│       └── tools-demo.js       # 演示体验区
 │
 └── server/                 # 后端代码
     └── app/

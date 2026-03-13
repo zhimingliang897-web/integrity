@@ -1,10 +1,11 @@
 /**
  * 认证功能模块
- * 处理登录、注册、Token 管理
  * 
  * 重要设计：
- * - GitHub Pages (静态托管): 只做展示，登录跳转到服务器
- * - 云服务器: 真实登录和 API 调用
+ * - GitHub Pages (HTTPS): 登录/注册按钮直接跳转到云服务器
+ * - 云服务器 (HTTP): 真实登录和 API 调用
+ * 
+ * 原因：HTTPS 页面无法调用 HTTP API (Mixed Content 限制)
  */
 
 const SERVER_URL = 'http://8.138.164.133:5000';
@@ -28,29 +29,41 @@ function checkAuth() {
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('username');
     const btn = document.getElementById('auth-btn');
-    const loginPrompt = document.getElementById('login-prompt');
-    const onlineContent = document.getElementById('online-tools-content');
-    
+
+    // 静态站（GitHub Pages）：点击按钮跳转到云服务器
+    if (IS_GITHUB_PAGES) {
+        if (btn) {
+            btn.textContent = '登录/注册';
+            btn.classList.remove('logged-in');
+            // 直接跳转到云服务器的登录页
+            btn.onclick = () => { window.location.href = SERVER_URL + '/login'; };
+        }
+        return;
+    }
+
+    // 云服务器上：显示登录状态
     if (token && username) {
         if (btn) {
             btn.textContent = username;
             btn.classList.add('logged-in');
-            btn.onclick = () => { if(confirm('确定退出登录？')) logout(); };
+            btn.onclick = () => { if (confirm('确定退出登录？')) logout(); };
         }
-        if (loginPrompt) loginPrompt.style.display = 'none';
-        if (onlineContent) onlineContent.style.display = 'block';
     } else {
         if (btn) {
             btn.textContent = '登录';
             btn.classList.remove('logged-in');
             btn.onclick = showAuthModal;
         }
-        if (loginPrompt) loginPrompt.style.display = 'block';
-        if (onlineContent) onlineContent.style.display = 'none';
     }
 }
 
 function showAuthModal() {
+    // GitHub Pages 上不显示弹窗，直接跳转
+    if (IS_GITHUB_PAGES) {
+        window.location.href = SERVER_URL + '/login';
+        return;
+    }
+    
     const modal = document.getElementById('auth-modal');
     const errorEl = document.getElementById('auth-error');
     if (modal) modal.style.display = 'flex';
@@ -91,6 +104,12 @@ function toggleAuthMode() {
 }
 
 async function handleAuth() {
+    // GitHub Pages 上不处理，直接跳转
+    if (IS_GITHUB_PAGES) {
+        window.location.href = SERVER_URL + '/login';
+        return;
+    }
+    
     const usernameEl = document.getElementById('auth-username');
     const passwordEl = document.getElementById('auth-password');
     const inviteEl = document.getElementById('auth-invite');
