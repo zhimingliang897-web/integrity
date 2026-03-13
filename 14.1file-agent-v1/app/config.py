@@ -131,6 +131,36 @@ class Settings:
     def email_password(self) -> str:
         return self.email.get("password", "")
     
+    @property
+    def mounts(self) -> list:
+        return self.storage.get("mounts", [])
+    
+    def get_mount_by_path(self, path: str) -> dict:
+        from pathlib import Path
+        try:
+            abs_path = str(Path(path).resolve())
+            for mount in self.mounts:
+                mount_path = str(Path(mount.get("path", "")).resolve())
+                if abs_path.startswith(mount_path):
+                    return mount
+            return None
+        except Exception:
+            return None
+    
+    def is_readonly_path(self, path: str) -> bool:
+        mount = self.get_mount_by_path(path)
+        if mount:
+            return mount.get("readonly", True)
+        return False
+    
+    def get_all_search_roots(self) -> list:
+        roots = [self.root_path]
+        for mount in self.mounts:
+            mount_path = mount.get("path", "")
+            if mount_path and Path(mount_path).exists():
+                roots.append(mount_path)
+        return roots
+    
     def update_password(self, new_password: str):
         if "auth" not in self._config:
             self._config["auth"] = {}
@@ -155,6 +185,39 @@ class Settings:
         self._config["email"]["sender"] = sender
         self._config["email"]["password"] = password
         self.save()
+    
+    def add_mount(self, name: str, path: str, icon: str = "📁", readonly: bool = True):
+        if "storage" not in self._config:
+            self._config["storage"] = {}
+        if "mounts" not in self._config["storage"]:
+            self._config["storage"]["mounts"] = []
+        
+        for mount in self._config["storage"]["mounts"]:
+            if mount.get("path") == path:
+                return False
+        
+        self._config["storage"]["mounts"].append({
+            "name": name,
+            "path": path,
+            "icon": icon,
+            "readonly": readonly
+        })
+        self.save()
+        return True
+    
+    def remove_mount(self, path: str):
+        if "storage" not in self._config:
+            return False
+        if "mounts" not in self._config["storage"]:
+            return False
+        
+        mounts = self._config["storage"]["mounts"]
+        for i, mount in enumerate(mounts):
+            if mount.get("path") == path:
+                mounts.pop(i)
+                self.save()
+                return True
+        return False
 
 
 settings = Settings()

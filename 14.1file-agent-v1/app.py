@@ -14,7 +14,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from app.config import settings
 from app.database import init_db
-from routers import auth_router, files_router, search_router, preview_router, trash_router, agent_router
+from routers import auth_router, files_router, search_router, preview_router, trash_router, agent_router, mounts_router
 
 app = FastAPI(
     title="私人文件系统",
@@ -44,6 +44,7 @@ app.include_router(search_router)
 app.include_router(preview_router)
 app.include_router(trash_router)
 app.include_router(agent_router)
+app.include_router(mounts_router)
 
 
 @app.on_event("startup")

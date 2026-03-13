@@ -14,6 +14,20 @@ class SearchService:
         self.root_path = Path(settings.root_path)
         self.excluded_dirs = settings.excluded_dirs
     
+    def _get_all_roots(self) -> List[Path]:
+        roots = [self.root_path]
+        for mount in settings.mounts:
+            mount_path = Path(mount.get("path", ""))
+            if mount_path.exists():
+                roots.append(mount_path)
+        return roots
+    
+    def _get_mount_name(self, path: str) -> Optional[str]:
+        for mount in settings.mounts:
+            if str(path).startswith(mount.get("path", "")):
+                return mount.get("name", "")
+        return None
+    
     def _should_skip_dir(self, dirpath: str) -> bool:
         dirpath_lower = dirpath.lower()
         dirname = os.path.basename(dirpath).lower()
@@ -38,70 +52,79 @@ class SearchService:
     
     def search(self, keyword: str, file_types: Optional[List[str]] = None,
                max_results: int = 100, path: Optional[str] = None,
-               progress_callback: Optional[Callable] = None) -> List[dict]:
+               progress_callback: Optional[Callable] = None,
+               search_all_mounts: bool = False) -> List[dict]:
         if not keyword and not file_types:
             return []
         
         keywords = [k.lower() for k in keyword.split()] if keyword else []
         file_types_lower = set(ft.lower() for ft in file_types) if file_types else None
         
-        search_root = Path(path) if path and self._is_path_allowed(path) else self.root_path
+        search_roots = []
+        if path and self._is_path_allowed(path):
+            search_roots = [Path(path)]
+        elif search_all_mounts:
+            search_roots = self._get_all_roots()
+        else:
+            search_roots = [self.root_path]
         
         results = []
         scanned = 0
         
-        for root, dirs, files in os.walk(search_root):
-            if self._should_skip_dir(root):
-                dirs[:] = []
-                continue
-            
-            dirs[:] = [d for d in dirs if not self._should_skip_dir(os.path.join(root, d))]
-            
-            scanned += 1
-            if progress_callback and scanned % 100 == 0:
-                progress_callback(f"正在扫描: {root}", len(results))
-            
-            for filename in files:
-                if len(results) >= max_results:
-                    break
-                
-                ext = os.path.splitext(filename)[1].lower()
-                
-                if file_types_lower and ext not in file_types_lower:
+        for search_root in search_roots:
+            for root, dirs, files in os.walk(search_root):
+                if self._should_skip_dir(root):
+                    dirs[:] = []
                     continue
                 
-                if keywords:
-                    filename_lower = filename.lower()
-                    root_lower = root.lower()
-                    matched = any(kw in filename_lower or kw in root_lower for kw in keywords)
-                    if not matched:
+                dirs[:] = [d for d in dirs if not self._should_skip_dir(os.path.join(root, d))]
+                
+                scanned += 1
+                if progress_callback and scanned % 100 == 0:
+                    progress_callback(f"正在扫描: {root}", len(results))
+                
+                for filename in files:
+                    if len(results) >= max_results:
+                        break
+                    
+                    ext = os.path.splitext(filename)[1].lower()
+                    
+                    if file_types_lower and ext not in file_types_lower:
                         continue
-                
-                filepath = os.path.join(root, filename)
-                try:
-                    stat = os.stat(filepath)
                     
-                    score = 0
-                    for kw in keywords:
-                        if kw in filename_lower:
-                            score += 10
-                        elif kw in root_lower:
-                            score += 3
+                    if keywords:
+                        filename_lower = filename.lower()
+                        root_lower = root.lower()
+                        matched = any(kw in filename_lower or kw in root_lower for kw in keywords)
+                        if not matched:
+                            continue
                     
-                    results.append({
-                        "name": filename,
-                        "path": filepath,
-                        "parent_path": root,
-                        "is_dir": False,
-                        "size": stat.st_size,
-                        "size_str": self._format_size(stat.st_size),
-                        "ext": ext,
-                        "modified_at": datetime.fromtimestamp(stat.st_mtime).isoformat(),
-                        "created_at": datetime.fromtimestamp(stat.st_ctime).isoformat(),
-                        "_score": score
-                    })
-                except (PermissionError, OSError, FileNotFoundError):
-                    continue
+                    filepath = os.path.join(root, filename)
+                    try:
+                        stat = os.stat(filepath)
+                        
+                        score = 0
+                        for kw in keywords:
+                            if kw in filename_lower:
+                                score += 10
+                            elif kw in root_lower:
+                                score += 3
+                        
+                        results.append({
+                            "name": filename,
+                            "path": filepath,
+                            "parent_path": root,
+                            "is_dir": False,
+                            "size": stat.st_size,
+                            "size_str": self._format_size(stat.st_size),
+                            "ext": ext,
+                            "modified_at": datetime.fromtimestamp(stat.st_mtime).isoformat(),
+                            "created_at": datetime.fromtimestamp(stat.st_ctime).isoformat(),
+                            "mount_name": self._get_mount_name(filepath),
+                            "_score": score
+                        })
+                    except (PermissionError, OSError, FileNotFoundError):
+                        continue
         
         results.sort(key=lambda x: (-x.get("_score", 0), x["name"]))
         for r in results:
@@ -126,6 +149,12 @@ class SearchService:
         try:
             abs_path = Path(path).resolve()
             root = self.root_path.resolve()
-            return str(abs_path).startswith(str(root))
+            if str(abs_path).startswith(str(root)):
+                return True
+            for mount in settings.mounts:
+                mount_path = Path(mount.get("path", "")).resolve()
+                if str(abs_path).startswith(str(mount_path)):
+                    return True
+            return False
         except Exception:
             return False

@@ -3,6 +3,9 @@ let files = [];
 let selectedFiles = [];
 let pendingUploadFiles = [];
 let isAuthenticated = false;
+let mounts = [];
+let currentMount = null;
+let isReadonlyPath = false;
 
 async function checkAuth() {
     try {
@@ -93,12 +96,13 @@ function renderFiles(files) {
             <div class="file-name" onclick="${f.is_dir ? `navigateTo('${f.path}')` : `previewFile('${f.path}')`}">
                 <span class="file-icon">${getFileIcon(f.ext, f.is_dir)}</span>
                 ${escapeHtml(f.name)}
+                ${f.mount_name ? `<span class="mount-tag">${escapeHtml(f.mount_name)}</span>` : ''}
             </div>
             <div class="file-size">${f.is_dir ? '-' : formatSize(f.size)}</div>
             <div class="file-date">${formatDate(f.modified_at)}</div>
             <div class="file-actions">
                 ${!f.is_dir ? `<button class="btn-sm" onclick="downloadFile('${f.path}')">📥</button>` : ''}
-                <button class="btn-sm btn-danger" onclick="deleteFile('${f.path}')">🗑️</button>
+                ${!isReadonlyPath ? `<button class="btn-sm btn-danger" onclick="deleteFile('${f.path}')">🗑️</button>` : ''}
             </div>
         </div>
     `).join('');
@@ -137,9 +141,17 @@ function escapeHtml(str) {
 }
 
 function navigateTo(path) {
-    loadFiles(path);
+    currentMount = null;
+    isReadonlyPath = false;
+    
     document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-    document.querySelector('.nav-item[data-path=""]')?.classList.add('active');
+    
+    if (!path) {
+        document.getElementById('nav-root')?.classList.add('active');
+    }
+    
+    updateToolbarForReadonly();
+    loadFiles(path);
 }
 
 function toggleSelect(path) {
@@ -183,6 +195,10 @@ function closeModal(id) { document.getElementById(id).classList.remove('visible'
 function showUploadModal() {
     if (!isAuthenticated) {
         showToast('请先登录', 'error');
+        return;
+    }
+    if (isReadonlyPath) {
+        showToast('挂载目录为只读，不允许上传', 'error');
         return;
     }
     pendingUploadFiles = [];
@@ -259,6 +275,10 @@ async function doUploadFiles() {
 function showNewFolderModal() {
     if (!isAuthenticated) {
         showToast('请先登录', 'error');
+        return;
+    }
+    if (isReadonlyPath) {
+        showToast('挂载目录为只读，不允许创建文件夹', 'error');
         return;
     }
     showModal('new-folder-modal');
@@ -495,6 +515,64 @@ function logout() {
     });
 }
 
+async function loadMounts() {
+    try {
+        const res = await apiCall('/api/mounts');
+        if (!res) return;
+        
+        const data = await res.json();
+        mounts = data.mounts || [];
+        renderMounts();
+    } catch (e) {
+        console.error('加载挂载点失败', e);
+    }
+}
+
+function renderMounts() {
+    const el = document.getElementById('mounts-list');
+    if (!el) return;
+    
+    if (mounts.length === 0) {
+        el.innerHTML = '<div style="padding:8px 16px;color:var(--text-dim);font-size:12px;">暂无挂载目录</div>';
+        return;
+    }
+    
+    el.innerHTML = mounts.map(m => `
+        <div class="nav-item mount-item ${currentMount && currentMount.path === m.path ? 'active' : ''}" 
+             onclick="navigateToMount('${m.path}', '${escapeHtml(m.name)}')"
+             title="${m.path}${m.readonly ? ' (只读)' : ''}">
+            <span class="icon">${m.icon || '📁'}</span> 
+            ${escapeHtml(m.name)}
+            ${m.readonly ? '<span class="readonly-badge">只读</span>' : ''}
+        </div>
+    `).join('');
+}
+
+async function navigateToMount(path, name) {
+    currentMount = { path, name };
+    isReadonlyPath = true;
+    
+    document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.mount-item[onclick*="${path}"]`)?.classList.add('active');
+    
+    await loadFiles(path);
+    updateToolbarForReadonly();
+}
+
+function updateToolbarForReadonly() {
+    const uploadBtn = document.querySelector('button[onclick="showUploadModal()"]');
+    const newFolderBtn = document.querySelector('button[onclick="showNewFolderModal()"]');
+    
+    if (uploadBtn) {
+        uploadBtn.disabled = isReadonlyPath;
+        uploadBtn.style.opacity = isReadonlyPath ? '0.5' : '1';
+    }
+    if (newFolderBtn) {
+        newFolderBtn.disabled = isReadonlyPath;
+        newFolderBtn.style.opacity = isReadonlyPath ? '0.5' : '1';
+    }
+}
+
 document.getElementById('search-btn')?.addEventListener('click', searchFiles);
 document.getElementById('search-input')?.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') searchFiles();
@@ -502,6 +580,7 @@ document.getElementById('search-input')?.addEventListener('keypress', (e) => {
 
 checkAuth().then(auth => {
     if (auth) {
+        loadMounts();
         loadFiles();
     }
 });

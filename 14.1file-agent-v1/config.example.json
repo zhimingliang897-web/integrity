@@ -2,7 +2,21 @@
   "storage": {
     "root": "F:\\MyFiles",
     "uploads": "F:\\MyFiles\\uploads",
-    "trash": "F:\\MyFiles\\.trash"
+    "trash": "F:\\MyFiles\\.trash",
+    "mounts": [
+      {
+        "name": "文档库",
+        "path": "F:\\Documents",
+        "icon": "📚",
+        "readonly": true
+      },
+      {
+        "name": "视频库",
+        "path": "E:\\Videos",
+        "icon": "🎬",
+        "readonly": true
+      }
+    ]
   },
   "auth": {
     "password": "your_password_here",

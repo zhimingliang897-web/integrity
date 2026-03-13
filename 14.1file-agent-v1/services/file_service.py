@@ -23,9 +23,18 @@ class FileService:
         try:
             abs_path = Path(path).resolve()
             root = self.root_path.resolve()
-            return str(abs_path).startswith(str(root))
+            if str(abs_path).startswith(str(root)):
+                return True
+            for mount in settings.mounts:
+                mount_path = Path(mount.get("path", "")).resolve()
+                if str(abs_path).startswith(str(mount_path)):
+                    return True
+            return False
         except Exception:
             return False
+    
+    def _is_readonly(self, path: str) -> bool:
+        return settings.is_readonly_path(path)
     
     def _format_size(self, size: int) -> str:
         if size < 1024:
@@ -109,6 +118,9 @@ class FileService:
         if not self._is_path_allowed(str(parent)):
             raise ValueError("路径不允许访问")
         
+        if self._is_readonly(str(parent)):
+            raise ValueError("挂载目录为只读，不允许创建文件夹")
+        
         new_folder = parent / name
         if new_folder.exists():
             raise ValueError("文件夹已存在")
@@ -126,6 +138,9 @@ class FileService:
         old = Path(old_path)
         if not self._is_path_allowed(str(old)):
             raise ValueError("路径不允许访问")
+        
+        if self._is_readonly(str(old)):
+            raise ValueError("挂载目录为只读，不允许重命名")
         
         if not old.exists():
             raise ValueError("文件不存在")
@@ -149,6 +164,9 @@ class FileService:
         if not self._is_path_allowed(str(target)):
             raise ValueError("目标路径不允许访问")
         
+        if self._is_readonly(str(target)):
+            raise ValueError("挂载目录为只读，不允许移动文件到此")
+        
         if not target.exists() or not target.is_dir():
             raise ValueError("目标路径不存在或不是文件夹")
         
@@ -156,6 +174,9 @@ class FileService:
         for fp in file_paths:
             src = Path(fp)
             if not self._is_path_allowed(str(src)):
+                continue
+            
+            if self._is_readonly(str(src)):
                 continue
             
             if not src.exists():
@@ -182,6 +203,9 @@ class FileService:
         target = Path(target_path)
         if not self._is_path_allowed(str(target)):
             raise ValueError("目标路径不允许访问")
+        
+        if self._is_readonly(str(target)):
+            raise ValueError("挂载目录为只读，不允许复制文件到此")
         
         if not target.exists() or not target.is_dir():
             raise ValueError("目标路径不存在或不是文件夹")

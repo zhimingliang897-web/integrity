@@ -214,6 +214,24 @@ hr { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
 .toast.success { border-color: var(--success); color: var(--success); }
 .toast.error { border-color: var(--error); color: var(--error); }
 
+.mount-item { position: relative; }
+.readonly-badge {
+    font-size: 10px;
+    padding: 2px 6px;
+    background: var(--warning);
+    color: #000;
+    border-radius: 4px;
+    margin-left: auto;
+}
+.mount-tag {
+    font-size: 10px;
+    padding: 2px 6px;
+    background: var(--surface2);
+    color: var(--text-dim);
+    border-radius: 4px;
+    margin-left: 8px;
+}
+
 @media (max-width: 768px) {
     .sidebar { display: none; }
     .header-right { display: none; }

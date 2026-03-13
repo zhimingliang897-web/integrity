@@ -31,9 +31,12 @@
         
         <div class="main">
             <aside class="sidebar">
-                <div class="nav-item active" data-path="" onclick="navigateTo('')">
-                    <span class="icon">📂</span> 全部文件
+                <div class="nav-item active" data-path="" onclick="navigateTo('')" id="nav-root">
+                    <span class="icon">🏠</span> MyFiles
                 </div>
+                <div class="nav-section" style="margin-top: 8px;">挂载目录</div>
+                <div id="mounts-list"></div>
+                <hr>
                 <div class="nav-item" onclick="showStarred()">
                     <span class="icon">⭐</span> 收藏
                 </div>
