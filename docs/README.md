@@ -2,6 +2,12 @@
 
 > 一个人的 AI 实验室 —— 用 AI 造工具，用工具学 AI
 
+## 📢 重要提示
+
+**当前状态**：代码已完成，需开放阿里云安全组端口 8000 才能访问。
+
+详见：[项目总结文档](./documentation/PROJECT_SUMMARY.md) | [部署问题文档](./documentation/DEPLOYMENT_ISSUES_AND_SOLUTIONS.md)
+
 ## 🌐 访问地址
 
 | 平台 | 地址 | 说明 |
@@ -202,10 +208,11 @@ GET  /api/tools/pdf/download/:file # 下载文件
 
 ## 📚 相关文档
 
-- [部署问题与解决方案](./documentation/DEPLOYMENT_ISSUES_AND_SOLUTIONS.md) - **必读**
-- [任务清单](./documentation/TASK_TODO.md)
-- [部署指南](./DEPLOYMENT.md)
-- [变更日志](./CHANGELOG.md)
+- [📋 项目总结](./documentation/PROJECT_SUMMARY.md) - **必读：做了什么，还要做什么**
+- [🚨 部署问题与解决方案](./documentation/DEPLOYMENT_ISSUES_AND_SOLUTIONS.md) - **必读：HTTPS 问题分析**
+- [✅ 任务清单](./documentation/TASK_TODO.md)
+- [📝 变更日志](./CHANGELOG.md)
+- [🚀 部署指南](./DEPLOYMENT.md)
 
 ---
 
