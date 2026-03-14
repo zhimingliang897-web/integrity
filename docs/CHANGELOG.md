@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2026-03-14] - Image Prompt Tool & Server Sync
+
+### Added
+- **Image Prompt Tool (图文互转)**
+  - New API endpoints:
+    - `POST /api/tools/image-prompt/analyze` - 分析图片生成提示词
+    - `POST /api/tools/image-prompt/generate` - 根据提示词生成图片
+    - `GET /api/tools/image-prompt/health` - 健康检查
+  - Supports DALL-E 3 and Stable Diffusion style prompts
+  - Uses Qwen3-VL for image analysis
+  - Uses DALL-E 3 for image generation
+  - Requires DASHSCOPE_API_KEY
+
+### Sync
+- **Local → Server sync completed**
+  - Copied `image_prompt/` module to server
+  - Updated server `__init__.py` with blueprint registration
+  - Restarted service - running successfully
+
+---
+
 ## [2026-03-14] - Server Bug Fixes & API Path Unification
 
 ### Fixed
