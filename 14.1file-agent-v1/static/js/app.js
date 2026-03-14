@@ -736,6 +736,157 @@ async function moveFiles() {
     }
 }
 
+let selectedCopyTarget = '';
+let renameTargetPath = '';
+
+function showCopyModal() {
+    if (selectedFiles.length === 0) return;
+    selectedCopyTarget = '';
+    loadCopyFolderTree();
+    showModal('copy-modal');
+}
+
+async function loadCopyFolderTree() {
+    const el = document.getElementById('copy-folder-tree');
+    el.innerHTML = '<div style="padding:10px;color:var(--text-dim);">加载中...</div>';
+    
+    try {
+        const res = await apiCall('/api/files/folders');
+        if (!res) return;
+        
+        const data = await res.json();
+        renderCopyFolderTree(data.folders || []);
+    } catch (e) {
+        el.innerHTML = '<div style="padding:10px;color:var(--text-dim);">加载失败</div>';
+    }
+}
+
+function renderCopyFolderTree(folders, indent = 0) {
+    const el = document.getElementById('copy-folder-tree');
+    
+    if (folders.length === 0 && indent === 0) {
+        el.innerHTML = '<div style="padding:10px;color:var(--text-dim);">没有可用的文件夹</div>';
+        return;
+    }
+    
+    if (indent === 0) {
+        el.innerHTML = `
+            <div class="folder-item ${selectedCopyTarget === '' ? 'selected' : ''}" 
+                 onclick="selectCopyTarget('')" style="padding:8px;cursor:pointer;border-radius:4px;">
+                🏠 根目录
+            </div>
+        `;
+    }
+    
+    folders.forEach(f => {
+        const isSelected = selectedCopyTarget === f.path;
+        const isDisabled = selectedFiles.includes(f.path);
+        
+        el.innerHTML += `
+            <div class="folder-item ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}" 
+                 data-path="${escapeAttr(f.path)}"
+                 onclick="${isDisabled ? '' : 'selectCopyTargetByEl(this)'}"
+                 style="padding:8px;padding-left:${16 + indent * 16}px;cursor:${isDisabled ? 'not-allowed' : 'pointer'};border-radius:4px;opacity:${isDisabled ? 0.5 : 1};">
+                📁 ${escapeHtml(f.name)} ${isDisabled ? '(当前选择)' : ''}
+            </div>
+        `;
+        
+        if (f.children && f.children.length > 0) {
+            renderCopyFolderTree(f.children, indent + 1);
+        }
+    });
+}
+
+function selectCopyTargetByEl(el) {
+    const path = el.dataset.path ? el.dataset.path.replace(/\\\\/g, '\\') : '';
+    selectedCopyTarget = path;
+    document.querySelectorAll('#copy-folder-tree .folder-item').forEach(item => {
+        item.classList.remove('selected');
+        item.style.background = '';
+    });
+    el.classList.add('selected');
+    el.style.background = 'var(--primary-light)';
+}
+
+function selectCopyTarget(path) {
+    selectedCopyTarget = path;
+    document.querySelectorAll('#copy-folder-tree .folder-item').forEach(item => {
+        item.classList.remove('selected');
+        item.style.background = '';
+    });
+    const rootItem = document.querySelector('#copy-folder-tree .folder-item');
+    if (rootItem) {
+        rootItem.classList.add('selected');
+        rootItem.style.background = 'var(--primary-light)';
+    }
+}
+
+async function copyFiles() {
+    if (selectedCopyTarget === null || selectedCopyTarget === undefined) {
+        showToast('请选择目标文件夹', 'error');
+        return;
+    }
+    
+    try {
+        const res = await apiCall(`/api/files/copy?paths=${encodeURIComponent(selectedFiles.join(','))}&target=${encodeURIComponent(selectedCopyTarget)}`, {
+            method: 'POST'
+        });
+        if (!res) return;
+        
+        const data = await res.json();
+        
+        if (data.count > 0) {
+            showToast(`已复制 ${data.count} 个文件`, 'success');
+            closeModal('copy-modal');
+            clearSelection();
+            loadFiles(currentPath);
+        } else {
+            showToast('复制失败', 'error');
+        }
+    } catch (e) {
+        showToast('复制失败', 'error');
+    }
+}
+
+function showRenameModal() {
+    if (selectedFiles.length !== 1) {
+        showToast('请选择一个文件进行重命名', 'error');
+        return;
+    }
+    renameTargetPath = selectedFiles[0];
+    const fileName = renameTargetPath.split(/[/\\]/).pop();
+    document.getElementById('rename-input').value = fileName;
+    showModal('rename-modal');
+}
+
+async function doRename() {
+    const newName = document.getElementById('rename-input').value.trim();
+    if (!newName) {
+        showToast('请输入新名称', 'error');
+        return;
+    }
+    
+    try {
+        const res = await apiCall(`/api/files/rename?path=${encodeURIComponent(renameTargetPath)}&new_name=${encodeURIComponent(newName)}`, {
+            method: 'PUT'
+        });
+        if (!res) return;
+        
+        const data = await res.json();
+        
+        if (data.success) {
+            showToast('重命名成功', 'success');
+            closeModal('rename-modal');
+            clearSelection();
+            loadFiles(currentPath);
+        } else {
+            showToast(data.detail || '重命名失败', 'error');
+        }
+    } catch (e) {
+        showToast('重命名失败', 'error');
+    }
+}
+
 function showToast(msg, type = '') {
     const toast = document.getElementById('toast');
     toast.textContent = msg;

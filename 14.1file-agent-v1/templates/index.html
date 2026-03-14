@@ -86,7 +86,9 @@
                     <span>已选择 <strong id="selected-count">0</strong> 个文件</span>
                     <div class="selection-actions">
                         <button class="btn-sm" onclick="downloadSelected()">📥 下载</button>
+                        <button class="btn-sm" onclick="showCopyModal()">📋 复制</button>
                         <button class="btn-sm" onclick="showMoveModal()">📁 移动</button>
+                        <button class="btn-sm" onclick="showRenameModal()">✏️ 重命名</button>
                         <button class="btn-sm btn-danger" onclick="deleteSelected()">🗑️ 删除</button>
                         <button class="btn-sm" onclick="clearSelection()">取消</button>
                     </div>
@@ -161,6 +163,39 @@
             <div class="modal-footer">
                 <button class="btn" onclick="closeModal('move-modal')">取消</button>
                 <button class="btn btn-primary" onclick="moveFiles()">移动</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="copy-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📋 复制文件</h2>
+                <button onclick="closeModal('copy-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <p>选择目标文件夹：</p>
+                <div class="folder-tree" id="copy-folder-tree"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('copy-modal')">取消</button>
+                <button class="btn btn-primary" onclick="copyFiles()">复制</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal" id="rename-modal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2>✏️ 重命名</h2>
+                <button onclick="closeModal('rename-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" id="rename-input" placeholder="请输入新名称">
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('rename-modal')">取消</button>
+                <button class="btn btn-primary" onclick="doRename()">确定</button>
             </div>
         </div>
     </div>

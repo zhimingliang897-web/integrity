@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2026-03-14
+
+### Added
+- 复制功能前端UI：支持选中文件后复制到指定文件夹
+- 重命名功能前端UI：支持单个文件重命名操作
+- 内网穿透预览兼容：动态获取服务器地址，修复外网访问时预览/播放失败问题
+
+### Fixed
+- 内网穿透环境下图片/视频/音频/PDF预览URL错误
+
 ## [1.1.0] - 2024-03-14
 
 ### Added

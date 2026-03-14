@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from fastapi.responses import FileResponse, StreamingResponse
 from typing import Optional
 from pathlib import Path
@@ -14,12 +14,18 @@ from services.preview_service import PreviewService
 router = APIRouter(prefix="/api/preview", tags=["预览"])
 
 
+def get_base_url(request: Request) -> str:
+    return str(request.base_url).rstrip('/')
+
+
 @router.get("")
 async def preview_file(
+    request: Request,
     path: str = Query(...),
     user: str = Depends(get_current_user)
 ):
     preview_service = PreviewService()
+    base_url = get_base_url(request)
 
     file_path = Path(path)
     if not file_path.exists():
@@ -48,7 +54,7 @@ async def preview_file(
         except Exception as e:
             return {
                 "type": "image",
-                "url": f"/api/preview/file?path={encoded_path}",
+                "url": f"{base_url}/api/preview/file?path={encoded_path}",
                 "filename": file_path.name,
                 "error": str(e)
             }
@@ -56,21 +62,21 @@ async def preview_file(
     elif preview_type == "video":
         return {
             "type": "video",
-            "url": f"/api/preview/file?path={encoded_path}",
+            "url": f"{base_url}/api/preview/file?path={encoded_path}",
             "filename": file_path.name
         }
 
     elif preview_type == "audio":
         return {
             "type": "audio",
-            "url": f"/api/preview/file?path={encoded_path}",
+            "url": f"{base_url}/api/preview/file?path={encoded_path}",
             "filename": file_path.name
         }
 
     elif preview_type == "pdf":
         return {
             "type": "pdf",
-            "url": f"/api/preview/file?path={encoded_path}",
+            "url": f"{base_url}/api/preview/file?path={encoded_path}",
             "filename": file_path.name
         }
 
