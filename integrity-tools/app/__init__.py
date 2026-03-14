@@ -34,6 +34,7 @@ def create_app():
     from app.tools.lines import lines_bp
     from app.tools.compare import compare_bp
     from app.tools.pdf import pdf_bp
+    from app.tools.image_prompt import image_prompt_bp
     
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(debate_bp, url_prefix='/api/debate')
@@ -41,6 +42,7 @@ def create_app():
     app.register_blueprint(lines_bp, url_prefix='/api/lines')
     app.register_blueprint(compare_bp, url_prefix='/api/compare')
     app.register_blueprint(pdf_bp, url_prefix='/api/pdf')
+    app.register_blueprint(image_prompt_bp, url_prefix='/api/tools/image-prompt')
     
     from app.routes import register_frontend_routes
     register_frontend_routes(app)

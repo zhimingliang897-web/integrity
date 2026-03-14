@@ -568,11 +568,8 @@
             const startBtn = document.getElementById('start-debate-btn');
             
             try {
-                // 添加超时控制
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 60000); // 60秒超时
-                
-                const response = await fetch(`${API_BASE}/api/debate/start`, {
+                // 第一步：启动辩论
+                const startResponse = await fetch(`${API_BASE}/api/debate/start`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -581,49 +578,42 @@
                     body: JSON.stringify({
                         topic: topic,
                         rounds: rounds
-                    }),
-                    signal: controller.signal
+                    })
                 });
 
-                clearTimeout(timeoutId);
-
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                if (!startResponse.ok) {
+                    const errorData = await startResponse.json().catch(() => ({}));
+                    throw new Error(errorData.error || `HTTP ${startResponse.status}`);
                 }
 
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                let buffer = '';
-                let currentEvent = '';
-
-                while (debateInProgress) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-
-                    buffer += decoder.decode(value, { stream: true });
-                    const lines = buffer.split('\n');
-                    buffer = lines.pop() || '';
-
-                    for (const line of lines) {
-                        if (!line) {
-                            currentEvent = '';
-                            continue;
-                        }
-                        if (line.startsWith('event: ')) {
-                            currentEvent = line.substring(7).trim();
-                            continue;
-                        }
-                        if (line.startsWith('data: ')) {
-                            try {
-                                const data = JSON.parse(line.substring(6));
-                                handleDebateEvent(data, currentEvent);
-                            } catch (e) {
-                                console.error('Parse error:', e);
-                            }
-                        }
+                // 第二步：连接 SSE 流
+                const eventSource = new EventSource(`${API_BASE}/api/debate/stream?token=${token}`);
+                
+                eventSource.onmessage = function(event) {
+                    if (!debateInProgress) {
+                        eventSource.close();
+                        return;
                     }
-                }
+                    
+                    try {
+                        const data = JSON.parse(event.data);
+                        handleDebateEvent(data, '');
+                    } catch (e) {
+                        console.error('Parse error:', e);
+                    }
+                };
+
+                eventSource.onerror = function(err) {
+                    console.error('SSE Error:', err);
+                    eventSource.close();
+                    
+                    if (debateInProgress) {
+                        DemoUtils.showMessage('连接中断，使用模拟数据演示', 'warning');
+                        simulateDebate(topic, rounds);
+                    }
+                };
+
+                this.eventSource = eventSource;
 
             } catch (error) {
                 console.error('SSE Error:', error);
@@ -636,7 +626,6 @@
                 }
                 
                 if (debateInProgress) {
-                    // 如果 SSE 失败，使用模拟数据
                     DemoUtils.showMessage(`${errorMessage}，使用模拟数据演示`, 'warning');
                     simulateDebate(topic, rounds);
                     return;
@@ -848,9 +837,9 @@
         // 停止辩论
         function stopDebate() {
             debateInProgress = false;
-            if (eventSource) {
-                eventSource.close();
-                eventSource = null;
+            if (this.eventSource) {
+                this.eventSource.close();
+                this.eventSource = null;
             }
             
             const startBtn = document.getElementById('start-debate-btn');
