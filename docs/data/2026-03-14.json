@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-14",
+  "summary": "今日焦点集中于大模型能力跃升与工程落地并进：Gemini 3.1 Pro强化复杂任务处理，NVIDIA Rubin平台推动开源模型与自动驾驶协同演进；同时，学术界聚焦代理系统鲁棒性（如DIVE、PACED）、安全评估（多步攻击场景）及泛化挑战（Sim2Real gap），体现从“能用”向“可靠可用”深度演进。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务深度优化，体现大模型在推理与规划能力上的关键突破，属行业里程碑事件。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA发布Rubin平台与开放模型，聚焦自动驾驶与全栈AI基础设施，标志其从GPU厂商向AI操作系统层跃迁，是行业里程碑事件。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "平台架构"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，体现大模型训练部署对高端GPU的深度绑定，标志AI基础设施新范式确立。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "DIVE: Scaling Diversity in Agentic Task Synthesis for Generalizable Tool Use",
+      "link": "https://arxiv.org/abs/2603.11076",
+      "rating": "A",
+      "score": 8,
+      "comment": "DIVE提出逆向任务合成思路，通过真实工具执行反推任务，有效提升合成任务多样性与泛化能力，解决LLM工具使用泛化难题，是具实用价值的高质量研究。",
+      "tags": [
+        "LLM",
+        "工具调用",
+        "任务合成",
+        "泛化能力"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "A Survey of Reasoning in Autonomous Driving Systems: Open Challenges and Emerging Paradigms",
+      "link": "https://arxiv.org/abs/2603.11093",
+      "rating": "A",
+      "score": 8,
+      "comment": "arXiv顶刊级综述，系统梳理自动驾驶推理瓶颈与LLM/MLLM融合路径，填补框架空白，具强指导价值。",
+      "tags": [
+        "自动驾驶",
+        "大模型",
+        "推理能力",
+        "学术综述"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "PACED: Distillation at the Frontier of Student Competence",
+      "link": "https://arxiv.org/abs/2603.11178",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出PACED框架，从理论证明梯度信噪比在 distillation 中必然在两端失效，并设计基于Beta核的动态权重策略，聚焦学生模型能力边界，显著提升蒸馏效率与效果，兼具理论深度与实用价值。",
+      "tags": [
+        "模型蒸馏",
+        "理论分析",
+        "LLM优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Measuring AI Agents' Progress on Multi-Step Cyber Attack Scenarios",
+      "link": "https://arxiv.org/abs/2603.11214",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统评估前沿AI模型在多步复杂网络攻击场景中的自主能力，揭示算力与性能的稳定增长关系，对AI安全防御有重要参考价值。",
+      "tags": [
+        "AI安全",
+        "攻击模拟",
+        "大模型评测"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Reversible Lifelong Model Editing via Semantic Routing-Based LoRA",
+      "link": "https://arxiv.org/abs/2603.11239",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出SoLA框架，通过语义路由实现可逆终身编辑，有效解决语义漂移与灾难性遗忘问题，LoRA模块独立冻结+动态激活设计具实用价值。",
+      "tags": [
+        "LLM编辑",
+        "LoRA",
+        "终身学习",
+        "语义路由"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Mind the Sim2Real Gap in User Simulation for Agentic Tasks",
+      "link": "https://arxiv.org/abs/2603.11245",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统性量化LLM用户模拟器与真实人类行为的差距，提出USI指标并完成大规模实证研究（451人），推动交互式NLP评估可信度提升。",
+      "tags": [
+        "LLM评测",
+        "Sim2Real",
+        "用户模拟"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Speculative Decoding Scaling Laws (SDSL): Throughput Optimization Made Simple",
+      "link": "https://arxiv.org/abs/2603.11053",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出推测解码的Scaling Laws理论，首次实现超参与吞吐效率的解析关联，可提前预测最优配置，显著降低实验成本，对LLM推理优化有实用价值。",
+      "tags": [
+        "推测解码",
+        "推理优化",
+        "LLM架构"
+      ]
+    }
+  ]
+}
