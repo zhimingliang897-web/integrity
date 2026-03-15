@@ -13,7 +13,7 @@
 | 平台 | 地址 | 说明 |
 |------|------|------|
 | **GitHub Pages** | https://zhimingliang897-web.github.io/integrity/ | 静态站点：首页、工具库页、演示体验区、源码浏览，均托管于此 |
-| **云服务器（在线工具）** | http://8.138.164.133:5000/app/tools.html | 仅在线工具入口跳转至此，登录与全部 API 在服务器运行 |
+| **云服务器（在线工具）** | http://8.138.164.133/tools.html | 仅在线工具入口跳转至此，登录与全部 API 在服务器运行 |
 | 后端 API | http://127.0.0.1:5000/ | 服务器内部 API |
 
 **部署策略**：仅保留一个「在线工具」入口跳转到云服务器；其余内容（演示、源码、说明）均在本地通过 GitHub Pages 部署。
@@ -156,12 +156,12 @@ friend2026
 ### API 认证
 ```bash
 # 登录获取 Token
-curl -X POST http://8.138.164.133:5000/api/auth/login \
+curl -X POST http://8.138.164.133/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"test","password":"123456"}'
 
 # 使用 Token
-curl http://8.138.164.133:5000/api/auth/verify \
+curl http://8.138.164.133/api/auth/verify \
   -H "Authorization: Bearer YOUR_TOKEN"
 ```
 

@@ -8,7 +8,7 @@
  * 原因：HTTPS 页面无法调用 HTTP API (Mixed Content 限制)
  */
 
-const SERVER_URL = 'http://8.138.164.133:5000';
+const SERVER_URL = 'http://8.138.164.133';
 const IS_GITHUB_PAGES = window.location.hostname.includes('github.io');
 const API_BASE = IS_GITHUB_PAGES ? SERVER_URL : window.location.origin;
 let isRegisterMode = false;

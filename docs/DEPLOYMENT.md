@@ -32,7 +32,7 @@
 
 ### 访问地址
 - 网页文档：https://zhimingliang897-web.github.io/integrity/
-- API 服务：http://8.138.164.133:5000/
+- API 服务：http://8.138.164.133/api/
 
 ---
 
@@ -103,7 +103,7 @@ chmod +x /usr/local/bin/docker-compose
 
 ```javascript
 // 示例：多模型对比
-const API_BASE = 'http://8.138.164.133:5000';
+const API_BASE = 'http://8.138.164.133';
 
 async function callCompareAPI(question) {
     const response = await fetch(`${API_BASE}/api/tools/compare`, {
@@ -166,20 +166,20 @@ server {
 ### API 测试命令
 ```bash
 # 健康检查
-curl http://8.138.164.133:5000/
+curl http://8.138.164.133/api/health
 
 # 注册用户（需要邀请码）
-curl -X POST http://8.138.164.133:5000/api/auth/register \
+curl -X POST http://8.138.164.133/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"username":"test","password":"123456","invite_code":"demo2026"}'
 
 # 登录
-curl -X POST http://8.138.164.133:5000/api/auth/login \
+curl -X POST http://8.138.164.133/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"test","password":"123456"}'
 
 # Token 计算
-curl -X POST http://8.138.164.133:5000/api/tools/token-calc \
+curl -X POST http://8.138.164.133/api/tools/token-calc \
   -H "Content-Type: application/json" \
   -d '{"model":"qwen-plus","lang":"zh","chars":100}'
 ```
