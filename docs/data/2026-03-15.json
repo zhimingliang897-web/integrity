@@ -1,0 +1,136 @@
+{
+  "date": "2026-03-15",
+  "summary": "今日焦点集中于三大方向：一是大模型生态演进，NVIDIA 推出 Nemotron 3 Super 与 Rubin 平台，强化“算力+模型+应用”闭环；二是开源与本地化加速，Qwen3.5、LocalLlama 等推动高性能模型落地个人/企业端；三是基础设施独立化，arXiv 正式脱离 Cornell 成立独立 nonprofit，标志学术发布体系进入新阶段。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Nvidia's Nemotron 3 Super is a bigger deal than you think",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rtp0og/nvidias_nemotron_3_super_is_a_bigger_deal_than/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Nemotron 3 Super是NVIDIA在大模型训练与推理协同优化上的重大突破，整合了训练+推理+多模态能力，体现其从硬件到软件栈的全栈布局野心，远超单纯模型规模提升。",
+      "tags": [
+        "大模型架构",
+        "全栈AI",
+        "NVIDIA"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "The arXiv is separating from Cornell University, and is hiring a CEO, who will be paid roughly $300,000/year. \"After decades of productive partnership with Cornell University, and with support from the Simons Foundation, arXiv is establishing itself as an independent nonprofit organization\"",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rtjirw/the_arxiv_is_separating_from_cornell_university/",
+      "rating": "S",
+      "score": 9,
+      "comment": "arXiv独立运营是开放科学里程碑，标志学术预印本平台走向可持续自治，对科研生态影响深远。",
+      "tags": [
+        "开放科学",
+        "学术平台",
+        "非营利组织"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务深度优化，体现大模型在推理与多步规划能力上的关键跃升，是当前最值得关注的模型演进之一。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI基础设施与应用层深度整合，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，体现大模型训练部署对高端GPU的深度绑定，标志AI基础设施新范式确立。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Announcing LocalLlama discord server & bot!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1mpk2va/announcing_localllama_discord_server_bot/",
+      "rating": "A",
+      "score": 8,
+      "comment": "LocalLlama Discord 服务器与 Bot 的上线，响应社区需求，提供开源模型实测平台，助力本地大模型技术交流与落地验证，体现社区驱动的实用价值。",
+      "tags": [
+        "本地大模型",
+        "社区工具",
+        "模型测试"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "55 → 282 tok/s: How I got Qwen3.5-397B running at speed on 4x RTX PRO 6000 Blackwell",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rtrdsv/55_282_toks_how_i_got_qwen35397b_running_at_speed/",
+      "rating": "A",
+      "score": 8,
+      "comment": "针对Blackwell架构SM120共享内存限制的定制化CUDA内核优化，实现推理吞吐翻倍至282 tok/s，兼具工程深度与实用价值，已开源PR和Docker镜像，推动MoE模型在消费级/工作站GPU落地。",
+      "tags": [
+        "CUDA优化",
+        "MoE加速",
+        "Blackwell适配"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "StepFun releases SFT dataset used to train Step 3.5 Flash",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rtrmp1/stepfun_releases_sft_dataset_used_to_train_step/",
+      "rating": "A",
+      "score": 8,
+      "comment": "StepFun开源Step 3.5 Flash的SFT数据集，推动中文大模型训练透明化与可复现性，对社区研究和微调实践有重要价值。",
+      "tags": [
+        "大模型开源",
+        "中文模型",
+        "SFT数据集"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen3.5 35b is sure one the best local model (pulling above its weight)",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rtm7bf/qwen35_35b_is_sure_one_the_best_local_model/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Qwen3.5 35B在本地部署场景获实测认可，体现大模型在资源受限环境下的高性价比与实用性能，属高质量开源模型的典型代表。",
+      "tags": [
+        "本地大模型",
+        "Qwen3.5",
+        "推理优化"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] Karpathy's autoresearch with evolutionary database.",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rtsbkv/p_karpathys_autoresearch_with_evolutionary/",
+      "rating": "A",
+      "score": 8,
+      "comment": "将进化算法引入自主研究系统，显著提升实验探索效率；与AlphaEvolve形成技术呼应，推动AI自研范式演进。",
+      "tags": [
+        "AI自研",
+        "进化算法",
+        "开源工具"
+      ]
+    }
+  ]
+}
