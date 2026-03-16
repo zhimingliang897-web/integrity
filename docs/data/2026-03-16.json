@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-16",
+  "summary": "今日焦点集中于三大方向：一是AI技术纵深拓展，从AlphaGo十年影响到Gemini 3.1 Pro与NVIDIA Rubin平台，凸显大模型在复杂任务与自动驾驶中的落地加速；二是开源生态持续演进，LocalLlama社区兴起、Nemotron许可优化及多篇高性能工程实践（如零拷贝图引擎、预训练验证器）反映开发者对可复现性与效率的迫切需求；三是领域交叉创新升温，如物理模拟+ML修正用于F1策略预测，显示AI正深度融入专业科学场景。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "From games to biology and beyond: 10 years of AlphaGo’s impact",
+      "link": "https://deepmind.google/blog/10-years-of-alphago/",
+      "rating": "S",
+      "score": 9,
+      "comment": "AlphaGo十周年回顾揭示其在科学发现与AGI路径上的深远影响，是AI发展史上的里程碑事件，推动跨领域应用与理论突破。",
+      "tags": [
+        "AI里程碑",
+        "AGI",
+        "科学计算"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务深度优化，体现大模型在推理与多步规划能力上的关键突破，属行业里程碑事件。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA发布Rubin平台与开放模型，聚焦AI原生架构与自动驾驶，标志其从GPU厂商向全栈AI基础设施领导者的战略跃迁，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA顶级硬件（Hopper/GB200），标志AI模型复杂度跃升与算力生态深度绑定，是当前AI基础设施演进的关键里程碑。",
+      "tags": [
+        "AI模型",
+        "NVIDIA",
+        "算力",
+        "大模型"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Announcing LocalLlama discord server & bot!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1mpk2va/announcing_localllama_discord_server_bot/",
+      "rating": "A",
+      "score": 8,
+      "comment": "LocalLlama Discord 服务器与 Bot 的上线，响应社区需求，提供开源模型实测平台，助力本地大模型技术交流与落地验证，体现社区驱动的实用价值。",
+      "tags": [
+        "本地大模型",
+        "社区工具",
+        "开源生态"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Can we say that each year an open-source alternative replaces the previous year's closed-source SOTA?",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1ruvn51/can_we_say_that_each_year_an_opensource/",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出开源模型替代闭源SOTA的观察，反映LLM发展加速与成本下降趋势，具有行业前瞻价值；需注意实际性能对比需实测验证。",
+      "tags": [
+        "LLM趋势",
+        "开源模型",
+        "技术演进"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Nvidia updated the Nemotron Super 3 122B A12B license to remove the rug-pull clauses",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1rue6tn/nvidia_updated_the_nemotron_super_3_122b_a12b/",
+      "rating": "A",
+      "score": 8,
+      "comment": "NVIDIA移除Nemotron 122B模型许可证中的 rug-pull 条款，大幅放宽使用限制，显著利好开源社区与本地部署，体现大厂对开放生态的积极支持。",
+      "tags": [
+        "AI开源",
+        "许可协议",
+        "NVIDIA"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] I got tired of PyTorch Geometric OOMing my laptop, so I wrote a C++ zero-copy graph engine to bypass RAM entirely.",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1ru7bnz/p_i_got_tired_of_pytorch_geometric_ooming_my/",
+      "rating": "A",
+      "score": 8,
+      "comment": "针对GNN训练中OOM痛点的实用突破，通过零拷贝内存映射和自定义二进制格式显著提升大图数据处理能力，开源且具工程价值。",
+      "tags": [
+        "Graph Neural Networks",
+        "内存优化",
+        "C++",
+        "开源工具"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] preflight, a pre-training validator for PyTorch I built after losing 3 days to label leakage",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1ruepfx/p_preflight_a_pretraining_validator_for_pytorch_i/",
+      "rating": "A",
+      "score": 8,
+      "comment": "针对训练中常见但隐蔽的错误（如标签泄露）设计的实用工具，提升模型可靠性，适配PyTorch生态，具工程价值。",
+      "tags": [
+        "PyTorch",
+        "工具",
+        "训练质量"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] Using residual ML correction on top of a deterministic physics simulator for F1 strategy prediction",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1ruxn9t/p_using_residual_ml_correction_on_top_of_a/",
+      "rating": "A",
+      "score": 8,
+      "comment": "将轻量ML残差校正与物理引擎结合，提升F1策略预测精度；工程实现完整（Monte Carlo、SC分类器），兼具学术价值与工业实用性。",
+      "tags": [
+        "机器学习",
+        "物理仿真",
+        "赛车模拟",
+        "策略优化"
+      ]
+    }
+  ]
+}
