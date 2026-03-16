@@ -50,7 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProfiles();
   loadCurrentProfile();
   setupEventListeners();
-  renderRecordsTab();
+  // 延迟一帧再读投递记录，避免弹窗刚打开时拿到旧缓存
+  setTimeout(() => renderRecordsTab(), 0);
+  // 监听 storage 变化：别处（或本页刚写入）更新了投递记录时，列表和数量同步刷新
+  chrome.storage.onChanged.addListener((changes, areaName) => {
+    if (areaName === 'local' && changes.applicationRecords) {
+      renderRecordsTab();
+    }
+  });
 });
 
 // ─────────────────────────────────────────
@@ -66,11 +73,9 @@ function setupEventListeners() {
   document.getElementById('modalSaveBtn').addEventListener('click', saveModalRecord);
   document.getElementById('modalCancelBtn').addEventListener('click', () => hideModal());
   document.getElementById('manualRecordBtn').addEventListener('click', manualRecord);
-  // 本地备份导入
-  const importBtn = document.getElementById('importLocalBtn');
-  if (importBtn) importBtn.addEventListener('click', importFromLocal);
-  const dedupBtn = document.getElementById('dedupBtn');
-  if (dedupBtn) dedupBtn.addEventListener('click', deduplicateNow);
+  // 本地备份下载
+  const downloadBackupBtn = document.getElementById('downloadBackupBtn');
+  if (downloadBackupBtn) downloadBackupBtn.addEventListener('click', downloadCurrentRecords);
 
   // Tab switching
   document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -382,15 +387,40 @@ function saveRecord(record) {
     chrome.storage.local.set({ applicationRecords: records }, () => {
       hideModal();
       showStatus('✅ 投递记录已保存，正在备份到本地…');
-      renderRecordsTab();
+      renderRecordsTab(records);
       autoSaveToLocal(records);
     });
   });
 }
 
 // ─────────────────────────────────────────
-//  本地文件自动备份 & 导入
+//  本地文件自动备份与下载
 // ─────────────────────────────────────────
+
+/**
+ * 手动下载当前投递记录为 JSON 备份文件（与自动备份同格式，可再用于「从备份导入」）
+ */
+function downloadCurrentRecords() {
+  chrome.storage.local.get(['applicationRecords'], (result) => {
+    const records = result.applicationRecords || [];
+    const json = JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), records }, null, 2);
+    const blob = new Blob([json], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const fileName = `投递记录_备份_${new Date().toLocaleDateString('zh-CN').replace(/\//g, '-')}.json`;
+    chrome.downloads.download({
+      url,
+      filename: fileName,
+      saveAs: true
+    }, (downloadId) => {
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+      if (chrome.runtime.lastError) {
+        showStatus('下载失败：' + chrome.runtime.lastError.message);
+      } else {
+        showStatus(`✅ 已下载当前 ${records.length} 条记录`);
+      }
+    });
+  });
+}
 
 /**
  * 每次保存记录后，自动把全量记录下载到本地固定文件
@@ -415,196 +445,16 @@ function autoSaveToLocal(records) {
   });
 }
 
-/**
- * 双重去重：
- *   1层 — 按 id （同 id 保留最新版本）
- *   2层 — 按 公司+岗位+投递时间 内容指纹（防止 id 不同但内容相同）
- */
-function deduplicateRecords(records) {
-  // 第一层：id 去重（同 id 只保留最后出现的，即最新版本）
-  const idMap = {};
-  records.forEach(r => {
-    const key = String(r.id || '');
-    idMap[key] = r;
-  });
-  let deduped = Object.values(idMap);
-
-  // 第二层：内容指纹去重（公司+岗位+投递时间 全相同才删）
-  const seen = new Set();
-  deduped = deduped.filter(r => {
-    const fp = `${r.company}||${r.position}||${r.applyTime}`;
-    if (seen.has(fp)) return false;
-    seen.add(fp);
-    return true;
-  });
-
-  deduped.sort((a, b) => (Number(b.id) || 0) - (Number(a.id) || 0));
-  return deduped;
-}
-
-/**
- * 从本地文件导入投递记录，支持 JSON / Excel，
- * 并先让用户选择导入模式。
- */
-function importFromLocal() {
-  const input = document.createElement('input');
-  input.type  = 'file';
-  input.accept = '.json,.xlsx,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-  input.onchange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const isXlsx = file.name.toLowerCase().endsWith('.xlsx');
-    const reader = new FileReader();
-
-    reader.onload = (ev) => {
-      try {
-        let incoming;
-        if (isXlsx) {
-          const data = new Uint8Array(ev.target.result);
-          const wb   = XLSX.read(data, { type: 'array' });
-          // 优先读「📑 详细记录」sheet，fallback 到第一个
-          const sheetName = wb.SheetNames.find(n => n.includes('详细')) || wb.SheetNames[0];
-          const rows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { defval: '' });
-          incoming = rows.map(row => ({
-            id:            Number(row['__id__'] || row['id']) || Math.floor(Date.now()),
-            company:       String(row['公司名称'] || row['company']      || '').trim(),
-            position:      String(row['应聘岗位'] || row['position']     || '').trim(),
-            applyTime:     String(row['投递时间'] || row['applyTime']    || '').trim(),
-            interviewTime: String(row['可能面试时间'] || row['interviewTime'] || '').trim(),
-            note:          String(row['备注']     || row['note']         || '').trim(),
-            url:           String(row['来源网址'] || row['url']          || '').trim(),
-          })).filter(r => r.company);
-        } else {
-          const parsed = JSON.parse(ev.target.result);
-          incoming = Array.isArray(parsed) ? parsed
-            : (Array.isArray(parsed.records) ? parsed.records : null);
-          if (!incoming) throw new Error('JSON 格式不对');
-        }
-
-        if (incoming.length === 0) {
-          showStatus('⚠️ 文件里没有有效记录');
-          return;
-        }
-
-        // 让用户选择导入模式
-        const mode = chooseImportMode(incoming.length);
-        if (!mode) return; // 用户取消
-
-        chrome.storage.local.get(['applicationRecords'], (result) => {
-          const existing = result.applicationRecords || [];
-          let merged;
-
-          if (mode === 'replace') {
-            // 全套替换
-            merged = deduplicateRecords(incoming);
-          } else if (mode === 'append') {
-            // 直接追加，不去重
-            merged = [...existing, ...incoming];
-            merged.sort((a, b) => (Number(b.id) || 0) - (Number(a.id) || 0));
-          } else {
-            // 默认：智能合并（双重去重）
-            const combined = [...existing, ...incoming];
-            // 同 id 的以文件里的为准（比如在 Excel 里加了备注）
-            const idMap = {};
-            existing.forEach(r => { idMap[String(r.id)] = r; });
-            incoming.forEach(r => { idMap[String(r.id)] = r; }); // 导入的覆盖
-            merged = deduplicateRecords(Object.values(idMap));
-          }
-
-          chrome.storage.local.set({ applicationRecords: merged }, () => {
-            const modeLabel = { smart:'智能合并', replace:'覆盖替换', append:'追加全部' }[mode];
-            showStatus(`✅ ${modeLabel}完成，共 ${merged.length} 条记录`);
-            renderRecordsTab();
-            autoSaveToLocal(merged);
-          });
-        });
-      } catch (err) {
-        console.error('Import error:', err);
-        showStatus('❌ 文件读取失败，请确认格式正确');
-      }
-    };
-
-    if (isXlsx) {
-      reader.readAsArrayBuffer(file);
-    } else {
-      reader.readAsText(file, 'utf-8');
-    }
-  };
-  input.click();
-}
-
-/**
- * 弹出导入模式选择层（内联 HTML，不用系统 prompt）
- * 返回 Promise<'smart'|'replace'|'append'|null>
- */
-function chooseImportMode(incomingCount) {
-  return new Promise(resolve => {
-    // 如果已经有弹层就先关掉
-    document.getElementById('importModeOverlay')?.remove();
-
-    const overlay = document.createElement('div');
-    overlay.id = 'importModeOverlay';
-    overlay.style.cssText = `
-      position:fixed;inset:0;background:rgba(15,23,42,0.6);
-      z-index:3000;display:flex;align-items:center;justify-content:center;
-    `;
-    overlay.innerHTML = `
-      <div style="background:white;border-radius:14px;padding:20px;width:320px;
-                  box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:modalIn .2s ease;">
-        <h3 style="font-size:15px;font-weight:700;color:#1e293b;margin-bottom:6px;">
-          📂 选择导入模式
-        </h3>
-        <p style="font-size:12px;color:#94a3b8;margin-bottom:14px;">
-          文件内共 <b>${incomingCount}</b> 条记录
-        </p>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <button id="imode-smart" style="padding:9px 12px;border:1.5px solid #2563eb;
-            border-radius:8px;background:#eff6ff;color:#1d4ed8;font-size:13px;
-            font-weight:600;cursor:pointer;text-align:left;">
-            ⚡ 智能合并（推荐）
-            <span style="font-weight:400;font-size:11px;color:#64748b;display:block;margin-top:2px;">
-              公司+岗位+时间去重，Excel 修改的内容优先
-            </span>
-          </button>
-          <button id="imode-replace" style="padding:9px 12px;border:1.5px solid #e2e8f0;
-            border-radius:8px;background:white;color:#475569;font-size:13px;
-            font-weight:600;cursor:pointer;text-align:left;">
-            🗑 覆盖替换
-            <span style="font-weight:400;font-size:11px;color:#94a3b8;display:block;margin-top:2px;">
-              删除当前全部，只保留文件里的
-            </span>
-          </button>
-          <button id="imode-append" style="padding:9px 12px;border:1.5px solid #e2e8f0;
-            border-radius:8px;background:white;color:#475569;font-size:13px;
-            font-weight:600;cursor:pointer;text-align:left;">
-            ➕ 全部追加
-            <span style="font-weight:400;font-size:11px;color:#94a3b8;display:block;margin-top:2px;">
-              不去重，全部导入（可能产生重复）
-            </span>
-          </button>
-        </div>
-        <button id="imode-cancel" style="width:100%;margin-top:10px;padding:7px;
-          border:none;border-radius:7px;background:#f1f5f9;color:#64748b;
-          font-size:12px;cursor:pointer;">取消</button>
-      </div>
-    `;
-    document.body.appendChild(overlay);
-
-    const close = (val) => { overlay.remove(); resolve(val); };
-    overlay.querySelector('#imode-smart'  ).onclick = () => close('smart');
-    overlay.querySelector('#imode-replace').onclick = () => close('replace');
-    overlay.querySelector('#imode-append' ).onclick = () => close('append');
-    overlay.querySelector('#imode-cancel' ).onclick = () => close(null);
-    overlay.onclick = (e) => { if (e.target === overlay) close(null); };
-  });
-}
-
 // ─────────────────────────────────────────
 //  RECORDS TAB RENDER
 // ─────────────────────────────────────────
-function renderRecordsTab() {
-  chrome.storage.local.get(['applicationRecords'], (result) => {
-    const records = result.applicationRecords || [];
+/**
+ * 刷新投递记录列表。可传入 records 则直接用该数组渲染（避免 set 后立刻 get 拿不到新值导致界面不更新）。
+ * @param {Array|undefined} recordsFromCaller - 可选，刚写入的完整记录数组；不传则从 storage 读取
+ */
+function renderRecordsTab(recordsFromCaller) {
+  function doRender(records) {
+    records = records || [];
     const countEl = document.getElementById('recordsCount');
     const listEl  = document.getElementById('recordsList');
     if (!countEl || !listEl) return;
@@ -691,6 +541,14 @@ function renderRecordsTab() {
 
       listEl.appendChild(card);
     });
+  }
+
+  if (recordsFromCaller !== undefined && Array.isArray(recordsFromCaller)) {
+    doRender(recordsFromCaller);
+    return;
+  }
+  chrome.storage.local.get(['applicationRecords'], (result) => {
+    doRender(result.applicationRecords || []);
   });
 }
 
@@ -698,7 +556,7 @@ function deleteRecord(recordId) {
   chrome.storage.local.get(['applicationRecords'], (result) => {
     const records = (result.applicationRecords || []).filter(r => r.id !== recordId);
     chrome.storage.local.set({ applicationRecords: records }, () => {
-      renderRecordsTab();
+      renderRecordsTab(records);
       autoSaveToLocal(records);
     });
   });
@@ -712,7 +570,7 @@ function updateRecordField(recordId, field, value) {
     if (!rec) return;
     rec[field] = value;
     chrome.storage.local.set({ applicationRecords: records }, () => {
-      renderRecordsTab();
+      renderRecordsTab(records);
       autoSaveToLocal(records);
     });
   });
@@ -751,25 +609,6 @@ function startInlineEdit(span, rec) {
   });
 }
 
-/** 对当前存储里的所有记录执行双重去重，直接保存回去 */
-function deduplicateNow() {
-  chrome.storage.local.get(['applicationRecords'], (result) => {
-    const records = result.applicationRecords || [];
-    const before = records.length;
-    const deduped = deduplicateRecords(records);
-    const removed = before - deduped.length;
-    chrome.storage.local.set({ applicationRecords: deduped }, () => {
-      if (removed === 0) {
-        showStatus('✅ 没有重复记录，无需去重');
-      } else {
-        showStatus(`✅ 已去除 ${removed} 条重复，剩余 ${deduped.length} 条`);
-        autoSaveToLocal(deduped);
-      }
-      renderRecordsTab();
-    });
-  });
-}
-
 function escHtml(str) {
   return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -794,7 +633,7 @@ function exportToExcel() {
       r.url           || ''
     ])];
 
-    // ── Sheet2：可编辑回传版（含隐藏 __id__ 列，改完可导回扩展）──
+    // ── Sheet2：详细记录（含隐藏 __id__ 列，便于本地管理）──
     const s2Header = ['__id__','公司名称','应聘岗位','投递时间','可能面试时间','备注','来源网址'];
     const s2Data = [s2Header, ...records.map(r => [
       r.id            || '',
@@ -819,7 +658,7 @@ function exportToExcel() {
       ws2['!cols'] = [{ wch: 2, hidden: true }, 22, 22, 20, 22, 28, 40].map(
         (v, i) => typeof v === 'object' ? v : { wch: v }
       );
-      XLSX.utils.book_append_sheet(wb, ws2, '📑 详细记录（可编辑后导回）');
+      XLSX.utils.book_append_sheet(wb, ws2, '📑 详细记录');
 
       const fileName = `投递记录_${new Date().toLocaleDateString('zh-CN').replace(/\//g,'-')}.xlsx`;
       // 使用 chrome.downloads 并弹出「另存为」对话框，方便选择保存位置
@@ -835,7 +674,7 @@ function exportToExcel() {
         if (chrome.runtime.lastError) {
           showStatus('导出失败：' + chrome.runtime.lastError.message);
         } else {
-          showStatus(`✅ 已导出 ${records.length} 条，Sheet2 改完可直接导回`);
+          showStatus(`✅ 已导出 ${records.length} 条记录`);
         }
       });
     } catch(e) {

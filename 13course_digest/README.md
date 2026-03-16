@@ -63,6 +63,15 @@ cache_dir: "cache"
 output_dir: "output"
 ```
 
+**需补充的隐私/本地配置（未随仓库提交）**
+
+| 文件名 | 说明（对他人） | 样式/格式 |
+|--------|----------------|-----------|
+| **config.yaml** 中的 `api.api_key` | 阿里云百炼（DashScope）API Key，驱动 LLM 分析与题目生成 | YAML 格式，在已有的 `config.yaml` 里直接填写 `api.api_key: "sk-..."` 字段；Key 格式为 `sk-` 开头的 32 位字符串 |
+
+> `config.yaml` 本身已在仓库中（含注释说明），只需把 `api_key` 字段替换为你的真实 Key 即可。  
+> 获取地址：[阿里云百炼控制台](https://dashscope.console.aliyun.com/apiKey)
+
 ---
 
 ## 🛠️ 四大应用场景

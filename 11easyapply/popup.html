@@ -394,18 +394,12 @@
       <span class="records-count" id="recordsCount">0 条</span>
     </div>
     <!-- 操作按钮行 -->
-    <div class="export-row" style="display:flex;gap:6px;">
-      <button class="btn btn-primary btn-sm" id="exportExcelBtn" style="flex:1">
+    <div class="export-row" style="display:flex;flex-wrap:wrap;gap:6px;">
+      <button class="btn btn-primary btn-sm" id="exportExcelBtn" style="flex:1;min-width:0;">
         ⬇️ 导出 Excel
       </button>
-      <button class="btn btn-secondary btn-sm" id="importLocalBtn" style="flex:1">
-        📂 从备份导入
-      </button>
-    </div>
-    <div style="padding:4px 14px 4px;display:flex;gap:6px;">
-      <button class="btn btn-sm" id="dedupBtn"
-        style="flex:1;background:#fff7ed;color:#d97706;border:1.5px solid #fcd34d;font-weight:600;">
-        🔄 一键去重
+      <button class="btn btn-outline btn-sm" id="downloadBackupBtn" style="flex:1;min-width:0;">
+        💾 下载当前投递记录
       </button>
     </div>
     <div style="padding:2px 14px 8px;font-size:11px;color:#94a3b8;">

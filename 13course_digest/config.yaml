@@ -18,7 +18,8 @@ whisper:
 # 阿里巴巴百炼 API 配置 (千问)
 api:
   provider: "dashscope" # 使用百炼 API
-  api_key: "sk-0ef56d1b3ba54a188ce28a46c54e2a24" # 你的千问 API Key
+  # 安全：不要把真实 Key 写进仓库。请使用环境变量 DASHSCOPE_API_KEY 或本地 _secrets 版本覆盖。
+  api_key: "sk-0ef56d1b3ba54a188ce28a46c54e2a24" # 示例占位符
   model: "glm-5" # 千问模型: qwen-turbo, qwen-plus, qwen-max
 
 # 分析分块配置

@@ -1,23 +1,30 @@
-"""
-auto_match.py - AI 自动匹配资料脚本
-
-结合大模型能力，扫描指定目录下未转录或未分析的视频与PDF，
-自动分析其主题，并让大模型推测关联，一键生成 `run_matched.bat` 命令。
-"""
-
 import json
 import os
+import argparse
 from pathlib import Path
 import config
 import analyze
 
 def main():
-    print("="*60)
-    print("🤖 资料智能匹配向导")
-    print("正在扫描 input 和 cache 目录中的视频与PDF文件...")
+    # 解析命令行输入的文件夹路径
+    parser = argparse.ArgumentParser(description="AI 自动匹配资料脚本")
+    parser.add_argument("dir", nargs="?", default="input", help="指定要扫描的文件夹路径 (默认: input)")
+    args = parser.parse_args()
     
-    videos = list(Path("input").glob("*.mp4")) + list(Path("cache").rglob("*.mp4"))
-    pdfs = list(Path("input").glob("*.pdf")) + list(Path("cache").rglob("*.pdf"))
+    target_dir = Path(args.dir)
+    
+    # 检查指定的目录是否存在
+    if not target_dir.exists():
+        print(f"❌ 错误：指定的目录 '{target_dir}' 不存在。")
+        return
+
+    print("="*60)
+    print(f"🤖 资料智能匹配向导 (当前扫描目录: {target_dir.absolute()})")
+    print("正在扫描指定目录中的视频与PDF文件...")
+    
+    # 【核心修复】：只扫描指定的 target_dir，不额外扫描其他目录
+    videos = list(target_dir.rglob("*.mp4"))
+    pdfs = list(target_dir.rglob("*.pdf"))
     
     videos = list(set(videos))
     pdfs = list(set(pdfs))
@@ -43,6 +50,7 @@ def main():
 
     video_features = {}
     for v in videos:
+        # 这里保留读取已有转录缓存的逻辑，以便大模型了解视频内容
         cache_paths = [Path(config.CACHE_DIR) / f"{v.stem}.json", Path(f"cache/3d/{v.stem}.json")]
         text = ""
         for cp in cache_paths:
@@ -82,8 +90,10 @@ def main():
         # 去除大模型可能输出的多余 markdown 代码块
         if result.startswith("```"):
             result = result.split("\n", 1)[1].rsplit("```", 1)[0]
-        
-        matchings = json.loads(result)
+        if result.startswith("json"):
+            result = result[4:]
+            
+        matchings = json.loads(result.strip())
         
         script_name = "run_matched.bat"
         with open(script_name, "w", encoding="utf-8") as f:
