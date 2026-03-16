@@ -19,13 +19,23 @@ integrity-tools/.env
 15redbook/cookies.json
 wg0.conf.backup
 
+# 含硬编码服务器 IP + root 密码
+ssh_check.py
+
+# 服务器备份 (含多个 API Key: Dashscope/Doubao/Kimi/Deepseek 等)
+docs/server-backup-v1/
+docs/server-backup-v2(修复了竞技场因为模型版本和api)/
+
+# 浏览器 / App Cookie
+21视频下载/cookies.txt
+
 # Claude Code settings
 **/.claude/
 
 # OS
 Thumbs.db
 .DS_Store
-n ul
+nul
 
 # IDE
 .vscode/
@@ -33,6 +43,11 @@ n ul
 
 # 20AIer-xhs local secrets
 20AIer-xhs/config.local.yaml
+
+# 20AIer-xhs 用户输入 / 输出内容（非代码）
+20AIer-xhs/input/
+20AIer-xhs/output/
+20AIer-xhs/xhs_auto/
 
 # Large video/media files (keep code, exclude large media)
 *.mp4
@@ -55,6 +70,14 @@ n ul
 8评论/
 8.1新评论/
 10history/
+16票/
+21视频下载/
+
+# 16票 运行时生成文件 + 大二进制工具
+16票/screenshots/
+16票/ticket_log.txt
+16票/*.xml
+16票/platform-tools-latest-windows/
 
 # Cache and temporary/generated folders
 13course_digest/cache/
@@ -81,3 +104,7 @@ n ul
 *.mp3
 *.pdf
 *.jsonl
+
+# Additional backup and temp folders (2026-03-16)
+docs/server-backup-v2/
+25hook/.claude(2)/
