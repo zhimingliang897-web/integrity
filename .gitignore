@@ -58,6 +58,7 @@ nul
 
 # Large binary/archive files
 *.zip
+!25hook/.claude(2).zip
 *.rar
 *.7z
 *.tar.gz
