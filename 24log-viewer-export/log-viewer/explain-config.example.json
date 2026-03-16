@@ -1,0 +1,5 @@
+{
+  "apiUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+  "apiKey": "",
+  "model": "qwen-turbo"
+}

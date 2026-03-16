@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claude Code 工具日志</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <h1 class="title">Claude Code 工具日志</h1>
+    <div class="toolbar">
+      <span id="sessionCount" class="session-count" title="项目与会话统计"></span>
+      <label class="field">
+        <span class="label">项目</span>
+        <select id="projectSelect" aria-label="选择项目">
+          <option value="">-- 全部项目 --</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="label">会话</span>
+        <select id="sessionSelect" aria-label="选择会话">
+          <option value="">-- 选择会话 --</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="label">解说模式</span>
+        <select id="explainMode" aria-label="解说模式">
+          <option value="manual">手动</option>
+          <option value="auto">自动</option>
+        </select>
+      </label>
+      <button type="button" id="refreshBtn" class="btn">刷新列表</button>
+      <label class="auto-refresh">
+        <input type="checkbox" id="autoRefresh" checked />
+        <span>自动刷新</span>
+      </label>
+      <button type="button" id="settingsBtn" class="btn btn-settings" title="解说 API 配置">设置</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="panel panel-log">
+      <div class="panel-title">时间线</div>
+      <div class="log-filters">
+        <label class="field compact">
+          <span class="label">筛选</span>
+          <select id="eventTypeFilter" aria-label="事件类型筛选">
+            <option value="">全部事件</option>
+            <option value="pre_tool">仅工具调用</option>
+            <option value="tool_failure">仅失败</option>
+            <option value="user_input">用户输入</option>
+            <option value="assistant_output">助手输出</option>
+          </select>
+        </label>
+        <label class="field compact">
+          <span class="label">工具</span>
+          <select id="toolFilter" aria-label="工具筛选">
+            <option value="">全部工具</option>
+          </select>
+        </label>
+        <label class="field compact">
+          <span class="label">关键词</span>
+          <input type="text" id="keywordFilter" class="keyword-input" placeholder="搜索内容…" aria-label="关键词筛选" />
+        </label>
+      </div>
+      <div id="logList" class="log-list"></div>
+      <p id="emptyHint" class="empty-hint">在顶部选择要查看的会话。</p>
+    </section>
+
+    <aside class="panel panel-explain">
+      <div class="panel-title">解说</div>
+      <div id="healthSummary" class="health-summary"></div>
+      <p id="explainEmptyHint" class="empty-hint">在左侧点击一条日志查看对应解说。</p>
+      <div id="explainPane" class="explain-pane hidden">
+        <div id="explainMeta" class="explain-meta"></div>
+        <div class="explain-box">
+          <h3>规则解说</h3>
+          <p id="ruleSummary" class="rule-summary"></p>
+        </div>
+        <div class="explain-box">
+          <div class="explain-actions">
+            <h3>模型解说</h3>
+            <button type="button" id="generateExplainBtn" class="btn btn-explain">生成解说</button>
+          </div>
+          <p id="modelStatus" class="model-status"></p>
+          <p id="explainGotoSettingsHint" class="explain-goto-settings hidden">
+            <button type="button" id="explainGotoSettingsBtn" class="btn btn-small">去设置</button>
+          </p>
+          <p id="modelExplainText" class="model-explain-text"></p>
+        </div>
+        <div class="explain-box">
+          <h3>提问</h3>
+          <div class="question-box">
+            <input type="text" id="questionInput" class="question-input" placeholder="对这条日志提问..." />
+            <button type="button" id="askQuestionBtn" class="btn btn-explain">提问</button>
+          </div>
+          <p id="questionStatus" class="model-status"></p>
+          <div id="questionAnswer" class="model-explain-text"></div>
+        </div>
+        <div class="explain-box">
+          <div class="explain-box-header">
+            <h3>原始 JSON</h3>
+            <button type="button" id="jsonToggleBtn" class="btn btn-small" title="展开/收起">收起</button>
+          </div>
+          <pre id="jsonPreview" class="json-preview"></pre>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <div id="settingsModal" class="modal" role="dialog" aria-labelledby="settingsTitle" aria-hidden="true">
+    <div class="modal-backdrop" id="settingsBackdrop"></div>
+    <div class="modal-content">
+      <h2 id="settingsTitle" class="modal-title">解说 API 配置</h2>
+      <p class="modal-desc">配置后，日志会调用模型生成解说。配置保存在本机 <code>log-viewer/explain-config.json</code>。</p>
+      <form id="settingsForm" class="settings-form">
+        <label>
+          <span>Base URL</span>
+          <input type="url" id="configBaseUrl" name="apiUrl" placeholder="https://dashscope.aliyuncs.com/compatible-mode/v1" autocomplete="off" />
+        </label>
+        <label>
+          <span>API Key</span>
+          <input type="password" id="configApiKey" name="apiKey" placeholder="sk-xxx" autocomplete="off" />
+        </label>
+        <label>
+          <span>模型</span>
+          <input type="text" id="configModel" name="model" placeholder="qwen-turbo" autocomplete="off" />
+        </label>
+        <div class="modal-actions">
+          <button type="button" id="settingsClose" class="btn">取消</button>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+      <p id="settingsStatus" class="settings-status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
