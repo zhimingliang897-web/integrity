@@ -102,8 +102,9 @@ function renderFiles(files) {
             <div class="file-size">${f.is_dir ? '-' : formatSize(f.size)}</div>
             <div class="file-date">${formatDate(f.modified_at)}</div>
             <div class="file-actions">
-                ${!f.is_dir ? `<button class="btn-sm" onclick="downloadByPath('${escapeAttr(f.path)}')">📥</button>` : ''}
-                ${!isReadonlyPath ? `<button class="btn-sm btn-danger" onclick="deleteByPath('${escapeAttr(f.path)}')">🗑️</button>` : ''}
+                ${!f.is_dir ? `<button class="btn-sm" onclick="downloadByPath('${escapeAttr(f.path)}')" title="下载">📥</button>` : ''}
+                <button class="btn-sm" onclick="toggleStarByPath('${escapeAttr(f.path)}')" title="收藏">${f.is_starred ? '⭐' : '☆'}</button>
+                ${!isReadonlyPath ? `<button class="btn-sm btn-danger" onclick="deleteByPath('${escapeAttr(f.path)}')" title="删除">🗑️</button>` : ''}
             </div>
         </div>
     `).join('');
@@ -970,6 +971,90 @@ document.getElementById('search-btn')?.addEventListener('click', searchFiles);
 document.getElementById('search-input')?.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') searchFiles();
 });
+
+async function toggleStarByPath(path) {
+    path = path.replace(/\\\\/g, '\\');
+    try {
+        const isStarred = files.find(f => f.path === path && f.is_starred);
+        
+        if (isStarred) {
+            await apiCall(`/api/files/star?path=${encodeURIComponent(path)}`, { method: 'DELETE' });
+            showToast('已取消收藏', 'success');
+        } else {
+            const formData = new FormData();
+            formData.append('path', path);
+            await apiCall('/api/files/star', { method: 'POST', body: formData });
+            showToast('已收藏', 'success');
+        }
+        
+        loadFiles(currentPath);
+    } catch (e) {
+        showToast('操作失败', 'error');
+    }
+}
+
+async function showStarred() {
+    try {
+        const res = await apiCall('/api/files/starred');
+        if (!res) return;
+        
+        const data = await res.json();
+        
+        files = (data.files || []).map(f => ({
+            ...f,
+            is_dir: f.is_dir || false,
+            mount_name: null
+        }));
+        
+        renderBreadcrumb([{ name: '⭐ 收藏', path: '' }]);
+        renderFiles(files);
+    } catch (e) {
+        showToast('加载失败', 'error');
+    }
+}
+
+function showEmailModal() {
+    if (selectedFiles.length === 0) {
+        showToast('请选择文件', 'error');
+        return;
+    }
+    document.getElementById('email-recipient').value = '';
+    showModal('email-modal');
+}
+
+async function sendEmail() {
+    const recipient = document.getElementById('email-recipient').value.trim();
+    if (!recipient) {
+        showToast('请输入收件人邮箱', 'error');
+        return;
+    }
+    
+    if (!recipient.includes('@')) {
+        showToast('邮箱格式不正确', 'error');
+        return;
+    }
+    
+    try {
+        const formData = new FormData();
+        formData.append('paths', selectedFiles.join(','));
+        formData.append('recipient', recipient);
+        
+        const res = await apiCall('/api/files/email', { method: 'POST', body: formData });
+        if (!res) return;
+        
+        const data = await res.json();
+        
+        if (data.success) {
+            showToast(data.message, 'success');
+            closeModal('email-modal');
+            clearSelection();
+        } else {
+            showToast(data.detail || '发送失败', 'error');
+        }
+    } catch (e) {
+        showToast('发送失败: ' + (e.message || ''), 'error');
+    }
+}
 
 checkAuth().then(auth => {
     if (auth) {

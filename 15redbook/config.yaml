@@ -1,5 +1,6 @@
 api:
-  api_key: sk-0ef56d1b3ba54a188ce28a46c54e2a24
+  # 安全：不要把真实 Key 写进仓库。请使用环境变量（推荐）或本地 _secrets 版本覆盖。
+  api_key: sk-your-key-here
   base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
   model: qwen-plus
   provider: dashscope
@@ -17,11 +18,5 @@ obsidian:
   queue_folder: 01_发布队列
   vault_path: E:/Obsidian/小红书运营
 xiaohongshu:
-  cookie: acw_tc=0a00d09017730775496297449e825adce7db5186b8b3901929f32287b97a0d; abRequestId=56bcfe8a-165e-561b-a26f-101bd24cf21c;
-    webBuild=5.14.2; xsecappid=xhs-pc-web; a1=19cd3a85703g1q6s5ppttecah6p1nt7pjyzelssif50000453055;
-    webId=0c5b39ad37ec28344a9b6d78e5e9b73d; acw_tc=0a8f071a17730775515892127e18707ceb53f0827363adaaff016e438dd8f3;
-    acw_tc=0ad627c917730775525676860e36fd659623457dec85d379e0def986a7e694; gid=yjSfq0YKjdV4yjSfq0Y2WvMM8qkyAKM2UU99u3idS0xKUd28yI9WU188842q8228yDjY4d82;
-    loadts=1773079086688; websectiga=a9bdcaed0af874f3a1431e94fbea410e8f738542fbb02df4e8e30c29ef3d91ac;
-    sec_poison_id=55af0a94-6e06-47b4-9257-86c15f24dd5e; web_session=040069b1cb51f4578b0d38429a3b4b1b2b722a;
-    id_token=VjEAAAEC/DhN2UPRi+UKIhWV6EGTyL1FDK0n/JmG9X09tcl1ikevVWRZ1rrP7ps/URWmZojxQwIodofScKmADBlAPo/pzbXLgpoLIRf25tMwZVEioFG9IW1PYVxwMMQcFO7rE2LU;
-    unread={%22ub%22:%2269a27c5c000000001a028ef8%22%2C%22ue%22:%2269ae3b930000000015031b6d%22%2C%22uc%22:22}
+  # 安全：Cookie 属于隐私信息，不要写进仓库。请改用 `cookies.json`（见 README）或从 _secrets 恢复。
+  cookie: ""

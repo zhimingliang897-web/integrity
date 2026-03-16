@@ -226,6 +226,25 @@ class Settings:
                 self.save()
                 return True
         return False
+    
+    def update_storage_paths(self, root: str = None, uploads: str = None, trash: str = None):
+        if "storage" not in self._config:
+            self._config["storage"] = {}
+        
+        if root is not None:
+            self._config["storage"]["root"] = root
+        if uploads is not None:
+            self._config["storage"]["uploads"] = uploads
+        if trash is not None:
+            self._config["storage"]["trash"] = trash
+        
+        self.save()
+    
+    def update_max_upload_size(self, size_mb: int):
+        if "upload" not in self._config:
+            self._config["upload"] = {}
+        self._config["upload"]["max_size_mb"] = size_mb
+        self.save()
 
 
 settings = Settings()

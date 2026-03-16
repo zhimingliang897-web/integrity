@@ -89,6 +89,7 @@
                         <button class="btn-sm" onclick="showCopyModal()">📋 复制</button>
                         <button class="btn-sm" onclick="showMoveModal()">📁 移动</button>
                         <button class="btn-sm" onclick="showRenameModal()">✏️ 重命名</button>
+                        <button class="btn-sm" onclick="showEmailModal()">📧 发送邮件</button>
                         <button class="btn-sm btn-danger" onclick="deleteSelected()">🗑️ 删除</button>
                         <button class="btn-sm" onclick="clearSelection()">取消</button>
                     </div>
@@ -207,6 +208,23 @@
                 <button onclick="closeModal('preview-modal')">✕</button>
             </div>
             <div class="modal-body preview-body" id="preview-body"></div>
+        </div>
+    </div>
+    
+    <div class="modal" id="email-modal">
+        <div class="modal-content modal-sm">
+            <div class="modal-header">
+                <h2>📧 发送邮件</h2>
+                <button onclick="closeModal('email-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <input type="email" id="email-recipient" placeholder="收件人邮箱">
+                <p style="color:var(--text-dim);font-size:12px;margin-top:8px;">将 selected 文件发送到指定邮箱</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" onclick="closeModal('email-modal')">取消</button>
+                <button class="btn btn-primary" onclick="sendEmail()">发送</button>
+            </div>
         </div>
     </div>
     

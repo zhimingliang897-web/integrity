@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query, Form, Request
 from fastapi.responses import FileResponse
 from typing import List, Optional
 from pathlib import Path
@@ -6,6 +6,11 @@ import shutil
 import zipfile
 import tempfile
 import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -222,3 +227,111 @@ async def get_folders(
     file_service = FileService(db)
     folders = file_service.get_folders_tree(path)
     return {"folders": folders}
+
+
+@router.post("/star")
+async def star_file(
+    path: str = Form(...),
+    user: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    from app.database import File
+    file_record = db.query(File).filter(File.path == path).first()
+    if not file_record:
+        file_record = File(path=path, name=Path(path).name, is_starred=True)
+        db.add(file_record)
+    else:
+        file_record.is_starred = True
+    db.commit()
+    return {"success": True, "message": "已收藏"}
+
+
+@router.delete("/star")
+async def unstar_file(
+    path: str = Query(...),
+    user: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    from app.database import File
+    file_record = db.query(File).filter(File.path == path).first()
+    if file_record:
+        file_record.is_starred = False
+        db.commit()
+    return {"success": True, "message": "已取消收藏"}
+
+
+@router.get("/starred")
+async def get_starred_files(
+    user: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    from app.database import File
+    starred = db.query(File).filter(File.is_starred == True).all()
+    files = []
+    for f in starred:
+        file_path = Path(f.path)
+        if file_path.exists():
+            files.append({
+                "name": f.name,
+                "path": f.path,
+                "is_dir": f.is_dir,
+                "size": f.size or (file_path.stat().st_size if file_path.is_file() else 0),
+                "ext": f.ext,
+                "modified_at": f.modified_at.isoformat() if f.modified_at else None
+            })
+    return {"files": files}
+
+
+@router.post("/email")
+async def send_file_email(
+    paths: str = Form(...),
+    recipient: str = Form(...),
+    user: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    from app.config import settings as s
+    
+    if not s.email_sender or not s.email_password:
+        raise HTTPException(status_code=400, detail="邮箱未配置，请先在设置中配置发件邮箱")
+    
+    path_list = paths.split(",")
+    file_service = FileService(db)
+    
+    valid_paths = []
+    for p in path_list:
+        if file_service._is_path_allowed(p) and Path(p).exists():
+            valid_paths.append(p)
+    
+    if not valid_paths:
+        raise HTTPException(status_code=400, detail="没有有效的文件")
+    
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = s.email_sender
+        msg['To'] = recipient
+        msg['Subject'] = f"文件发送 - {len(valid_paths)}个文件"
+        
+        body = f"您好，您收到 {len(valid_paths)} 个文件：\n\n"
+        for p in valid_paths:
+            body += f"- {Path(p).name}\n"
+        body += "\n详情请查看附件"
+        
+        msg.attach(MIMEText(body, 'plain', 'utf-8'))
+        
+        for p in valid_paths:
+            file_path = Path(p)
+            if file_path.is_file():
+                with open(file_path, 'rb') as f:
+                    part = MIMEBase('application', 'octet-stream')
+                    part.set_payload(f.read())
+                    encoders.encode_base64(part)
+                    part.add_header('Content-Disposition', f'attachment; filename={file_path.name}')
+                    msg.attach(part)
+        
+        with smtplib.SMTP_SSL(s.email_smtp_server, s.email_smtp_port) as server:
+            server.login(s.email_sender, s.email_password)
+            server.sendmail(s.email_sender, recipient, msg.as_string())
+        
+        return {"success": True, "message": f"已发送到 {recipient}"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"发送失败: {str(e)}")

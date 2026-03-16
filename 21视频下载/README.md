@@ -206,6 +206,14 @@ python get_cookies.py
 
 ---
 
+## 需补充的隐私/本地配置（未随仓库提交）
+
+| 文件名 | 说明（对他人） | 样式/格式 |
+|--------|----------------|-----------|
+| **cookies.txt** | B 站（bilibili）登录 Cookie，用于下载大会员画质视频；由 yt-dlp 自动生成或手动填写 | Netscape Cookie 格式（纯文本），每行格式为：`域名<Tab>TRUE/FALSE<Tab>路径<Tab>TRUE/FALSE<Tab>过期时间戳<Tab>Cookie名<Tab>Cookie值`；关键字段为 `SESSDATA`、`bili_jct`、`DedeUserID` |
+
+**自己使用**：从本仓库的 **`_secrets/21视频下载/cookies.txt`** 拷贝到本目录（文件名不变）即可。也可运行 `python get_cookies.py` 从已登录的浏览器自动导出。
+
 ## 📁 项目结构
 
 ```
@@ -217,7 +225,7 @@ python get_cookies.py
 ├── get_cookies.py            # Cookie获取工具
 ├── requirements.txt          # Python依赖
 ├── downloads/                # 视频保存目录
-├── cookies.txt              # Cookie文件（自动生成）
+├── cookies.txt              # [需自行补充] B站 Cookie，见上方说明
 ├── batch_progress.json      # 批量下载进度（自动生成）
 ├── core/                    # 核心模块
 │   └── downloader.py        # 下载器核心

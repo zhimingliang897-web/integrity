@@ -61,6 +61,10 @@ class FileService:
         dirs = []
         files = []
         
+        starred_paths = set()
+        for f in self.db.query(File).filter(File.is_starred == True).all():
+            starred_paths.add(f.path)
+        
         try:
             for entry in target_path.iterdir():
                 if entry.name.startswith('.') and entry.name != '.trash':
@@ -77,6 +81,7 @@ class FileService:
                     "mime_type": self._get_mime_type(str(entry)) if entry.is_file() else None,
                     "modified_at": datetime.fromtimestamp(stat.st_mtime),
                     "created_at": datetime.fromtimestamp(stat.st_ctime),
+                    "is_starred": str(entry) in starred_paths,
                 }
                 
                 if entry.is_dir():

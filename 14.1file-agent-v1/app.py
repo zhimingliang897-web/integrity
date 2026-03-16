@@ -96,6 +96,8 @@ async def get_config():
         "natapp_configured": bool(settings.natapp_token),
         "email_configured": bool(settings.email_sender and settings.email_password),
         "root_path": settings.root_path,
+        "uploads_path": settings.uploads_path,
+        "trash_path": settings.trash_path,
         "max_upload_size_mb": settings.max_upload_size_mb
     }
 
@@ -117,6 +119,16 @@ async def update_config(request: Request):
     
     if "email_sender" in data and "email_password" in data:
         s.update_email(data["email_sender"], data["email_password"])
+    
+    if "root_path" in data or "uploads_path" in data or "trash_path" in data:
+        s.update_storage_paths(
+            root=data.get("root_path"),
+            uploads=data.get("uploads_path"),
+            trash=data.get("trash_path")
+        )
+    
+    if "max_upload_size_mb" in data:
+        s.update_max_upload_size(data["max_upload_size_mb"])
     
     s.reload()
     

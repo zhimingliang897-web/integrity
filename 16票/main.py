@@ -80,11 +80,7 @@ def main():
     # 检查页面状态
     print("\n[*] 检查页面状态...")
     if not buyer.check_page_ready():
-        print("\n[!] 警告: 未检测到购买按钮")
-        response = input("是否继续? (y/n): ")
-        if response.lower() != 'y':
-            print("已退出")
-            sys.exit(0)
+        print("\n[!] 警告: 未检测到购买按钮（可能是预约状态，正常）")
 
     # 解析目标时间
     try:
@@ -98,11 +94,7 @@ def main():
     # 检查时间
     current_ts = device.get_accurate_time()
     if target_ts <= current_ts:
-        print(f"\n[!] 目标时间已过，将立即执行抢票")
-        response = input("是否立即开始? (y/n): ")
-        if response.lower() != 'y':
-            print("已退出")
-            sys.exit(0)
+        print(f"\n[!] 目标时间已过，立即开始抢票！")
     else:
         remaining = target_ts - current_ts
         print(f"\n[√] 将在 {config.TARGET_TIME} 开始抢票")

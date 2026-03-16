@@ -81,6 +81,26 @@
         <h1>⚙️ 系统设置</h1>
         
         <div class="card">
+            <h2>📂 存储路径配置</h2>
+            <div class="form-group">
+                <label for="root-path">主目录 Root</label>
+                <input type="text" id="root-path" placeholder="F:\MyFiles">
+            </div>
+            <div class="form-group">
+                <label for="uploads-path">上传目录</label>
+                <input type="text" id="uploads-path" placeholder="F:\MyFiles\uploads">
+            </div>
+            <div class="form-group">
+                <label for="trash-path">回收站目录</label>
+                <input type="text" id="trash-path" placeholder="F:\MyFiles\.trash">
+            </div>
+            <div class="form-group">
+                <label for="max-upload-size">上传文件大小限制 (MB)</label>
+                <input type="number" id="max-upload-size" placeholder="2048" min="1">
+            </div>
+        </div>
+        
+        <div class="card">
             <h2>🔐 登录密码</h2>
             <div class="form-group">
                 <label for="password">新密码</label>
@@ -136,6 +156,18 @@
             try {
                 const res = await fetch('/api/config');
                 const data = await res.json();
+                if (data.root_path) {
+                    document.getElementById('root-path').value = data.root_path;
+                }
+                if (data.uploads_path) {
+                    document.getElementById('uploads-path').value = data.uploads_path;
+                }
+                if (data.trash_path) {
+                    document.getElementById('trash-path').value = data.trash_path;
+                }
+                if (data.max_upload_size_mb) {
+                    document.getElementById('max-upload-size').value = data.max_upload_size_mb;
+                }
                 if (data.llm_api_key) {
                     document.getElementById('llm-api-key').placeholder = data.llm_api_key;
                 }
@@ -157,6 +189,16 @@
             msg.style.display = 'none';
             
             const data = {};
+            
+            const rootPath = document.getElementById('root-path').value.trim();
+            const uploadsPath = document.getElementById('uploads-path').value.trim();
+            const trashPath = document.getElementById('trash-path').value.trim();
+            const maxUploadSize = document.getElementById('max-upload-size').value.trim();
+            
+            if (rootPath) data.root_path = rootPath;
+            if (uploadsPath) data.uploads_path = uploadsPath;
+            if (trashPath) data.trash_path = trashPath;
+            if (maxUploadSize) data.max_upload_size_mb = parseInt(maxUploadSize);
             
             const password = document.getElementById('password').value;
             if (password) data.password = password;

@@ -74,6 +74,14 @@ api:
   timeout_sec: 180
 ```
 
+**需补充的隐私/本地配置（未随仓库提交）**
+
+| 文件名 | 说明（对他人） | 样式/格式 |
+|--------|----------------|-----------|
+| **config.local.yaml** | 覆盖 `config.yaml` 中的 API Key 与模型配置，避免把密钥写入仓库 | YAML 格式，包含 `api.api_key`（格式 `sk-...`）、`api.base_url`、`api.model`、`api.timeout_sec` 四个字段，见上方示例 |
+
+**自己使用**：从本仓库的 **`_secrets/20AIer-xhs/config.local.yaml`** 拷贝到本目录（文件名不变）即可。
+
 ### 3. 放入文章
 
 把你的文章保存为 `.txt` 文件，放到 `input/` 目录：
