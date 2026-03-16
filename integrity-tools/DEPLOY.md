@@ -19,7 +19,7 @@
                             ▼
 ┌─────────────────────────────────────────────────────────────────┐
 │                      云服务器 (HTTP)                              │
-│                     8.138.164.133:5000                           │
+│                     <your-server-ip>:5000                        │
 │                                                                   │
 │  ┌──────────────────────────────────────────────────────────┐   │
 │  │                    Gunicorn + Flask                       │   │
@@ -225,8 +225,8 @@ def new_tool_page():
 ### 步骤 7：部署
 
 ```bash
-scp -r integrity-tools root@8.138.164.133:/root/
-ssh root@8.138.164.133 "systemctl restart integrity-tools"
+scp -r integrity-tools root@<your-server-ip>:/root/
+ssh root@<your-server-ip> "systemctl restart integrity-tools"
 ```
 
 ## 六、配置文件
@@ -234,8 +234,8 @@ ssh root@8.138.164.133 "systemctl restart integrity-tools"
 ### .env
 
 ```bash
-SECRET_KEY=integrity-lab-secret-key-2026
-INVITE_CODES=demo2026,friend2026,test2026
+SECRET_KEY=<your-secret-key>
+INVITE_CODES=<invite1>,<invite2>,<invite3>
 
 # LLM API Keys
 DASHSCOPE_API_KEY=sk-xxx
@@ -310,7 +310,7 @@ systemctl restart integrity-tools
 
 | 项目 | 值 |
 |------|-----|
-| IP | 8.138.164.133 |
+| IP | <your-server-ip> |
 | SSH 端口 | 22 |
 | 服务端口 | 5000 |
 | Python | /root/miniconda3/bin/python3 |
@@ -355,7 +355,7 @@ PDF工具使用临时目录，服务重启后文件会清空。需要重新处�
 确保 `docs/assets/js/tools-auth.js` 中的 `SERVER_URL` 正确：
 
 ```javascript
-const SERVER_URL = 'http://8.138.164.133:5000';
+const SERVER_URL = 'http://<your-server-ip>:5000';
 ```
 
 然后提交并推送到 GitHub。

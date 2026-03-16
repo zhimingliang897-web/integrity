@@ -21,7 +21,7 @@
   - tools(不好用)/organize 智能文件夹整理助手
 
 ### 3. 阿里云服务器部署后端
-- 服务器：8.138.164.133 (2核2G, Alibaba Cloud Linux 8)
+- 服务器：<your-server-ip> (2核2G, Alibaba Cloud Linux 8)
 - 服务：Flask API 服务
 - 端口：5000
 - 功能：
@@ -32,7 +32,7 @@
 
 ### 访问地址
 - 网页文档：https://zhimingliang897-web.github.io/integrity/
-- API 服务：http://8.138.164.133/api/
+- API 服务：http://<your-server-ip>/api/
 
 ---
 
@@ -53,7 +53,7 @@ GitHub Pages (静态网页)
 #### 1. 服务器环境准备
 ```bash
 # SSH 连接
-ssh root@8.138.164.133
+ssh root@<your-server-ip>
 
 # 安装 Docker（如未安装）
 dnf install -y docker
@@ -103,7 +103,7 @@ chmod +x /usr/local/bin/docker-compose
 
 ```javascript
 // 示例：多模型对比
-const API_BASE = 'http://8.138.164.133';
+const API_BASE = 'http://<your-server-ip>';
 
 async function callCompareAPI(question) {
     const response = await fetch(`${API_BASE}/api/tools/compare`, {
@@ -166,20 +166,20 @@ server {
 ### API 测试命令
 ```bash
 # 健康检查
-curl http://8.138.164.133/api/health
+curl http://<your-server-ip>/api/health
 
 # 注册用户（需要邀请码）
-curl -X POST http://8.138.164.133/api/auth/register \
+curl -X POST http://<your-server-ip>/api/auth/register \
   -H "Content-Type: application/json" \
   -d '{"username":"test","password":"123456","invite_code":"demo2026"}'
 
 # 登录
-curl -X POST http://8.138.164.133/api/auth/login \
+curl -X POST http://<your-server-ip>/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username":"test","password":"123456"}'
 
 # Token 计算
-curl -X POST http://8.138.164.133/api/tools/token-calc \
+curl -X POST http://<your-server-ip>/api/tools/token-calc \
   -H "Content-Type: application/json" \
   -d '{"model":"qwen-plus","lang":"zh","chars":100}'
 ```
@@ -187,7 +187,7 @@ curl -X POST http://8.138.164.133/api/tools/token-calc \
 ### 服务器管理命令
 ```bash
 # SSH 登录
-ssh root@8.138.164.133
+ssh root@<your-server-ip>
 
 # 查看服务状态
 ps aux | grep gunicorn

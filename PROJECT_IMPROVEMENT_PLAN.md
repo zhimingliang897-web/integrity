@@ -50,7 +50,7 @@
                      ↓
 ┌─────────────────────────────────────────────────────────┐
 │  阿里云ECS (后端API)                                     │
-│  IP: 8.138.164.133:5000                                 │
+│  IP: <your-server-ip>:5000                              │
 │  Gunicorn (2 workers, 120s timeout)                     │
 │  Flask + SQLAlchemy + JWT                               │
 └─────────────────────────────────────────────────────────┘
@@ -74,7 +74,7 @@
 
 **问题描述**:
 - 文件: `docs/server/deploy_ssh.py:8`
-- 内容: `PASSWORD = '15232735822Aa'`
+- 内容: `PASSWORD = '<your-ssh-password>'`（示例，真实值不要写入仓库）
 - 影响: 服务器完全暴露，任何人都可以SSH登录
 
 **修复优先级**: 🔴 P0 - 立即修复
@@ -115,7 +115,7 @@
 #### 4. 服务器IP地址广泛暴露
 
 **问题描述**:
-在67个文件中硬编码了服务器IP `8.138.164.133`
+在67个文件中硬编码了服务器IP `<your-server-ip>`
 
 **影响范围**:
 - 服务器IP暴露，容易成为攻击目标
@@ -128,7 +128,7 @@
 #### 5. JWT Secret Key管理不当
 
 **问题描述**:
-多个工具文件中有fallback默认值: `'integrity-lab-secret-key-2026'`
+多个工具文件中有 fallback 默认值: `'<your-secret-key>'`（示例，真实值不要写入仓库）
 
 **影响范围**:
 - 弱密钥可能被暴力破解
@@ -202,7 +202,7 @@
 
 **验证**:
 ```bash
-ssh root@8.138.164.133  # 使用新密码登录
+ssh root@<your-server-ip>  # 使用新密码登录
 ```
 
 ---
@@ -232,9 +232,9 @@ git clone --mirror https://github.com/zhimingliang897-web/integrity.git
 
 # 创建passwords.txt文件
 cat > passwords.txt << EOF
-15232735822Aa
-sk-0ef56d1b3ba54a188ce28a46c54e2a24
-integrity-lab-secret-key-2026
+<your-ssh-password>
+sk-your-key-here
+your-secret-key-here
 EOF
 
 # 清理敏感信息
@@ -291,7 +291,7 @@ if not secret:
 **步骤**:
 
 1. **配置域名解析**:
-   - 将 `api.liangyiren.top` 解析到 `8.138.164.133`
+   - 将 `api.liangyiren.top` 解析到 `<your-server-ip>`
    - 配置SSL证书（Let's Encrypt）
 
 2. **创建配置文件**:

@@ -92,6 +92,17 @@
     box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
 }
 
+.demo-card.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.demo-card.disabled:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border);
+}
+
 .demo-header {
     padding: 20px 24px;
     border-bottom: 1px solid var(--border);

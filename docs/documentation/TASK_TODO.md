@@ -10,7 +10,7 @@
 
 | 模块 | 状态 | 说明 |
 |------|------|------|
-| 后端 API 部署 | ✅ 完成 | 服务器 `8.138.164.133:5000` 正常运行 |
+| 后端 API 部署 | ✅ 完成 | 服务器 `<your-server-ip>:5000` 正常运行 |
 | PDF 蓝图注册 | ✅ 完成 | 2026-03-14 修复 `/api/pdf/*` 404 错误 |
 | debate.html 语法修复 | ✅ 完成 | 2026-03-14 删除残留代码 |
 | 前端 API 路径统一 | ✅ 完成 | 2026-03-14 修复所有 `/api/tools/*` 路径 |
@@ -48,7 +48,7 @@
 **问题根源**：域名 `api.liangyiren.top` 被劫持或被墙
 - 通过域名访问 HTTPS 时，TLS 握手阶段连接被重置
 - HTTP 请求被重定向到返回 403 的 "Beaver" 服务器
-- 直接使用 IP 地址访问正常：`curl -k -I https://8.138.164.133/`
+- 直接使用 IP 地址访问正常：`curl -k -I https://<your-server-ip>/`
 - SSL 证书有效（Let's Encrypt，有效期至 2026-06-10）
 - 服务器内部访问正常：`curl https://api.liangyiren.top/` 返回正常
 
@@ -65,10 +65,10 @@
 **临时访问方案**：
 ```bash
 # 方案 1: 修改本地 hosts 文件（仅本地测试）
-echo "8.138.164.133 api.liangyiren.top" >> /etc/hosts
+echo "<your-server-ip> api.liangyiren.top" >> /etc/hosts
 
 # 方案 2: 使用 IP + 端口访问（需开放端口 8000）
-http://8.138.164.133:8000/
+http://<your-server-ip>:8000/
 ```
 
 ---
@@ -302,7 +302,7 @@ async function generateImages() {
 
 ```bash
 # SSH 到服务器
-ssh root@8.138.164.133
+ssh root@<your-server-ip>
 
 # 1. 检查服务运行状态
 ps aux | grep gunicorn

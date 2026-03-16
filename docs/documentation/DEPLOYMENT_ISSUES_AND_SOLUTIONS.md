@@ -48,21 +48,21 @@ HTTP/1.1 403 Forbidden
 Server: Beaver
 
 # 现象 3：直接用 IP 访问正常
-$ curl -k -I https://8.138.164.133/
+$ curl -k -I https://<your-server-ip>/
 HTTP/2 200 
 server: nginx/1.23.1
 
 # 现象 4：服务器内部访问正常
-$ ssh root@8.138.164.133
+$ ssh root@<your-server-ip>
 $ curl https://api.liangyiren.top/
 {"service":"Integrity Lab API","status":"ok"}
 ```
 
 ### 技术分析
 
-1. **DNS 解析正常**：`api.liangyiren.top` → `8.138.164.133`
+1. **DNS 解析正常**：`api.liangyiren.top` → `<your-server-ip>`
 2. **SSL 证书有效**：Let's Encrypt 签发，有效期至 2026-06-10
-3. **端口开放正常**：443 端口可以连接（`nc -zv 8.138.164.133 443` 成功）
+3. **端口开放正常**：443 端口可以连接（`nc -zv <your-server-ip> 443` 成功）
 4. **TLS 握手失败**：在 Client Hello 之后连接被重置
 5. **HTTP 被劫持**：返回的 Server 头是 "Beaver"，不是 nginx
 
@@ -91,15 +91,15 @@ $ curl https://api.liangyiren.top/
 
 **访问地址**：
 ```
-http://8.138.164.133:8000/
-http://8.138.164.133:8000/demos/ai-debate.html
-http://8.138.164.133:8000/tools.html
+http://<your-server-ip>:8000/
+http://<your-server-ip>:8000/demos/ai-debate.html
+http://<your-server-ip>:8000/tools.html
 ```
 
 **API 调用**：
 ```javascript
 // 前端代码无需修改，自动使用同源 API
-const API_BASE = window.location.origin; // http://8.138.164.133:8000
+const API_BASE = window.location.origin; // http://<your-server-ip>:8000
 fetch(`${API_BASE}/api/tools/ai-compare/providers`)
 ```
 
@@ -114,7 +114,7 @@ fetch(`${API_BASE}/api/tools/ai-compare/providers`)
 **步骤**：
 
 1. 注册新域名（建议使用国外域名商，如 Namecheap、Cloudflare）
-2. 配置 DNS A 记录指向 `8.138.164.133`
+2. 配置 DNS A 记录指向 `<your-server-ip>`
 3. 申请 SSL 证书：
    ```bash
    certbot certonly --nginx -d newdomain.com
@@ -146,7 +146,7 @@ fetch(`${API_BASE}/api/tools/ai-compare/providers`)
 3. 修改域名 NS 记录到 Cloudflare
 4. 在 Cloudflare 添加 A 记录：
    - 名称：`api`
-   - 内容：`8.138.164.133`
+   - 内容：`<your-server-ip>`
    - 代理状态：已代理（橙色云朵）
 5. SSL/TLS 设置：完全（严格）
 
@@ -158,10 +158,10 @@ fetch(`${API_BASE}/api/tools/ai-compare/providers`)
 
 ```bash
 # macOS/Linux
-sudo echo "8.138.164.133 api.liangyiren.top" >> /etc/hosts
+sudo echo "<your-server-ip> api.liangyiren.top" >> /etc/hosts
 
 # Windows (管理员权限)
-echo 8.138.164.133 api.liangyiren.top >> C:\Windows\System32\drivers\etc\hosts
+echo <your-server-ip> api.liangyiren.top >> C:\Windows\System32\drivers\etc\hosts
 ```
 
 然后访问：`https://api.liangyiren.top/`（需要忽略证书警告）
@@ -215,7 +215,7 @@ echo 8.138.164.133 api.liangyiren.top >> C:\Windows\System32\drivers\etc\hosts
 
 ```bash
 # SSH 登录
-ssh root@8.138.164.133
+ssh root@<your-server-ip>
 
 # 检查 Nginx
 systemctl status nginx
@@ -290,7 +290,7 @@ gunicorn -w 2 -b 0.0.0.0:5000 --timeout 120 app.main:app --daemon \
 ## 🎯 下一步行动
 
 1. **立即执行**：开放阿里云安全组端口 8000
-2. **测试访问**：`http://8.138.164.133:8000/`
+2. **测试访问**：`http://<your-server-ip>:8000/`
 3. **测试功能**：登录 → 使用在线工具
 4. **长期方案**：注册新域名或使用 Cloudflare CDN
 

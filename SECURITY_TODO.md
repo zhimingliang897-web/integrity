@@ -11,7 +11,7 @@
 ### 1. 更改服务器密码 🔴
 ```bash
 # SSH登录服务器
-ssh root@8.138.164.133
+ssh root@<your-server-ip>
 
 # 更改密码
 passwd
@@ -47,7 +47,7 @@ passwd
 #### 文件1: `docs/server/deploy_ssh.py`
 ```python
 # 删除第8行的硬编码密码
-# PASSWORD = '15232735822Aa'  # ❌ 删除这行
+# PASSWORD = '<your-ssh-password>'  # ❌ 示例，真实值不要写入仓库
 
 # 改为:
 PASSWORD = os.environ.get('SSH_PASSWORD')
@@ -69,7 +69,7 @@ if not PASSWORD:
 
 ```python
 # 从:
-DASHSCOPE_API_KEY = os.environ.get('DASHSCOPE_API_KEY', 'sk-0ef56d1b3ba54a188ce28a46c54e2a24')
+DASHSCOPE_API_KEY = os.environ.get('DASHSCOPE_API_KEY')
 
 # 改为:
 DASHSCOPE_API_KEY = os.environ.get('DASHSCOPE_API_KEY')
@@ -89,12 +89,12 @@ if not DASHSCOPE_API_KEY:
 在所有工具文件中搜索并修改:
 ```bash
 # 搜索包含默认secret的文件
-grep -r "integrity-lab-secret-key-2026" docs/server/app/tools/
+grep -r "<your-secret-key>" docs/server/app/tools/
 ```
 
 ```python
 # 从:
-secret = flask.current_app.config.get('SECRET_KEY', 'integrity-lab-secret-key-2026')
+secret = flask.current_app.config.get('SECRET_KEY')
 
 # 改为:
 secret = flask.current_app.config.get('SECRET_KEY')
@@ -138,7 +138,7 @@ git push
 
 ```bash
 # SSH登录服务器
-ssh root@8.138.164.133
+ssh root@<your-server-ip>
 
 # 创建.env文件
 cat > /root/integrity-api/server/.env << 'ENVEOF'
@@ -187,9 +187,9 @@ git clone --mirror https://github.com/zhimingliang897-web/integrity.git
 
 # 创建要替换的敏感信息列表
 cat > passwords.txt << 'PWDEOF'
-15232735822Aa
-sk-0ef56d1b3ba54a188ce28a46c54e2a24
-integrity-lab-secret-key-2026
+<your-ssh-password>
+sk-your-key-here
+<your-secret-key>
 PWDEOF
 
 # 清理敏感信息
@@ -216,10 +216,10 @@ git gc --prune=now --aggressive
 ```bash
 # 1. 配置域名解析
 # 在域名管理后台添加A记录:
-# api.liangyiren.top -> 8.138.164.133
+# api.liangyiren.top -> <your-server-ip>
 
 # 2. 在服务器上安装Nginx和Certbot
-ssh root@8.138.164.133
+ssh root@<your-server-ip>
 apt update
 apt install nginx certbot python3-certbot-nginx
 
@@ -242,7 +242,7 @@ certbot --nginx -d api.liangyiren.top
 ```bash
 # 批量替换IP为域名
 cd /Users/lzm/macbook_space/integrity
-find docs -type f \( -name "*.html" -o -name "*.js" \) -exec sed -i '' 's|http://8.138.164.133:5000|https://api.liangyiren.top|g' {} +
+find docs -type f \( -name "*.html" -o -name "*.js" \) -exec sed -i '' 's|http://<your-server-ip>:5000|https://api.liangyiren.top|g' {} +
 
 # 提交修改
 git add docs/
@@ -275,9 +275,9 @@ git push
 ```bash
 # 检查代码中是否还有敏感信息
 cd /Users/lzm/macbook_space/integrity
-grep -r "15232735822Aa" .
-grep -r "sk-0ef56d1b3ba54a188ce28a46c54e2a24" .
-grep -r "integrity-lab-secret-key-2026" docs/server/app/tools/
+grep -r "<your-ssh-password>" .
+grep -r "sk-your-key-here" .
+grep -r "<your-secret-key>" docs/server/app/tools/
 
 # 检查服务器状态
 curl https://api.liangyiren.top/

@@ -53,7 +53,7 @@ All notable changes to this project will be documented in this file.
   - 原始 SHA256 无盐值哈希替换为 `werkzeug.security.generate_password_hash`（PBKDF2-HMAC-SHA256，自动加盐）
   - 登录验证改用 `check_password_hash`，兼容新哈希格式
 - **SECRET_KEY 安全加固** (`server/app/main.py`)
-  - 移除硬编码备用值 `'integrity-lab-secret-key-2026'`；环境变量未设置时直接抛出 `RuntimeError`，防止以已知明文 key 运行
+  - 移除硬编码备用值 `'<your-secret-key>'`（示例占位符，真实值不要写入仓库）；环境变量未设置时直接抛出 `RuntimeError`，防止以已知明文 key 运行
 - **CORS 通配符端口修复** (`server/app/main.py`)
   - `http://localhost:*` / `http://127.0.0.1:*` 通配符在 CORS 规范中无效，替换为明确端口列表（3000, 5000, 5500, 8080）
 - **SQLAlchemy 弃用 API 替换** (`server/app/main.py`)
@@ -66,7 +66,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - **Demo 链接改为相对路径** (`docs/tools.html`)
-  - Demo 5（台词学习）、Demo 6（分镜视频生成）从硬编码服务器地址（`http://8.138.164.133:5000/demos/...`）改为相对路径（`demos/...`），GitHub Pages 和服务器均可直接访问
+  - Demo 5（台词学习）、Demo 6（分镜视频生成）从硬编码服务器地址（`http://<your-server-ip>:5000/demos/...`）改为相对路径（`demos/...`），GitHub Pages 和服务器均可直接访问
 
 ---
 
@@ -94,9 +94,9 @@ All notable changes to this project will be documented in this file.
 - 修复 Nginx 配置域名未备案无法访问的问题
 
 ### Deployment
-- 服务器 IP: `8.138.164.133:5000`
-- 前端地址: `http://8.138.164.133:5000/app/`
-- 后端 API: `http://8.138.164.133:5000/`
+- 服务器 IP: `<your-server-ip>:5000`
+- 前端地址: `http://<your-server-ip>:5000/app/`
+- 后端 API: `http://<your-server-ip>:5000/`
 
 ---
 
