@@ -1,6 +1,6 @@
 api:
   # 安全：不要把真实 Key 写进仓库。请使用环境变量（推荐）或本地 _secrets 版本覆盖。
-  api_key: sk-your-key-here
+  api_key: sk-0ef56d1b3ba54a188ce28a46c54e2a24
   base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
   model: qwen-plus
   provider: dashscope

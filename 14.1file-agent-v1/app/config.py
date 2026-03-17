@@ -180,6 +180,18 @@ class Settings:
             self._config["llm"] = {}
         self._config["llm"]["api_key"] = api_key
         self.save()
+
+    def update_llm_model(self, model: str):
+        if "llm" not in self._config:
+            self._config["llm"] = {}
+        self._config["llm"]["model"] = model
+        self.save()
+
+    def update_llm_base_url(self, base_url: str):
+        if "llm" not in self._config:
+            self._config["llm"] = {}
+        self._config["llm"]["base_url"] = base_url
+        self.save()
     
     def update_natapp_token(self, token: str):
         if "natapp" not in self._config:

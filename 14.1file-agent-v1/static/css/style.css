@@ -50,11 +50,12 @@ body {
 .main { display: flex; flex: 1; overflow: hidden; }
 
 .sidebar {
-    width: 220px;
+    width: 240px;
     background: var(--surface);
     border-right: 1px solid var(--border);
     padding: 16px 0;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .nav-item {
@@ -65,11 +66,27 @@ body {
     gap: 10px;
     color: var(--text-dim);
     transition: all 0.2s;
+    min-width: 0;
+}
+
+.nav-item .mount-name {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
 }
 
 .nav-item:hover { background: var(--surface2); color: var(--text); }
 .nav-item.active { background: var(--accent); color: #fff; }
-.nav-item .icon { width: 20px; text-align: center; }
+.nav-item .icon {
+    width: 20px;
+    text-align: center;
+    flex: 0 0 20px;
+    overflow: hidden;
+    white-space: nowrap;
+}
 .nav-section { padding: 20px 20px 10px; font-size: 12px; color: var(--text-dim); text-transform: uppercase; }
 hr { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
 
@@ -222,6 +239,8 @@ hr { border: none; border-top: 1px solid var(--border); margin: 10px 0; }
     color: #000;
     border-radius: 4px;
     margin-left: auto;
+    flex: 0 0 auto;
+    white-space: nowrap;
 }
 .mount-tag {
     font-size: 10px;

@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse, Response
 from typing import Optional
 from pathlib import Path
 from urllib.parse import quote
 import io
-import base64
+import os
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -44,39 +44,30 @@ async def preview_file(
         }
 
     elif preview_type == "image":
-        try:
-            img_data = preview_service.get_image_base64(path)
-            return {
-                "type": "image",
-                "data": img_data,
-                "filename": file_path.name
-            }
-        except Exception as e:
-            return {
-                "type": "image",
-                "url": f"{base_url}/api/preview/file?path={encoded_path}",
-                "filename": file_path.name,
-                "error": str(e)
-            }
+        return {
+            "type": "image",
+            "url": f"/api/preview/file?path={encoded_path}",
+            "filename": file_path.name
+        }
 
     elif preview_type == "video":
         return {
             "type": "video",
-            "url": f"{base_url}/api/preview/file?path={encoded_path}",
+            "url": f"/api/preview/file?path={encoded_path}",
             "filename": file_path.name
         }
 
     elif preview_type == "audio":
         return {
             "type": "audio",
-            "url": f"{base_url}/api/preview/file?path={encoded_path}",
+            "url": f"/api/preview/file?path={encoded_path}",
             "filename": file_path.name
         }
 
     elif preview_type == "pdf":
         return {
             "type": "pdf",
-            "url": f"{base_url}/api/preview/file?path={encoded_path}",
+            "url": f"/api/preview/file?path={encoded_path}",
             "filename": file_path.name
         }
 
@@ -90,17 +81,83 @@ async def preview_file(
 
 @router.get("/file")
 async def get_file(
+    request: Request,
     path: str = Query(...),
     user: str = Depends(get_current_user)
 ):
     preview_service = PreviewService()
-    
+
     try:
-        return preview_service.get_file_response(path)
-    except ValueError as e:
-        raise HTTPException(status_code=403, detail=str(e))
-    except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="文件不存在")
+        file_path = Path(path)
+        if not preview_service._is_path_allowed(path):
+            raise HTTPException(status_code=403, detail="路径不允许访问")
+        if not file_path.exists():
+            raise HTTPException(status_code=404, detail="文件不存在")
+
+        import mimetypes
+        mime_type, _ = mimetypes.guess_type(str(file_path))
+        mime_type = mime_type or "application/octet-stream"
+
+        file_size = file_path.stat().st_size
+        range_header = request.headers.get("range")
+
+        cache_headers = {
+            "Cache-Control": "private, max-age=3600",
+            "Accept-Ranges": "bytes",
+        }
+
+        if range_header:
+            # 解析 Range: bytes=start-end
+            range_val = range_header.replace("bytes=", "")
+            parts = range_val.split("-")
+            start = int(parts[0]) if parts[0] else 0
+            end = int(parts[1]) if parts[1] else file_size - 1
+            end = min(end, file_size - 1)
+            chunk_size = end - start + 1
+
+            def iter_file(start, end):
+                with open(file_path, "rb") as f:
+                    f.seek(start)
+                    remaining = end - start + 1
+                    while remaining > 0:
+                        chunk = f.read(min(65536, remaining))
+                        if not chunk:
+                            break
+                        remaining -= len(chunk)
+                        yield chunk
+
+            return StreamingResponse(
+                iter_file(start, end),
+                status_code=206,
+                media_type=mime_type,
+                headers={
+                    **cache_headers,
+                    "Content-Range": f"bytes {start}-{end}/{file_size}",
+                    "Content-Length": str(chunk_size),
+                },
+            )
+        else:
+            def iter_full():
+                with open(file_path, "rb") as f:
+                    while True:
+                        chunk = f.read(65536)
+                        if not chunk:
+                            break
+                        yield chunk
+
+            return StreamingResponse(
+                iter_full(),
+                media_type=mime_type,
+                headers={
+                    **cache_headers,
+                    "Content-Length": str(file_size),
+                    "Content-Disposition": f'inline; filename="{quote(file_path.name)}"',
+                },
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/thumb")

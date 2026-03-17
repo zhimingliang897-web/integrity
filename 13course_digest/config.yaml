@@ -1,29 +1,27 @@
 # CourseDigest 配置文件
-# 使用阿里巴巴百炼 API (千问)
 
 # 路径配置
 input_dir: "input"
 cache_dir: "cache"
 output_dir: "output"
 
-# faster-whisper 语音转文字配置
+# 语音转文字配置
 whisper:
-  model: "medium" # 可选: tiny / base / small / medium / large-v3
-  device: "cuda" # 新环境下固定用 GPU
-  compute_type: "auto" # 让代码自行选择合适精度（GPU 优先 int8_float16/int8）
-  # 解码时的 beam size，数值越大精度略高但明显更慢，1 通常就足够
+  engine: "faster"      # faster（稳定）或 fast（快10倍，需 pip install insanely-fast-whisper）
+  model: "small"        # tiny/base/small/medium
+  device: "cpu"         # cuda 或 cpu
+  compute_type: "int8"  # int8/float16
+  language: "en"
   beam_size: 1
-  language: "en" # 课程语言
 
-# 阿里巴巴百炼 API 配置 (千问)
+# API 配置
 api:
-  provider: "dashscope" # 使用百炼 API
-  # 安全：不要把真实 Key 写进仓库。请使用环境变量 DASHSCOPE_API_KEY 或本地 _secrets 版本覆盖。
-  api_key: "sk-0ef56d1b3ba54a188ce28a46c54e2a24" # 示例占位符
-  model: "glm-5" # 千问模型: qwen-turbo, qwen-plus, qwen-max
+  provider: "dashscope"
+  api_key: "sk-0ef56d1b3ba54a188ce28a46c54e2a24"
+  model: "glm-5"
 
-# 分析分块配置
+# 分析配置
 analysis:
-  chunk_minutes: 30 # 每块时长（分钟）
-  temperature: 0.3 # 低温度确保输出稳定
-  max_tokens: 4096 # 最大token数
+  chunk_minutes: 30
+  temperature: 0.3
+  max_tokens: 4096
