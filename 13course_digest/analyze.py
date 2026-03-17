@@ -143,7 +143,6 @@ def analyze_lecture(
     past_exams: str = "",
     ppt_text: str = "",
     paper_text: str = "",
-    subject: str = "default",
 ) -> str:
     """
     对单节课的所有转录块进行分析，输出完整学习指南。
@@ -159,7 +158,6 @@ def analyze_lecture(
         past_exams: 往年真题文本（可选）
         ppt_text: PPT 提取的文本（可选）
         paper_text: 论文文本（可选）
-        subject: 学科类型（可选，默认 "default"）
 
     Returns:
         str: 完整的 Markdown 格式学习指南
@@ -172,7 +170,7 @@ def analyze_lecture(
         if not config.GROQ_API_KEY:
             raise ValueError("GROQ_API_KEY 未设置，请在环境变量中配置")
 
-    system = prompts.build_system_prompt(subject)
+    system = prompts.build_system_prompt()
     chunk_results: list[str] = []
 
     provider_name = "千问" if config.API_PROVIDER in ["dashscope", "qwen"] else "Groq"

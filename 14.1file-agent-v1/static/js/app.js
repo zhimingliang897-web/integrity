@@ -1,8 +1,6 @@
 let currentPath = '';
 let files = [];
 let selectedFiles = [];
-let lastAgentFiles = [];
-// 待上传文件列表：{ file: File, relativePath?: string }
 let pendingUploadFiles = [];
 let isAuthenticated = false;
 let mounts = [];
@@ -104,8 +102,7 @@ function renderFiles(files) {
             <div class="file-size">${f.is_dir ? '-' : formatSize(f.size)}</div>
             <div class="file-date">${formatDate(f.modified_at)}</div>
             <div class="file-actions">
-                <button class="btn-sm" onclick="downloadByPath('${escapeAttr(f.path)}')" title="下载">📥</button>
-                ${!f.is_dir ? `<button class="btn-sm" onclick="sendEmailSingle('${escapeAttr(f.path)}')" title="发邮件">📧</button>` : ''}
+                ${!f.is_dir ? `<button class="btn-sm" onclick="downloadByPath('${escapeAttr(f.path)}')" title="下载">📥</button>` : ''}
                 <button class="btn-sm" onclick="toggleStarByPath('${escapeAttr(f.path)}')" title="收藏">${f.is_starred ? '⭐' : '☆'}</button>
                 ${!isReadonlyPath ? `<button class="btn-sm btn-danger" onclick="deleteByPath('${escapeAttr(f.path)}')" title="删除">🗑️</button>` : ''}
             </div>
@@ -165,34 +162,6 @@ function formatDate(date) {
 
 function escapeHtml(str) {
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-function getMountIcon(icon) {
-    const raw = String(icon || '').trim();
-    if (!raw) return '📁';
-
-    const token = raw.toUpperCase();
-    const map = {
-        FOLDER: '📁',
-        DIR: '📁',
-        DIRECTORY: '📁',
-        DRIVE: '💽',
-        DISK: '💽',
-        ARCHIVE: '🗄️',
-        DOC: '📄',
-        FILE: '📄',
-        IMAGE: '🖼️',
-        VIDEO: '🎬',
-        AUDIO: '🎵'
-    };
-
-    if (map[token]) return map[token];
-
-    // Pure text labels are treated as placeholders and fallback to folder icon.
-    if (/^[A-Za-z0-9_\- ]+$/.test(raw)) return '📁';
-
-    // Keep actual emoji/symbols/custom icons.
-    return raw;
 }
 
 function navigateTo(path) {
@@ -293,13 +262,10 @@ document.getElementById('upload-area')?.addEventListener('drop', (e) => {
 
 function handleFiles(fileList) {
     for (const file of fileList) {
-        const relativePath = file.webkitRelativePath || file.relativePath || file.name;
-        const entry = { file, relativePath };
-        pendingUploadFiles.push(entry);
+        pendingUploadFiles.push(file);
         const item = document.createElement('div');
         item.className = 'upload-item';
-        const displayName = relativePath && relativePath !== file.name ? relativePath : file.name;
-        item.innerHTML = `<span class="name">${escapeHtml(displayName)}</span><span class="size">${formatSize(file.size)}</span>`;
+        item.innerHTML = `<span class="name">${escapeHtml(file.name)}</span><span class="size">${formatSize(file.size)}</span>`;
         document.getElementById('upload-list').appendChild(item);
     }
 }
@@ -319,12 +285,7 @@ async function doUploadFiles() {
     showToast(`开始上传 ${pendingUploadFiles.length} 个文件...`, '');
 
     const formData = new FormData();
-    pendingUploadFiles.forEach(item => {
-        formData.append('files', item.file);
-        if (item.relativePath) {
-            formData.append('relative_paths', item.relativePath);
-        }
-    });
+    pendingUploadFiles.forEach(file => formData.append('files', file));
     formData.append('target_path', currentPath);
     
     try {
@@ -659,14 +620,10 @@ async function sendAgentMsg(text) {
     messagesEl.innerHTML += `<div class="agent-msg user">${escapeHtml(msg)}</div>`;
     
     try {
-        const context = { current_path: currentPath };
-        if (selectedFiles.length > 0) context.selected_files = selectedFiles;
-        if (lastAgentFiles.length > 0) context.last_files = lastAgentFiles;
-
         const res = await apiCall('/api/agent/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: msg, context })
+            body: JSON.stringify({ message: msg, context: { current_path: currentPath } })
         });
         
         if (!res) return;
@@ -676,7 +633,6 @@ async function sendAgentMsg(text) {
         messagesEl.scrollTop = messagesEl.scrollHeight;
         
         if (data.files && data.files.length > 0) {
-            lastAgentFiles = data.files;
             files = data.files;
             renderFiles(files);
         }
@@ -973,8 +929,8 @@ function renderMounts() {
              data-name="${escapeHtml(m.name)}"
              onclick="navigateToMountByEl(this)"
              title="${m.path}${m.readonly ? ' (只读)' : ''}">
-            <span class="icon">${escapeHtml(getMountIcon(m.icon))}</span> 
-            <span class="mount-name">${escapeHtml(m.name)}</span>
+            <span class="icon">${m.icon || '📁'}</span> 
+            ${escapeHtml(m.name)}
             ${m.readonly ? '<span class="readonly-badge">只读</span>' : ''}
         </div>
     `).join('');
@@ -1072,21 +1028,15 @@ async function sendEmail() {
         showToast('请输入收件人邮箱', 'error');
         return;
     }
+    
     if (!recipient.includes('@')) {
         showToast('邮箱格式不正确', 'error');
         return;
     }
-
-    const singlePath = document.getElementById('email-recipient').dataset.singlePath;
-    const paths = singlePath ? [singlePath] : selectedFiles;
-    if (paths.length === 0) {
-        showToast('没有选中文件', 'error');
-        return;
-    }
-
+    
     try {
         const formData = new FormData();
-        formData.append('paths', paths.join(','));
+        formData.append('paths', selectedFiles.join(','));
         formData.append('recipient', recipient);
         
         const res = await apiCall('/api/files/email', { method: 'POST', body: formData });
@@ -1097,7 +1047,6 @@ async function sendEmail() {
         if (data.success) {
             showToast(data.message, 'success');
             closeModal('email-modal');
-            delete document.getElementById('email-recipient').dataset.singlePath;
             clearSelection();
         } else {
             showToast(data.detail || '发送失败', 'error');
@@ -1105,13 +1054,6 @@ async function sendEmail() {
     } catch (e) {
         showToast('发送失败: ' + (e.message || ''), 'error');
     }
-}
-
-function sendEmailSingle(filePath) {
-    const realPath = filePath.replace(/\\\\/g, '\\');
-    document.getElementById('email-recipient').value = '';
-    document.getElementById('email-recipient').dataset.singlePath = realPath;
-    showModal('email-modal');
 }
 
 checkAuth().then(auth => {

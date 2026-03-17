@@ -23,19 +23,11 @@ def generate_for_course_dir(course_dir: str, transcribe_all: bool = False) -> No
     scanned = scan_course_dir(course_dir)
 
     if transcribe_all:
-        print(f"[dl_generate] 开始为该课程目录下的共 {len(scanned.videos)} 个视频生成/刷新转写缓存...")
-        failed = []
+        print("[dl_generate] 开始为该课程目录下的所有视频生成/刷新转写缓存...")
         for vf in scanned.videos:
-            print(f"[dl_generate] 转写视频: {vf.path.name}")
-            try:
-                transcribe.transcribe(str(vf.path))
-            except Exception as e:
-                print(f"[dl_generate] 转写失败，跳过: {vf.path.name} —— {e}")
-                failed.append((vf.path.name, str(e)))
-        if failed:
-            print(f"[dl_generate] 视频转写阶段完成，其中 {len(failed)} 个失败: {[n for n, _ in failed]}")
-        else:
-            print("[dl_generate] 视频转写阶段完成。")
+            print(f"[dl_generate] 转写视频: {vf.path}")
+            transcribe.transcribe(str(vf.path))
+        print("[dl_generate] 视频转写阶段完成。")
 
     previews = build_previews_for_course(scanned)
 
@@ -45,15 +37,6 @@ def generate_for_course_dir(course_dir: str, transcribe_all: bool = False) -> No
 
     roles = classify_files_with_llm(previews)
     ctx = build_course_context(scanned, previews, roles)
-
-    # 自动检测学科类型
-    all_texts = [
-        ctx.course_overview,
-        ctx.lecture_materials_text,
-        ctx.past_exams_text,
-    ]
-    subject = prompts.detect_subject(all_texts)
-    print(f"[dl_generate] 检测到学科类型: {subject}")
 
     # 为 Study/Exam prompt 构建精简上下文字典
     course_context_payload = {
@@ -67,14 +50,14 @@ def generate_for_course_dir(course_dir: str, transcribe_all: bool = False) -> No
         "key_topics": "",  # 如后续增加结构化提取可填充
     }
 
-    system = prompts.build_system_prompt(subject)
+    system = prompts.build_system_prompt()
 
     # 复习指南
-    study_user = prompts.build_dl_study_guide_prompt(course_context_payload, subject)
+    study_user = prompts.build_dl_study_guide_prompt(course_context_payload)
     study_md = _call_llm(system, study_user)
 
     # 考试指南
-    exam_user = prompts.build_dl_exam_guide_prompt(course_context_payload, subject)
+    exam_user = prompts.build_dl_exam_guide_prompt(course_context_payload)
     exam_md = _call_llm(system, exam_user)
 
     out_dir = Path(config.OUTPUT_DIR)

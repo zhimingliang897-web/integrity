@@ -1,0 +1,140 @@
+{
+  "date": "2026-03-17",
+  "summary": "今日焦点集中于三大方向：一是大模型能力跃升，Gemini 3.1 Pro 与 NVIDIA Rubin 平台凸显“复杂任务+算力协同”新范式；二是Agent技术深化，ToolTree、AI规划框架等推动工具调用与推理效率突破；三是垂直场景落地加速，从船舶轨迹描述到柴油机故障预警，体现AI在工业与安全领域的精准赋能。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，标志着大模型从回答转向解决，具行业里程碑意义。",
+      "tags": [
+        "AI大模型",
+        "Google",
+        "推理能力"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA发布Rubin平台与开放模型，聚焦AI原生架构和自动驾驶，标志其从算力供应商向全栈AI生态领导者转型的关键一步。",
+      "tags": [
+        "AI芯片",
+        "自动驾驶",
+        "大模型平台"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI发布GPT-5.2/5.3并明确依赖NVIDIA硬件（Hopper/GB200），标志大模型训练部署深度绑定GPU生态，凸显算力瓶颈下的基础设施关键性突破。",
+      "tags": [
+        "AI模型",
+        "NVIDIA",
+        "算力"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Context-Enriched Natural Language Descriptions of Vessel Trajectories",
+      "link": "https://arxiv.org/abs/2603.12287",
+      "rating": "A",
+      "score": 8,
+      "comment": "将AIS轨迹转化为带语义与上下文的自然语言描述，融合多源信息并支持LLM生成，为航海安全与智能系统提供结构化数据新范式。",
+      "tags": [
+        "AIS",
+        "轨迹分析",
+        "LLM",
+        "自然语言生成"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Efficient Reasoning with Balanced Thinking",
+      "link": "https://arxiv.org/abs/2603.12372",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出ReBalance框架，无需训练即可平衡过思考与欠思考问题，提升推理效率与准确性，对LRM实际落地有重要价值。",
+      "tags": [
+        "大模型推理",
+        "效率优化",
+        "训练-free"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Generating Expressive and Customizable Evals for Timeseries Data Analysis Agents with AgentFuel",
+      "link": "https://arxiv.org/abs/2603.12483",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统性揭示时序分析代理在状态化/事件查询上的表达能力缺陷，提出AgentFuel工具支持领域定制评估，对大模型+时序分析落地有重要指导意义。",
+      "tags": [
+        "时序分析",
+        "大模型评估",
+        "Agent"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "AI Planning Framework for LLM-Based Web Agents",
+      "link": "https://arxiv.org/abs/2603.12710",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将LLM网络代理任务形式化为规划问题，建立与传统搜索算法的映射关系，为诊断和优化提供理论框架，具有重要方法论价值。",
+      "tags": [
+        "LLM代理",
+        "规划理论",
+        "系统诊断"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "On Using Machine Learning to Early Detect Catastrophic Failures in Marine Diesel Engines",
+      "link": "https://arxiv.org/abs/2603.12733",
+      "rating": "A",
+      "score": 8,
+      "comment": "基于真实故障数据提出新方法，用随机森林结合传感器偏差导数检测突发性灾难故障，填补了传统渐进式退化建模的空白，具工程实用价值。",
+      "tags": [
+        "机器学习",
+        "故障检测",
+        "海洋工程",
+        "arXiv"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "ToolTree: Efficient LLM Agent Tool Planning via Dual-Feedback Monte Carlo Tree Search and Bidirectional Pruning",
+      "link": "https://arxiv.org/abs/2603.12740",
+      "rating": "A",
+      "score": 8,
+      "comment": "ToolTree提出双阶段LLM评估+双向剪枝的MCTS启发式规划框架，有效解决工具序列依赖与长程规划问题，是LLM代理工具规划的重要进展。",
+      "tags": [
+        "LLM代理",
+        "工具规划",
+        "MCTS",
+        "AI推理"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Task-Specific Knowledge Distillation via Intermediate Probes",
+      "link": "https://arxiv.org/abs/2603.12270",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出通过中间探针直接利用教师模型隐藏层信息进行知识蒸馏，解决推理任务中输出分布失真问题，显著提升学生模型性能，是LLM蒸馏领域的重要实用改进。",
+      "tags": [
+        "知识蒸馏",
+        "大语言模型",
+        "推理能力",
+        "中间表示"
+      ]
+    }
+  ]
+}

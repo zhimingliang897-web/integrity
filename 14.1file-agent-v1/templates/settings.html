@@ -109,26 +109,11 @@
         </div>
         
         <div class="card">
-            <h2>🤖 LLM 配置 (阿里百炼) <span id="llm-status" class="status-badge"></span></h2>
+            <h2>🤖 LLM 配置 (阿里百炼)</h2>
             <div class="form-group">
-                <label for="llm-api-key">API Key（不填则保留原值）</label>
+                <label for="llm-api-key">API Key</label>
                 <input type="text" id="llm-api-key" placeholder="sk-xxxxxx">
             </div>
-            <div class="form-group">
-                <label for="llm-model">模型名称</label>
-                <input type="text" id="llm-model" placeholder="qwen-plus">
-            </div>
-            <div class="form-group">
-                <label for="llm-base-url">API Base URL（兼容 OpenAI 格式）</label>
-                <input type="text" id="llm-base-url" placeholder="https://dashscope.aliyuncs.com/compatible-mode/v1">
-            </div>
-            <div class="form-group">
-                <label for="llm-model-display" style="font-size:12px;color:var(--text-dim)">获取 Key：<a href="https://dashscope.console.aliyun.com/apiKey" target="_blank">DashScope 控制台</a></label>
-            </div>
-            <div class="actions" style="margin-top:0">
-                <button class="btn ghost" onclick="testLLM()">🔌 测试连接</button>
-            </div>
-            <div class="msg" id="llm-test-msg" style="display:none;"></div>
         </div>
         
         <div class="card">
@@ -140,23 +125,15 @@
         </div>
         
         <div class="card">
-            <h2>📧 邮箱配置 (用于发送文件) <span id="email-status" class="status-badge"></span></h2>
+            <h2>📧 邮箱配置 (用于发送文件)</h2>
             <div class="form-group">
                 <label for="email-sender">发件邮箱</label>
                 <input type="email" id="email-sender" placeholder="your@qq.com">
             </div>
             <div class="form-group">
-                <label for="email-password">邮箱授权码（QQ邮箱16位，不填则保留原值）</label>
-                <input type="password" id="email-password" placeholder="留空则不修改">
+                <label for="email-password">邮箱授权码</label>
+                <input type="password" id="email-password" placeholder="16位授权码">
             </div>
-            <div class="form-group">
-                <label for="email-test-recipient" style="font-size:12px;">测试收件邮箱</label>
-                <input type="email" id="email-test-recipient" placeholder="发一封测试邮件到此地址">
-            </div>
-            <div class="actions" style="margin-top:0">
-                <button class="btn ghost" onclick="testEmail()">📨 发送测试邮件</button>
-            </div>
-            <div class="msg" id="email-test-msg" style="display:none;"></div>
         </div>
         
 
@@ -174,83 +151,37 @@
         <div class="msg" id="msg" style="display:none;"></div>
     </div>
     
-    <style>
-        .status-badge { font-size: 13px; font-weight: 400; margin-left: 8px; }
-        .status-ok { color: #4ecdc4; }
-        .status-no { color: #ff6b6b; }
-    </style>
     <script>
-        function setStatusBadge(id, configured) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.textContent = configured ? '✅ 已配置' : '❌ 未配置';
-            el.className = 'status-badge ' + (configured ? 'status-ok' : 'status-no');
-        }
-
         async function loadConfig() {
             try {
                 const res = await fetch('/api/config');
                 const data = await res.json();
-                if (data.root_path) document.getElementById('root-path').value = data.root_path;
-                if (data.uploads_path) document.getElementById('uploads-path').value = data.uploads_path;
-                if (data.trash_path) document.getElementById('trash-path').value = data.trash_path;
-                if (data.max_upload_size_mb) document.getElementById('max-upload-size').value = data.max_upload_size_mb;
-                if (data.llm_model) document.getElementById('llm-model').value = data.llm_model;
-                if (data.llm_base_url) document.getElementById('llm-base-url').value = data.llm_base_url;
-                if (data.natapp_configured) document.getElementById('natapp-token').placeholder = '（已配置，留空保留原值）';
-                if (data.email_configured) document.getElementById('email-sender').placeholder = '（已配置，留空保留原值）';
-                setStatusBadge('llm-status', data.llm_configured);
-                setStatusBadge('email-status', data.email_configured);
+                if (data.root_path) {
+                    document.getElementById('root-path').value = data.root_path;
+                }
+                if (data.uploads_path) {
+                    document.getElementById('uploads-path').value = data.uploads_path;
+                }
+                if (data.trash_path) {
+                    document.getElementById('trash-path').value = data.trash_path;
+                }
+                if (data.max_upload_size_mb) {
+                    document.getElementById('max-upload-size').value = data.max_upload_size_mb;
+                }
+                if (data.llm_api_key) {
+                    document.getElementById('llm-api-key').placeholder = data.llm_api_key;
+                }
+                if (data.natapp_token) {
+                    document.getElementById('natapp-token').placeholder = data.natapp_token;
+                }
+                if (data.email_sender) {
+                    document.getElementById('email-sender').value = data.email_sender;
+                }
             } catch (e) {
                 console.error('Load config failed:', e);
             }
         }
-
-        async function testLLM() {
-            const msgEl = document.getElementById('llm-test-msg');
-            msgEl.textContent = '正在测试...';
-            msgEl.className = 'msg';
-            msgEl.style.display = 'block';
-            try {
-                const res = await fetch('/api/agent/test');
-                const data = await res.json();
-                msgEl.textContent = data.message;
-                msgEl.className = 'msg ' + (data.success ? 'success' : 'error');
-            } catch (e) {
-                msgEl.textContent = '测试请求失败：' + e.message;
-                msgEl.className = 'msg error';
-            }
-        }
-
-        async function testEmail() {
-            const recipient = document.getElementById('email-test-recipient').value.trim();
-            if (!recipient) {
-                alert('请填写测试收件邮箱');
-                return;
-            }
-            const msgEl = document.getElementById('email-test-msg');
-            msgEl.textContent = '正在发送测试邮件...';
-            msgEl.className = 'msg';
-            msgEl.style.display = 'block';
-            try {
-                const formData = new FormData();
-                formData.append('paths', '');
-                formData.append('recipient', recipient);
-                formData.append('test_only', 'true');
-                const res = await fetch('/api/files/email/test', {
-                    method: 'POST',
-                    body: JSON.stringify({ recipient }),
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                const data = await res.json();
-                msgEl.textContent = data.message || (res.ok ? '✅ 测试邮件已发送' : '❌ 发送失败');
-                msgEl.className = 'msg ' + (res.ok ? 'success' : 'error');
-            } catch (e) {
-                msgEl.textContent = '测试请求失败：' + e.message;
-                msgEl.className = 'msg error';
-            }
-        }
-
+        
         loadConfig();
         
         document.getElementById('save-btn').addEventListener('click', async () => {
@@ -274,18 +205,16 @@
             
             const llmApiKey = document.getElementById('llm-api-key').value;
             if (llmApiKey) data.llm_api_key = llmApiKey;
-            const llmModel = document.getElementById('llm-model').value.trim();
-            if (llmModel) data.llm_model = llmModel;
-            const llmBaseUrl = document.getElementById('llm-base-url').value.trim();
-            if (llmBaseUrl) data.llm_base_url = llmBaseUrl;
             
             const natappToken = document.getElementById('natapp-token').value;
             if (natappToken) data.natapp_token = natappToken;
             
             const emailSender = document.getElementById('email-sender').value;
             const emailPassword = document.getElementById('email-password').value;
-            if (emailSender) data.email_sender = emailSender;
-            if (emailPassword) data.email_password = emailPassword;
+            if (emailSender || emailPassword) {
+                data.email_sender = emailSender;
+                data.email_password = emailPassword;
+            }
             
             try {
                 const res = await fetch('/api/config', {
@@ -295,6 +224,7 @@
                 });
                 
                 const result = await res.json();
+                
                 msg.textContent = result.message || '保存成功';
                 msg.className = 'msg success';
                 msg.style.display = 'block';
@@ -303,8 +233,7 @@
                 document.getElementById('llm-api-key').value = '';
                 document.getElementById('natapp-token').value = '';
                 document.getElementById('email-password').value = '';
-
-                loadConfig();
+                
             } catch (e) {
                 msg.textContent = '保存失败: ' + e.message;
                 msg.className = 'msg error';

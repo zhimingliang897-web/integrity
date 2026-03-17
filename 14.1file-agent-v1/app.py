@@ -9,7 +9,6 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.gzip import GZipMiddleware
 
 sys.path.insert(0, str(Path(__file__).parent))
 
@@ -25,19 +24,10 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-app.add_middleware(GZipMiddleware, minimum_size=1024)
-
-_cors_origins = settings.cors_origins
-if "*" in _cors_origins:
-    _cors_origins = ["*"]
-    _allow_credentials = False
-else:
-    _allow_credentials = True
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=_cors_origins,
-    allow_credentials=_allow_credentials,
+    allow_origins=settings.cors_origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -103,7 +93,6 @@ async def get_config():
     return {
         "llm_configured": bool(settings.llm_api_key),
         "llm_model": settings.llm_model,
-        "llm_base_url": settings.llm_base_url,
         "natapp_configured": bool(settings.natapp_token),
         "email_configured": bool(settings.email_sender and settings.email_password),
         "root_path": settings.root_path,
@@ -124,10 +113,6 @@ async def update_config(request: Request):
     
     if "llm_api_key" in data and data["llm_api_key"]:
         s.update_llm_api_key(data["llm_api_key"])
-    if "llm_model" in data and data["llm_model"]:
-        s.update_llm_model(data["llm_model"])
-    if "llm_base_url" in data and data["llm_base_url"]:
-        s.update_llm_base_url(data["llm_base_url"])
     
     if "natapp_token" in data and data["natapp_token"]:
         s.update_natapp_token(data["natapp_token"])
@@ -178,8 +163,11 @@ def start_natapp():
     try:
         process = subprocess.Popen(
             [str(natapp_path), "-authtoken=" + settings.natapp_token],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
         )
-        print(f"[Natapp] 内网穿透已启动，请查看上方输出中的外网域名")
+        print(f"[Natapp] 内网穿透已启动")
         return process
     except Exception as e:
         print(f"[警告] 启动 natapp 失败: {e}")

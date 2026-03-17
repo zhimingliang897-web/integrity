@@ -1,111 +1,41 @@
 """
 prompts.py - LLM Prompt 模板管理
 
-支持自动学科检测，泛化的 prompt 设计。
+所有发给 Groq/LLM 的提示词集中在此，便于调优和维护。
+与业务逻辑解耦：analyze.py 只负责调用 API，此文件负责"说什么"。
 """
 
-from __future__ import annotations
-from typing import List, Optional
 
-
-# 学科关键词配置
-SUBJECT_KEYWORDS = {
-    "ai": [
-        "neural network", "deep learning", "CNN", "transformer",
-        "machine learning", "AI", "NLP", "computer vision",
-        "神经网络", "深度学习", "机器学习", "自然语言处理",
-        "LLM", "GPT", "attention", "backpropagation", "gradient descent",
-        "reinforcement learning", "GAN", "autoencoder", "RNN", "LSTM"
-    ],
-    "math": [
-        "theorem", "proof", "calculus", "algebra", "equation",
-        "function", "derivative", "integral", "matrix", "vector",
-        "定理", "证明", "微积分", "代数", "方程", "函数",
-        "导数", "积分", "矩阵", "向量", "线性代数", "概率论"
-    ],
-    "stats": [
-        "probability", "distribution", "statistic", "regression",
-        "hypothesis", "variance", "mean", "sampling", "Bayesian",
-        "概率", "分布", "统计", "回归", "假设检验", "方差"
-    ],
-}
-
-# 学科对应的 System Prompt
-SUBJECT_PROMPTS = {
-    "ai": (
-        "You are an expert AI/ML tutor helping a student prepare for exams. "
-        "Your goal is to analyze course materials and identify what the student "
-        "MUST study versus what can be safely skipped. "
-        "Focus on key algorithms, architectures, and practical applications. "
-        "Be concise and exam-focused. Output in Chinese (except for technical terms)."
-    ),
-    "math": (
-        "You are an expert mathematics tutor helping a student prepare for exams. "
-        "Your goal is to analyze course materials and identify key theorems, formulas, "
-        "and problem-solving techniques the student must master. "
-        "Be concise and exam-focused. Output in Chinese (except for mathematical notation)."
-    ),
-    "stats": (
-        "You are an expert statistics tutor helping a student prepare for exams. "
-        "Focus on probability distributions, hypothesis testing, and statistical methods. "
-        "Be concise and exam-focused. Output in Chinese (except for statistical notation)."
-    ),
-    "default": (
-        "You are an expert academic tutor helping a student prepare for exams. "
-        "Your goal is to analyze course materials and identify what the student "
-        "MUST study versus what can be safely skipped. "
-        "Be concise and exam-focused. Output in Chinese (except for technical terms)."
-    ),
-}
-
-
-def detect_subject(texts: List[str]) -> str:
+def build_system_prompt() -> str:
     """
-    根据资料内容自动检测学科类型。
-
-    Args:
-        texts: 文本列表（如预览文本、标题等）
-
-    Returns:
-        str: 检测到的学科类型 ("ai", "math", "stats", "default")
-    """
-    combined = " ".join(texts).lower()
-    scores = {}
-
-    for subject, keywords in SUBJECT_KEYWORDS.items():
-        scores[subject] = sum(1 for kw in keywords if kw.lower() in combined)
-
-    best = max(scores, key=scores.get, default="default")
-    return best if scores.get(best, 0) > 0 else "default"
-
-
-def build_system_prompt(subject: str = "default") -> str:
-    """
-    构建系统提示词。
-
-    Args:
-        subject: 学科类型
+    构建系统提示词：定义 LLM 的角色和行为准则。
 
     Returns:
         str: 系统提示词内容
     """
-    return SUBJECT_PROMPTS.get(subject, SUBJECT_PROMPTS["default"])
+    return (
+        "You are an expert academic tutor helping a student prepare for a STEM exam. "
+        "Your goal is to analyze lecture transcripts and identify what the student "
+        "MUST study versus what can be safely skipped. "
+        "Always reference specific timestamps when pointing to lecture content. "
+        "Be concise and exam-focused. Output in Chinese (except for technical terms)."
+    )
 
 
 def build_chunk_prompt(
     chunk_text: str,
     lecture_name: str,
-    syllabus: str = "",
-    past_exams: str = "",
-    ppt_text: str = "",
+    syllabus: str,
+    past_exams: str,
+    ppt_text: str,
     paper_text: str = "",
 ) -> str:
     """
     构建单段转录文本的分析 Prompt。
 
     Args:
-        chunk_text: 带时间戳的转录片段
-        lecture_name: 课程名称
+        chunk_text: 带时间戳的转录片段（如 "[00:05:00] Professor explains..."）
+        lecture_name: 课程名称，如 "Lecture 3"
         syllabus: 考试大纲全文
         past_exams: 往年真题全文
         ppt_text: 本节课 PPT 提取的文字内容
@@ -155,7 +85,48 @@ def build_chunk_prompt(
 """
 
 
-def build_summary_prompt(all_guides: List[str], lecture_name: str) -> str:
+def build_cv_analysis_prompt(all_texts: str) -> str:
+    """第一部分：全课程考点深度分析"""
+    return f"""
+你是一位计算机视觉专家。请根据以下 7 节课的资料内容，输出：
+## 第一部分：全课程考点深度分析
+1. 识别跨章节的高频考点（列表形式）。
+2. 总结核心算法（CNN, Transformers, Autoencoder, VAE, YOLO, Faster R-CNN, Swin）的优缺点、适用场景和关键公式。
+3. 给出每个知识点的“考试关注度”（⭐⭐⭐）。
+
+## 课程资料内容：
+{all_texts}
+"""
+
+def build_cv_questions_part1_prompt(all_texts: str) -> str:
+    """第二部分：模拟备考练习题 (MCQ 1-20)"""
+    return f"""
+你是一位计算机视觉专家。请根据以下资料设计 **20 道单项选择题 (MCQ 1-20)**。
+要求：
+1. 涵盖前几章的基础概念与计算。
+2. 每道题必须包含：【正确答案】、【详细知识点分析】、【解题思路/题解】。
+3. 重点术语保留英文。
+
+## 课程资料内容：
+{all_texts}
+"""
+
+def build_cv_questions_part2_prompt(all_texts: str) -> str:
+    """第三部分：模拟备考练习题 (MCQ 21-40 + 6 Fill-in)"""
+    return f"""
+你是一位计算机视觉专家。请根据以下资料设计：
+1. **20 道单项选择题 (MCQ 21-40)**：涵盖检测、分割及高级模型。
+2. **6 道填空题**：考察公式参数、术语或架构名称。
+要求：
+1. 每道题必须包含：【正确答案】、【详细知识点分析】、【解题思路/题解】。
+2. 重点术语保留英文。
+
+## 课程资料内容：
+{all_texts}
+"""
+
+
+def build_summary_prompt(all_guides: list[str], lecture_name: str) -> str:
     """
     构建单节课汇总 Prompt：将多个片段分析整合为完整学习指南。
 
@@ -189,9 +160,9 @@ def build_summary_prompt(all_guides: List[str], lecture_name: str) -> str:
 """
 
 
-def build_dl_classify_prompt(files: List[dict]) -> str:
+def build_dl_classify_prompt(files: list[dict]) -> str:
     """
-    为 dl 模式构建"资料角色识别" Prompt。
+    为 dl 模式构建“资料角色识别” Prompt。
 
     Args:
         files: 形如 {"path": "...", "ext": ".pdf", "kind": "document", "preview": "..."} 的列表
@@ -209,20 +180,20 @@ def build_dl_classify_prompt(files: List[dict]) -> str:
 
     return f"""
 你是一名资深课程设计与考试教研专家，负责帮学生整理一个课程文件夹中的各种资料。
-请阅读下方每个文件的基本信息和内容预览，为每个文件识别其在课程中的"角色"。
+请阅读下方每个文件的基本信息和内容预览，为每个文件识别其在课程中的“角色”。
 
 ## 可用角色类别（role 字段）
 - course_overview: 课程简介、课程介绍、syllabus 封面等总览性说明
-- course_requirements: 教学大纲、学习目标、作业/平时成绩构成等"平时学习要求"
-- exam_requirements: 期中/期末考试说明、考试范围、题型、评分标准等
-- lecture_slides: 课堂 PPT、讲义、板书整理等"授课内容"
+- course_requirements: 教学大纲、学习目标、作业/平时成绩构成等“平时学习要求”
+- exam_requirements: 期中/期末考试说明、考试范围、题型、评分标准、作弊说明等
+- lecture_slides: 课堂 PPT、讲义、板书整理等“授课内容”
 - past_exams: 往年试卷、sample exam、quiz/midterm/final 题目
 - reference: 论文、书籍章节、补充阅读材料
 - other: 其他与考试不直接相关或难以判断的内容
 
 ## 需要你做的事
 1. 对每个文件给出一个最合适的 role。
-2. 如能从该文件中看出"考试政策/考试要求"，请在 exam_policy_notes 中用 1-3 句话摘录关键信息（中文）。
+2. 如能从该文件中看出“考试政策/考试要求”，请在 exam_policy_notes 中用 1-3 句话摘录关键信息（中文）。
 3. 给出一个 1-5 的置信度（confidence），5 表示非常确定。
 
 ## 输入文件列表（YAML 形式，仅供阅读理解，不要求原样返回）
@@ -239,9 +210,9 @@ def build_dl_classify_prompt(files: List[dict]) -> str:
 """
 
 
-def build_dl_study_guide_prompt(course_context: dict, subject: str = "default") -> str:
+def build_dl_study_guide_prompt(course_context: dict) -> str:
     """
-    为 dl 模式构建"复习指南" Prompt。
+    为 dl 模式构建“复习指南” Prompt。
 
     course_context 为 Python dict，将在此转为纯文本。
     """
@@ -251,13 +222,6 @@ def build_dl_study_guide_prompt(course_context: dict, subject: str = "default") 
     lecture_summary = course_context.get("lecture_summary", "")
     key_topics = course_context.get("key_topics", "")
 
-    # 根据学科调整提示
-    subject_hint = {
-        "ai": "重点关注算法原理、模型架构、代码实现和应用场景。",
-        "math": "重点关注定理证明、公式推导和典型例题。",
-        "stats": "重点关注分布特征、检验方法和实际应用。",
-    }.get(subject, "重点关注核心概念和典型应用。")
-
     return f"""
 你是一名专业的大学课程学习规划导师，现在需要根据一个课程的所有资料，为学生制定一份完整的 **复习指南**。
 
@@ -265,7 +229,7 @@ def build_dl_study_guide_prompt(course_context: dict, subject: str = "default") 
 课程名称：{course_name}
 
 ### 课程简介 / 课程目标（来自课程说明/教学大纲）
-{overview or "（无明确课程简介，按一般课程默认假设）"}
+{overview or "（无明确课程简介，按一般 STEM 课程默认假设）"}
 
 ### 课程要求 / 学习目标（来自教学大纲）
 {syllabus or "（未提供详细课程要求）"}
@@ -277,9 +241,7 @@ def build_dl_study_guide_prompt(course_context: dict, subject: str = "default") 
 {key_topics or "（暂未做结构化提取，可按你理解总结）"}
 
 ## 你的任务
-请输出一份面向"期中/期末考试复习"的指南，{subject_hint}
-
-内容包括：
+请输出一份面向“期中/期末考试复习”的指南，内容包括：
 
 1. **整体复习策略**
    - 本课程大概分为哪些模块/章节？
@@ -301,23 +263,15 @@ def build_dl_study_guide_prompt(course_context: dict, subject: str = "default") 
 """
 
 
-def build_dl_exam_guide_prompt(course_context: dict, subject: str = "default") -> str:
+def build_dl_exam_guide_prompt(course_context: dict) -> str:
     """
-    为 dl 模式构建"考试指南" Prompt。
+    为 dl 模式构建“考试指南” Prompt。
     """
     course_name = course_context.get("course_name", "本课程")
     exam_raw = course_context.get("exam_raw_text", "")
     past_exams_text = course_context.get("past_exams_text", "")
     exam_policy_notes = course_context.get("exam_policy_notes", "")
     key_topics = course_context.get("key_topics", "")
-
-    # 根据学科调整题型预测
-    subject_question_types = {
-        "ai": "选择题、简答题、算法设计题、代码实现题",
-        "math": "选择题、证明题、计算题、应用题",
-        "stats": "选择题、计算题、分析题、应用题",
-    }
-    question_types = subject_question_types.get(subject, "选择题、简答题、计算题")
 
     return f"""
 你是一名考试命题与备考辅导专家，现在需要根据一个课程的考试相关资料，为学生生成一份 **考试指南**。
@@ -339,16 +293,16 @@ def build_dl_exam_guide_prompt(course_context: dict, subject: str = "default") -
 {key_topics or "（你可以结合常见课程内容自行推断重点考点）"}
 
 ## 你的任务
-请输出一份面向"考前 1-3 周"的考试指南，内容包括：
+请输出一份面向“考前 1-3 周”的考试指南，内容包括：
 
 1. **考试基本信息总结**
    - 考试形式（开卷/闭卷、线上/线下）
-   - 考试时长、题型构成（如{question_types}等）
+   - 考试时长、题型构成（选择题/简答/计算/证明/编程等）
    - 各部分分值比例、平时成绩与考试成绩的权重
 
 2. **高频考点与分值分布预测**
    - 列出 10-20 个高频考点，并用⭐标注重要性（⭐⭐⭐/⭐⭐/⭐）。
-   - 对每类题型给出常考内容和典型问题类型。
+   - 对每类题型（如选择题、简答题、证明题）给出常考内容和典型问题类型。
 
 3. **不同时间段的备考策略**
    - 考前 2-3 周：应该完成哪些任务？

@@ -38,20 +38,17 @@ def _get(path: str, default=None, env_override: str = None):
             break
     return value if value is not None else default
 
-# ── 路径配置（相对路径均基于 PROJECT_ROOT，保证任意 cwd 下一致）────────────────
-_input_dir  = _get("input_dir", "input")
-_cache_dir  = _get("cache_dir", "cache")
-_output_dir = _get("output_dir", "output")
-INPUT_DIR   = (PROJECT_ROOT / _input_dir).resolve() if not Path(_input_dir).is_absolute() else Path(_input_dir)
-CACHE_DIR   = (PROJECT_ROOT / _cache_dir).resolve() if not Path(_cache_dir).is_absolute() else Path(_cache_dir)
-OUTPUT_DIR  = (PROJECT_ROOT / _output_dir).resolve() if not Path(_output_dir).is_absolute() else Path(_output_dir)
+# ── 路径配置 ──────────────────────────────────────────────
+INPUT_DIR  = _get("input_dir", "input")
+CACHE_DIR  = _get("cache_dir", "cache")
+OUTPUT_DIR = _get("output_dir", "output")
 
 # ── faster-whisper 配置 ───────────────────────────────────
-WHISPER_ENGINE       = _get("whisper.engine", "faster")  # faster 或 fast
-WHISPER_MODEL        = _get("whisper.model", "small")
-WHISPER_DEVICE       = _get("whisper.device", "cuda")
-WHISPER_COMPUTE_TYPE = _get("whisper.compute_type", "int8")
+WHISPER_MODEL        = _get("whisper.model", "medium")
+WHISPER_DEVICE       = _get("whisper.device", "auto")
+WHISPER_COMPUTE_TYPE = _get("whisper.compute_type", "auto")
 WHISPER_LANGUAGE     = _get("whisper.language", "en")
+# beam_size 对速度影响很大，默认降低到 1 以优先换取速度
 WHISPER_BEAM_SIZE    = int(_get("whisper.beam_size", 1))
 
 # ── API 配置 ──────────────────────────────────────────────
