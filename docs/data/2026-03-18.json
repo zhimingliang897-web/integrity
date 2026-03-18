@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-18",
+  "summary": "今日焦点集中于三大方向：一是大模型能力跃升，如Gemini 3.1 Pro与NVIDIA Rubin平台推动复杂任务处理；二是安全与可信AI深化，涵盖零日欺诈检测、智能合约错误识别及账户劫持可解释建模；三是推理与应用工程突破，如计划引导的扩散语言模型优化与法律文书智能处理，体现AI从“能用”向“可用、可信、好用”演进。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro首次明确聚焦复杂推理与多步规划能力，标志着大模型从“回答”向“思考”跃迁，是当前最接近通用人工智能的实用化进展。",
+      "tags": [
+        "AI大模型",
+        "推理能力",
+        "Google"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI基础设施与应用层深度整合，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，标志大模型训练部署深度绑定GPU生态，凸显算力基础设施的关键作用。",
+      "tags": [
+        "AI大模型",
+        "NVIDIA",
+        "算力"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Human Attribution of Causality to AI Across Agency, Misuse, and Misalignment",
+      "link": "https://arxiv.org/abs/2603.13236",
+      "rating": "A",
+      "score": 8,
+      "comment": "arXiv高分论文，首次系统研究人类对AI因果归责的感知机制，为AI伦理与法律追责提供实证基础，具重要理论与实践价值。",
+      "tags": [
+        "AI伦理",
+        "因果推理",
+        "人机责任归属"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "A Dual-Path Generative Framework for Zero-Day Fraud Detection in Banking Systems",
+      "link": "https://arxiv.org/abs/2603.13237",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出双路径生成框架，结合VAE低延迟检测与WGAN-GP对抗训练，有效解决零日欺诈检测中实时性与可解释性矛盾，具工程落地潜力。",
+      "tags": [
+        "零日攻击",
+        "生成式AI",
+        "金融风控",
+        "VAE",
+        "WGAN"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Benchmarking Zero-Shot Reasoning Approaches for Error Detection in Solidity Smart Contracts",
+      "link": "https://arxiv.org/abs/2603.13239",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次系统性 benchmark 零样本推理在 Solidity 错误检测中的效果，覆盖误差分类与二分类任务，为 LLM 安全审计提供实证依据，实用价值高。",
+      "tags": [
+        "LLM安全",
+        "智能合约",
+        "漏洞检测"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Think First, Diffuse Fast: Improving Diffusion Language Model Reasoning via Autoregressive Plan Conditioning",
+      "link": "https://arxiv.org/abs/2603.13243",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将AR模型的计划作为全局上下文引入扩散LLM，0训练成本显著提升多步推理能力，实测效果接近同尺寸AR模型，为dLLM性能瓶颈提供新解法。",
+      "tags": [
+        "扩散语言模型",
+        "推理增强",
+        "计划生成",
+        "零样本微调"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Automating Document Intelligence in Statutory City Planning",
+      "link": "https://arxiv.org/abs/2603.13245",
+      "rating": "A",
+      "score": 8,
+      "comment": "UK规划部门面临法律合规与效率矛盾，该AI系统实现自动信息识别、脱敏与图纸分析，AI-in-the-Loop设计兼顾准确性与人工审核，具强落地价值。",
+      "tags": [
+        "AI+政府监管",
+        "文档智能",
+        "合规AI"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Multi-Axis Trust Modeling for Interpretable Account Hijacking Detection",
+      "link": "https://arxiv.org/abs/2603.13246",
+      "rating": "A",
+      "score": 8,
+      "comment": "将古典圣训学的多维可信度建模思想创新应用于账户劫持检测，提出5轴26特征+轻量时序特征框架，兼具理论深度与实用价值，为可解释安全分析提供新范式。",
+      "tags": [
+        "可信计算",
+        "账户安全",
+        "可解释AI"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Slang Context-based Inference Enhancement via Greedy Search-Guided Chain-of-Thought Prompting",
+      "link": "https://arxiv.org/abs/2603.13230",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出贪心搜索引导的思维链框架解决俚语上下文推理难题，实验发现模型规模与温度影响有限，对LLM在文化敏感任务上的泛化能力有重要启示",
+      "tags": [
+        "俚语理解",
+        "链式思维",
+        "LLM评估"
+      ]
+    }
+  ]
+}
