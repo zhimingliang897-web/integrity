@@ -1,0 +1,138 @@
+{
+  "date": "2026-03-19",
+  "summary": "今日焦点集中于AI系统架构与代理能力的深化：从“理解-决策”闭环的经济代理模型，到神经符号逻辑、颅内记忆等具身化记忆机制，体现对长时序推理与鲁棒性的追求；同时，NVIDIA生态整合（如Rubin平台）与Gemini 3.1 Pro等大模型演进，凸显算力、模型与应用层协同演进趋势。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "The Comprehension-Gated Agent Economy: A Robustness-First Architecture for AI Economic Agency",
+      "link": "https://arxiv.org/abs/2603.15639",
+      "rating": "S",
+      "score": 9,
+      "comment": "提出Comprehension-Gated Agent Economy（CGAE）架构，以对抗鲁棒性审计为经济权限上界，首次将鲁棒性维度系统化纳入AI经济代理的治理框架，是AI安全与自主系统领域的里程碑式突破。",
+      "tags": [
+        "AI安全",
+        "经济代理",
+        "鲁棒性评估"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，标志着大模型从回答转向解决问题的跃迁，具行业里程碑意义。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型与自动驾驶蓝图，标志AI基础设施全面下沉至边缘与车端，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开源模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，标志大模型训练部署深度绑定GPU算力，凸显AI复杂度提升下的基础设施关键作用。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "算力"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Neural-Symbolic Logic Query Answering in Non-Euclidean Space",
+      "link": "https://arxiv.org/abs/2603.15633",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出HYQNET融合超球面与神经符号方法，解决逻辑查询中层次结构建模与缺失链接问题，兼具可解释性与泛化能力，是知识图谱推理的重要进展。",
+      "tags": [
+        "知识图谱",
+        "神经符号系统",
+        "超球面嵌入",
+        "逻辑推理"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "NextMem: Towards Latent Factual Memory for LLM-based Agents",
+      "link": "https://arxiv.org/abs/2603.15634",
+      "rating": "A",
+      "score": 8,
+      "comment": "NextMem提出潜空间事实记忆框架，解决文本索引负担与参数化记忆灾难性遗忘问题，两阶段训练提升优化效果，是LLM代理记忆系统的重要进展。",
+      "tags": [
+        "LLM代理",
+        "记忆机制",
+        "自回归自动编码器"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "AIDABench: AI Data Analytics Benchmark",
+      "link": "https://arxiv.org/abs/2603.15636",
+      "rating": "A",
+      "score": 8,
+      "comment": "AIDABench填补了AI文档分析领域端到端评估的空白，覆盖600+真实场景任务，对推动AI系统实用化评估具有重要价值。",
+      "tags": [
+        "AI基准测试",
+        "文档理解",
+        "数据可视化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Form Follows Function: Recursive Stem Model",
+      "link": "https://arxiv.org/abs/2603.15641",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出Recursive Stem Model（RSM），通过分离训练历史、仅在终态施加损失，解决递归模型训练成本高与贪婪偏差问题，延续TRM轻量架构优势，具实用价值。",
+      "tags": [
+        "递归推理",
+        "训练优化",
+        "arXiv"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "CraniMem: Cranial Inspired Gated and Bounded Memory for Agentic Systems",
+      "link": "https://arxiv.org/abs/2603.15642",
+      "rating": "A",
+      "score": 8,
+      "comment": "神经认知启发的门控有界记忆架构，解决长程代理任务中状态稳定与知识整合难题，具实用价值。",
+      "tags": [
+        "LLM代理",
+        "记忆系统",
+        "神经科学"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Recursive Language Models Meet Uncertainty: The Surprising Effectiveness of Self-Reflective Program Search for Long Context",
+      "link": "https://arxiv.org/abs/2603.15653",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出SRLM框架，将自反思与不确定性感知引入递归语言模型，显著提升长上下文处理能力，是当前LLM长文本推理方向的重要进展。",
+      "tags": [
+        "递归语言模型",
+        "长上下文",
+        "自反思",
+        "不确定性建模"
+      ]
+    }
+  ]
+}
