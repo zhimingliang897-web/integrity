@@ -1,0 +1,138 @@
+{
+  "date": "2026-03-20",
+  "summary": "今日焦点集中于三大方向：一是基础理论突破，如Transformer与贝叶斯网络的等价性研究；二是产业落地加速，NVIDIA在CES发布 Rubin 平台及开放模型战略，强化AI算力与自主驾驶生态；三是安全与可信应用拓展，涵盖医疗建议、逻辑推理评估及参与式规划等高风险场景的AI可靠性验证。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Transformers are Bayesian Networks",
+      "link": "https://arxiv.org/abs/2603.17063",
+      "rating": "S",
+      "score": 9,
+      "comment": "首次从理论层面严格证明Transformer等价于贝叶斯网络，揭示其概率推理本质，为理解模型工作原理提供根本性突破，属行业里程碑式工作。",
+      "tags": [
+        "Transformer理论",
+        "贝叶斯网络",
+        "AI基础理论"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，是大模型迈向专业级应用的关键一步。",
+      "tags": [
+        "大模型",
+        "AI推理",
+        "Google"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型与自动驾驶蓝图，标志AI基础设施全面下沉至终端设备，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，标志大模型训练部署深度绑定GPU算力，凸显AI基础设施关键性突破。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "算力"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Generative AI-assisted Participatory Modeling in Socio-Environmental Planning under Deep Uncertainty",
+      "link": "https://arxiv.org/abs/2603.17021",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出LLM辅助参与式建模的新范式，解决深不确定环境下规划问题概念化难题，具实用价值与方法论创新。",
+      "tags": [
+        "生成式AI",
+        "参与式建模",
+        "社会-环境规划",
+        "LLM应用"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Cascade-Aware Multi-Agent Routing: Spatio-Temporal Sidecars and Geometry-Switching",
+      "link": "https://arxiv.org/abs/2603.17112",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出几何感知的多智能体路由机制，首次将执行图拓扑（树/环）对故障传播的影响纳入调度优化，为大型推理系统可靠性设计提供新范式。",
+      "tags": [
+        "多智能体系统",
+        "推理架构",
+        "故障传播建模"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "How Clued up are LLMs? Evaluating Multi-Step Deductive Reasoning in a Text-Based Game Environment",
+      "link": "https://arxiv.org/abs/2603.17169",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将Clue游戏作为多步演绎推理基准，实证检验LLM在长序列逻辑推理中的稳定性；发现微调对推理精度提升有限，揭示当前大模型在复杂推理任务中的瓶颈。",
+      "tags": [
+        "LLM推理",
+        "基准测试",
+        "多智能体"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "AI Scientist via Synthetic Task Scaling",
+      "link": "https://arxiv.org/abs/2603.17216",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次提出面向ML代理的合成任务生成管道，解决agent训练缺乏系统性方法的核心难题，推动自动科学发现落地；与SWE-agent框架深度集成，兼具理论创新与工程可行性。",
+      "tags": [
+        "AI代理",
+        "自动科学发现",
+        "合成数据",
+        "机器学习"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Draft-and-Prune: Improving the Reliability of Auto-formalization for Logical Reasoning",
+      "link": "https://arxiv.org/abs/2603.17233",
+      "rating": "A",
+      "score": 8,
+      "comment": "Draft-and-Prune提出推理时多样性生成+验证的框架，显著提升自动形式化在逻辑推理中的可靠性，尤其解决语义错误这一关键瓶颈，是AF领域重要进展。",
+      "tags": [
+        "自动形式化",
+        "逻辑推理",
+        "AI+证明助手"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Trust, Safety, and Accuracy: Assessing LLMs for Routine Maternity Advice",
+      "link": "https://arxiv.org/abs/2603.16872",
+      "rating": "A",
+      "score": 8,
+      "comment": "首篇聚焦LLM在母婴健康领域的实证评估，结合印度农村现实场景，用专业指标对比模型与专家表现，兼具社会价值与技术严谨性。",
+      "tags": [
+        "LLM应用",
+        "医疗AI",
+        "可信AI"
+      ]
+    }
+  ]
+}
