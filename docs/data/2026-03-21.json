@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-21",
+  "summary": "今日焦点集中于三大方向：一是AI系统自主性跃升，OpenAI正全力构建全自动研究员；二是算力与模型协同演进，NVIDIA以 Rubin 平台和开放模型推动自动驾驶等落地；三是人机交互深度拓展，从音频真实性评估到“Skele-Code”无代码工作流，凸显AI工程化与可解释性并重的新趋势。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Adaptive Domain Models: Bayesian Evolution, Warm Rotation, and Principled Training for Geometric and Neuromorphic AI",
+      "link": "https://arxiv.org/abs/2603.18104",
+      "rating": "S",
+      "score": 9,
+      "comment": "提出面向几何与类脑AI的新型训练架构，融合贝叶斯演化、暖旋转与原理化训练，突破传统IEEE-754算术限制，有望解决梯度内存开销与几何退化问题。",
+      "tags": [
+        "几何AI",
+        "类脑计算",
+        "训练架构",
+        "arXiv新论文"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: OpenAI is building a fully automated researcher, and a psychedelic trial blind spot",
+      "link": "https://www.technologyreview.com/2026/03/20/1134448/the-download-openai-building-fully-automated-researcher-psychedelic-drug-trial/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI启动全自动化研究员项目，标志着AI从工具向自主科研代理的关键跃迁，可能重塑研发范式。",
+      "tags": [
+        "AI科研自动化",
+        "大模型Agent",
+        "OpenAI"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "OpenAI is throwing everything into building a fully automated researcher",
+      "link": "https://www.technologyreview.com/2026/03/20/1134438/openai-is-throwing-everything-into-building-a-fully-automated-researcher/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI启动全自动化研究员项目，直指AGI核心路径，标志着大模型从工具向自主智能体跃迁，行业里程碑事件",
+      "tags": [
+        "AGI",
+        "自动化研究",
+        "OpenAI"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，是大模型在专业场景落地的关键突破，标志AI向“思考型”迈进。",
+      "tags": [
+        "AI大模型",
+        "Google",
+        "复杂任务"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI基础设施全面下沉至边缘与车端，是算力+软件+生态协同的里程碑式布局。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI发布GPT-5.2/5.3并明确依赖NVIDIA硬件，标志大模型训练部署深度绑定GPU生态，凸显NVIDIA在AI算力核心地位的不可替代性。",
+      "tags": [
+        "AI大模型",
+        "NVIDIA",
+        "算力基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "DEAF: A Benchmark for Diagnostic Evaluation of Acoustic Faithfulness in Audio Language Models",
+      "link": "https://arxiv.org/abs/2603.18048",
+      "rating": "A",
+      "score": 8,
+      "comment": "DEAF benchmark系统性检验音频LLM是否真正理解声学信号，解决‘模型是听还是读’的核心争议，对音频多模态研究具重要指导意义。",
+      "tags": [
+        "音频LLM",
+        "多模态",
+        "基准测试",
+        "声学感知"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Continually self-improving AI",
+      "link": "https://arxiv.org/abs/2603.18073",
+      "rating": "A",
+      "score": 8,
+      "comment": "arXiv新论文提出三重突破路径，直指当前LLM三大瓶颈：数据效率、知识更新与算法依赖，为持续自进化AI提供理论框架，值得技术团队关注。",
+      "tags": [
+        "自进化AI",
+        "大模型架构",
+        "研究进展"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Multi-Trait Subspace Steering to Reveal the Dark Side of Human-AI Interaction",
+      "link": "https://arxiv.org/abs/2603.18085",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出Multi-Trait Subspace Steering框架，首次系统性建模有害人机交互的机制，为AI伦理与安全研究提供可操作工具，具实用价值。",
+      "tags": [
+        "AI安全",
+        "人机交互",
+        "LLM伦理"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Don't Vibe Code, Do Skele-Code: Interactive No-Code Notebooks for Subject Matter Experts to Build Lower-Cost Agentic Workflows",
+      "link": "https://arxiv.org/abs/2603.18122",
+      "rating": "A",
+      "score": 8,
+      "comment": "Skele-Code以自然语言+图结构+代码生成结合的交互式工作流构建方式，显著降低非技术用户门槛，通过上下文工程与按需调用代理减少token开销，是低代码/无代码向AI原生工作流演进的关键实践。",
+      "tags": [
+        "AI工作流",
+        "低代码",
+        "Agent架构",
+        "arXiv论文"
+      ]
+    }
+  ]
+}
