@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-22",
+  "summary": "今日焦点集中于大模型本地化与效率突破：Qwen3.5-122B-A10B的GGUF版及K_P量化释放，推动高性能模型下沉；Llama 8B通过结构化提示逼近70B性能，印证轻量高效路径；同时ArXiv独立运营与OpenAI自动化研究员布局，折射学术生态与研发范式变革。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen3.5-122B-A10B Uncensored (Aggressive) — GGUF Release + new K_P Quants",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s0aa1y/qwen35122ba10b_uncensored_aggressive_gguf_release/",
+      "rating": "S",
+      "score": 10,
+      "comment": "Qwen3.5-122B-A10B Aggressive 首次完整开源无限制版本，零拒绝、零性能损失，实现大模型完全开放可用，具行业里程碑意义",
+      "tags": [
+        "大模型开源",
+        "无限制版本",
+        "Qwen3.5"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[N] ArXiv, the pioneering preprint server, declares independence from Cornell | Science | As an independent nonprofit, it hopes to raise funds to cope with exploding submissions and “AI slop”",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1rzp5ph/n_arxiv_the_pioneering_preprint_server_declares/",
+      "rating": "S",
+      "score": 9,
+      "comment": "ArXiv脱离Cornell独立运营，标志学术预印本生态关键转折；应对爆炸式投稿与AI生成内容污染问题，体现开源基础设施的自主性与可持续性挑战。",
+      "tags": [
+        "学术生态",
+        "开源基础设施",
+        "AI治理"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: OpenAI is building a fully automated researcher, and a psychedelic trial blind spot",
+      "link": "https://www.technologyreview.com/2026/03/20/1134448/the-download-openai-building-fully-automated-researcher-psychedelic-drug-trial/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI启动全自动化研究员项目，标志着AI从工具向自主科研代理的关键跃迁，可能重塑研发范式。",
+      "tags": [
+        "AI科研自动化",
+        "大模型Agent",
+        "OpenAI"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "OpenAI is throwing everything into building a fully automated researcher",
+      "link": "https://www.technologyreview.com/2026/03/20/1134438/openai-is-throwing-everything-into-building-a-fully-automated-researcher/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI启动全自动化研究员项目，直指AGI核心瓶颈——自主科研能力，是当前最前沿的系统性突破尝试。",
+      "tags": [
+        "AGI",
+        "自动化科研",
+        "OpenAI"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，是大模型在专业场景落地的关键突破，标志AI向“思考型”迈进。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google",
+        "AI应用"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型与自动驾驶全栈方案，标志着AI基础设施从算力到生态的全面重构，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI发布GPT-5.2/5.3并明确依赖NVIDIA硬件，标志大模型训练部署深度绑定GPU生态，凸显NVIDIA在AI基础设施的核心地位，具行业里程碑意义。",
+      "tags": [
+        "AI大模型",
+        "NVIDIA",
+        "硬件依赖"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Announcing LocalLlama discord server & bot!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1mpk2va/announcing_localllama_discord_server_bot/",
+      "rating": "A",
+      "score": 8,
+      "comment": "LocalLlama Discord 服务器重启并引入模型测试 Bot，响应50万用户社区需求，推动本地大模型实操与技术交流，体现开源生态活力。",
+      "tags": [
+        "本地大模型",
+        "社区建设",
+        "开源工具"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Llama 8B matching 70B on multi-hop QA with structured prompting, no fine-tuning",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s05thz/llama_8b_matching_70b_on_multihop_qa_with/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Llama 8B通过结构化提示与上下文压缩，在多跳问答中逼近70B模型性能，证明小模型推理瓶颈可通过工程优化突破，具实用价值。",
+      "tags": [
+        "多跳问答",
+        "结构化提示",
+        "Graph RAG",
+        "小模型优化"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "ik_llama.cpp gives 26x faster prompt processing on Qwen 3.5 27B — real world numbers",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s07ysr/ik_llamacpp_gives_26x_faster_prompt_processing_on/",
+      "rating": "A",
+      "score": 8,
+      "comment": "ik_llama.cpp fork实现26倍prompt处理加速，实测显著提升推理效率，尤其适配Qwen 3.5 27B等新型混合架构模型，工具链优化价值高。",
+      "tags": [
+        "llama.cpp",
+        "推理加速",
+        "Qwen 3.5",
+        "GPU优化"
+      ]
+    }
+  ]
+}
