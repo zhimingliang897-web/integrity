@@ -1,0 +1,137 @@
+{
+  "date": "2026-03-23",
+  "summary": "今日焦点集中于三大方向：一是OpenAI与NVIDIA加速构建全自动研究者及底层算力生态，凸显AI系统化能力跃升；二是阿里、MiniMax等持续开放模型权重，推动开源协作深化；三是社区实测展现大模型在低级工具调用与底层数据解析上的突破性进展，反映AI从“能答”向“能做”演进。",
+  "news": [
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: OpenAI is building a fully automated researcher, and a psychedelic trial blind spot",
+      "link": "https://www.technologyreview.com/2026/03/20/1134448/the-download-openai-building-fully-automated-researcher-psychedelic-drug-trial/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI启动全自动化研究员项目，标志着AI从工具向自主科研 agent 跃迁，可能颠覆传统研究范式，是行业里程碑事件。",
+      "tags": [
+        "AI科研",
+        "自动化研究",
+        "OpenAI"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "OpenAI is throwing everything into building a fully automated researcher",
+      "link": "https://www.technologyreview.com/2026/03/20/1134438/openai-is-throwing-everything-into-building-a-fully-automated-researcher/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI启动全自动化研究员项目，直指AGI核心挑战，标志着大模型研究范式从工具辅助转向自主科研，具有里程碑意义。",
+      "tags": [
+        "AGI",
+        "自动化科研",
+        "OpenAI"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，是大模型迈向专业级应用的关键一步，具行业里程碑意义。",
+      "tags": [
+        "AI大模型",
+        "Google",
+        "复杂任务"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI算力基础设施与生态协同进入新阶段，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，体现大模型训练部署对高端GPU的深度绑定，标志AI工程化进入新阶段。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Alibaba confirms they are committed to continuously open-sourcing new Qwen and Wan models",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s0pfml/alibaba_confirms_they_are_committed_to/",
+      "rating": "A",
+      "score": 8,
+      "comment": "阿里确认持续开源Qwen与Wan系列模型，体现大厂对开放生态的坚定承诺，推动国产大模型普惠化与社区共建。",
+      "tags": [
+        "大模型开源",
+        "国产AI",
+        "生态建设"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "MiniMax M2.7 Will Be Open Weights",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s0mnv3/minimax_m27_will_be_open_weights/",
+      "rating": "A",
+      "score": 8,
+      "comment": "MiniMax M2.7将开放权重，体现中国大模型厂商在开源生态上的积极布局，增强社区协作与应用落地能力。",
+      "tags": [
+        "大模型开源",
+        "国产模型",
+        "M2.7"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Impressive thread from /r/ChatGPT, where after ChatGPT finds out no 7Zip, tar, py7zr, apt-get, Internet, it just manually parsed and unzipped from hex data of the .7z file. What model + prompts would be able to do this?",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s0mmsn/impressive_thread_from_rchatgpt_where_after/",
+      "rating": "A",
+      "score": 8,
+      "comment": "展示大模型在无工具环境下通过hex解析+手动解压处理压缩文件的强推理与工程能力，体现LLM在系统级任务中的突破性进展。",
+      "tags": [
+        "大模型能力",
+        "工具调用",
+        "系统编程"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Honest take on running 9× RTX 3090 for AI",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s0p28x/honest_take_on_running_9_rtx_3090_for_ai/",
+      "rating": "A",
+      "score": 8,
+      "comment": "9×RTX 3090组建AI算力集群的实战经验分享，含功耗、散热、稳定性实测，对中小规模部署具高参考价值",
+      "tags": [
+        "AI算力",
+        "硬件实测",
+        "分布式训练"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[N] MIT Flow Matching and Diffusion Lecture 2026",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1s0qi41/n_mit_flow_matching_and_diffusion_lecture_2026/",
+      "rating": "A",
+      "score": 8,
+      "comment": "MIT 2026年流匹配与扩散模型课程完整开源，涵盖理论推导、代码实践及前沿扩展（潜空间/扩散Transformer/离散扩散语言模型），是当前最系统的学习资源之一。",
+      "tags": [
+        "扩散模型",
+        "课程资源",
+        "AI教育",
+        "CSAIL"
+      ]
+    }
+  ]
+}
