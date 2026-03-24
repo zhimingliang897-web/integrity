@@ -1,0 +1,139 @@
+{
+  "date": "2026-03-24",
+  "summary": "今日焦点集中于三大方向：一是推理性能突破，FlashAttention-4以1613 TFLOPs/s刷新加速纪录，凸显Python生态在高效算子中的崛起；二是大模型能力跃升，Gemini 3.1 Pro与OpenAI自动化研究员项目展现复杂任务处理新范式；三是AI系统化演进，NVIDIA Rubin平台与Hyperagents等研究推动自主代理与形式化验证深度融合。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "FlashAttention-4: 1613 TFLOPs/s, 2.7x faster than Triton, written in Python. What it means for inference.",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s1yw23/flashattention4_1613_tflopss_27x_faster_than/",
+      "rating": "S",
+      "score": 9,
+      "comment": "FlashAttention-4实现1613 TFLOPs/s，达矩阵乘法极限，2.7x超越Triton，B200上vLLM自动集成，标志着推理性能进入新阶段。",
+      "tags": [
+        "AI推理",
+        "FlashAttention",
+        "B200",
+        "高性能计算"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: OpenAI is building a fully automated researcher, and a psychedelic trial blind spot",
+      "link": "https://www.technologyreview.com/2026/03/20/1134448/the-download-openai-building-fully-automated-researcher-psychedelic-drug-trial/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI启动全自动研究员项目，标志着AGI关键路径突破，可能重塑科研范式与知识生产方式。",
+      "tags": [
+        "AGI",
+        "自动化研究",
+        "OpenAI"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "OpenAI is throwing everything into building a fully automated researcher",
+      "link": "https://www.technologyreview.com/2026/03/20/1134438/openai-is-throwing-everything-into-building-a-fully-automated-researcher/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI启动全自动化研究员项目，直指AGI核心挑战，标志着大模型研究范式从工具辅助转向自主科研，具有里程碑意义。",
+      "tags": [
+        "AGI",
+        "自动化科研",
+        "OpenAI"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Pro: A smarter model for your most complex tasks",
+      "link": "https://deepmind.google/blog/gemini-3-1-pro-a-smarter-model-for-your-most-complex-tasks/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Gemini 3.1 Pro面向复杂任务优化，强调深度推理与多步规划能力，是大模型在专业场景落地的关键突破，标志AI向“思考型”迈进。",
+      "tags": [
+        "大模型",
+        "推理能力",
+        "Google",
+        "AI应用"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI算力基础设施与生态协同进入新阶段，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，标志大模型训练部署深度绑定GPU生态，体现AI基础设施关键性突破。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "When both Grounding and not Grounding are Bad -- A Partially Grounded Encoding of Planning into SAT (Extended Version)",
+      "link": "https://arxiv.org/abs/2603.19429",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出部分接地的SAT编码新方法，线性缩放优于传统二次复杂度，显著提升长规划求解性能，是经典规划领域的重要理论突破。",
+      "tags": [
+        "AI规划",
+        "SAT编码",
+        "理论突破"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Hyperagents",
+      "link": "https://arxiv.org/abs/2603.19461",
+      "rating": "A",
+      "score": 8,
+      "comment": "DGM实现开放自进化编码，提出hyperagents框架突破传统固定元机制限制，为通用自提升AI提供新路径，arXiv首发具学术价值。",
+      "tags": [
+        "自进化AI",
+        "DGM",
+        "hyperagents"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Teaching an Agent to Sketch One Part at a Time",
+      "link": "https://arxiv.org/abs/2603.19500",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出ControlSketch-Part数据集与分步强化学习框架，实现可控、可编辑的文本到矢量草图生成，是AI绘图领域的重要进展。",
+      "tags": [
+        "AI绘图",
+        "多模态Agent",
+        "强化学习",
+        "矢量图形"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Learning to Disprove: Formal Counterexample Generation with Large Language Models",
+      "link": "https://arxiv.org/abs/2603.19514",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将LLM用于形式化反例生成，结合Lean4验证，填补AI数学领域关键空白，具实用价值与研究深度。",
+      "tags": [
+        "AI数学",
+        "形式化验证",
+        "LLM"
+      ]
+    }
+  ]
+}
