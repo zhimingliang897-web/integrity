@@ -1,0 +1,138 @@
+{
+  "date": "2026-03-26",
+  "summary": "今日焦点集中于三大方向：一是多协议AI代理架构（如STEM Agent）与自主驾驶平台（NVIDIA Rubin）推动系统级智能进化；二是模型构建者对算力依赖加深，NVIDIA生态成核心支撑；三是认知科学与安全机制突破，如记忆增强、语言假设挑战及动态情绪识别等研究，反映AI向具身化、可解释性与安全性深度演进。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "STEM Agent: A Self-Adapting, Tool-Enabled, Extensible Architecture for Multi-Protocol AI Agent Systems",
+      "link": "https://arxiv.org/abs/2603.22359",
+      "rating": "S",
+      "score": 9,
+      "comment": "提出STEM Agent架构，首次统一五种协议并支持动态自适应，突破传统AI agent框架的协议与工具绑定僵化问题，具里程碑意义。",
+      "tags": [
+        "AI Agent",
+        "架构设计",
+        "多协议融合"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[D] Is LeCun’s $1B seed round the signal that autoregressive LLMs have actually hit a wall for formal reasoning?",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1s3j3ef/d_is_lecuns_1b_seed_round_the_signal_that/",
+      "rating": "S",
+      "score": 9,
+      "comment": "LeCun以10亿美元种子轮押注能量模型+逻辑约束，直接挑战Transformer在形式推理上的天花板，是近十年最激进的架构路线切换之一。",
+      "tags": [
+        "AI架构突破",
+        "形式推理",
+        "Energy-Based Model"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶全栈方案，标志着AI从算力到生态的系统性跃迁，是行业里程碑事件。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "大模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI发布GPT-5.2/5.3并明确依赖NVIDIA硬件，标志大模型训练部署深度绑定GPU生态，凸显NVIDIA在AI基础设施的核心地位，具行业里程碑意义。",
+      "tags": [
+        "AI大模型",
+        "NVIDIA",
+        "硬件依赖"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Memory Bear AI Memory Science Engine for Multimodal Affective Intelligence: A Technical Report",
+      "link": "https://arxiv.org/abs/2603.22306",
+      "rating": "A",
+      "score": 8,
+      "comment": "Memory Bear提出以记忆为中心的多模态情感智能框架，解决长期依赖建模与不完整输入下的情感推理问题，是MER领域的重要技术演进。",
+      "tags": [
+        "多模态情感识别",
+        "记忆机制",
+        "Affective Intelligence"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "The Efficiency Attenuation Phenomenon: A Computational Challenge to the Language of Thought Hypothesis",
+      "link": "https://arxiv.org/abs/2603.22312",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次用MARL实证挑战LoT假说，发现'效率衰减现象'（EAP），为认知科学与AI架构提供新洞见，具理论突破性。",
+      "tags": [
+        "语言的思维假说",
+        "多智能体强化学习",
+        "认知科学"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Dynamic Fusion-Aware Graph Convolutional Neural Network for Multimodal Emotion Recognition in Conversations",
+      "link": "https://arxiv.org/abs/2603.22345",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出DF-GCN动态融合感知GCN，解决多模态情感识别中融合动态性不足问题，提升特定情绪建模能力，是MERC领域有实用价值的架构创新。",
+      "tags": [
+        "多模态情感识别",
+        "图神经网络",
+        "GCN",
+        "动态融合"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Intelligence Inertia: Physical Principles and Applications",
+      "link": "https://arxiv.org/abs/2603.22347",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出'智能惯性'概念，结合热力学与信息几何，解释高级AI系统重配置时的非线性能耗问题，为可解释性与能效矛盾提供新理论框架。",
+      "tags": [
+        "AI理论",
+        "信息物理",
+        "能源效率"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Session Risk Memory (SRM): Temporal Authorization for Deterministic Pre-Execution Safety Gates",
+      "link": "https://arxiv.org/abs/2603.22350",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出Session Risk Memory(SRM)机制，通过轨迹级授权弥补单步安全门的分布式攻击盲区，轻量且可集成，是确定性预执行安全的重要演进。",
+      "tags": [
+        "安全架构",
+        "AI治理",
+        "arXiv"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Evaluating Prompting Strategies for Chart Question Answering with Large Language Models",
+      "link": "https://arxiv.org/abs/2603.22288",
+      "rating": "A",
+      "score": 8,
+      "comment": "系统性评估四大提示策略在图表问答任务上的表现，发现Few-Shot CoT最优，为LLM推理增强提供实证指导，对工业级图表分析应用有直接参考价值。",
+      "tags": [
+        "LLM",
+        "提示工程",
+        "图表问答",
+        "ChartQA"
+      ]
+    }
+  ]
+}
