@@ -1,0 +1,140 @@
+{
+  "date": "2026-03-27",
+  "summary": "今日焦点集中于大模型性能突破与安全挑战：Qwen 3.5 在B200上实现100万tokens/秒推理，展现极致效率；同时前沿模型内部安全机制出现“崩溃”风险，引发对复杂系统可靠性的深度担忧；NVIDIA生态持续强化，从 Rubin平台到自动驾驶蓝图，凸显算力与架构协同演进的紧迫性。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen 3.5 27B at 1.1M tok/s on B200s, all configs on GitHub",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s4hudr/qwen_35_27b_at_11m_toks_on_b200s_all_configs_on/",
+      "rating": "S",
+      "score": 10,
+      "comment": "Qwen 3.5 27B在B200集群达110万tok/s，突破百万吞吐大关，MTP-1 speculative decoding等关键优化显著提升GPU利用率，vLLM原生支持+无定制内核即实现高能效，属推理性能里程碑式突破。",
+      "tags": [
+        "推理性能",
+        "B200",
+        "vLLM",
+        "MTP-1"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "PLDR-LLMs Reason At Self-Organized Criticality",
+      "link": "https://arxiv.org/abs/2603.23539",
+      "rating": "S",
+      "score": 9,
+      "comment": "首次将自组织临界性与大模型推理能力直接关联，提出PLDR-LLM新范式，理论深度高且具可推广性，可能重塑大模型训练与推理机制设计思路。",
+      "tags": [
+        "自组织临界性",
+        "大模型推理",
+        "理论突破"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Internal Safety Collapse in Frontier Large Language Models",
+      "link": "https://arxiv.org/abs/2603.23509",
+      "rating": "S",
+      "score": 9,
+      "comment": "首次系统揭示前沿大模型内在安全失效机制，提出ISC概念与基准测试，暴露当前AI安全防护根本性缺陷，属行业里程碑级研究。",
+      "tags": [
+        "LLM安全",
+        "安全漏洞",
+        "arXiv论文"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[D] - 1M tokens/second serving Qwen 3.5 27B on B200 GPUs, benchmark results and findings",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1s4hxgu/d_1m_tokenssecond_serving_qwen_35_27b_on_b200/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Qwen 3.5 27B在B200上达1M tokens/second，突破推理吞吐天花板；MTP-1关键优化、DP显著优于TP等发现具工程指导价值，属当前最顶尖推理性能标杆。",
+      "tags": [
+        "大模型推理",
+        "B200",
+        "vLLM",
+        "吞吐优化"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[N] TurboQuant: Redefining AI efficiency with extreme compression",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1s3yjyl/n_turboquant_redefining_ai_efficiency_with/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Google Research发布TurboQuant，实现极端压缩下的模型高效推理，突破性提升AI能效比，属行业里程碑式进展。",
+      "tags": [
+        "模型压缩",
+        "效率优化",
+        "Google Research"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "From games to biology and beyond: 10 years of AlphaGo’s impact",
+      "link": "https://deepmind.google/blog/10-years-of-alphago/",
+      "rating": "S",
+      "score": 9,
+      "comment": "AlphaGo十周年回顾揭示其作为AGI探索关键里程碑的深远影响，推动跨学科科学发现与AI基础研究突破。",
+      "tags": [
+        "AGI",
+        "AlphaGo",
+        "科学发现"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型与自动驾驶蓝图，标志AI基础设施全面下沉至边缘与车端，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI发布GPT-5.2/5.3并明确依赖NVIDIA硬件，标志大模型训练部署深度绑定GPU生态，凸显NVIDIA在AI基础设施的核心地位。",
+      "tags": [
+        "AI芯片",
+        "NVIDIA",
+        "大模型"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Environment Maps: Structured Environmental Representations for Long-Horizon Agents",
+      "link": "https://arxiv.org/abs/2603.23610",
+      "rating": "A",
+      "score": 8,
+      "comment": "Environment Maps 提出结构化环境表示，通过图结构整合屏幕录像与执行轨迹，有效缓解长时序代理中的级联错误与随机性问题，是提升AI Agent鲁棒性的关键进展。",
+      "tags": [
+        "AI Agent",
+        "环境建模",
+        "长时序规划"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Evaluating a Multi-Agent Voice-Enabled Smart Speaker for Care Homes: A Safety-Focused Framework",
+      "link": "https://arxiv.org/abs/2603.23625",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个面向养老院的语音智能音箱安全评估框架，融合Whisper+RAG实现高可靠性语音交互，实证验证330条语料覆盖11类场景，具落地价值。",
+      "tags": [
+        "AI医疗",
+        "多智能体系统",
+        "语音识别",
+        "RAG",
+        "养老科技"
+      ]
+    }
+  ]
+}
