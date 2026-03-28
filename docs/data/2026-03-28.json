@@ -1,0 +1,140 @@
+{
+  "date": "2026-03-28",
+  "summary": "今日焦点集中于AGI与多智能体系统演进：ARC-AGI-3提出新挑战，多智能体 Scaling Laws 与 Metacognitive Co-Regulation 等研究深化对集体智能与自我调节机制的理解；NVIDIA平台与Open Models布局凸显算力与生态协同对复杂AI落地的关键支撑。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "ARC-AGI-3: A New Challenge for Frontier Agentic Intelligence",
+      "link": "https://arxiv.org/abs/2603.24621",
+      "rating": "S",
+      "score": 9,
+      "comment": "ARC-AGI-3是首个聚焦纯推理与自适应能力的高难度交互式基准，人类100%通过率 vs AI<1%，凸显当前大模型在抽象建模与目标推理上的根本差距，推动AGI评估范式革新。",
+      "tags": [
+        "AGI评估",
+        "基准测试",
+        "认知建模"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "From games to biology and beyond: 10 years of AlphaGo’s impact",
+      "link": "https://deepmind.google/blog/10-years-of-alphago/",
+      "rating": "S",
+      "score": 9,
+      "comment": "AlphaGo十周年回顾揭示其在科学发现与AGI路径上的深远影响，是AI发展史上的里程碑事件",
+      "tags": [
+        "AI里程碑",
+        "AGI",
+        "科学计算"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI基础设施全面下沉至边缘与车端，是AI算力+软件栈+生态协同的里程碑式整合。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "Open Models",
+        "NVIDIA"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI发布GPT-5.2/5.3并明确依赖NVIDIA硬件（Hopper/GB200），体现大模型训练部署对高端GPU的强绑定，标志AI基础设施新范式确立。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "When Is Collective Intelligence a Lottery? Multi-Agent Scaling Laws for Memetic Drift in LLMs",
+      "link": "https://arxiv.org/abs/2603.24676",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出QSG模型揭示多智能体共识的微观机制，首次将'群体认知漂变'与上下文学习关联，为LLM集体决策提供理论基石，适合系统性研究者关注。",
+      "tags": [
+        "多智能体",
+        "LLM",
+        "集体智能",
+        "理论分析"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "AutoSAM: an Agentic Framework for Automating Input File Generation for the SAM Code with Multi-Modal Retrieval-Augmented Generation",
+      "link": "https://arxiv.org/abs/2603.24736",
+      "rating": "A",
+      "score": 8,
+      "comment": "AutoSAM首次将多模态RAG与代理框架用于核工程输入文件自动化，解决高价值领域痛点，兼具学术创新与工程实用价值。",
+      "tags": [
+        "AI+工程",
+        "多模态RAG",
+        "核能软件"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Trust as Monitoring: Evolutionary Dynamics of User Trust and AI Developer Behaviour",
+      "link": "https://arxiv.org/abs/2603.24742",
+      "rating": "A",
+      "score": 8,
+      "comment": "arXiv高分论文，首次将用户信任建模为动态演化过程，结合进化博弈论分析监控成本与制度对AI开发者行为的影响，为AI治理提供新理论框架。",
+      "tags": [
+        "AI安全",
+        "进化博弈论",
+        "AI治理"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Formal Semantics for Agentic Tool Protocols: A Process Calculus Approach",
+      "link": "https://arxiv.org/abs/2603.24747",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将SGD与MCP统一到过程演算框架，证明结构双相似性，为大模型代理协议形式化验证奠定理论基础，具重要学术与工程价值。",
+      "tags": [
+        "形式化验证",
+        "Agent协议",
+        "过程演算",
+        "MCP"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Supervising Ralph Wiggum: Exploring a Metacognitive Co-Regulation Agentic AI Loop for Engineering Design",
+      "link": "https://arxiv.org/abs/2603.24768",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出SRL与CRDAL双循环机制，首次将元认知调控引入工程设计AI代理，解决LLM固有思维定势问题，具实用价值和研究前瞻性。",
+      "tags": [
+        "AI代理",
+        "元认知",
+        "工程设计",
+        "LLM"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "When Consistency Becomes Bias: Interviewer Effects in Semi-Structured Clinical Interviews",
+      "link": "https://arxiv.org/abs/2603.24651",
+      "rating": "A",
+      "score": 8,
+      "comment": "揭示临床对话中模型依赖 interviewer prompt 的系统性偏差，提出限制模型仅用患者话语可提升可解释性与泛化性，对医疗NLP有重要警示意义",
+      "tags": [
+        "医疗AI",
+        "可解释性",
+        "偏见检测"
+      ]
+    }
+  ]
+}
