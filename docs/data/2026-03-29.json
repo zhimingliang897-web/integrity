@@ -1,0 +1,137 @@
+{
+  "date": "2026-03-29",
+  "summary": "今日焦点集中于AI安全与模型优化：Litellm供应链攻击凸显API密钥管理风险；TurboQuant等量化技术推动大模型轻量化部署；NVIDIA在CES发布 Rubin 平台与开放模型战略，强化其在复杂AI系统中的核心地位。",
+  "news": [
+    {
+      "source": "Reddit ML",
+      "title": "[D] Litellm supply chain attack and what it means for api key management",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1s62taq/d_litellm_supply_chain_attack_and_what_it_means/",
+      "rating": "S",
+      "score": 9,
+      "comment": "Litellm供应链攻击暴露API密钥管理重大风险，攻击通过恶意.pth文件窃取各类凭证，影响2000+下游项目，推动行业对密钥治理的深度反思。",
+      "tags": [
+        "供应链安全",
+        "API密钥管理",
+        "安全事件"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "A woman’s uterus has been kept alive outside the body for the first time",
+      "link": "https://www.technologyreview.com/2026/03/28/1134766/womans-uterus-kept-alive-outside-the-body-first/",
+      "rating": "S",
+      "score": 9,
+      "comment": "全球首次实现人类子宫离体存活，突破生殖医学与器官移植关键瓶颈，为不孕治疗、生育保存带来革命性可能。",
+      "tags": [
+        "生殖医学",
+        "器官芯片",
+        "生物工程"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI算力基础设施与生态协同进入新阶段，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI发布GPT-5.2/5.3并明确依赖NVIDIA硬件（Hopper/GB200），体现大模型训练部署对高端GPU的强绑定，标志AI基础设施新范式确立。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AI基础设施"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "A simple explanation of the key idea behind TurboQuant",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s62g5v/a_simple_explanation_of_the_key_idea_behind/",
+      "rating": "A",
+      "score": 8,
+      "comment": "TurboQuant是向量量化领域的重要突破，虽非颠覆性架构，但显著提升压缩效率与推理性能，对大模型部署有实用价值。",
+      "tags": [
+        "向量量化",
+        "大模型压缩",
+        "算法优化"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Gemma 4",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s65hfw/gemma_4/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Gemma 4为Google最新开源模型，延续轻量高效路线，支持多语言与长上下文，体现大厂在小型化LLM领域的持续投入与实用化进展。",
+      "tags": [
+        "开源模型",
+        "LLM",
+        "Google"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Turbo3 + gfx906 + 4 mi50 16gb running qwen3.5 122b 🤯",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s67k6v/turbo3_gfx906_4_mi50_16gb_running_qwen35_122b/",
+      "rating": "A",
+      "score": 8,
+      "comment": "4×MI50 16GB显卡+gfx906 Turbo3优化实现Qwen3.5-122B本地运行，体现大模型推理在消费级/中端硬件上的突破，属实用工具重大更新。",
+      "tags": [
+        "大模型部署",
+        "GPU优化",
+        "LLaMA.cpp"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] TurboQuant for weights: near‑optimal 4‑bit LLM quantization with lossless 8‑bit residual – 3.2× memory savings",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1s634wk/p_turboquant_for_weights_nearoptimal_4bit_llm/",
+      "rating": "A",
+      "score": 8,
+      "comment": "将TurboQuant从KV缓存扩展到权重压缩，实现4-bit近最优量化+8-bit残差无损，3.2×内存节省，兼容nn.Linear且性能损失极小，实用价值高。",
+      "tags": [
+        "LLM量化",
+        "模型压缩",
+        "TurboQuant"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[R] I built a benchmark that catches LLMs breaking physics laws",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1s6keh0/r_i_built_a_benchmark_that_catches_llms_breaking/",
+      "rating": "A",
+      "score": 8,
+      "comment": "构建了首个基于符号计算的物理规律对抗性基准，有效暴露LLM在物理推理中的系统性错误，为模型可信度评估提供新范式。",
+      "tags": [
+        "LLM评测",
+        "物理推理",
+        "符号计算"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "LVFace performance vs. ArcFace/ResNet",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1s6a90d/lvface_performance_vs_arcfaceresnet/",
+      "rating": "A",
+      "score": 8,
+      "comment": "ByteDance ICCV 2025 一作模型，ViT替代ResNet的Face Recognition新范式，MFR-Ongoing挑战冠军，实测性能与部署适配性值得评估。",
+      "tags": [
+        "人脸识别",
+        "ViT",
+        "开源模型",
+        "MFR"
+      ]
+    }
+  ]
+}
