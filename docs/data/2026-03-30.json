@@ -1,0 +1,137 @@
+{
+  "date": "2026-03-30",
+  "summary": "今日焦点集中于AI基础设施与模型落地：NVIDIA在CES发布 Rubin 平台及开放模型战略，强化其在复杂模型训练与自动驾驶中的主导地位；同时，开源社区活跃推进轻量化部署（如ZINC支持35B模型在中端GPU运行）与工具链优化（如TurboQuant、KV旋转修复），反映行业正加速从理论研究向高效工程化过渡。",
+  "news": [
+    {
+      "source": "MIT Tech Review",
+      "title": "A woman’s uterus has been kept alive outside the body for the first time",
+      "link": "https://www.technologyreview.com/2026/03/28/1134766/womans-uterus-kept-alive-outside-the-body-first/",
+      "rating": "S",
+      "score": 9,
+      "comment": "全球首次实现子宫离体存活，为生育医学和器官保存带来革命性突破，属生命科学里程碑事件。",
+      "tags": [
+        "生物工程",
+        "器官保存",
+        "生殖医学"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The snow gods: How a couple of ski bums built the internet’s best weather app",
+      "link": "https://www.technologyreview.com/2026/03/26/1134470/the-snow-gods-how-a-couple-of-ski-bums-built-the-internets-best-weather-app/",
+      "rating": "S",
+      "score": 9,
+      "comment": "独立创业团队用政府数据+自研AI+多年雪场经验，超越官方与大厂，实现雪况预测颠覆性突破，是技术落地与垂直领域创新的典范",
+      "tags": [
+        "AI预测",
+        "天气服务",
+        "创业公司"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI算力基础设施与生态协同进入新阶段，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "OpenAI发布GPT-5.2/5.3并明确依赖NVIDIA硬件，彰显大模型训练部署对GPU算力的深度绑定；尤其Codex首推自构建能力，标志AI工程化进入新阶段。",
+      "tags": [
+        "大模型",
+        "NVIDIA",
+        "AGI"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Announcing LocalLlama discord server & bot!",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1mpk2va/announcing_localllama_discord_server_bot/",
+      "rating": "A",
+      "score": 8,
+      "comment": "LocalLlama Discord 服务器与 Bot 的上线，响应社区需求，提供开源模型实测平台，助力本地 LLM 技术交流与实践，体现社区驱动的实用工具建设价值。",
+      "tags": [
+        "LLM社区",
+        "开源工具",
+        "本地部署"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "ZINC — LLM inference engine written in Zig, running 35B models on $550 AMD GPUs",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s79w6u/zinc_llm_inference_engine_written_in_zig_running/",
+      "rating": "A",
+      "score": 8,
+      "comment": "ZINC用Zig重写LLM推理引擎，专为AMD消费级GPU优化，突破ROCm限制，实现35B模型本地运行，填补关键生态空白。",
+      "tags": [
+        "Zig",
+        "LLM推理",
+        "AMD GPU",
+        "开源工具"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "In the recent kv rotation PR it was found that the existing q8 kv quants tank performance on AIME25, but can be recovered mostly with rotation",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s720r8/in_the_recent_kv_rotation_pr_it_was_found_that/",
+      "rating": "A",
+      "score": 8,
+      "comment": "KV旋转优化修复Q8量化在AIME25上的性能下滑，体现模型量化与推理优化的深度协同，对实际部署有重要指导意义。",
+      "tags": [
+        "量化优化",
+        "LLM推理",
+        "AIME25"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] Built an open source tool to find the location of any street picture",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1s6uqns/p_built_an_open_source_tool_to_find_the_location/",
+      "rating": "A",
+      "score": 8,
+      "comment": "开源工具实现街景图定位，复用Netryx Astra V2技术栈，提供10km纽约区域免费Web Demo，降低使用门槛，具实用价值与社区推广意义。",
+      "tags": [
+        "计算机视觉",
+        "地理定位",
+        "开源工具"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] Implemented TurboQuant in Python",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1s73sbf/p_implemented_turboquant_in_python/",
+      "rating": "A",
+      "score": 8,
+      "comment": "首次将TurboQuant论文实现为Python库，突破传统量化需校准或牺牲质量的困境，随机旋转+向量量化结合思路新颖实用。",
+      "tags": [
+        "向量量化",
+        "随机旋转",
+        "论文复现"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[D] Why does it seem like open source materials on ML are incomplete? this is not enough...",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1s6wswn/d_why_does_it_seem_like_open_source_materials_on/",
+      "rating": "A",
+      "score": 8,
+      "comment": "揭示ML开源现状痛点，直击复现难、文档缺失等核心问题，推动行业反思与改进，具实践指导价值。",
+      "tags": [
+        "开源生态",
+        "复现性",
+        "AI工程"
+      ]
+    }
+  ]
+}
