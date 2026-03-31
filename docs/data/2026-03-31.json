@@ -1,0 +1,140 @@
+{
+  "date": "2026-03-31",
+  "summary": "今日焦点集中于三大方向：一是开源生态爆发，llama.cpp突破10万星标，显示本地推理与轻量化部署持续升温；二是安全与伦理议题升温，斯坦福哈佛联合论文引发对AI系统潜在风险的深度担忧；三是行业应用深化，NVIDIA发布 Rubin 平台及自主驾驶蓝图，同时医疗AI（如子宫体外存活）与建筑仿真等垂类场景加速落地。",
+  "news": [
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "llama.cpp at 100k stars",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s7z7hj/llamacpp_at_100k_stars/",
+      "rating": "S",
+      "score": 10,
+      "comment": "llama.cpp突破10万星标，标志着本地大模型推理工具生态成熟，是开源社区驱动AI普惠的关键里程碑。",
+      "tags": [
+        "开源项目",
+        "本地推理",
+        "社区影响力"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Stanford and Harvard just dropped the most disturbing AI paper of the year",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s7w9mq/stanford_and_harvard_just_dropped_the_most/",
+      "rating": "S",
+      "score": 10,
+      "comment": "斯坦福与哈佛联合发布arXiv最新论文，被称'年度最令人不安'，暗示AI系统存在严重安全风险或能力跃升，引发学界高度关注。",
+      "tags": [
+        "AI安全",
+        "前沿研究",
+        "学术突破"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "AIRA_2: Overcoming Bottlenecks in AI Research Agents",
+      "link": "https://arxiv.org/abs/2603.26499",
+      "rating": "S",
+      "score": 9,
+      "comment": "AIRA_2提出三大结构性瓶颈突破：异步多GPU、隐式一致性评估、ReAct动态调试，显著提升AI研究代理性能上限，属领域里程碑式工作。",
+      "tags": [
+        "AI研究代理",
+        "架构创新",
+        "异步计算"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] fastrad: GPU-native radiomics library — 25× faster than PyRadiomics, 100% IBSI-compliant, all 8 feature classes",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1s82qdb/p_fastrad_gpunative_radiomics_library_25_faster/",
+      "rating": "A",
+      "score": 9,
+      "comment": "GPU-native radiomics库fastrad实现25×速度提升，100% IBSI合规，填补了PyRadiomics在GPU加速和实时处理上的空白，是医学影像AI基础设施的重要进步。",
+      "tags": [
+        "医学影像",
+        "AI加速",
+        "PyTorch",
+        "radiomics"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: brainless human clones and the first uterus kept alive outside a body",
+      "link": "https://www.technologyreview.com/2026/03/30/1134836/the-download-brainless-human-clones-first-uterus-kept-alive-outside-body/",
+      "rating": "S",
+      "score": 9,
+      "comment": "R3 Bio披露脑无意识人源克隆体与体外子宫技术，属再生医学与伦理突破性进展，可能重塑器官移植与发育生物学研究范式。",
+      "tags": [
+        "再生医学",
+        "伦理争议",
+        "器官移植",
+        "生物工程"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "A woman’s uterus has been kept alive outside the body for the first time",
+      "link": "https://www.technologyreview.com/2026/03/28/1134766/womans-uterus-kept-alive-outside-the-body-first/",
+      "rating": "S",
+      "score": 9,
+      "comment": "首次实现人类子宫体外存活，为生殖医学、器官移植和生物工程带来里程碑式突破，属重大科学进展。",
+      "tags": [
+        "生殖医学",
+        "器官芯片",
+        "生物工程"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA CES 2026 主题演讲发布Rubin平台、开放模型及自动驾驶蓝图，标志AI算力基础设施与生态协同进入新阶段，具行业里程碑意义。",
+      "tags": [
+        "AI基础设施",
+        "自动驾驶",
+        "开放模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "GPT-5.2与首个自建代码模型GPT-5.3 Codex发布，均依赖NVIDIA硬件，标志大模型训练部署深度绑定GPU生态，体现算力瓶颈下的技术路径关键转折点。",
+      "tags": [
+        "AI大模型",
+        "NVIDIA",
+        "算力基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "BeSafe-Bench: Unveiling Behavioral Safety Risks of Situated Agents in Functional Environments",
+      "link": "https://arxiv.org/abs/2603.25747",
+      "rating": "A",
+      "score": 8,
+      "comment": "BeSafe-Bench首次系统性构建面向具身智能体的实用安全基准，覆盖Web/移动/具身VLM/VLA四大场景，填补了高风险部署前的安全评估空白，对LMM安全落地至关重要。",
+      "tags": [
+        "AI安全",
+        "具身智能",
+        "基准测试",
+        "LMM"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "AutoB2G: A Large Language Model-Driven Agentic Framework For Automated Building-Grid Co-Simulation",
+      "link": "https://arxiv.org/abs/2603.26005",
+      "rating": "A",
+      "score": 8,
+      "comment": "AutoB2G首次实现基于自然语言驱动的建筑-电网协同仿真全流程自动化，填补了从数据到控制策略再到电网影响评估的闭环空白，显著降低仿真门槛。",
+      "tags": [
+        "LLM",
+        "建筑能源",
+        "电网仿真",
+        "自动化工具"
+      ]
+    }
+  ]
+}
