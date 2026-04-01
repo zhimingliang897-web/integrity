@@ -11,7 +11,7 @@ from pathlib import Path
 QWEN_API_KEY = os.getenv("QWEN_API_KEY")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "-1003878273027")
-MODEL_NAME = "qwen3-vl-flash-2026-01-22"
+MODEL_NAME = "qwen3.5-plus-2026-02-15"
 TARGET_COUNT = 10  # 每天固定推送 10 条
 
 BJ_TZ = timezone(timedelta(hours=8))
