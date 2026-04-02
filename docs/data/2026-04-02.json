@@ -1,0 +1,145 @@
+{
+  "date": "2026-04-02",
+  "summary": "英伟达 CES 确立硬件与自动驾驶战略基石。代理研究涌现范式转变，自组织多智能体系统优于预设结构。1 比特模型与终身记忆架构，同步突破效率与认知边界。",
+  "news": [
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA 发布 Rubin 平台，定义 AI 新架构，CES 揭示行业蓝图。",
+      "tags": [
+        "NVIDIA",
+        "AI 硬件",
+        "CES",
+        "Rubin"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "ChartDiff: A Large-Scale Benchmark for Comprehending Pairs of Charts",
+      "link": "https://arxiv.org/abs/2603.28902",
+      "rating": "A",
+      "score": 8,
+      "comment": "首个大规模跨图表对比基准，填补推理空白，含人工验证，助力可视化分析模型评估",
+      "tags": [
+        "AI Benchmark",
+        "Multimodal",
+        "Data Visualization"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Mimosa Framework: Toward Evolving Multi-Agent Systems for Scientific Research",
+      "link": "https://arxiv.org/abs/2603.28986",
+      "rating": "A",
+      "score": 8,
+      "comment": "突破 ASR 固定工作流限制，实现智能体自动进化与工具动态发现，科研自动化创新。",
+      "tags": [
+        "Multi-Agent",
+        "ASR",
+        "MCP",
+        "AI4Science"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Drop the Hierarchy and Roles: How Self-Organizing LLM Agents Outperform Designed Structures",
+      "link": "https://arxiv.org/abs/2603.28990",
+      "rating": "A",
+      "score": 8,
+      "comment": "2.5 万任务实证：自组织 Agent 优于预设层级，颠覆多智能体架构设计范式。",
+      "tags": [
+        "LLM Agents",
+        "Multi-Agent Systems",
+        "Self-Organization",
+        "AI Architecture"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "OptiMer: Optimal Distribution Vector Merging Is Better than Data Mixing for Continual Pre-Training",
+      "link": "https://arxiv.org/abs/2603.28858",
+      "rating": "A",
+      "score": 8,
+      "comment": "解决持续预训练数据配比调优难题，通过向量合并后验搜索，大幅节省算力且效果更优。",
+      "tags": [
+        "大模型",
+        "持续预训练",
+        "模型合并",
+        "效率优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Theory of Mind and Self-Attributions of Mentality are Dissociable in LLMs",
+      "link": "https://arxiv.org/abs/2603.28925",
+      "rating": "A",
+      "score": 8,
+      "comment": "证实安全微调不损害心智理论能力，解决对齐关键担忧，机制分析深入。",
+      "tags": [
+        "AI 安全",
+        "大模型",
+        "心智理论",
+        "对齐"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Human-Like Lifelong Memory: A Neuroscience-Grounded Architecture for Infinite Interaction",
+      "link": "https://arxiv.org/abs/2603.29023",
+      "rating": "A",
+      "score": 8,
+      "comment": "基于神经科学构建终身记忆架构，直击长上下文推理退化痛点，理论突破值得关注。",
+      "tags": [
+        "LLM",
+        "记忆架构",
+        "神经科学",
+        "长上下文"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "The Bonsai 1-bit models are very good",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1s9zumi/the_bonsai_1bit_models_are_very_good/",
+      "rating": "A",
+      "score": 8,
+      "comment": "1-bit 模型实现 14 倍压缩，大幅降低本地部署门槛，效率优化重要进展。",
+      "tags": [
+        "大模型",
+        "模型压缩",
+        "本地部署",
+        "1-bit"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[D] We reimplemented Claude Code entirely in Python — open source, works with local models",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1sa09ta/d_we_reimplemented_claude_code_entirely_in_python/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Python 版 Claude Code 开源，支持本地模型，降低开发门槛。",
+      "tags": [
+        "Open Source",
+        "AI Agent",
+        "Python",
+        "LLM"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "Stanford CS 25 Transformers Course (OPEN TO ALL | Starts Tomorrow)",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1sa3cf0/stanford_cs_25_transformers_course_open_to_all/",
+      "rating": "A",
+      "score": 8,
+      "comment": "斯坦福 CS25 公开课，聚焦 Transformer，顶级资源，值得学习。",
+      "tags": [
+        "教育",
+        "Transformers",
+        "斯坦福",
+        "开源课程"
+      ]
+    }
+  ]
+}
