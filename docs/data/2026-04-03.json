@@ -1,0 +1,143 @@
+{
+  "date": "2026-04-03",
+  "summary": "NVIDIA 发布硬件蓝图，研究聚焦多智能体情感与安全。机器人实测暴露落地鸿沟，效率远逊人类。技术正向具身智能与可信评估演进。",
+  "news": [
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA 发布 Rubin 平台蓝图，涵盖开源模型与自动驾驶，定义下一代 AI 基础设施。",
+      "tags": [
+        "NVIDIA",
+        "Rubin",
+        "AI 基础设施",
+        "自动驾驶"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "How Emotion Shapes the Behavior of LLMs and Agents: A Mechanistic Study",
+      "link": "https://arxiv.org/abs/2604.00005",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出 E-STEER 框架，实现情绪隐藏层直接干预，探索机制性影响，具研究价值。",
+      "tags": [
+        "LLM",
+        "Mechanistic Interpretability",
+        "Agents",
+        "Emotion AI"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "One Panel Does Not Fit All: Case-Adaptive Multi-Agent Deliberation for Clinical Prediction",
+      "link": "https://arxiv.org/abs/2604.00085",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出动态多智能体面板 CAMP，引入三值投票，解决临床预测异质性，提升可靠性。",
+      "tags": [
+        "大模型",
+        "多智能体",
+        "医疗 AI",
+        "学术研究"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Open, Reliable, and Collective: A Community-Driven Framework for Tool-Using AI Agents",
+      "link": "https://arxiv.org/abs/2604.00137",
+      "rating": "A",
+      "score": 8,
+      "comment": "聚焦智能体工具可靠性瓶颈，社区驱动标准化框架，含自动化测试，落地价值高。",
+      "tags": [
+        "AI Agents",
+        "Tool Use",
+        "Reliability",
+        "Open Source"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "A Safety-Aware Role-Orchestrated Multi-Agent LLM Framework for Behavioral Health Communication Simulation",
+      "link": "https://arxiv.org/abs/2604.00249",
+      "rating": "A",
+      "score": 8,
+      "comment": "多智能体协作框架，专攻行为健康对话，强化安全审计与角色分工，具高落地参考价值。",
+      "tags": [
+        "多智能体",
+        "大模型",
+        "AI 安全",
+        "数字健康"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Dynin-Omni: Omnimodal Unified Large Diffusion Language Model",
+      "link": "https://arxiv.org/abs/2604.00007",
+      "rating": "A",
+      "score": 8,
+      "comment": "首创掩码扩散全模态架构，统一文本图像语音视频，非自回归路径值得关注。",
+      "tags": [
+        "多模态",
+        "扩散模型",
+        "架构创新"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "How Trustworthy Are LLM-as-Judge Ratings for Interpretive Responses? Implications for Qualitative Research Workflows",
+      "link": "https://arxiv.org/abs/2604.00008",
+      "rating": "A",
+      "score": 8,
+      "comment": "探究 LLM 评判定性回复的可靠性，填补评估空白，为社科研究 AI 工作流提供关键参考。",
+      "tags": [
+        "LLM-as-Judge",
+        "定性研究",
+        "模型评估",
+        "科研工具"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[R] Is autoresearch really better than classic hyperparameter tuning?",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1satj6r/r_is_autoresearch_really_better_than_classic/",
+      "rating": "A",
+      "score": 8,
+      "comment": "AutoResearch 调优优于 Optuna，效率更高，LLM 应用值得关注",
+      "tags": [
+        "AutoML",
+        "超参数调优",
+        "LLM 应用"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] PhAIL (phail.ai) – an open benchmark for robot AI on real hardware. Best model: 5% of human throughput, needs help every 4 minutes.",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1sajdwr/p_phail_phailai_an_open_benchmark_for_robot_ai_on/",
+      "rating": "A",
+      "score": 8,
+      "comment": "真实硬件基准测试，揭露 VLA 模型实际产能仅为人类 5%，数据诚实极具参考价值。",
+      "tags": [
+        "机器人",
+        "VLA",
+        "基准测试",
+        "产业落地"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: gig workers training humanoids, and better AI benchmarks",
+      "link": "https://www.technologyreview.com/2026/04/01/1134993/the-download-gig-workers-training-humanoids-better-ai-benchmarks/",
+      "rating": "A",
+      "score": 8,
+      "comment": "揭示人形机器人远程训练新模式，关注 AI 背后的人力环节与基准测试改进。",
+      "tags": [
+        "人形机器人",
+        "AI 训练",
+        "行业洞察"
+      ]
+    }
+  ]
+}
