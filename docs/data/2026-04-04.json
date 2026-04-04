@@ -1,0 +1,145 @@
+{
+  "date": "2026-04-04",
+  "summary": "英伟达与网飞推动产业开源，Rubin 平台与视频模型亮相。学术圈多智能体协作与安全成热点，大模型情感机制与评估可信度获深入探究，基础设施与行为研究并行。",
+  "news": [
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "英伟达发布 Rubin 平台，定义下一代 AI 架构，涵盖自动驾驶，值得关注。",
+      "tags": [
+        "NVIDIA",
+        "AI 硬件",
+        "CES",
+        "自动驾驶"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "How Emotion Shapes the Behavior of LLMs and Agents: A Mechanistic Study",
+      "link": "https://arxiv.org/abs/2604.00005",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出 E-STEER 框架，实现情感表示层干预，探究情感对行为安全机制影响。",
+      "tags": [
+        "LLM",
+        "可解释性",
+        "Agent",
+        "情感计算"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "One Panel Does Not Fit All: Case-Adaptive Multi-Agent Deliberation for Clinical Prediction",
+      "link": "https://arxiv.org/abs/2604.00085",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出动态专家面板与三值投票机制，解决医疗预测异质性，提升多智能体可靠性。",
+      "tags": [
+        "LLM",
+        "Multi-Agent",
+        "Healthcare",
+        "Research"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Open, Reliable, and Collective: A Community-Driven Framework for Tool-Using AI Agents",
+      "link": "https://arxiv.org/abs/2604.00137",
+      "rating": "A",
+      "score": 8,
+      "comment": "聚焦智能体工具可靠性瓶颈，社区驱动测试监控框架，标准化接口，助力生态发展。",
+      "tags": [
+        "AI Agents",
+        "Tool Use",
+        "Reliability",
+        "Open Source"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "A Safety-Aware Role-Orchestrated Multi-Agent LLM Framework for Behavioral Health Communication Simulation",
+      "link": "https://arxiv.org/abs/2604.00249",
+      "rating": "A",
+      "score": 8,
+      "comment": "多智能体协作加安全审计，专为心理健康对话设计，架构创新具高参考价值。",
+      "tags": [
+        "多智能体",
+        "AI 安全",
+        "医疗 AI",
+        "LLM 架构"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Human-in-the-Loop Control of Objective Drift in LLM-Assisted Computer Science Education",
+      "link": "https://arxiv.org/abs/2604.00281",
+      "rating": "A",
+      "score": 8,
+      "comment": "引入控制理论解决 LLM 教育目标漂移，视人机协同为稳定方案，具理论与实用价值。",
+      "tags": [
+        "LLM",
+        "AI 教育",
+        "人机协同",
+        "控制理论"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "LinearARD: Linear-Memory Attention Distillation for RoPE Restoration",
+      "link": "https://arxiv.org/abs/2604.00004",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出线性内存注意力蒸馏，恢复 RoPE 能力，解决长上下文扩展导致短文本性能退化。",
+      "tags": [
+        "LLM",
+        "长上下文",
+        "RoPE",
+        "知识蒸馏"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Dynin-Omni: Omnimodal Unified Large Diffusion Language Model",
+      "link": "https://arxiv.org/abs/2604.00007",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出掩码扩散统一架构，整合文本图像语音视频，多模态融合新方向。",
+      "tags": [
+        "多模态",
+        "扩散模型",
+        "统一架构"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "How Trustworthy Are LLM-as-Judge Ratings for Interpretive Responses? Implications for Qualitative Research Workflows",
+      "link": "https://arxiv.org/abs/2604.00008",
+      "rating": "A",
+      "score": 8,
+      "comment": "探究 LLM 评委在定性研究中的可靠性，填补评估空白，对 AI 辅助科研工作流有指导意义。",
+      "tags": [
+        "LLM-as-Judge",
+        "定性研究",
+        "AI 评估",
+        "学术前沿"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Netflix just dropped their first public model on Hugging Face: VOID: Video Object and Interaction Deletion",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1sbc5ij/netflix_just_dropped_their_first_public_model_on/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Netflix 首个公开模型，聚焦视频物体删除，大厂开源利好开发者，实用性强。",
+      "tags": [
+        "Netflix",
+        "开源模型",
+        "计算机视觉",
+        "视频处理"
+      ]
+    }
+  ]
+}
