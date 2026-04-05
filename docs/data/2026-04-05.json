@@ -1,0 +1,144 @@
+{
+  "date": "2026-04-05",
+  "summary": "英伟达凭借 CES 蓝图与开源模型进一步巩固算力霸权。同时，人形机器人众包训练与 AGI 认知框架成为新焦点，预示 AI 竞争正从云端参数迈向物理交互与深度智能测量。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemma 4: Byte for byte, the most capable open models",
+      "link": "https://deepmind.google/blog/gemma-4-byte-for-byte-the-most-capable-open-models/",
+      "rating": "S",
+      "score": 9,
+      "comment": "谷歌发布最强开源模型，专攻推理与智能体，开放生态重大进展。",
+      "tags": [
+        "谷歌",
+        "Gemma",
+        "开源模型",
+        "智能体",
+        "大语言模型"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "英伟达发布 Rubin 平台，定义下一代 AI 架构，覆盖自动驾驶，行业里程碑。",
+      "tags": [
+        "NVIDIA",
+        "CES",
+        "AI 硬件",
+        "自动驾驶"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "模型复杂度推高算力需求，英伟达硬件依赖成趋势，关键行业动态。",
+      "tags": [
+        "NVIDIA",
+        "OpenAI",
+        "Infrastructure"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "Four things we’d need to put data centers in space",
+      "link": "https://www.technologyreview.com/2026/04/03/1135073/four-things-wed-need-to-put-data-centers-in-space/",
+      "rating": "A",
+      "score": 8,
+      "comment": "MIT 解析太空数据中心可行性，SpaceX 申请引关注，潜在颠覆性架构，值得紧盯",
+      "tags": [
+        "太空计算",
+        "数据中心",
+        "SpaceX",
+        "基础设施"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: gig workers training humanoids, and better AI benchmarks",
+      "link": "https://www.technologyreview.com/2026/04/01/1134993/the-download-gig-workers-training-humanoids-better-ai-benchmarks/",
+      "rating": "A",
+      "score": 8,
+      "comment": "零工经济赋能机器人训练，解决数据瓶颈，具身智能新趋势值得关注。",
+      "tags": [
+        "具身智能",
+        "机器人训练",
+        "零工经济",
+        "AI 基准"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The gig workers who are training humanoid robots at home",
+      "link": "https://www.technologyreview.com/2026/04/01/1134863/humanoid-data-training-gig-economy-2026-breakthrough-technology/",
+      "rating": "A",
+      "score": 8,
+      "comment": "众包模式采集机器人训练数据，突破具身智能数据瓶颈，行业落地新信号。",
+      "tags": [
+        "人形机器人",
+        "具身智能",
+        "数据众包"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Flash Live: Making audio AI more natural and reliable",
+      "link": "https://deepmind.google/blog/gemini-3-1-flash-live-making-audio-ai-more-natural-and-reliable/",
+      "rating": "A",
+      "score": 8,
+      "comment": "谷歌 Gemini 语音模型升级，低延迟高精准，优化实时交互体验，值得关注",
+      "tags": [
+        "Google",
+        "Gemini",
+        "Voice AI",
+        "LLM"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Measuring progress toward AGI: A cognitive framework",
+      "link": "https://deepmind.google/blog/measuring-progress-toward-agi-a-cognitive-framework/",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出 AGI 认知评估框架，联动 Kaggle 竞赛共建标准，直击通用智能衡量痛点。",
+      "tags": [
+        "AGI",
+        "评估框架",
+        "Kaggle",
+        "技术趋势"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "Reaching Across the Isles: UK-LLM Brings AI to UK Languages With NVIDIA Nemotron",
+      "link": "https://blogs.nvidia.com/blog/uk-llm-nemotron/",
+      "rating": "A",
+      "score": 8,
+      "comment": "主权 AI 趋势典型案例，赋能小众语言，NVIDIA 生态扩展值得关注。",
+      "tags": [
+        "主权 AI",
+        "NVIDIA",
+        "小众语言",
+        "UK-LLM"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "It’s the Humidity: How International Researchers in Poland, Deep Learning and NVIDIA GPUs Could Change the Forecast",
+      "link": "https://blogs.nvidia.com/blog/humidity/",
+      "rating": "A",
+      "score": 8,
+      "comment": "深度学习提升湿度预测，结合 GPU 加速，AI for Science 落地。",
+      "tags": [
+        "AI for Science",
+        "Deep Learning",
+        "气象预测"
+      ]
+    }
+  ]
+}
