@@ -1,0 +1,145 @@
+{
+  "date": "2026-04-06",
+  "summary": "谷歌 Gemma 升级开放模型与音频交互及音乐生成，英伟达新平台巩固算力基建。零工训练人形机器人与边缘侧实时 AI 凸显落地趋势，软硬协同与人机协作成今日焦点。",
+  "news": [
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemma 4: Byte for byte, the most capable open models",
+      "link": "https://deepmind.google/blog/gemma-4-byte-for-byte-the-most-capable-open-models/",
+      "rating": "S",
+      "score": 9,
+      "comment": "谷歌开源重磅更新，聚焦推理与智能体，开放模型能力新标杆。",
+      "tags": [
+        "Google",
+        "Gemma",
+        "Open Source",
+        "LLM",
+        "Agentic"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA 发布 Rubin 平台，黄仁勋描绘 AI 蓝图，生态重磅更新，行业风向标。",
+      "tags": [
+        "NVIDIA",
+        "CES",
+        "Rubin 平台",
+        "AI 硬件",
+        "自动驾驶"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "Four things we’d need to put data centers in space",
+      "link": "https://www.technologyreview.com/2026/04/03/1135073/four-things-wed-need-to-put-data-centers-in-space/",
+      "rating": "A",
+      "score": 8,
+      "comment": "MIT 解析太空数据中心挑战，SpaceX 构想引发关注，探索未来算力新方向。",
+      "tags": [
+        "SpaceX",
+        "数据中心",
+        "太空计算",
+        "前沿趋势"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The Download: gig workers training humanoids, and better AI benchmarks",
+      "link": "https://www.technologyreview.com/2026/04/01/1134993/the-download-gig-workers-training-humanoids-better-ai-benchmarks/",
+      "rating": "A",
+      "score": 8,
+      "comment": "零工远程训练人形机器人新模式，解决数据稀缺痛点，辅以基准测试优化，具行业参考价值。",
+      "tags": [
+        "人形机器人",
+        "AI 训练",
+        "行业趋势"
+      ]
+    },
+    {
+      "source": "MIT Tech Review",
+      "title": "The gig workers who are training humanoid robots at home",
+      "link": "https://www.technologyreview.com/2026/04/01/1134863/humanoid-data-training-gig-economy-2026-breakthrough-technology/",
+      "rating": "A",
+      "score": 8,
+      "comment": "揭示人形机器人数据收集新范式，零工经济赋能具身智能，解决数据稀缺瓶颈，值得关注",
+      "tags": [
+        "人形机器人",
+        "具身智能",
+        "数据收集"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Flash Live: Making audio AI more natural and reliable",
+      "link": "https://deepmind.google/blog/gemini-3-1-flash-live-making-audio-ai-more-natural-and-reliable/",
+      "rating": "A",
+      "score": 8,
+      "comment": "谷歌语音模型升级，降低延迟提升自然度，解决交互卡顿痛点，开发者需关注。",
+      "tags": [
+        "AI",
+        "Voice",
+        "Google",
+        "Gemini"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Lyria 3 Pro: Create longer tracks in more",
+      "link": "https://deepmind.google/blog/lyria-3-pro-create-longer-tracks-in-more/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Lyria 3 Pro 升级，支持长曲目结构感知，集成产品，增强 AI 音乐生成。",
+      "tags": [
+        "AI 音乐",
+        "谷歌",
+        "生成式 AI",
+        "产品更新"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Measuring progress toward AGI: A cognitive framework",
+      "link": "https://deepmind.google/blog/measuring-progress-toward-agi-a-cognitive-framework/",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出 AGI 认知框架，联手 Kaggle 构建评测集，推动行业标准建立。",
+      "tags": [
+        "AGI",
+        "评估框架",
+        "Kaggle",
+        "行业标准"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "A",
+      "score": 8,
+      "comment": "揭示头部模型对 NVIDIA 算力依赖加深，基础设施成竞争关键。",
+      "tags": [
+        "NVIDIA",
+        "AI 基础设施",
+        "行业趋势"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Real-time AI (audio/video in, voice out) on an M3 Pro with Gemma E2B",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1sda3r6/realtime_ai_audiovideo_in_voice_out_on_an_m3_pro/",
+      "rating": "A",
+      "score": 7,
+      "comment": "苹果 M3 本地运行实时多模态 AI，展示端侧交互潜力，语言学习场景具实用价值。",
+      "tags": [
+        "本地 AI",
+        "多模态",
+        "苹果 M3",
+        "实时交互"
+      ]
+    }
+  ]
+}
