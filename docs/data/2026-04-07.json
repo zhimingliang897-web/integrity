@@ -1,0 +1,146 @@
+{
+  "date": "2026-04-07",
+  "summary": "英伟达 CES 勾勒硬件未来，今日学术焦点转向智能体效能与安全对齐。研究对比单多智能体架构，警示自主欺骗风险，并探索神经符号推理以提升系统可信度。",
+  "news": [
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "NVIDIA 发布 Rubin 平台，定义下一代 AI 算力架构，确立行业未来风向标。",
+      "tags": [
+        "NVIDIA",
+        "CES",
+        "Rubin",
+        "AI 基础设施"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Holos: A Web-Scale LLM-Based Multi-Agent System for the Agentic Web",
+      "link": "https://arxiv.org/abs/2604.02334",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出 Web 规模多智能体架构，解决扩展与协调难题，指向 AGI 演进。",
+      "tags": [
+        "Multi-Agent",
+        "LLM",
+        "Agentic Web",
+        "Architecture"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Xpertbench: Expert Level Tasks with Rubrics-Based Evaluation",
+      "link": "https://arxiv.org/abs/2604.02368",
+      "rating": "A",
+      "score": 8,
+      "comment": "聚焦专家级任务评测，覆盖 80 类专业领域，解决通用基准饱和痛点，具高参考价值。",
+      "tags": [
+        "LLM",
+        "Benchmark",
+        "Evaluation",
+        "AI Research"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Compositional Neuro-Symbolic Reasoning",
+      "link": "https://arxiv.org/abs/2604.02434",
+      "rating": "A",
+      "score": 8,
+      "comment": "神经符号架构结合 DSL 与神经先验，解决 ARC 泛化难题，增强 LLM 推理，研究价值高。",
+      "tags": [
+        "Neuro-Symbolic",
+        "ARC",
+        "LLM",
+        "Reasoning"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "AIVV: Neuro-Symbolic LLM Agent-Integrated Verification and Validation for Trustworthy Autonomous Systems",
+      "link": "https://arxiv.org/abs/2604.02478",
+      "rating": "A",
+      "score": 8,
+      "comment": "融合神经符号与 LLM 代理，自动化自主系统验证，解决安全落地瓶颈，研究价值高。",
+      "tags": [
+        "LLM",
+        "自主系统",
+        "V&V",
+        "神经符号"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "I must delete the evidence: AI Agents Explicitly Cover up Fraud and Violent Crime",
+      "link": "https://arxiv.org/abs/2604.02500",
+      "rating": "A",
+      "score": 8,
+      "comment": "重磅安全研究，揭露 AI 代理协助掩盖犯罪行为的对齐漏洞，值得关注。",
+      "tags": [
+        "AI 安全",
+        "AI 代理",
+        "对齐研究",
+        "大模型"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Using LLM-as-a-Judge/Jury to Advance Scalable, Clinically-Validated Safety Evaluations of Model Responses to Users Demonstrating Psychosis",
+      "link": "https://arxiv.org/abs/2604.02359",
+      "rating": "A",
+      "score": 8,
+      "comment": "聚焦精神病用户安全，结合临床标准与 LLM 评估，实现规模化验证，安全伦理价值高",
+      "tags": [
+        "AI Safety",
+        "Mental Health",
+        "LLM-as-a-Judge",
+        "Clinical Validation"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "SWAY: A Counterfactual Computational Linguistic Approach to Measuring and Mitigating Sycophancy",
+      "link": "https://arxiv.org/abs/2604.02423",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出 SWAY 指标量化模型谄媚，结合反事实提示与缓解策略，对齐与安全研究重要参考。",
+      "tags": [
+        "LLM",
+        "AI Safety",
+        "Alignment",
+        "NLP"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Single-Agent LLMs Outperform Multi-Agent Systems on Multi-Hop Reasoning Under Equal Thinking Token Budgets",
+      "link": "https://arxiv.org/abs/2604.02460",
+      "rating": "A",
+      "score": 8,
+      "comment": "同等算力下单智能体优于多智能体，为架构选型提供理论依据与信息论视角。",
+      "tags": [
+        "LLM",
+        "Multi-Agent",
+        "Reasoning",
+        "AI Architecture"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Failing to Falsify: Evaluating and Mitigating Confirmation Bias in Language Models",
+      "link": "https://arxiv.org/abs/2604.02485",
+      "rating": "A",
+      "score": 8,
+      "comment": "揭示 LLM 存在确认偏差阻碍推理，提供评估与缓解方案，对对齐研究具重要价值。",
+      "tags": [
+        "AI 安全",
+        "大模型",
+        "推理能力",
+        "学术研究"
+      ]
+    }
+  ]
+}
