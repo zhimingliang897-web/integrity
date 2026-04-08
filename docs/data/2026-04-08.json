@@ -1,0 +1,141 @@
+{
+  "date": "2026-04-08",
+  "summary": "英伟达 CES 蓝图强化算力主导权，学术界通过稀疏注意力与模型压缩应对复杂度挑战。AI 正从通用对话走向科学实验与硬件验证，本地化部署趋势显著。",
+  "news": [
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "英伟达发布 Rubin 平台，定义 AI 基础设施未来，涵盖自动驾驶，行业风向标。",
+      "tags": [
+        "NVIDIA",
+        "CES",
+        "Rubin",
+        "AI"
+      ]
+    },
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "As AI Grows More Complex, Model Builders Rely on NVIDIA",
+      "link": "https://blogs.nvidia.com/blog/leading-models-nvidia/",
+      "rating": "S",
+      "score": 9,
+      "comment": "头部模型迭代凸显英伟达算力垄断，架构与硬件绑定趋势值得关注。",
+      "tags": [
+        "NVIDIA",
+        "OpenAI",
+        "AI Infrastructure"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "IC3-Evolve: Proof-/Witness-Gated Offline LLM-Driven Heuristic Evolution for IC3 Hardware Model Checking",
+      "link": "https://arxiv.org/abs/2604.03232",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM 自动优化 IC3 启发式策略，提升硬件验证效率，形式化方法与 AI 结合",
+      "tags": [
+        "大模型",
+        "硬件验证",
+        "形式化方法",
+        "算法优化"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Position: Science of AI Evaluation Requires Item-level Benchmark Data",
+      "link": "https://arxiv.org/abs/2604.03244",
+      "rating": "A",
+      "score": 8,
+      "comment": "直击评估有效性痛点，主张项级数据分析，为生成式 AI 高利害部署提供严谨框架。",
+      "tags": [
+        "AI 评估",
+        "基准测试",
+        "论文",
+        "可靠性"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Toward Full Autonomous Laboratory Instrumentation Control with Large Language Models",
+      "link": "https://arxiv.org/abs/2604.03286",
+      "rating": "A",
+      "score": 8,
+      "comment": "LLM 代理实现仪器自动控制，降低科研编程门槛，AI4S 自动化重要实践。",
+      "tags": [
+        "LLM",
+        "AI4S",
+        "实验室自动化",
+        "AI Agent"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Self-Execution Simulation Improves Coding Models",
+      "link": "https://arxiv.org/abs/2604.03253",
+      "rating": "A",
+      "score": 8,
+      "comment": "引入执行模拟与 RL 验证，解决代码模型执行估计难题，显著提升竞赛表现。",
+      "tags": [
+        "Code LLM",
+        "Program Simulation",
+        "Reinforcement Learning"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "SoLA: Leveraging Soft Activation Sparsity and Low-Rank Decomposition for Large Language Model Compression",
+      "link": "https://arxiv.org/abs/2604.03258",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出无需训练的压缩方案，结合激活稀疏与低秩分解，有望大幅降低部署成本。",
+      "tags": [
+        "大模型",
+        "模型压缩",
+        "效率优化",
+        "学术论文"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Why Attend to Everything? Focus is the Key",
+      "link": "https://arxiv.org/abs/2604.03260",
+      "rating": "A",
+      "score": 8,
+      "comment": "冻结权重仅训质心，显著提效且升性能，多规模验证有效，支持存量模型优化。",
+      "tags": [
+        "大模型",
+        "高效注意力",
+        "学术论文"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "LPC-SM: Local Predictive Coding and Sparse Memory for Long-Context Language Modeling",
+      "link": "https://arxiv.org/abs/2604.03263",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出混合架构替代注意力，结合预测编码与稀疏记忆，探索长上下文建模新路径。",
+      "tags": [
+        "长上下文",
+        "模型架构",
+        "论文"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "You can now fine-tune Gemma 4 locally 8GB VRAM + Bug Fixes",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1sexdhk/you_can_now_finetune_gemma_4_locally_8gb_vram_bug/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Unsloth 支持新模型微调，8GB 显存即可运行，显著降低本地部署与开发门槛。",
+      "tags": [
+        "Unsloth",
+        "模型微调",
+        "显存优化"
+      ]
+    }
+  ]
+}
