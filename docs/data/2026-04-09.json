@@ -1,0 +1,144 @@
+{
+  "date": "2026-04-09",
+  "summary": "英伟达 CES 发布 Rubin 平台，谷歌 Gemma4 与 Meta 加码开源，模型竞争加剧。多篇研究聚焦 LLM 推理可靠性与医疗安全，技术正从通用向垂直场景深化。",
+  "news": [
+    {
+      "source": "NVIDIA AI Blog",
+      "title": "NVIDIA Rubin Platform, Open Models, Autonomous Driving: NVIDIA Presents Blueprint for the Future at CES",
+      "link": "https://blogs.nvidia.com/blog/2026-ces-special-presentation/",
+      "rating": "S",
+      "score": 9,
+      "comment": "英伟达发布 Rubin 平台，定义下一代 AI 算力架构，行业风向标。",
+      "tags": [
+        "NVIDIA",
+        "AI 硬件",
+        "CES",
+        "Rubin"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Algebraic Structure Discovery for Real World Combinatorial Optimisation Problems: A General Framework from Abstract Algebra to Quotient Space Learning",
+      "link": "https://arxiv.org/abs/2604.04941",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出代数结构发现框架，利用商空间缩减搜索，提升组合优化效率，理论扎实具潜力。",
+      "tags": [
+        "组合优化",
+        "抽象代数",
+        "机器学习",
+        "算法框架"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "PaperOrchestra: A Multi-Agent Framework for Automated AI Research Paper Writing",
+      "link": "https://arxiv.org/abs/2604.05018",
+      "rating": "A",
+      "score": 8,
+      "comment": "多智能体自动写论文框架，生成 LaTeX 与图表，首创基准评测，推动科研自动化。",
+      "tags": [
+        "多智能体",
+        "AI 科研",
+        "自动化写作",
+        "基准评测"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "TDA-RC: Task-Driven Alignment for Knowledge-Based Reasoning Chains in Large Language Models",
+      "link": "https://arxiv.org/abs/2604.04942",
+      "rating": "A",
+      "score": 8,
+      "comment": "融合拓扑学与 CoT，平衡推理效率与性能，方法新颖，值得研究者关注。",
+      "tags": [
+        "LLM",
+        "Reasoning",
+        "Topology",
+        "arXiv"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "This Treatment Works, Right? Evaluating LLM Sensitivity to Patient Question Framing in Medical QA",
+      "link": "https://arxiv.org/abs/2604.05051",
+      "rating": "A",
+      "score": 8,
+      "comment": "医疗 AI 安全关键研究，揭示提示词措辞显著影响诊断一致性，需警惕。",
+      "tags": [
+        "LLM",
+        "医疗 AI",
+        "安全性",
+        "评估"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "EXAONE 4.5 released",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1sgc8ir/exaone_45_released/",
+      "rating": "A",
+      "score": 8,
+      "comment": "LG 发布 33B 开源模型，支持 GGUF 量化，本地部署友好，性能值得测试。",
+      "tags": [
+        "大模型",
+        "开源",
+        "本地推理"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Meta has not given up on open-source",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1sfzdrv/meta_has_not_given_up_on_opensource/",
+      "rating": "A",
+      "score": 8,
+      "comment": "Meta 官方确认坚持开源策略，消除社区疑虑，稳固开源大模型生态信心。",
+      "tags": [
+        "Meta",
+        "开源",
+        "大模型",
+        "行业动态"
+      ]
+    },
+    {
+      "source": "Microsoft AI",
+      "title": "A conversation with Kevin Scott: What’s next in AI",
+      "link": "https://blogs.microsoft.com/ai/a-conversation-with-kevin-scott-whats-next-in-ai/",
+      "rating": "A",
+      "score": 8,
+      "comment": "微软 CTO 解读 AI 下一步走向，洞察大厂战略布局与技术趋势，从业者必读。",
+      "tags": [
+        "微软",
+        "AI 战略",
+        "技术趋势"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemma 4: Byte for byte, the most capable open models",
+      "link": "https://deepmind.google/blog/gemma-4-byte-for-byte-the-most-capable-open-models/",
+      "rating": "A",
+      "score": 8,
+      "comment": "谷歌开源模型重磅更新，主打推理与智能体，开放生态竞争力显著增强。",
+      "tags": [
+        "Google",
+        "Open Source",
+        "LLM",
+        "Agentic"
+      ]
+    },
+    {
+      "source": "DeepMind Blog",
+      "title": "Gemini 3.1 Flash Live: Making audio AI more natural and reliable",
+      "link": "https://deepmind.google/blog/gemini-3-1-flash-live-making-audio-ai-more-natural-and-reliable/",
+      "rating": "A",
+      "score": 8,
+      "comment": "谷歌语音模型更新，优化延迟与自然度，体现实时交互技术演进，值得关注。",
+      "tags": [
+        "Google",
+        "Gemini",
+        "Voice AI",
+        "LLM"
+      ]
+    }
+  ]
+}
