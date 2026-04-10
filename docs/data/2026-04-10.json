@@ -1,0 +1,144 @@
+{
+  "date": "2026-04-10",
+  "summary": "今日 AI 领域动态汇总如下。",
+  "news": [
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Blind Refusal: Language Models Refuse to Help Users Evade Unjust, Absurd, and Illegitimate Rules",
+      "link": "https://arxiv.org/abs/2604.06233",
+      "rating": "A",
+      "score": 8,
+      "comment": "揭示大模型安全过度对齐问题，提出盲目拒绝概念及数据集，对对齐研究具重要参考价值。",
+      "tags": [
+        "AI 安全",
+        "大模型",
+        "对齐研究",
+        "伦理"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "Weakly Supervised Distillation of Hallucination Signals into Transformer Representations",
+      "link": "https://arxiv.org/abs/2604.06277",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出弱监督蒸馏幻觉信号至内部表示，摆脱外部验证依赖，降低推理成本，具实用价值。",
+      "tags": [
+        "LLM",
+        "幻觉检测",
+        "弱监督",
+        "模型蒸馏"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "SymptomWise: A Deterministic Reasoning Layer for Reliable and Efficient AI Systems",
+      "link": "https://arxiv.org/abs/2604.06375",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出确定性推理层解决医疗 AI 幻觉，分离理解与推理，提升安全性，可靠 AI 架构新探索",
+      "tags": [
+        "医疗 AI",
+        "可靠性",
+        "架构创新",
+        "大模型"
+      ]
+    },
+    {
+      "source": "ArXiv cs.AI",
+      "title": "SELFDOUBT: Uncertainty Quantification for Reasoning LLMs via the Hedge-to-Verify Ratio",
+      "link": "https://arxiv.org/abs/2604.06389",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出 HVR 指标实现单遍不确定性量化，无需 logits，解决闭源 API 部署痛点，实用性强。",
+      "tags": [
+        "大模型",
+        "不确定性量化",
+        "推理模型",
+        "AI 安全"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Contextual Earnings-22: A Speech Recognition Benchmark with Custom Vocabulary in the Wild",
+      "link": "https://arxiv.org/abs/2604.07354",
+      "rating": "A",
+      "score": 8,
+      "comment": "填补上下文语音识别基准空白，解决学术与工业界准确率差异痛点，推动落地研究。",
+      "tags": [
+        "语音识别",
+        "基准测试",
+        "数据集",
+        "AI 研究"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Cross-Tokenizer LLM Distillation through a Byte-Level Interface",
+      "link": "https://arxiv.org/abs/2604.07466",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出字节级蒸馏基线，解决跨分词器知识转移难题，简单有效，利于模型压缩部署。",
+      "tags": [
+        "LLM",
+        "知识蒸馏",
+        "模型压缩"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Enabling Intrinsic Reasoning over Dense Geospatial Embeddings with DFR-Gemma",
+      "link": "https://arxiv.org/abs/2604.07490",
+      "rating": "A",
+      "score": 8,
+      "comment": "DFR-Gemma 使 LLM 直接推理地理嵌入，消除转换损耗，提升地理智能效率与精度。",
+      "tags": [
+        "AI",
+        "LLM",
+        "Geospatial",
+        "arXiv"
+      ]
+    },
+    {
+      "source": "ArXiv cs.CL",
+      "title": "Decompose, Look, and Reason: Reinforced Latent Reasoning for VLMs",
+      "link": "https://arxiv.org/abs/2604.07518",
+      "rating": "A",
+      "score": 8,
+      "comment": "提出 DLR 框架，利用强化潜在推理解决 VLM 视觉信息丢失，增强推理能力",
+      "tags": [
+        "VLM",
+        "视觉推理",
+        "强化学习",
+        "人工智能"
+      ]
+    },
+    {
+      "source": "Reddit LocalLLaMA",
+      "title": "Qwen3.5-122B at 198 tok/s on 2x RTX PRO 6000 Blackwell — Budget build, verified results",
+      "link": "https://www.reddit.com/r/LocalLLaMA/comments/1sh7yxa/qwen35122b_at_198_toks_on_2x_rtx_pro_6000/",
+      "rating": "A",
+      "score": 8,
+      "comment": "双卡高吞吐推理方案验证，量化与引擎优化技术具重要参考意义。",
+      "tags": [
+        "LLM 推理",
+        "模型量化",
+        "SGLang",
+        "硬件优化"
+      ]
+    },
+    {
+      "source": "Reddit ML",
+      "title": "[P] PCA before truncation makes non-Matryoshka embeddings compressible: results on BGE-M3 [P]",
+      "link": "https://www.reddit.com/r/MachineLearning/comments/1sgt7ol/p_pca_before_truncation_makes_nonmatryoshka/",
+      "rating": "A",
+      "score": 8,
+      "comment": "简单 PCA 旋转即可大幅压缩嵌入维度，性能损失极小，无需重训，工程实用价值高。",
+      "tags": [
+        "Embedding",
+        "向量压缩",
+        "工程优化"
+      ]
+    }
+  ]
+}
